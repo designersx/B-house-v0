@@ -1,8 +1,9 @@
 import React from 'react'
+import styles from '../Home/Home.module.css'
 
 const Home = () => {
   return (
-    <div>
+    <div className={styles.homeMain}>
       <h1>Home Page</h1>
     </div>
   )

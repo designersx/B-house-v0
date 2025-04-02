@@ -13,7 +13,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
+body {
+ margin: 0;
+}
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -48,5 +50,10 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+@media (min-width: 601px) {
+  body {
+    display: none;
   }
 }
