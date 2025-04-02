@@ -1,8 +1,15 @@
+
 .ImgDiv img {
     width: 100%;
+    position: relative;
 }
 
-
+.logoContainer {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
 /* Signin.module.css */
 
@@ -29,9 +36,11 @@
     display: flex;
     flex-direction: column;
 }
-.form label{
+
+.form label {
     margin-bottom: 5px;
 }
+
 .label {
     text-align: left;
     margin-top: 10px;
@@ -45,9 +54,11 @@
     border-radius: 20px;
     min-height: 30px;
 }
+
 input:focus {
     outline: none;
-  }
+}
+
 .passwordContainer {
     position: relative;
     border-radius: 20px;
@@ -77,17 +88,28 @@ input:focus {
     align-items: center;
     justify-content: space-between;
     font-size: 14px;
-    margin: 10px 0;
+    margin: 10px 0 20px;
+}
+
+input[type="checkbox"] {
+    accent-color: #004680;
 }
 
 .checkbox {
     margin-right: 5px;
 }
-.checkBoxDiv label{
+
+.checkBoxDiv label {
     font-size: 14px;
     color: #004680;
 
 }
+.errorMessage {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
 .forgotPassword {
     color: #004680;
     text-decoration: none;
