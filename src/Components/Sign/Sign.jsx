@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import styles from "../Sign/Sign.module.css";
-import users from '../Json/user.json';
+import users from '../../Json/user.json'
 
 const Sign = () => {
     const [email, setEmail] = useState('');
