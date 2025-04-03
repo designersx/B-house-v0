@@ -37,7 +37,7 @@ const Reset = () => {
           </div>
 
           <div className={styles.BtnDiv}>
-            <div className={styles.CancelBtn}><p>Cancel</p></div>
+            <div className={styles.CancelBtn} onClick={() => navigate("/")}><p>Cancel</p></div>
             <div className={styles.ContinueBtn} onClick={() => navigate("/onboarding")}>
           <p>Continue</p>
         </div>

@@ -1,0 +1,61 @@
+/* DateSliderPicker.module.css */
+.container {
+
+text-align: center;
+
+  }
+  .dragDiv{
+    display: flex;
+    align-items: end;
+    gap: 10px;
+  }
+  
+  .title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .wrapper {
+    /* display: flex; */
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .marker {
+    background-color: #0a3d62;
+    color: white;
+    padding: 0.75rem;
+    border-radius: 50%;
+    text-align: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .date {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .month {
+    font-size: 0.875rem;
+  }
+  
+  .slider {
+    width: 12rem;
+    height: 5px;
+    background: #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .datePicker {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

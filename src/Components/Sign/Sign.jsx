@@ -56,6 +56,7 @@ const Sign = () => {
                     </div>
 
                     {/* Show error message with red color */}
+                    
                     {error && <p className={styles.errorMessage}>{error}</p>}
 
                     <div className={styles.options}>
@@ -63,12 +64,12 @@ const Sign = () => {
                             <input type="checkbox" id="rememberMe" />
                             <label htmlFor="rememberMe"> Keep me logged in</label>
                         </div>
-                        <div> <a href="#" className={styles.forgotPassword}>Forget password?</a></div>
+                        <div> <a href="" className={styles.forgotPassword} onClick={() => navigate("/forget")}>Forget password?</a></div>
                     </div>
 
                     <button type="submit" className={styles.signInButton}>Sign In</button>
                 </form>
-                <p className={styles.registerText}>Not registered yet? <a href="#" className={styles.registerLink}>Request to Create an Account</a></p>
+                <p className={styles.registerText}>Not registered yet? <a href=" " className={styles.registerLink} onClick={() => navigate("/createAccount")}>Request to Create an Account</a></p>
                 <footer className={styles.footer}>
                     &copy; 2025 Bhouse. All rights reserved for the use of terms related to Bhouse.
                 </footer>

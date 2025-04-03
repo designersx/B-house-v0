@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import styles from '../Onboarding/Onboarding.module.css';
 import Modal from '../Modal/Modal';
-import { useNavigate,  } from "react-router-dom";
+import { useNavigate, } from "react-router-dom";
+import Datepicker from '../Datepicker/Datepicker';
 
 
 const onboardingItems = [
-    { img: 'Svg/Coi.svg', title: 'Project Address',link: 'https://login.microsoftonline.com/5a89ca1e-6149-40f1-95b4-3123ceacb89c/oauth2/authorize?client%5Fid=00000003%2D0000%2D0ff1%2Dce00%2D000000000000&response%5Fmode=form%5Fpost&response%5Ftype=code%20id%5Ftoken&resource=00000003%2D0000%2D0ff1%2Dce00%2D000000000000&scope=openid&nonce=A61BBC1955D66B2B7114210A659BF3CD3E3DF1F5CE3E3315%2DCB371FF6B1BCEF357322B54AFEC812891EC308005D1B4F45C3EDFEDD1E810F0B&redirect%5Furi=https%3A%2F%2Fmapeigroup%2Esharepoint%2Ecom%2F%5Fforms%2Fdefault%2Easpx&state=OD0w&claims=%7B%22id%5Ftoken%22%3A%7B%22xms%5Fcc%22%3A%7B%22values%22%3A%5B%22CP1%22%5D%7D%7D%7D&wsucxt=1&cobrandid=11bd8083%2D87e0%2D41b5%2Dbb78%2D0bc43c8a8e8a&client%2Drequest%2Did=d84885a1%2D9073%2D0000%2D49d3%2D3ee9dee858ef' },
+    { img: 'Svg/Coi.svg', title: 'Project Address', link: 'https://login.microsoftonline.com/5a89ca1e-6149-40f1-95b4-3123ceacb89c/oauth2/authorize?client%5Fid=00000003%2D0000%2D0ff1%2Dce00%2D000000000000&response%5Fmode=form%5Fpost&response%5Ftype=code%20id%5Ftoken&resource=00000003%2D0000%2D0ff1%2Dce00%2D000000000000&scope=openid&nonce=A61BBC1955D66B2B7114210A659BF3CD3E3DF1F5CE3E3315%2DCB371FF6B1BCEF357322B54AFEC812891EC308005D1B4F45C3EDFEDD1E810F0B&redirect%5Furi=https%3A%2F%2Fmapeigroup%2Esharepoint%2Ecom%2F%5Fforms%2Fdefault%2Easpx&state=OD0w&claims=%7B%22id%5Ftoken%22%3A%7B%22xms%5Fcc%22%3A%7B%22values%22%3A%5B%22CP1%22%5D%7D%7D%7D&wsucxt=1&cobrandid=11bd8083%2D87e0%2D41b5%2Dbb78%2D0bc43c8a8e8a&client%2Drequest%2Did=d84885a1%2D9073%2D0000%2D49d3%2D3ee9dee858ef' },
     { img: 'Svg/Coi.svg', title: 'Building Delivery Hours', link: 'https://ttp.cbp.dhs.gov/' },
-    { img: 'Svg/Coi.svg', title: 'Building Sample (COI)',  link: 'https://docs.google.com/gview?embedded=true&url=https://polyglass.us/wp-content/uploads/2024/01/Polyflex-5.0-PDS_.pdf' },
-    { img: 'Svg/Coi.svg', title: 'eLearning Resources', link: 'https://e-learning.mapei.eu/UPL-UPL/learn/signin' },
+    { img: 'Svg/Coi.svg', title: 'Building Sample (COI)', link: 'https://docs.google.com/gview?embedded=true&url=https://polyglass.us/wp-content/uploads/2024/01/Polyflex-5.0-PDS_.pdf' },
     { img: 'Svg/Coi.svg', title: 'Est. Occupancy date', link: 'https://polyglass.us/wp-content/uploads/2023/03/2023-Sparc-Brochure-2023-NL_web.pdf' }
 ];
 
@@ -38,20 +38,23 @@ const Onboarding = () => {
                     <p>Welcome to Bhouse,</p>
                     <h1>New <b>Customer</b> Onboarding</h1>
                     <div className={styles.logo}>
-                        <img src='svg/Logo.svg' alt='' />
+                        <img src='Svg/b-houseBlack.svg' alt='Logo' />
                     </div>
                 </div>
+
+
                 <div>
-                    <img src='images/cloudPng.png' alt='' />
+                    <img src='Svg/lamp.svg' alt='lamp' />
                 </div>
             </div>
-
+{/* <Datepicker/> */}
             <div className={styles.bodyMain}>
                 {onboardingItems.map((item, index) => (
                     <div
                         key={index}
                         className={`${styles.bodypart} ${completedSteps.includes(index) ? styles.completedStepBorder : ''}`}
                     >
+                        <div className={styles.FlexDiv}>
                         <div
                             className={`${styles.iconLogo} ${completedSteps.includes(index) ? styles.completedStep : ''}`}
                         >
@@ -59,9 +62,11 @@ const Onboarding = () => {
                         </div>
                         <div>
                             <h2>{item.title}</h2>
-                            <p>{item.desc}</p>
                         </div>
-                        {/* ✅ Sirf Start button pe modal open hoga */}
+
+                        </div>
+                      
+                        {/*Sirf Start button pe modal open hoga */}
                         {completedSteps.includes(index) ? (
                             <div>
                                 <img src='Svg/done.svg' alt='' />
@@ -75,7 +80,7 @@ const Onboarding = () => {
                 ))}
 
                 <p className={styles.signP}>
-                Upload your documents to proceed or skip for later.
+                    Upload your documents to proceed or <b>skip</b> for later.
                 </p>
             </div>
 
