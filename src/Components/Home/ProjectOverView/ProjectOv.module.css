@@ -1,0 +1,136 @@
+.mainProject{
+    display: flex;
+    margin: 20px 0;
+    padding: 0 20px 0 20px;
+}
+
+.mainProject h3{
+    font-size: 22px;
+    color:#26211F;
+
+
+
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .card {
+    /* width: 320px; */
+    width: 100%;
+    /* padding: 20px; */
+    background: white;
+    border-radius: 12px;
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+  }
+  
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+
+  .FlexControl{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .grid {
+    display: grid;
+    gap: 20px;
+    justify-content: space-between;
+    margin: 10px 0;
+  }
+  
+  .bigText {
+    font-size: 35px;
+    font-weight: 500;
+    margin: 0;
+    color: #26211F;
+
+  }
+  
+  .subText {
+    font-size: 18px;
+    color: #7D7D7D;
+  }
+  
+  .label {
+    font-size: 18px;
+    color: #26211F;
+    font-weight: 500;
+    margin:0 ;
+  }
+  
+  .team {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+  }
+  
+  .avatars {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: -8px;
+    border: 2px solid white;
+  }
+  
+  .plus {
+    font-size: 14px;
+    color: gray;
+  }
+  
+  .advance {
+    background: #fdeedc;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .advanceText {
+    font-size: 12px;
+    color: gray;
+  }
+  
+  .document {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e0f2ff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  .docTitle {
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .docSubtitle {
+    font-size: 10px;
+    color: gray;
+  }
+  
+  .plusButton {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #007bff;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  

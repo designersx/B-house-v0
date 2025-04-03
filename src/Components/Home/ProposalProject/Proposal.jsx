@@ -36,7 +36,8 @@ function Proposal() {
           <div key={step.id} className={styles.step}>
             <div className={styles.circle} >
               <div className={styles.count} style={{ backgroundColor: step.colorSmall }}>
-                <span>{step.count}</span>
+                <span className={styles.counttip} style={{ borderColor: step.colorSmall }}></span>
+                <span >{step.count}</span>
               </div>
               <img src={step.img} alt={step.label} className={styles.icon} />
             </div>
