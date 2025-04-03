@@ -5,6 +5,10 @@ import Home from '../src/Components/Home/Home'
 import Sign from "./Components/Sign/Sign";
 import Reset from "./Components/Reset/Reset";
 import Onboarding from "./Components/Onboarding/Onboarding";
+import Invoice from "./Components/Invoice/Invoice";
+import Docs from "./Components/Docs/Docs";
+import Punchlist from "./Components/Punchlist/Punchlist";
+
 
 
 function App() {
@@ -18,6 +22,9 @@ function App() {
           <Route path="/home" element={<Home />}></Route>
           <Route path="/reset" element={<Reset/>}></Route>
           <Route path="/onboarding" element={<Onboarding />}></Route>
+          <Route path="/invoice" element={<Invoice />}></Route>
+          <Route path="/docs" element={<Docs />}></Route>
+          <Route path="/punchlist" element={<Punchlist />}></Route>
 
         </Routes>
       </BrowserRouter>
