@@ -17,7 +17,7 @@ const Sign = () => {
 
         if (user) {
             setError('');
-            alert("Sign in successful!");
+            // alert("Sign in successful!");
             navigate('/reset'); // Redirect to Reset Password Page
         } else {
             setError('Invalid email or password');

@@ -1,0 +1,93 @@
+/* Modal.module.css */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.486);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+.modalContent {
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #ffffff;
+  width: 90%;
+  height: auto;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideInBottom 0.3s ease-in-out;
+  padding: 10px;
+}
+
+/* Close Button */
+.closeButton {
+  position: absolute;
+  top: 5%;
+  right: 0%;
+  font-size: 24px;
+  border: none;
+  background: #ffffff;
+  cursor: pointer;
+  width: 80px;
+}
+
+.closeButton img {
+  width: 100%;
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Closing Animations */
+.modalOverlay.hide {
+  animation: fadeOut 0.2s ease-in-out;
+}
+
+.modalContent.hide {
+  animation: slideOutBottom 0.2s ease-in-out;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideOutBottom {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
