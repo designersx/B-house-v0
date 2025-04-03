@@ -1,0 +1,112 @@
+.container {
+    background: white;
+    /* padding: 20px; */
+    /* border-radius: 10px; */
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+    /* width: 400px; */
+  }
+  
+  .header {
+    text-align: left;
+    padding: 0 20px;
+  }
+  
+  .statusBadge {
+    display: table-cell;
+    background: #FDBD24;
+    color: #ffffff;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    font-weight: 500;
+    /* padding: 0 20px; */
+  }
+  
+  .projectTitle {
+    font-size: 28px;
+    color: #26211F;
+    margin: 10px 0;
+  }
+
+.countContainer{
+
+}
+
+  .projectSelector select {
+    font-size: 28px;
+    font-weight: 700;
+    outline: none;
+    border: none;
+  }
+  
+  .subText {
+    font-size: 16px;
+    color: #7A7A7A;
+    font-weight: 500;
+    margin: 0px 0 30px 0;
+  }
+  
+  .progressTracker {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    gap: 20px;
+    /* width: 100%; */
+    overflow: auto;
+   background-color: #fff;
+    padding: 20px 30px 20px 20px;
+  }
+  
+  .step {
+    text-align: center;
+  }
+  
+  .circle {
+    width: 104px;
+    height: 104px;
+    background-color: #EEF7FF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    color: #26211F;
+    font-size: 14px;
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 300;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: #7A7A7A;
+}
+  
+  .icon {
+    width: 32px;
+
+  }
+  
+  .label {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  .progressBar {
+    display: flex;
+    height: 5px;
+    margin-top: 10px;
+  }
+  
+  .barSegment {
+    flex: 1;
+    height: 5px;
+  }
+  

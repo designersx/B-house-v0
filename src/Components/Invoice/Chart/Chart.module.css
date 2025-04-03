@@ -1,0 +1,64 @@
+.card {
+    background: #003c71;
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+
+  }
+  
+  .financeBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .cost {
+    text-align: center;
+  }
+  
+  .amount {
+    font-size: 22px;
+    font-weight: bold;
+  }
+  
+  .label {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  
+  .chartContainer {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .cashflowMessage {
+    display: flex;
+    align-items: center;
+    background: white;
+    color: black;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  
+  .cashflowMessage img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .cashflowTitle {
+    font-weight: bold;
+    margin-block: 0px;
+  }
+  .cashflowTitle p{
+
+  }
+  
+  .cashflowText {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+  

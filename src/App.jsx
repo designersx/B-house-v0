@@ -6,6 +6,10 @@ import Sign from "./Components/Sign/Sign";
 import Reset from "./Components/Reset/Reset";
 import Onboarding from "./Components/Onboarding/Onboarding";
 import Forget from "./Components/Forget/Forget";
+import InvoicePage from "./Pages/InvoicePage/InvoicePage";
+import DocsPage from "./Pages/DocsPage/DocsPage";
+import PunchPage from "./Pages/PunchPage/PunchPage";
+
 
 
 function App() {
@@ -21,6 +25,9 @@ function App() {
           <Route path="/onboarding" element={<Onboarding />}></Route>
           <Route path="/forget" element={<Forget  />}></Route>
           <Route path="*" element={<h2 className="comingSoon">Coming Soon</h2>} />
+          <Route path="/invoice" element={<InvoicePage />}></Route>
+          <Route path="/docs" element={<DocsPage />}></Route>
+          <Route path="/punchlist" element={<PunchPage />}></Route>
         </Routes>
       </BrowserRouter>
     </>
