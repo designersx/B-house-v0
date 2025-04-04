@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from '../Onboarding/Onboarding.module.css';
 import Modal from '../Modal/Modal';
 import { useNavigate, } from "react-router-dom";
-import Datepicker from '../Datepicker/Datepicker';
+
 
 
 const onboardingItems = [
@@ -47,7 +47,7 @@ const Onboarding = () => {
                     <img src='Svg/lamp.svg' alt='lamp' />
                 </div>
             </div>
-{/* <Datepicker/> */}
+
             <div className={styles.bodyMain}>
                 {onboardingItems.map((item, index) => (
                     <div
