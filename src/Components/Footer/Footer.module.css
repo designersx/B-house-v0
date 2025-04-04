@@ -16,14 +16,15 @@
 }
 
 
-.footerMain{
+
+.footerFixed{
     position:fixed;
     bottom: 0;
     width: 100%;
     background-color: #fff;
     height: 40px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    padding: 20px 0 20px 0;
+    padding: 10px 0 10px 0;
 
 }
 
@@ -40,6 +41,10 @@
     text-decoration: none;
     /* color: #004680; */
     font-weight: 600;
+}
+
+.footerMain{
+    margin: 0 0 49px 0;
 }
 
 .footerSideIcon a span{

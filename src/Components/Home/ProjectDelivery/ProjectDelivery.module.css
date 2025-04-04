@@ -1,0 +1,141 @@
+.DeliveryUpdate{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    margin: 20px 0 0 0;
+    border-top: 2px solid;
+    border-image: linear-gradient(to right, #EAEAEA, #004680, #EAEAEA) 1;
+    padding: 20px 20px 10px 20px;
+   }
+
+   .DeliveryUpdate h4{
+    font-size: 22px;
+    color:#26211F;
+   }
+
+   
+   .DeliveryUpdate button{
+    font-size: 16px;
+    color:#004680;
+    border: none;background-color: transparent;
+   }
+
+
+ /* OrderCard.module.css */
+
+/* Card Container */
+.orderCard {
+    background: #fff;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    max-width: 400px;
+  }
+  
+  /* Title and Status */
+  .orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .orderTitle {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .orderStatus {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .green {
+    color: #28a745;
+  }
+  
+  .orange {
+    color: #ff9800;
+  }
+  
+  /* Order Details */
+  .orderDetails {
+    font-size: 14px;
+    color: #555;
+    margin: 8px 0;
+  }
+  
+  /* Comment Section */
+  .commentBox {
+    background: #f4f4f4;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  .commentUser {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .commentTime {
+    font-size: 12px;
+    color: #777;
+  }
+  
+  .commentMessage {
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  
+  /* Bottom Section */
+  .orderFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #777;
+    margin-top: 12px;
+  }
+  
+  .addComment {
+    display: flex;
+    align-items: center;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+  
+  .addComment img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+  }
+  
+  /* Progress Bar */
+  .progressBar {
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  .progress {
+    height: 4px;
+    border-radius: 5px;
+  }
+  
+  .progressGreen {
+    background: #28a745;
+  }
+  
+  .progressOrange {
+    background: #ff9800;
+  }
+  
