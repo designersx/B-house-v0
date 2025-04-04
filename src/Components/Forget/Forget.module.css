@@ -9,7 +9,7 @@
 }
 
 .resetLockDiv {
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 .Title {
@@ -21,6 +21,7 @@
     font-size: 32px;
     font-weight: 600;
     color: #000000;
+    margin-block: 0px;
 }
 .Title p{
     color:#828389;
