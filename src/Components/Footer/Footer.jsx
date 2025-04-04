@@ -6,7 +6,7 @@ function Footer() {
     <div>
 
 
-<div className={styles.footerMain}>
+<div className={styles.footerMain} >
     
     <div className={styles.footerSideIcon}>
 
