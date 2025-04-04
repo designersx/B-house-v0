@@ -1,0 +1,77 @@
+.detailContainer {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    text-align: center;
+  }
+  
+  .imageContainer {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  
+  .productImage {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .orderInfo {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  
+  .actionButton {
+    background: #004A84;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .commentSection {
+    margin-top: 20px;
+  }
+  
+  .commentBox {
+    background: #e1e1e1;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .commentInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .commentSubmit {
+    background: #004A84;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
