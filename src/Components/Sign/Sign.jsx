@@ -66,9 +66,9 @@ const Sign = () => {
 
                     <button type="submit" className={styles.signInButton}>Sign In</button>
                 </form>
-                <p className={styles.registerText}>Not registered yet? <a href=" " className={styles.registerLink} onClick={() => navigate("/createAccount")}>Request to Create an Account</a></p>
+                <p className={styles.registerText}>Not registered yet? <a href=" " className={styles.registerLink} onClick={() => navigate("/create-account")}>Request to Create an Account</a></p>
                 <footer className={styles.footer}>
-                    &copy; 2025 Bhouse. All rights reserved for the use of terms related to Bhouse.
+                    &copy; © 2025 Bhouse. All rights reserved for the use of terms related to Bhouse.
                 </footer>
             </div>
         </div>

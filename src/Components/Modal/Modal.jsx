@@ -1,24 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../Modal/Modal.module.css';
 
 const Modal = ({ isOpen, onClose, children }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [animateOut, setAnimateOut] = useState(false);
+
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden'; 
-    } else {
-      document.body.style.overflow = 'auto'; 
+      setShowModal(true);
+      document.body.style.overflow = 'hidden';
+    } else if (showModal) {
+      setAnimateOut(true);
+      setTimeout(() => {
+        setShowModal(false);
+        setAnimateOut(false);
+        document.body.style.overflow = 'auto';
+      }, 500); // Match the slow slideDown duration
     }
 
     return () => {
-      document.body.style.overflow = 'auto'; 
+      document.body.style.overflow = 'auto';
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!showModal) return null;
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={`${styles.modalContent} ${
+          animateOut ? styles.slideDown : styles.slideUp
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <button onClick={onClose} className={styles.closeButton}>
           <img src="Svg/Cross-Icon.svg" alt="Close" />
         </button>

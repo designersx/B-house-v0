@@ -57,8 +57,8 @@
     content: "";
     position: absolute;
     left: 10%;
-    bottom: -34px;
-    height: 30px;
+    bottom: -18px;
+    height: 15px;
     width: 2px;
     background: repeating-linear-gradient(to bottom, #004680, #004680 5px, transparent 5px, transparent 10px);
 }
@@ -81,13 +81,28 @@
 }
 
 .bodypart h2 {
-    margin-top: 10px;
+    margin-top: -5px;
     font-size: 18px;
     color: #000;
 }
 
-
-
+.bodypart2{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #E9E9E9;
+    border-radius: 20px;
+    margin: 10px 10px 20px 10px;
+    background-color: rgb(255, 255, 255);
+    min-height: 70px;
+}
+.bodypart2 h2{
+    margin-top: -5px;
+    font-size: 18px;
+    color: #000;
+}
 .signP {
     margin-inline: 10px;
     width: 80%;
@@ -140,26 +155,76 @@
 }
 
 /* Modale CSS START */
-.modalContent p {
-    line-height: 24px;
-}
-
-.LinkDiv {
-    margin-bottom: 10px;
-}
+.formGroup {
+    margin-bottom: 20px;
+  }
+  
+  .formGroup label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .formGroup input,
+  .formGroup select,
+  .formGroup textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    color: #787C81;
+    font-size: 16px;
+  }
+  
+  textarea {
+    resize: none;
+    min-height: 100px;
+  }
+  
 
 .submitButton {
     padding: 10px 20px;
-    background-color: #004680;
-    color: white;
+    background-color: #EEF7FF;
+    color: #004680;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    float: right;
     margin-block: 1rem;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    font-weight: 600;
+    font-size: 18px;
 }
-
+.submitButton :hover{
+    background-color: #004680;
+}
 /* Modale CSS END */
+
+/* Clender CSS Start */
+.dateWrapper {
+    position: relative;
+    display: inline-block;
+    font-size: 16px;
+  }
+  
+  .hiddenInput {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 0;
+  }
+  
+  .display {
+    color: gray;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 14px;
+    user-select: none;
+    transition: all 0.3s ease;
+  }
+  
+  
+
 
 
 @media (max-width:375px) {
