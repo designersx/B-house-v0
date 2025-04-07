@@ -1,0 +1,56 @@
+.offCanvas {
+    position: fixed;
+    background: white;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+  }
+  
+  .right {
+    top: 0;
+    right: 0;
+    height: 100%;
+    transform: translateX(100%);
+  }
+  .left {
+    top: 0;
+    left: 0;
+    height: 100%;
+    transform: translateX(-100%);
+  }
+  .top {
+    top: 0;
+    left: 0;
+    width: 100%;
+    transform: translateY(-100%);
+  }
+  .bottom {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    transform: translateY(100%);
+  }
+  
+  .open.right {
+    transform: translateX(0);
+  }
+  .open.left {
+    transform: translateX(0);
+  }
+  .open.top {
+    transform: translateY(0);
+  }
+  .open.bottom {
+    transform: translateY(0);
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+  }
+  

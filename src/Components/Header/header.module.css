@@ -1,16 +1,94 @@
-.headerMain{
+.headerMain {
     display: flex;
     justify-content: space-between;
     /* border-width: 4px; */
     /* border-style: solid; */
     padding: 0 0 10px 0;
-    border-bottom: 2px solid ;
+    border-bottom: 2px solid;
     border-image: linear-gradient(to right, #EAEAEA, #004680, #EAEAEA) 1;
     padding: 20px 20px 10px 20px;
 }
 
-.headerSideIcon{
+.headerSideIcon {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+/* SideBar Css  */
+.sidebarContainer {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sectionTitle {
+    font-size: 16px;
+    color: #64748B;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.userName {
+    font-weight: bold;
+    margin: 0;
+}
+
+.userEmail {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin: 0;
+}
+
+.btn {
+    background: transparent;
+    border: none;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background 0.2s;
+}
+
+.btn:hover {
+    background-color: #f3f4f6;
+}
+
+.active {
+    background-color: #E7EAEE;
+}
+
+.logoutBtn {
+    background-color: #E7EAEE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+}
+
+.divider {
+    margin-top: 10px;
+    border-top: 1px solid #e5e7eb;
 }

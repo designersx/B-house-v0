@@ -10,7 +10,7 @@ import InvoicePage from "./Pages/InvoicePage/InvoicePage";
 import DocsPage from "./Pages/DocsPage/DocsPage";
 import PunchPage from "./Pages/PunchPage/PunchPage";
 import OrderDetail from "./Components/Home/OrderDetail/OrderDetail";
-import ProjectDelivery from "./Components/Home/ProjectDelivery/ProjectDelivery";
+import CreateAccount from "./Components/CreateAccount/CreateAccount";
 
 
 
@@ -24,11 +24,15 @@ function App() {
           <Route path="/" element={<Sign />}></Route>
           <Route path="/home" element={<Home />}></Route>
           <Route path="/reset" element={<Reset/>}></Route>
+          <Route path="/create-account" element={<CreateAccount/>}></Route>
           <Route path="/onboarding" element={<Onboarding />}></Route>
           <Route path="/forget" element={<Forget  />}></Route>
           <Route path="/invoice" element={<InvoicePage />}></Route>
           <Route path="/docs" element={<DocsPage />}></Route>
           <Route path="/punchlist" element={<PunchPage />}></Route>
+        
+          <Route path="/order/:id" element={<OrderDetail />} />
+          {/* <Route path="/order" element={<OrderDetail />}></Route> */}
         </Routes>
       </BrowserRouter>
     </>
