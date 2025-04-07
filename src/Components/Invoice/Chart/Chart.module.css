@@ -178,11 +178,13 @@
 .details {
   flex-grow: 1;
 }
-.track{
+
+.track {
   display: flex;
   align-items: center;
-  gap:5px;
+  gap: 5px;
 }
+
 .title {
   font-size: 18px;
   font-weight: 600;
