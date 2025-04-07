@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import styles from "../Sign/Sign.module.css";
-import users from '../../Json/user.json'
+import users from '../../Json/user.json';
 
 const Sign = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const navigate = useNavigate(); // Initialize navigate function
+    const [showPassword, setShowPassword] = useState(false); 
+    const navigate = useNavigate();
 
     const handleSignIn = (e) => {
         e.preventDefault();
-
-        // Check user authentication
         const user = users.find(user => user.email === email && user.password === password);
-
         if (user) {
             setError('');
-            // alert("Sign in successful!");
-            navigate('/reset'); // Redirect to Reset Password Page
+            navigate('/reset');
         } else {
             setError('Invalid email or password');
         }
@@ -37,7 +34,7 @@ const Sign = () => {
                     <label>Email*</label>
                     <input
                         type="email"
-                        placeholder="YourEmail@gmail.com"
+                        placeholder="Youremail@gmail.com"
                         className={styles.input}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -46,17 +43,17 @@ const Sign = () => {
                     <label>Password*</label>
                     <div className={styles.passwordContainer}>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"} 
                             placeholder="Min. 8 characters"
                             className={styles.inputPassword}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <span className={styles.eyeIcon}><img src='Svg/eye.svg' alt='' /></span>
+                        <span className={styles.eyeIcon} onClick={() => setShowPassword(!showPassword)} style={{ cursor: "pointer" }}>
+                            <img src={showPassword ? 'Svg/eye.svg' : 'Svg/eye-close.svg'} alt='' />
+                        </span>
                     </div>
 
-                    {/* Show error message with red color */}
-                    
                     {error && <p className={styles.errorMessage}>{error}</p>}
 
                     <div className={styles.options}>
@@ -64,7 +61,7 @@ const Sign = () => {
                             <input type="checkbox" id="rememberMe" />
                             <label htmlFor="rememberMe"> Keep me logged in</label>
                         </div>
-                        <div> <a href="" className={styles.forgotPassword} onClick={() => navigate("/forget")}>Forget password?</a></div>
+                        <div><a href="" className={styles.forgotPassword} onClick={() => navigate("/forget")}>Forget password?</a></div>
                     </div>
 
                     <button type="submit" className={styles.signInButton}>Sign In</button>
@@ -76,6 +73,6 @@ const Sign = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Sign;

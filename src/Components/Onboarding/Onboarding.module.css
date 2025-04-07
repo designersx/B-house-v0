@@ -150,12 +150,13 @@
 
 .submitButton {
     padding: 10px 20px;
-    background-color: #4318FF;
+    background-color: #004680;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     float: right;
+    margin-block: 1rem;
 }
 
 /* Modale CSS END */

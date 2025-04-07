@@ -27,9 +27,30 @@
   opacity: 0.8;
 }
 
+
 .chartContainer {
-  width: 100px;
-  height: 100px;
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.overlayText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: center;
+  pointer-events: none;
+}
+
+.amount {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.label {
+  font-size: 14px;
 }
 
 .cashflowMessage {
@@ -47,7 +68,6 @@
 .cashflowMessage img {
   width: 60px;
   height: 60px;
-  margin-right: 10px;
 }
 
 .cashFlowTextMain {
@@ -64,171 +84,5 @@
 
 .cashflowText {
   font-size: 14px;
-  opacity: 0.8;
-  margin-block: 0px;
-}
-
-/* Part 1 Css Start */
-.ListMian {
-  padding-inline: 20px;
-}
-
-.Part1 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.title p {
-  font-size: 22px;
-  font-weight: 600;
   color: #26211F;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdownBtn {
-  background: none;
-  border: none;
-  font-size: 16px;
-  color: #555;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0px;
-}
-
-.arrow {
-  margin-left: 5px;
-  font-size: 16px;
-}
-
-.dropdownMenu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  list-style: none;
-  padding: 5px 0;
-  margin: 0;
-  width: 120px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  outline: none;
-}
-
-.dropdownBtn:focus {
-  outline: none;
-}
-
-.dropdownMenu li {
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #333;
-}
-
-.dropdownMenu li:hover {
-  background: #f0f0f0;
-}
-
-.arrow {
-  margin-left: 5px;
-  font-size: 12px;
-  transition: transform 0.3s ease;
-  pointer-events: none;
-}
-
-.rotate {
-  transform: rotate(180deg);
-}
-
-
-/* Lst Data Css Start */
-.transactionList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-}
-
-.transactionItem {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-}
-
-/* .transactionItem:last-child {
-  border-bottom: none;
-} */
-
-.image {
-  width: 50px;
-  height: 50px;
-  border-radius: 10px;
-}
-
-.details {
-  flex-grow: 1;
-}
-
-.track {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #26211F;
-  margin: 0;
-}
-
-.date {
-  font-size: 12px;
-  color: gray;
-  display: flex;
-  align-items: center;
-  margin: 0;
-  border-right: 1px solid;
-  padding-right: 5px;
-}
-
-.amount {
-  font-size: 14px;
-  font-weight: bold;
-  color: #004680;
-  margin: 0;
-}
-
-.status {
-  font-size: 12px;
-  font-weight: bold;
-  padding: 4px 10px;
-  border-radius: 5px;
-  text-align: center;
-  min-width: 80px;
-}
-
-.Pending {
-  background-color: #004a99;
-  color: white;
-}
-
-.Paid {
-  background-color: #28a745;
-  color: white;
-}
-
-.PartlyPaid {
-  background-color: #f39c12;
-  color: white;
 }
