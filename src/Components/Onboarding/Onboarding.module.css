@@ -57,8 +57,8 @@
     content: "";
     position: absolute;
     left: 10%;
-    bottom: -34px;
-    height: 30px;
+    bottom: -18px;
+    height: 15px;
     width: 2px;
     background: repeating-linear-gradient(to bottom, #004680, #004680 5px, transparent 5px, transparent 10px);
 }
