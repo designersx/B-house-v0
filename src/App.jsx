@@ -9,6 +9,8 @@ import Forget from "./Components/Forget/Forget";
 import InvoicePage from "./Pages/InvoicePage/InvoicePage";
 import DocsPage from "./Pages/DocsPage/DocsPage";
 import PunchPage from "./Pages/PunchPage/PunchPage";
+import OrderDetail from "./Components/Home/OrderDetail/OrderDetail";
+import ProjectDelivery from "./Components/Home/ProjectDelivery/ProjectDelivery";
 
 
 
@@ -24,10 +26,13 @@ function App() {
           <Route path="/reset" element={<Reset/>}></Route>
           <Route path="/onboarding" element={<Onboarding />}></Route>
           <Route path="/forget" element={<Forget  />}></Route>
-          <Route path="*" element={<h2 className="comingSoon">Coming Soon</h2>} />
+          {/* <Route path="*" element={<h2 className="comingSoon">Coming Soon</h2>} /> */}
           <Route path="/invoice" element={<InvoicePage />}></Route>
           <Route path="/docs" element={<DocsPage />}></Route>
           <Route path="/punchlist" element={<PunchPage />}></Route>
+          <Route path="/" element={<ProjectDelivery />} />
+          <Route path="/order/:id" element={<OrderDetail />} />
+          {/* <Route path="/order" element={<OrderDetail />}></Route> */}
         </Routes>
       </BrowserRouter>
     </>

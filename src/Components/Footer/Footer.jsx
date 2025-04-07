@@ -7,7 +7,8 @@ function Footer() {
 
 
 <div className={styles.footerMain} >
-    
+
+  <div className={styles.footerFixed}>  
     <div className={styles.footerSideIcon}>
 
 <NavLink to='/home'className={({ isActive }) => isActive ? styles.activeLink : ""}  >
@@ -41,7 +42,7 @@ function Footer() {
     
 
     </div>
-
+    </div>
 
 </div>
 
