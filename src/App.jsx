@@ -26,13 +26,9 @@ function App() {
           <Route path="/reset" element={<Reset/>}></Route>
           <Route path="/onboarding" element={<Onboarding />}></Route>
           <Route path="/forget" element={<Forget  />}></Route>
-          {/* <Route path="*" element={<h2 className="comingSoon">Coming Soon</h2>} /> */}
           <Route path="/invoice" element={<InvoicePage />}></Route>
           <Route path="/docs" element={<DocsPage />}></Route>
           <Route path="/punchlist" element={<PunchPage />}></Route>
-          <Route path="/" element={<ProjectDelivery />} />
-          <Route path="/order/:id" element={<OrderDetail />} />
-          {/* <Route path="/order" element={<OrderDetail />}></Route> */}
         </Routes>
       </BrowserRouter>
     </>
