@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import styles from '../OffCanvas/OffCanvas.module.css'
+import styles from '../OffCanvas/Offcanvas.module.css'
 
 const OffCanvas = ({ isOpen, onClose, children, direction = 'right', width = '80%', height = '100%', overlay = true }) => {
     useEffect(() => {
