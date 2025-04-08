@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
+
 import styles from './header.module.css';
 import OffCanvas from '../OffCanvas/OffCanvas';
 import Modal from '../Modal/Modal';
 import { useNavigate } from 'react-router-dom';
+
+import axios from 'axios';
+import URL from '../../config/api';
 
 function Header() {
   const [showCanvas, setShowCanvas] = useState(false);
@@ -12,6 +17,32 @@ function Header() {
 
   const navigate = useNavigate();
 
+  const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
+  const projectId = localStorage.getItem('selectedProjectId');
+
+  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [deliveryHours, setDeliveryHours] = useState('');
+  const [customHours, setCustomHours] = useState('');
+
+  useEffect(() => {
+    const fetchProjectDetails = async () => {
+      try {
+        if (!projectId) return;
+
+        const res = await axios.get(`${URL}/projects/${projectId}`);
+        const project = res.data;
+
+        setDeliveryAddress(project.deliveryAddress || '');
+        setDeliveryHours(project.deliveryHours || '');
+        setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(project.deliveryHours) ? '' : project.deliveryHours);
+      } catch (err) {
+        console.error("Error fetching project data:", err);
+      }
+    };
+
+    fetchProjectDetails();
+  }, [projectId]);
+
   const handleLogout = () => {
     localStorage.removeItem('customerToken');
     localStorage.removeItem('customerInfo');
@@ -19,9 +50,29 @@ function Header() {
     localStorage.removeItem('selectedProjectId');
     navigate('/');
   };
+
   const handleEdit = () => {
     navigate('/edit-profile')
   }
+
+
+  const handleUpdateDeliveryDetails = async () => {
+    try {
+      const data = {
+        deliveryAddress,
+        deliveryHours: deliveryHours === "Other" ? customHours : deliveryHours
+      };
+
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => formData.append(key, value));
+
+      await axios.put(`${URL}/projects/${projectId}`, formData);
+      setShowModal(false);
+    } catch (err) {
+      console.error("Update failed:", err);
+      alert("Failed to update delivery details.");
+    }
+  };
 
   return (
     <div>
@@ -49,8 +100,8 @@ function Header() {
           <div className={styles.userInfo}>
             <img src="Svg/DP.svg" alt="user" className={styles.avatar} />
             <div>
-              <p className={styles.userName}>Jenny Wilson</p>
-              <p className={styles.userEmail}>J.wilson@example.com</p>
+              <p className={styles.userName}>{customerInfo?.full_name || "User"}</p>
+              <p className={styles.userEmail}>{customerInfo?.email || "email@example.com"}</p>
             </div>
           </div>
 
@@ -73,45 +124,48 @@ function Header() {
         </div>
       </OffCanvas>
 
-      {/* Modal UI  Start */}
 
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height="70vh">
-        <>
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
+        <div className={styles.formGroup}>
+          <label>Delivery Address*</label>
+          <input
+            type="text"
+            value={deliveryAddress}
+            onChange={(e) => setDeliveryAddress(e.target.value)}
+            placeholder="Write delivery address"
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label>Delivery Hours*</label>
+          <select
+            value={deliveryHours}
+            onChange={(e) => {
+              setDeliveryHours(e.target.value);
+              if (e.target.value !== "Other") setCustomHours('');
+            }}
+          >
+            <option>Regular Hours</option>
+            <option>Before 9 AM</option>
+            <option>After 6 PM</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        {deliveryHours === "Other" && (
           <div className={styles.formGroup}>
-            <label>Delivery Address*</label>
-            <input type="text" placeholder="Write delivery address" />
+            <label>Other</label>
+            <textarea
+              placeholder="Enter custom hours"
+              value={customHours}
+              onChange={(e) => setCustomHours(e.target.value)}
+            />
           </div>
+        )}
 
-          <div className={styles.formGroup}>
-            <label>Delivery Hours*</label>
-            <select
-              value={deliveryHours}
-              onChange={(e) => setDeliveryHours(e.target.value)}
-            >
-              <option value="">Select</option>
-              <option value="Regular Hours">Regular Hours</option>
-              <option value="Before 9 AM">Before 9 AM</option>
-              <option value="After 6 PM">After 6 PM</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
 
-          {deliveryHours === 'Other' && (
-            <div className={styles.formGroup}>
-              <label>Other</label>
-              <textarea
-                placeholder="Enter custom hours"
-                value={customHours}
-                onChange={(e) => setCustomHours(e.target.value)}
-              />
-            </div>
-          )}
-
-          <button className={styles.submitButton}>Update</button>
-        </>
+        <button className={styles.submitButton} onClick={handleUpdateDeliveryDetails}>Update</button>
       </Modal>
-      {/* Modal UI  End */}
-
     </div>
   );
 }
