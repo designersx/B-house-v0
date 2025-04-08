@@ -49,7 +49,7 @@ const CreateAccount = () => {
                         value=''
                     />
                     <label>Description*</label>
-                    <textarea  className={styles.textarea} id="w3review" name="w3review" rows="2" cols="50">Description</textarea>
+                    <textarea  className={styles.textarea} name="w3review" rows="2" cols="50">Description</textarea>
                     <button type="submit" className={styles.signInButton}>Request to Create an Account</button>
                 </form>
 
