@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../Onboarding/Onboarding.module.css';
 import Modal from '../Modal/Modal';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import URL from '../../config/api.js';
+import URL from '../../config/api';
 
 const onboardingItems = [
   { img: 'Svg/Coi.svg', title: 'Building Delivery Hours' },
@@ -12,58 +12,51 @@ const onboardingItems = [
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const customerInfo = localStorage.getItem("customerInfo");
+  const customerInfo = localStorage.getItem('customerInfo');
   const clientId = customerInfo ? JSON.parse(customerInfo)?.id : null;
+
   const [openModalIndex, setOpenModalIndex] = useState(null);
   const [completedSteps, setCompletedSteps] = useState([]);
-  const [project, setProject] = useState(null);
   const [projectId, setProjectId] = useState(null);
-
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryHours, setDeliveryHours] = useState('');
   const [customHours, setCustomHours] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
-  const today = new Date().toISOString().split('T')[0];
-  const [selectedDate, setSelectedDate] = useState(today);
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return '';
-    const options = { day: '2-digit', month: 'short', year: 'numeric' };
-    return new Date(dateStr).toLocaleDateString('en-GB', options);
-  };
-
-  const handleChange = (e) => {
-    setSelectedDate(e.target.value);
-  };
-
+  // Fetch project data
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const projectRes = await axios.get(`${URL}/projects/client/${clientId}`);
-        const selected = projectRes.data[0];
-        if (!selected) return;
+        const res = await axios.get(`${URL}/projects/client/${clientId}`);
+        const project = res.data[0];
+        if (!project) return;
 
-        const full = await axios.get(`${URL}/projects/${selected.id}`);
-        setProject(full.data);
-        setProjectId(selected.id);
+        setProjectId(project.id);
+        const full = await axios.get(`${URL}/projects/${project.id}`);
+        const data = full.data;
 
-        setDeliveryAddress(full.data.deliveryAddress || "");
-        setDeliveryHours(full.data.deliveryHours || "");
-        setCustomHours(["Regular Hours", "Before 9 AM", "After 6 PM"].includes(full.data.deliveryHours) ? "" : full.data.deliveryHours);
-        setSelectedDate(full.data.estimatedCompletion?.split('T')[0] || today);
+        setDeliveryAddress(data.deliveryAddress || '');
+        setDeliveryHours(data.deliveryHours || '');
+        setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(data.deliveryHours) ? '' : data.deliveryHours);
+        setSelectedDate(data.estimatedCompletion?.split('T')[0] || selectedDate);
       } catch (err) {
-        console.error("Error fetching project", err);
+        console.error('Error fetching project:', err);
       }
     };
 
     if (clientId) fetchProject();
   }, [clientId]);
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  };
+
   const handleSubmit = async () => {
     try {
       const data = {
         deliveryAddress,
-        deliveryHours: deliveryHours === "Other" ? customHours : deliveryHours,
+        deliveryHours: deliveryHours === 'Other' ? customHours : deliveryHours,
         estimatedCompletion: selectedDate
       };
 
@@ -71,12 +64,11 @@ const Onboarding = () => {
       Object.entries(data).forEach(([key, value]) => formData.append(key, value));
 
       await axios.put(`${URL}/projects/${projectId}`, formData);
-
-      setCompletedSteps([...completedSteps, openModalIndex]);
+      setCompletedSteps((prev) => [...prev, openModalIndex]);
       setOpenModalIndex(null);
     } catch (err) {
-      console.error("Update failed", err);
-      alert("Failed to update project.");
+      console.error('Update failed', err);
+      alert('Failed to update project.');
     }
   };
 
@@ -105,37 +97,23 @@ const Onboarding = () => {
               </div>
               <div><h2>{item.title}</h2></div>
             </div>
-            {completedSteps.includes(index) ? (
-              <div><img src='Svg/done.svg' alt='' /></div>
-            ) : (
-              <div onClick={() => setOpenModalIndex(index)} style={{ cursor: 'pointer' }}>
-                <img src='Svg/start.svg' alt='' />
-              </div>
-            )}
+            <div onClick={() => setOpenModalIndex(index)} style={{ cursor: 'pointer' }}>
+              <img src={completedSteps.includes(index) ? 'Svg/done.svg' : 'Svg/start.svg'} alt='icon' />
+            </div>
           </div>
         ))}
 
         <div className={styles.bodypart2}>
           <div className={styles.FlexDiv}>
             <div className={styles.iconLogo}><img src='Svg/Coi.svg' alt='Coi' /></div>
-            <div><h2>Est. Occupancy date</h2></div>
-          </div>
-          <div className={styles.dateWrapper}>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={handleChange}
-              className={styles.hiddenInput}
-            />
-            <div className={styles.display} onClick={() => document.querySelector(`.${styles.hiddenInput}`).showPicker()}>
-              {formatDate(selectedDate)}
+            <div className={styles.Date}>
+              <h2>Est. Occupancy date</h2>
+              <p>{formatDate(selectedDate)}</p>
             </div>
           </div>
         </div>
 
-        <p className={styles.signP}>
-          Upload your documents to proceed or <b>skip</b> for later.
-        </p>
+        <p className={styles.signP}>Upload your documents to proceed or <b>skip</b> for later.</p>
       </div>
 
       <div className={styles.skipMain}>
@@ -166,56 +144,14 @@ const Onboarding = () => {
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                   />
                 </div>
-            <div className={styles.bodyMain}>
-                {onboardingItems.map((item) => (
-                    <div
-                        key={item.title}
-                        className={`${styles.bodypart} ${completedSteps.includes(item.title) ? styles.completedStepBorder : ''}`}
-                    >
-                        <div className={styles.FlexDiv}>
-                            <div
-                                className={`${styles.iconLogo} ${completedSteps.includes(item.title) ? styles.completedStep : ''}`}
-                            >
-                                <img src={item.img} alt='' />
-                            </div>
-                            <div>
-                                <h2>{item.title}</h2>
-                            </div>
-                        </div>
 
-                        <div onClick={() => handleOpenModal(item.title)} style={{ cursor: 'pointer' }}>
-                            {completedSteps.includes(item.title) ? (
-                                <img src='Svg/done.svg' alt='done' />
-                            ) : (
-                                <img src='Svg/start.svg' alt='start' />
-                            )}
-                        </div>
-                    </div>
-                ))}
-
-                <div className={styles.bodypart2}>
-                    <div className={styles.FlexDiv}>
-                        <div className={styles.iconLogo}>
-                            <img src='Svg/Coi.svg' alt='Coi' />
-                        </div>
-                        <div className={styles.Date}>
-                            <h2>Est. Occupancy date</h2>
-                            <p>08 April 2025</p>
-                        </div>
-                    </div>
-                </div>
-
-                <p className={styles.signP}>
-                    Upload your documents to proceed or <b>skip</b> for later.
-                </p>
-            </div>
                 <div className={styles.formGroup}>
                   <label>Delivery Hours*</label>
                   <select
                     value={deliveryHours}
                     onChange={(e) => {
                       setDeliveryHours(e.target.value);
-                      if (e.target.value !== "Other") setCustomHours("");
+                      if (e.target.value !== "Other") setCustomHours('');
                     }}
                   >
                     <option>Regular Hours</option>
@@ -224,7 +160,6 @@ const Onboarding = () => {
                     <option>Other</option>
                   </select>
                 </div>
-
 
                 {deliveryHours === "Other" && (
                   <div className={styles.formGroup}>
@@ -255,84 +190,7 @@ const Onboarding = () => {
                   <label>Upload COI Document</label>
                   <input type="file" />
                 </div>
-            {openModalTitle && (
-                <Modal isOpen={true} onClose={() => setOpenModalTitle(null)} height='70vh'>
-                    <div className={styles.modalContent}>
-                        <h2>{openModalTitle}</h2>
 
-                        {openModalTitle === 'Project Address' && (
-                            <>
-                                <div className={styles.formGroup}>
-                                    <label>Project Address*</label>
-                                    <input type="text" placeholder="Write project address" />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label>Project Hours*</label>
-                                    <select>
-                                        <option>Ex-Regular hours, Before 9 am, after 6pm</option>
-                                        <option>9 am to 6 pm</option>
-                                        <option>24 Hours Access</option>
-                                    </select>
-                                </div>
-                            </>
-                        )}
-
-                        {openModalTitle === 'Building Delivery Hours' && (
-                            <>
-                                <div className={styles.formGroup}>
-                                    <label>Delivery Address*</label>
-                                    <input type="text" placeholder="Write delivery address" />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label>Delivery Hours*</label>
-                                    <select
-                                        value={selectedDeliveryHour}
-                                        onChange={(e) => setSelectedDeliveryHour(e.target.value)}
-                                    >
-                                        <option value="">Select option</option>
-                                        <option value="Regular hours">Regular hours</option>
-                                        <option value="Before 9 am">9 am</option>
-                                        <option value="After 6 pm">After 6 pm</option>
-                                        <option value="Others">Others</option>
-                                    </select>
-
-                                    {selectedDeliveryHour === "Others" && (
-                                        <textarea
-                                            className={styles.textarea}
-                                            placeholder="Please specify delivery hours"
-                                            rows="3"
-                                        />
-                                    )}
-                                </div>
-
-                            </>
-                        )}
-
-                        {openModalTitle === 'Building Sample (COI)' && (
-                            <>
-                                <div className={styles.formGroup}>
-                                    <label>Insurance Provider Names*</label>
-                                    <select>
-                                        <option>Ex-UnitedHealth Group</option>
-                                        <option>Aetna</option>
-                                        <option>BlueCross BlueShield</option>
-                                        <option>Cigna</option>
-                                    </select>
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label>Upload COI Document</label>
-                                    <input type="file" />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label>Comments or Notes</label>
-                                    <textarea placeholder="Leave your thought here" />
-                                </div>
-                            </>
-                        )}
-                    </div>
-
-                    <button onClick={handleSubmit} className={styles.submitButton}>Update</button>
-                </Modal>
                 <div className={styles.formGroup}>
                   <label>Comments or Notes</label>
                   <textarea placeholder="Leave your thought here" />

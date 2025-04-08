@@ -1,59 +1,123 @@
-import React, { useState } from 'react'
-import styles from '../Verify/Verify.module.css'
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import styles from '../Verify/Verify.module.css';
+import axios from 'axios';
+import URL from '../../config/api';
+import { useNavigate } from 'react-router-dom';
 
 const Verify = () => {
-    const navigate = useNavigate();
-    const [showPassword1, setShowPassword1] = useState(false);
-    const handleClick = () => {
-        navigate("/reset");
-    };
-    return (
-        <div className={styles.VerifyMain}>
-            <div className={styles.detailsDiv}>
-                <div className={styles.blackLogo}>
-                    <img src='Svg/b-houseBlack.svg' alt='' />
-                </div>
-                <div className={styles.OtpMain}>
-                    <h2>Verify Your Email</h2>
-                    <p>Enter code we’ve sent to your inbox
-                        info@bhouse.com</p>
-                    <div className={styles.OtpContainer}>
-                        <input type="text" maxLength="1" value="5" className={`${styles.input} ${styles.filled}`} />
-                        <input type="text" maxLength="1" value="1" className={`${styles.input} ${styles.filled}`} />
-                        <input type="text" maxLength="1" className={`${styles.input} ${styles.active}`} />
-                        <input type="text" maxLength="1" className={styles.input} />
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [newPassword, setNewPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const [resendMsg, setResendMsg] = useState('');
+  const navigate = useNavigate();
 
-                    </div>
-                    <div className={styles.Input1}>
-                        <input
-                            type={showPassword1 ? "text" : "password"}
-                            placeholder="Enter your new password"
-                            className={styles.inputField}
-                        />
-                        <div onClick={() => setShowPassword1(!showPassword1)} style={{ cursor: 'pointer' }}>
-                            <img
-                                src={showPassword1 ? 'Svg/eye.svg' : 'Svg/eye-close.svg'}
-                                alt='Toggle visibility'
-                            />
-                        </div>
-                    </div>
+  const email = localStorage.getItem('otpEmail'); 
 
-                    <div className={styles.resend}>
-                        <p>Don’t get the code? <a href=''>Resend it.</a></p>
-                    </div>
-                    <div className={styles.BtnDiv} onClick={handleClick}>
-                        <div className={styles.ContinueBtn}>
-                            <p >Submit</p>
-                        </div>
-                    </div>
-                </div>
+  const handleChangeOtp = (index, value) => {
+    if (!/^[0-9]?$/.test(value)) return;
+    const updatedOtp = [...otp];
+    updatedOtp[index] = value;
+    setOtp(updatedOtp);
+    if (value && index < 5) {
+      document.getElementById(`otp-${index + 1}`)?.focus();
+    }
+  };
 
+  const handleSubmit = async () => {
+    try {
+      const finalOtp = otp.join('');
+      if (finalOtp.length !== 6 || !newPassword) {
+        setError('Please enter a valid OTP and password');
+        return;
+      }
 
+      const response = await axios.post(`${URL}/customer/reset-password-otp`, {
+        email,
+        otp: finalOtp,
+        newPassword,
+      });
+      
+      setSuccessMsg(response.data.message || "Password reset successful!");
+      setTimeout(() => {
+        navigate('/');
+      }, 1500);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Something went wrong.');
+    }
+  };
 
-            </div>
+  const handleResendOTP = async () => {
+    try {
+      if (!email) return setError("Email not found in session");
+
+      await axios.post(`${URL}/customer/forgot-password`, { email });
+      setResendMsg("OTP resent to your email.");
+      setTimeout(() => setResendMsg(''), 3000);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to resend OTP.");
+    }
+  };
+
+  return (
+    <div className={styles.VerifyMain}>
+      <div className={styles.detailsDiv}>
+        <div className={styles.blackLogo}>
+          <img src='Svg/b-houseBlack.svg' alt='' />
         </div>
-    )
-}
 
-export default Verify
+        <div className={styles.OtpMain}>
+          <h2>Verify Your Email</h2>
+          <p>Enter code sent to your inbox <b>{email}</b></p>
+
+          <div className={styles.OtpContainer}>
+            {otp.map((digit, index) => (
+              <input
+                key={index}
+                id={`otp-${index}`}
+                type='text'
+                maxLength='1'
+                value={digit}
+                className={`${styles.input} ${digit ? styles.filled : ''}`}
+                onChange={(e) => handleChangeOtp(index, e.target.value)}
+              />
+            ))}
+          </div>
+
+          <div className={styles.Input1}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder='Enter your new password'
+              className={styles.inputField}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+            <div onClick={() => setShowPassword(!showPassword)} style={{ cursor: 'pointer' }}>
+              <img
+                src={showPassword ? 'Svg/eye.svg' : 'Svg/eye-close.svg'}
+                alt='Toggle visibility'
+              />
+            </div>
+          </div>
+
+          {error && <p style={{ color: 'red', marginTop: 10 }}>{error}</p>}
+          {successMsg && <p style={{ color: 'green', marginTop: 10 }}>{successMsg}</p>}
+          {resendMsg && <p style={{ color: 'blue', marginTop: 10 }}>{resendMsg}</p>}
+
+          <div className={styles.resend}>
+            <p>Didn't get the code? <span onClick={handleResendOTP} style={{ cursor: 'pointer', color: '#007bff' }}><b>Resend it</b></span></p>
+          </div>
+
+          <div className={styles.BtnDiv}>
+            <div className={styles.ContinueBtn} onClick={handleSubmit}>
+              <p>Submit</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Verify;

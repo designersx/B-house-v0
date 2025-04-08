@@ -3,10 +3,12 @@ import styles from "../Forget/Forget.module.css";
 import axios from "axios";
 import URL from "../../config/api";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Forget = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const Nevigate = useNavigate();
 
   const handleSendOtp = async () => {
     if (!email) {
@@ -18,6 +20,7 @@ const Forget = () => {
       const res = await axios.post(`${URL}/customer/forgot-password`, { email });
       toast.success(res.data.message || "OTP sent to your email!");
       localStorage.setItem("otpEmail", email);
+      Nevigate("/verify");
     } catch (err) {
       console.error("OTP Error:", err);
       toast.error(err.response?.data?.message || "Failed to send OTP.");
