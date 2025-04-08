@@ -30,17 +30,23 @@ body {
 
 
 
-/* @media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff00 !important;
+    background-color: #ffffff !important;
   }
-} */
+}
 @media (prefers-color-scheme: dark) {
   :root {
     color: #213547;
     background-color: #ffffff !important;
   }
+  input, textarea, select {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+   
+  }
+
 }
 @media (min-width: 601px) {
   body {
