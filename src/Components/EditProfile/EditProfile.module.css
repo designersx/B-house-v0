@@ -1,0 +1,136 @@
+.profileContainer {
+    position: relative;
+}
+
+.BlueImg img {
+    width: 100%;
+
+}
+
+.backButton {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+.imageSection {
+    position: relative;
+    margin: 30px auto 10px;
+    width: 130px;
+    height: 130px;
+}
+
+.ProfileSection {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.profileImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.editIcon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background-color: white;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.detalis{
+    text-align: center;
+}
+.name {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 10px;
+    color: #191D23;
+}
+
+.email {
+    font-size: 14px;
+    color: #888;
+}
+
+
+
+.formContainer {
+    padding: 20px;
+    margin-top: -6rem;
+  }
+  
+  .formGroup {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  label span {
+    color: #000000;
+    margin-left: 4px;
+  }
+  
+  input {
+    padding: 14px 18px;
+    font-size: 16px;
+    border: 1px solid #E0E5F2;
+    border-radius: 10px;
+    outline: none;
+    color: #000;
+  }
+  
+  ::placeholder {
+    color: #bcc3d4;
+    font-size: 16px;
+  }
+
+  .updateBtn{
+    background-color: #EEF7FF ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 16px;
+    min-height: 54px;
+  }
+  .updateBtn p{
+    color: #004680;
+    font-size: 16px;
+    font-weight: bold;
+
+  }
+  
+
+  

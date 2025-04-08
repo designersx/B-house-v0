@@ -72,6 +72,7 @@ function ProjectDelivery({ selectedProject }) {
     fetchManufacturers();
   }, [selectedProject]);
 
+
   // Fetch comments once items are available
   useEffect(() => {
     if (data && data.length > 0) {
