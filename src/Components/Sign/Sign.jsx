@@ -9,6 +9,8 @@ const Sign = () => {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false); 
+
     const navigate = useNavigate();
 
 
@@ -24,7 +26,6 @@ const Sign = () => {
 
     const handleSignIn = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.post(`${URL}/customer/login`, {
                 email,
@@ -67,7 +68,7 @@ const Sign = () => {
                     <label>Email*</label>
                     <input
                         type="email"
-                        placeholder="YourEmail@gmail.com"
+                        placeholder="Youremail@gmail.com"
                         className={styles.input}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -76,13 +77,15 @@ const Sign = () => {
                     <label>Password*</label>
                     <div className={styles.passwordContainer}>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"} 
                             placeholder="Min. 8 characters"
                             className={styles.inputPassword}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <span className={styles.eyeIcon}><img src='Svg/eye.svg' alt='' /></span>
+                        <span className={styles.eyeIcon} onClick={() => setShowPassword(!showPassword)} style={{ cursor: "pointer" }}>
+                            <img src={showPassword ? 'Svg/eye.svg' : 'Svg/eye-close.svg'} alt='' />
+                        </span>
                     </div>
 
                     {error && <p className={styles.errorMessage}>{error}</p>}

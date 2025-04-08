@@ -4,7 +4,7 @@ import Footer from '../../Components/Footer/Footer'
 const PunchPage = () => {
   return (
     <div>
-       <HeaderTab title='Invoice List' />
+       <HeaderTab title='Punchlist' />
        <Footer />
     </div>
   )
