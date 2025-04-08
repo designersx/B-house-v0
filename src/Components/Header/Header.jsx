@@ -56,7 +56,7 @@ function Header() {
 
 
       {/* Modal open on click */}
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
         <>
           <div className={styles.formGroup}>
             <label>Delivery Address*</label>

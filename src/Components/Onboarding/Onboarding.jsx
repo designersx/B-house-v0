@@ -4,30 +4,35 @@ import Modal from '../Modal/Modal';
 import { useNavigate } from "react-router-dom";
 
 const onboardingItems = [
-    { img: 'Svg/Coi.svg', title: 'Project Address' },
+    // { img: 'Svg/Coi.svg', title: 'Project Address' },
     { img: 'Svg/Coi.svg', title: 'Building Delivery Hours' },
     { img: 'Svg/Coi.svg', title: 'Building Sample (COI)' },
-
 ];
+
 const Onboarding = () => {
     const navigate = useNavigate();
-    const [openModalIndex, setOpenModalIndex] = useState(null);
+    const [openModalTitle, setOpenModalTitle] = useState(null);
     const [completedSteps, setCompletedSteps] = useState([]);
+    const [selectedDeliveryHour, setSelectedDeliveryHour] = useState('');
 
-    const handleOpenModal = (index) => {
-        if (index === 0 || completedSteps.includes(index - 1)) {
-            setOpenModalIndex(index);
+    const handleOpenModal = (title) => {
+        const index = onboardingItems.findIndex(item => item.title === title);
+        const prevTitle = onboardingItems[index - 1]?.title;
+
+        // Allow open if it's the first or previous step is done
+        if (index === 0 || completedSteps.includes(prevTitle)) {
+            setOpenModalTitle(title);
+        } else {
+            alert("Please complete the previous step first!");
         }
     };
 
     const handleSubmit = () => {
-        setCompletedSteps([...completedSteps, openModalIndex]);
-        setOpenModalIndex(null);
+        if (!completedSteps.includes(openModalTitle)) {
+            setCompletedSteps([...completedSteps, openModalTitle]);
+        }
+        setOpenModalTitle(null);
     };
-
-
-   
-
 
     return (
         <div className={styles.OnboardingMain}>
@@ -46,14 +51,14 @@ const Onboarding = () => {
             </div>
 
             <div className={styles.bodyMain}>
-                {onboardingItems.map((item, index) => (
+                {onboardingItems.map((item) => (
                     <div
-                        key={index}
-                        className={`${styles.bodypart} ${completedSteps.includes(index) ? styles.completedStepBorder : ''}`}
+                        key={item.title}
+                        className={`${styles.bodypart} ${completedSteps.includes(item.title) ? styles.completedStepBorder : ''}`}
                     >
                         <div className={styles.FlexDiv}>
                             <div
-                                className={`${styles.iconLogo} ${completedSteps.includes(index) ? styles.completedStep : ''}`}
+                                className={`${styles.iconLogo} ${completedSteps.includes(item.title) ? styles.completedStep : ''}`}
                             >
                                 <img src={item.img} alt='' />
                             </div>
@@ -62,30 +67,28 @@ const Onboarding = () => {
                             </div>
                         </div>
 
-                        {completedSteps.includes(index) ? (
-                            <div>
-                                <img src='Svg/done.svg' alt='' />
-                            </div>
-                        ) : (
-                            <div onClick={() => handleOpenModal(index)} style={{ cursor: 'pointer' }}>
-                                <img src='Svg/start.svg' alt='' />
-                            </div>
-                        )}
+                        <div onClick={() => handleOpenModal(item.title)} style={{ cursor: 'pointer' }}>
+                            {completedSteps.includes(item.title) ? (
+                                <img src='Svg/done.svg' alt='done' />
+                            ) : (
+                                <img src='Svg/start.svg' alt='start' />
+                            )}
+                        </div>
                     </div>
                 ))}
+
                 <div className={styles.bodypart2}>
                     <div className={styles.FlexDiv}>
                         <div className={styles.iconLogo}>
                             <img src='Svg/Coi.svg' alt='Coi' />
-
                         </div>
                         <div className={styles.Date}>
                             <h2>Est. Occupancy date</h2>
                             <p>08 April 2025</p>
                         </div>
                     </div>
-            
                 </div>
+
                 <p className={styles.signP}>
                     Upload your documents to proceed or <b>skip</b> for later.
                 </p>
@@ -103,12 +106,12 @@ const Onboarding = () => {
                 )}
             </div>
 
-            {openModalIndex !== null && (
-                <Modal isOpen={true} onClose={() => setOpenModalIndex(null)}>
+            {openModalTitle && (
+                <Modal isOpen={true} onClose={() => setOpenModalTitle(null)} height='70vh'>
                     <div className={styles.modalContent}>
-                        <h2>{onboardingItems[openModalIndex].title}</h2>
+                        <h2>{openModalTitle}</h2>
 
-                        {openModalIndex === 0 && (
+                        {openModalTitle === 'Project Address' && (
                             <>
                                 <div className={styles.formGroup}>
                                     <label>Project Address*</label>
@@ -122,14 +125,10 @@ const Onboarding = () => {
                                         <option>24 Hours Access</option>
                                     </select>
                                 </div>
-                                {/* <div className={styles.formGroup}>
-                                    <label>Other</label>
-                                    <textarea placeholder="Leave your thoughts here" />
-                                </div> */}
                             </>
                         )}
 
-                        {openModalIndex === 1 && (
+                        {openModalTitle === 'Building Delivery Hours' && (
                             <>
                                 <div className={styles.formGroup}>
                                     <label>Delivery Address*</label>
@@ -137,17 +136,30 @@ const Onboarding = () => {
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label>Delivery Hours*</label>
-                                    <select>
-                                        <option>Ex-Regular hours, Before 9 am, after 6pm</option>
-                                        <option>9 am to 6 pm</option>
-                                        <option>24 Hours Access</option>
+                                    <select
+                                        value={selectedDeliveryHour}
+                                        onChange={(e) => setSelectedDeliveryHour(e.target.value)}
+                                    >
+                                        <option value="">Select option</option>
+                                        <option value="Regular hours">Regular hours</option>
+                                        <option value="Before 9 am">9 am</option>
+                                        <option value="After 6 pm">After 6 pm</option>
+                                        <option value="Others">Others</option>
                                     </select>
+
+                                    {selectedDeliveryHour === "Others" && (
+                                        <textarea
+                                            className={styles.textarea}
+                                            placeholder="Please specify delivery hours"
+                                            rows="3"
+                                        />
+                                    )}
                                 </div>
-                             
+
                             </>
                         )}
 
-                        {openModalIndex === 2 && (
+                        {openModalTitle === 'Building Sample (COI)' && (
                             <>
                                 <div className={styles.formGroup}>
                                     <label>Insurance Provider Names*</label>
@@ -158,20 +170,16 @@ const Onboarding = () => {
                                         <option>Cigna</option>
                                     </select>
                                 </div>
-
                                 <div className={styles.formGroup}>
                                     <label>Upload COI Document</label>
                                     <input type="file" />
                                 </div>
-
                                 <div className={styles.formGroup}>
                                     <label>Comments or Notes</label>
                                     <textarea placeholder="Leave your thought here" />
                                 </div>
                             </>
                         )}
-
-
                     </div>
 
                     <button onClick={handleSubmit} className={styles.submitButton}>Update</button>

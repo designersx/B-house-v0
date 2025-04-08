@@ -6,10 +6,9 @@ function OrderDetail() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ✅ Retrieve the order data from React Router state
   const order = location.state?.order;
 
-  // ✅ Redirect to home if no data is found (Prevents blank page issue)
+
   if (!order) {
     navigate("/", { replace: true });
     return null;
