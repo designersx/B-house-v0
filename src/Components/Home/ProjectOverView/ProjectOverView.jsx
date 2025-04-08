@@ -6,18 +6,27 @@ import URL from '../../../config/api';
 function ProjectOverView({selectedProject}) {
   const [project, setProject] = useState(null);
   const [leadTimeDays, setLeadTimeDays] = useState(0);
+  const [punchList, setPunchList] = useState([]);
+
 
   useEffect(() => {
     const fetchProject = async () => {
       const projectId = localStorage.getItem("selectedProjectId");
       if (!projectId) return;
-  
+    
       try {
-        const res = await axios.get(`${URL}/projects/${projectId}`);
-        const project = res.data;
+        const [projectRes, punchListRes] = await Promise.all([
+          axios.get(`${URL}/projects/${projectId}`),
+          axios.get(`${URL}/projects/${projectId}/punch-list`)
+        ]);
+    
+        const project = projectRes.data;
+        const punchList = punchListRes.data;
+    
         setProject(project);
-  
-        // Lead time
+        setPunchList(punchList);
+    
+        // Lead time calculation
         if (project?.createdAt && project?.estimatedCompletion) {
           const created = new Date(project.createdAt);
           const estimated = new Date(project.estimatedCompletion);
@@ -26,15 +35,12 @@ function ProjectOverView({selectedProject}) {
           setLeadTimeDays(days);
         }
       } catch (err) {
-        console.error("Failed to fetch project by ID", err);
+        console.error("Failed to fetch project or punch list", err);
       }
     };
-  
     fetchProject();
   }, [selectedProject]);
-  
-  
-
+ 
   return (
     <div>
       <div className={styles.container}>
@@ -52,11 +58,13 @@ function ProjectOverView({selectedProject}) {
               </div>
 
               <div>
-                <p className={styles.bigText}>
-                  02<span className={styles.subText}> out of 5</span>
-                </p>
-                <p className={styles.label}>Punchlist</p>
-              </div>
+  <p className={styles.bigText}>
+    {resolvedPunchItems}
+    <span className={styles.subText}> out of {totalPunchItems}</span>
+  </p>
+  <p className={styles.label}>Punchlist</p>
+</div>
+
 
               <div className={styles.team}>
   <div className={styles.avatars}>

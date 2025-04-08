@@ -1,9 +1,20 @@
 import React, { useState } from 'react'
 import styles from './header.module.css'
 import OffCanvas from '../OffCanvas/OffCanvas'
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const [showCanvas, setShowCanvas] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('customerToken');
+    localStorage.removeItem('customerInfo');
+    localStorage.removeItem('selectedProject');
+    localStorage.removeItem('selectedProjectId');
+    navigate('/');
+  };
+
   return (
     <div>
 
@@ -42,10 +53,11 @@ function Header() {
             Settings
           </button>
 
-          <button className={`${styles.btn} ${styles.logoutBtn}`}>
-            <img src="Svg/Left-icon.svg" alt="icon" className={styles.icon} />
-            Log out
+          <button className={`${styles.btn} ${styles.logoutBtn}`} onClick={handleLogout}>
+           <img src="Svg/Left-icon.svg" alt="icon" className={styles.icon} />
+           Log out
           </button>
+
 
           <div className={styles.divider}></div>
         </div>
