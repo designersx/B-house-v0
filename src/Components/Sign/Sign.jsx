@@ -1,26 +1,56 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from "../Sign/Sign.module.css";
-import users from '../../Json/user.json'
+import axios from 'axios';
+import URL from '../../config/api';
 
 const Sign = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
-    const navigate = useNavigate(); // Initialize navigate function
+    const navigate = useNavigate();
 
-    const handleSignIn = (e) => {
+
+    useEffect(() => {
+        const savedEmail = localStorage.getItem("savedEmail");
+        const savedPassword = localStorage.getItem("savedPassword");
+        if (savedEmail && savedPassword) {
+            setEmail(savedEmail);
+            setPassword(savedPassword);
+            setRememberMe(true);
+        }
+    }, []);
+
+    const handleSignIn = async (e) => {
         e.preventDefault();
 
-        // Check user authentication
-        const user = users.find(user => user.email === email && user.password === password);
+        try {
+            const response = await axios.post(`${URL}/customer/login`, {
+                email,
+                password,
+            });
 
-        if (user) {
-            setError('');
-            // alert("Sign in successful!");
-            navigate('/reset'); // Redirect to Reset Password Page
-        } else {
-            setError('Invalid email or password');
+            const { token, firstLogin, customer } = response.data;
+            localStorage.setItem('customerToken', token);
+            localStorage.setItem('customerInfo', JSON.stringify(customer));
+            if (rememberMe) {
+                localStorage.setItem("savedEmail", email);
+                localStorage.setItem("savedPassword", password);
+            } else {
+                localStorage.removeItem("savedEmail");
+                localStorage.removeItem("savedPassword");
+            }
+
+            if (firstLogin) {
+                navigate('/reset');
+            } else {
+                navigate('/home');
+            }
+
+        } catch (err) {
+            console.error("Login error:", err);
+            setError(err.response?.data?.message || "Login failed");
         }
     };
 
@@ -55,27 +85,32 @@ const Sign = () => {
                         <span className={styles.eyeIcon}><img src='Svg/eye.svg' alt='' /></span>
                     </div>
 
-                    {/* Show error message with red color */}
-                    
                     {error && <p className={styles.errorMessage}>{error}</p>}
 
                     <div className={styles.options}>
                         <div className={styles.checkBoxDiv}>
-                            <input type="checkbox" id="rememberMe" />
+                            <input
+                                type="checkbox"
+                                id="rememberMe"
+                                checked={rememberMe}
+                                onChange={() => setRememberMe(!rememberMe)}
+                            />
                             <label htmlFor="rememberMe"> Keep me logged in</label>
                         </div>
-                        <div> <a href="" className={styles.forgotPassword} onClick={() => navigate("/forget")}>Forget password?</a></div>
+                        <div>
+                            <a className={styles.forgotPassword} onClick={() => navigate("/forget")}>Forget password?</a>
+                        </div>
                     </div>
 
                     <button type="submit" className={styles.signInButton}>Sign In</button>
                 </form>
-                <p className={styles.registerText}>Not registered yet? <a href=" " className={styles.registerLink} onClick={() => navigate("/createAccount")}>Request to Create an Account</a></p>
+                <p className={styles.registerText}>Not registered yet? <a className={styles.registerLink} onClick={() => navigate("/createAccount")}>Request to Create an Account</a></p>
                 <footer className={styles.footer}>
-                    &copy; 2025 Bhouse. All rights reserved for the use of terms related to Bhouse.
+                    &copy; 2025 Bhouse. All rights reserved.
                 </footer>
             </div>
         </div>
     );
-}
+};
 
 export default Sign;
