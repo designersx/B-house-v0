@@ -97,7 +97,7 @@ function Proposal() {
     setSelectedProjectId(projectId);
     setSelectedProject(project);
     localStorage.setItem("selectedProjectId", projectId);
-    // window.location.reload()
+
   };
  
 

@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
-import styles from './header.module.css'
-import OffCanvas from '../OffCanvas/OffCanvas'
+import React, { useState } from 'react';
+import styles from './header.module.css';
+import OffCanvas from '../OffCanvas/OffCanvas';
 import Modal from '../Modal/Modal';
 import { useNavigate } from 'react-router-dom';
+
 function Header() {
-  const [showCanvas, setShowCanvas] = useState(false);  
+  const [showCanvas, setShowCanvas] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [deliveryHours, setDeliveryHours] = useState('');
+  const [customHours, setCustomHours] = useState('');
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -15,9 +19,12 @@ function Header() {
     localStorage.removeItem('selectedProjectId');
     navigate('/');
   };
+  const handleEdit = () => {
+    navigate('/edit-profile')
+  }
+
   return (
     <div>
-
       <div className={styles.headerMain}>
         <div className={styles.headerLogo}>
           <img src="/Svg/Logo-Bhouse.svg" alt="logo" className={styles.logo} />
@@ -26,9 +33,13 @@ function Header() {
         <div className={styles.headerSideIcon}>
           <img src="/Svg/searchIcon.svg" alt="searchIcon" className={styles.vector1} />
           <img src="/Svg/BellIcon.svg" alt="BellIcon" className={styles.vector1} />
-          <img src="/Svg/UserIcon1.svg" alt="UserIcon" className={styles.vector1} onClick={() => setShowCanvas(true)} />
+          <img
+            src="/Svg/UserIcon1.svg"
+            alt="UserIcon"
+            className={styles.vector1}
+            onClick={() => setShowCanvas(true)}
+          />
         </div>
-
       </div>
 
       <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="300px">
@@ -48,44 +59,61 @@ function Header() {
             Delivery Details
           </button>
 
-          <button className={styles.btn}>
-            <img src="Svg/setting.svg" alt="icon" className={styles.icon} />
-            Settings
+          <button className={styles.btn} onClick={handleEdit}>
+            <img src="Svg/black-edit.svg" alt="icon" className={styles.icon} />
+            Edit Profile
           </button>
 
           <button className={`${styles.btn} ${styles.logoutBtn}`} onClick={handleLogout}>
-           <img src="Svg/Left-icon.svg" alt="icon" className={styles.icon} />
-           Log out
+            <img src="Svg/Left-icon.svg" alt="icon" className={styles.icon} />
+            Log out
           </button>
-
 
           <div className={styles.divider}></div>
         </div>
       </OffCanvas>
 
+      {/* Modal UI  Start */}
 
-
-      {/* Modal open on click */}
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height="70vh">
         <>
           <div className={styles.formGroup}>
             <label>Delivery Address*</label>
             <input type="text" placeholder="Write delivery address" />
           </div>
+
           <div className={styles.formGroup}>
             <label>Delivery Hours*</label>
-            <select>
-              <option>Ex-Regular hours, Before 9 am, after 6pm</option>
-              <option>9 am to 6 pm</option>
-              <option>24 Hours Access</option>
+            <select
+              value={deliveryHours}
+              onChange={(e) => setDeliveryHours(e.target.value)}
+            >
+              <option value="">Select</option>
+              <option value="Regular Hours">Regular Hours</option>
+              <option value="Before 9 AM">Before 9 AM</option>
+              <option value="After 6 PM">After 6 PM</option>
+              <option value="Other">Other</option>
             </select>
           </div>
+
+          {deliveryHours === 'Other' && (
+            <div className={styles.formGroup}>
+              <label>Other</label>
+              <textarea
+                placeholder="Enter custom hours"
+                value={customHours}
+                onChange={(e) => setCustomHours(e.target.value)}
+              />
+            </div>
+          )}
+
           <button className={styles.submitButton}>Update</button>
         </>
       </Modal>
+      {/* Modal UI  End */}
 
     </div>
-  )
+  );
 }
 
-export default Header
+export default Header;
