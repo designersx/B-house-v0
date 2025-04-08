@@ -46,10 +46,7 @@ body {
     color: #000000 !important;
    
   }
-  input[type="checkbox"] {
-    background-color: #fff !important;
 
-  }
 }
 @media (min-width: 601px) {
   body {
