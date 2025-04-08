@@ -1,5 +1,4 @@
 .profileContainer {
-    text-align: center;
     position: relative;
 }
 
@@ -36,7 +35,7 @@
 }
 
 .ProfileSection {
-    position: absolute;
+    position: relative;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
@@ -63,7 +62,9 @@
     justify-content: center;
     cursor: pointer;
 }
-
+.detalis{
+    text-align: center;
+}
 .name {
     font-size: 18px;
     font-weight: 500;
@@ -75,3 +76,61 @@
     font-size: 14px;
     color: #888;
 }
+
+
+
+.formContainer {
+    padding: 20px;
+    margin-top: -6rem;
+  }
+  
+  .formGroup {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  label span {
+    color: #000000;
+    margin-left: 4px;
+  }
+  
+  input {
+    padding: 14px 18px;
+    font-size: 16px;
+    border: 1px solid #E0E5F2;
+    border-radius: 10px;
+    outline: none;
+    color: #000;
+  }
+  
+  ::placeholder {
+    color: #bcc3d4;
+    font-size: 16px;
+  }
+
+  .updateBtn{
+    background-color: #EEF7FF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 16px;
+    min-height: 54px;
+  }
+  .updateBtn p{
+    color: #004680;
+    font-size: 16px;
+    font-weight: bold;
+
+  }
+  
+
+  

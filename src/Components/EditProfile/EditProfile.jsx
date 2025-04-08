@@ -24,7 +24,7 @@ const EditProfile = () => {
                 <img src='Images/Bg-blue.png' alt='' />
             </div>
             <button className={styles.backButton}>
-            <img src='Svg/back-arrow.svg' alt='' onClick={() => navigate(-1)}/>
+                <img src='Svg/back-arrow.svg' alt='' onClick={() => navigate(-1)} />
                 <h2 className={styles.title}>Edit Profile</h2>
             </button>
 
@@ -43,9 +43,36 @@ const EditProfile = () => {
                         onChange={handleImageChange}
                     />
                 </div>
+                <div className={styles.detalis}>
+                    <p className={styles.name}>Jenny Wilson</p>
+                    <p className={styles.email}>J.wilson@example.com</p>
+                </div>
+            </div>
 
-                <p className={styles.name}>Jenny Wilson</p>
-                <p className={styles.email}>J.wilson@example.com</p>
+            <div className={styles.formContainer}>
+                <div className={styles.formGroup}>
+                    <label>Full Name<span>*</span></label>
+                    <input type="text" placeholder="Full name" />
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label>Email<span>*</span></label>
+                    <input type="email" placeholder="YourEmail@gmail.com" />
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label>Phone Number<span>*</span></label>
+                    <input type="tel" placeholder="88-XXX-XXX-88" />
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label>Company Name<span>*</span></label>
+                    <input type="text" placeholder="XYZ Company Name" />
+                </div>
+
+                <div className={styles.updateBtn}>
+                    <p>Update</p>
+                </div>
             </div>
 
         </div>
