@@ -3,7 +3,7 @@ import styles from '../ProjectOverView/ProjectOv.module.css';
 import axios from 'axios';
 import URL from '../../../config/api';
 
-function ProjectOverView() {
+function ProjectOverView({selectedProject}) {
   const [project, setProject] = useState(null);
   const [leadTimeDays, setLeadTimeDays] = useState(0);
 
@@ -31,7 +31,7 @@ function ProjectOverView() {
     };
   
     fetchProject();
-  }, []);
+  }, [selectedProject]);
   
   
 

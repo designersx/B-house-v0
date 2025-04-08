@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "./Proposal.module.css";
 import axios from "axios";
 import URL from "../../../config/api";
+import ProjectOverView from "../ProjectOverView/ProjectOverView";
+import ProjectDelivery from "../ProjectDelivery/ProjectDelivery";
 
 function Proposal() {
   const [projects, setProjects] = useState([]);
@@ -62,6 +64,7 @@ function Proposal() {
         const res = await axios.get(`${URL}/projects/client/${customer.id}`);
         const projectsData = res.data || [];
         setProjects(projectsData);
+        
   
         // Check if a previously selected project exists
         if (storedProjectId) {
@@ -94,9 +97,9 @@ function Proposal() {
     setSelectedProjectId(projectId);
     setSelectedProject(project);
     localStorage.setItem("selectedProjectId", projectId);
-    window.location.reload()
+    // window.location.reload()
   };
-  
+ 
 
   return (
     <div className={styles.container}>
@@ -157,6 +160,8 @@ function Proposal() {
           ></div>
         ))}
       </div>
+      <ProjectOverView  selectedProject={selectedProject}/>
+      <ProjectDelivery selectedProject={selectedProject}/>
     </div>
   );
 }
