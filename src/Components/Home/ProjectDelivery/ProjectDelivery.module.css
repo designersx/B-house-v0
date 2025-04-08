@@ -52,6 +52,7 @@
   .orderTitle {
     font-size: 18px;
     font-weight: 600;
+    color: #26211F;
   }
   
   .orderStatus {
@@ -95,6 +96,7 @@
   .commentMessage {
     font-size: 14px;
     margin-top: 4px;
+    color: #26211F;
   }
   
   /* Bottom Section */
@@ -164,6 +166,7 @@
     display: flex;
     align-items: center;
     gap:5px;
+    color: #444444;
     
   }
 

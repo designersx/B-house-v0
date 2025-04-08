@@ -11,9 +11,7 @@ const Home = () => {
       <Header />
 
       <Proposal />
-      <ProjectOverView />
-      <ProjectDelivery />
-
+  
       <Footer />
     </div>
   );

@@ -45,6 +45,7 @@
 .userName {
     font-weight: bold;
     margin: 0;
+    color: rgb(0, 0, 0);
 }
 
 .userEmail {
@@ -90,5 +91,67 @@
 
 .divider {
     margin-top: 10px;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid #D0D5DD;
+}
+
+
+
+/* Modale CSS START */
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formGroup label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: rgb(0, 0, 0);
+}
+
+.formGroup input,
+
+.formGroup select,textarea  , 
+
+.formGroup textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    color: #787C81;
+    font-size: 16px;
+}
+.formGroup textarea {
+    resize: none;
+    height: 100px;
+}
+.formGroup select {
+
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    color: #787C81;
+    font-size: 16px;
+    outline: none;
+}
+
+
+
+
+.submitButton {
+    padding: 10px 20px;
+    background-color: #EEF7FF;
+    color: #004680;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-block: 1rem;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.submitButton :hover {
+    background-color: #004680;
 }

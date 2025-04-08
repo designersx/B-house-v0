@@ -11,6 +11,8 @@ import DocsPage from "./Pages/DocsPage/DocsPage";
 import PunchPage from "./Pages/PunchPage/PunchPage";
 import OrderDetail from "./Components/Home/OrderDetail/OrderDetail";
 import CreateAccount from "./Components/CreateAccount/CreateAccount";
+import Verify from "./Components/Verify/Verify";
+import EditProfile from "./Components/EditProfile/EditProfile";
 
 
 
@@ -23,15 +25,17 @@ function App() {
         <Routes>
           <Route path="/" element={<Sign />}></Route>
           <Route path="/home" element={<Home />}></Route>
-          <Route path="/reset" element={<Reset/>}></Route>
-          <Route path="/create-account"  element={<CreateAccount/>}></Route>
+          <Route path="/reset" element={<Reset />}></Route>
+          <Route path="/verify" element={<Verify />}></Route>
+          <Route path="/edit-profile" element={<EditProfile />}></Route>
+
+          <Route path="/create-account" element={<CreateAccount />}></Route>
           <Route path="/onboarding" element={<Onboarding />}></Route>
-          <Route path="/forget" element={<Forget  />}></Route>
+          <Route path="/forget" element={<Forget />}></Route>
           <Route path="/invoice" element={<InvoicePage />}></Route>
           <Route path="/docs" element={<DocsPage />}></Route>
           <Route path="/punchlist" element={<PunchPage />}></Route>
           <Route path="/order/:id" element={<OrderDetail />} />
-    
         </Routes>
       </BrowserRouter>
     </>
