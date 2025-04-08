@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../Modal/Modal.module.css';
 
-const Modal = ({ isOpen, onClose, children }) => {
+const Modal = ({ isOpen, onClose, children, height = 'auto' }) => {
   const [showModal, setShowModal] = useState(false);
   const [animateOut, setAnimateOut] = useState(false);
 
@@ -15,7 +15,7 @@ const Modal = ({ isOpen, onClose, children }) => {
         setShowModal(false);
         setAnimateOut(false);
         document.body.style.overflow = 'auto';
-      }, 500); // Match the slow slideDown duration
+      }, 500);
     }
 
     return () => {
@@ -32,6 +32,7 @@ const Modal = ({ isOpen, onClose, children }) => {
           animateOut ? styles.slideDown : styles.slideUp
         }`}
         onClick={(e) => e.stopPropagation()}
+        style={{ height }} 
       >
         <button onClick={onClose} className={styles.closeButton}>
           <img src="Svg/Cross-Icon.svg" alt="Close" />

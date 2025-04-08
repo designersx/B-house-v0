@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import styles from '../Docs/Docs.module.css'
-import Modal from '../Modal/Modal';
+import styles from '../Docs/Docs.module.css';
+import Docs2 from '../Docs2/Docs2';
 
 const docs = [
   "Sample COI",
@@ -12,18 +12,6 @@ const docs = [
 
 function Docs() {
   const [activeTab, setActiveTab] = useState('JENNY WILSON');
-  const [selectedDoc, setSelectedDoc] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleUpdateClick = (doc) => {
-    setSelectedDoc(doc);     
-    setIsModalOpen(true);    
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);     
-    setSelectedDoc(null);   
-  };
 
   return (
     <div className={styles.container}>
@@ -52,10 +40,7 @@ function Docs() {
                 <span className={styles.docTitle}>{doc}</span>
               </div>
               <div className={styles.rightSection}>
-                <button
-                  className={styles.updateBtn}
-                  onClick={() => handleUpdateClick(doc)}
-                >
+                <button className={styles.updateBtn}>
                   Update
                 </button>
                 <div className={styles.editFlex}>
@@ -68,7 +53,7 @@ function Docs() {
         </div>
       ) : (
         <div className={styles.bHouseContent}>
-          <p className={styles.bHouseText}>B-House Docs content goes here.</p>
+          <Docs2 />
         </div>
       )}
 
@@ -77,14 +62,6 @@ function Docs() {
           If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
         </p>
       )}
-
-
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <h3>{selectedDoc}</h3>
-        <p>You clicked update for <strong>{selectedDoc}</strong>.</p>
-    
-        <button onClick={handleCloseModal} className={styles.submitButton}>Submit</button>
-      </Modal>
     </div>
   );
 }
