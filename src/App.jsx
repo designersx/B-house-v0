@@ -24,7 +24,7 @@ function App() {
           <Route path="/" element={<Sign />}></Route>
           <Route path="/home" element={<Home />}></Route>
           <Route path="/reset" element={<Reset/>}></Route>
-          <Route path="/create-account"  element={<CreateAccount/>}></Route>
+          <Route path="/createaccount"  element={<CreateAccount/>}></Route>
           <Route path="/onboarding" element={<Onboarding />}></Route>
           <Route path="/forget" element={<Forget  />}></Route>
           <Route path="/invoice" element={<InvoicePage />}></Route>
