@@ -61,7 +61,7 @@ const Sign = () => {
                             <input type="checkbox" id="rememberMe" />
                             <label htmlFor="rememberMe"> Keep me logged in</label>
                         </div>
-                        <div><a href="" className={styles.forgotPassword} onClick={() => navigate("/forget")}>Forget password?</a></div>
+                        <div><text className={styles.forgotPassword} onClick={() => navigate("/forget")}>Forget password?</text></div>
                     </div>
 
                     <button type="submit" className={styles.signInButton}>Sign In</button>
