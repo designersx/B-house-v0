@@ -3,7 +3,7 @@ import styles from '../ProjectOverView/ProjectOv.module.css';
 import axios from 'axios';
 import URL from '../../../config/api';
 
-function ProjectOverView() {
+function ProjectOverView({selectedProject}) {
   const [project, setProject] = useState(null);
   const [leadTimeDays, setLeadTimeDays] = useState(0);
   const [punchList, setPunchList] = useState([]);
@@ -38,15 +38,9 @@ function ProjectOverView() {
         console.error("Failed to fetch project or punch list", err);
       }
     };
-    
-  
     fetchProject();
-  }, []);
-  const totalPunchItems = punchList.length;
-const resolvedPunchItems = punchList.filter(item => item.status === "Resolved").length;
-
-  
-
+  }, [selectedProject]);
+ 
   return (
     <div>
       <div className={styles.container}>
