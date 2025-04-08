@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import styles from './header.module.css'
 import OffCanvas from '../OffCanvas/OffCanvas'
+import Modal from '../Modal/Modal';
 
 function Header() {
   const [showCanvas, setShowCanvas] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   return (
     <div>
 
@@ -32,7 +34,7 @@ function Header() {
             </div>
           </div>
 
-          <button className={`${styles.btn} ${styles.active}`}>
+          <button className={`${styles.btn} ${styles.active}`} onClick={() => setShowModal(true)}>
             <img src="Svg/person.svg" alt="person" className={styles.icon} />
             Delivery Details
           </button>
@@ -53,7 +55,24 @@ function Header() {
 
 
 
-
+      {/* Modal open on click */}
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+        <>
+          <div className={styles.formGroup}>
+            <label>Delivery Address*</label>
+            <input type="text" placeholder="Write delivery address" />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Delivery Hours*</label>
+            <select>
+              <option>Ex-Regular hours, Before 9 am, after 6pm</option>
+              <option>9 am to 6 pm</option>
+              <option>24 Hours Access</option>
+            </select>
+          </div>
+          <button className={styles.submitButton}>Update</button>
+        </>
+      </Modal>
 
     </div>
   )

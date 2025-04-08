@@ -25,19 +25,8 @@ const Onboarding = () => {
         setOpenModalIndex(null);
     };
 
-    // Clender Function Start ///
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    const [selectedDate, setSelectedDate] = useState(today);
-  
-    const handleChange = (e) => {
-      setSelectedDate(e.target.value);
-    };
-  
-    const formatDate = (dateStr) => {
-      if (!dateStr) return '';
-      const options = { day: '2-digit', month: 'short', year: 'numeric' };
-      return new Date(dateStr).toLocaleDateString('en-GB', options);
-    };
+
+   
 
 
     return (
@@ -90,21 +79,12 @@ const Onboarding = () => {
                             <img src='Svg/Coi.svg' alt='Coi' />
 
                         </div>
-                        <div>
+                        <div className={styles.Date}>
                             <h2>Est. Occupancy date</h2>
+                            <p>08 April 2025</p>
                         </div>
                     </div>
-                    <div className={styles.dateWrapper}>
-      <input
-        type="date"
-        value={selectedDate}
-        onChange={handleChange}
-        className={styles.hiddenInput}
-      />
-      <div className={styles.display} onClick={() => document.querySelector(`.${styles.hiddenInput}`).showPicker()}>
-        {formatDate(selectedDate)}
-      </div>
-    </div>
+            
                 </div>
                 <p className={styles.signP}>
                     Upload your documents to proceed or <b>skip</b> for later.
@@ -142,10 +122,10 @@ const Onboarding = () => {
                                         <option>24 Hours Access</option>
                                     </select>
                                 </div>
-                                <div className={styles.formGroup}>
+                                {/* <div className={styles.formGroup}>
                                     <label>Other</label>
                                     <textarea placeholder="Leave your thoughts here" />
-                                </div>
+                                </div> */}
                             </>
                         )}
 
@@ -163,10 +143,7 @@ const Onboarding = () => {
                                         <option>24 Hours Access</option>
                                     </select>
                                 </div>
-                                <div className={styles.formGroup}>
-                                    <label>Other</label>
-                                    <textarea placeholder="Leave your thought here" />
-                                </div>
+                             
                             </>
                         )}
 
