@@ -99,7 +99,7 @@ function ProjectDelivery() {
 
 <Link  to={`/order/${order.id}`}
   key={order.id}
-  state={{ order }} // Pass the order object
+  state={{ order }}
   className={styles.linkStyle}>
         <div key={order.id} className={styles.orderCard}>
           {/* Header */}
