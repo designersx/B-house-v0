@@ -1,14 +1,20 @@
+
 import React, { useEffect, useState } from 'react';
+
 import styles from './header.module.css';
 import OffCanvas from '../OffCanvas/OffCanvas';
 import Modal from '../Modal/Modal';
 import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 import URL from '../../config/api';
 
 function Header() {
   const [showCanvas, setShowCanvas] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [deliveryHours, setDeliveryHours] = useState('');
+  const [customHours, setCustomHours] = useState('');
+
   const navigate = useNavigate();
 
   const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
@@ -45,6 +51,11 @@ function Header() {
     navigate('/');
   };
 
+  const handleEdit = () => {
+    navigate('/edit-profile')
+  }
+
+
   const handleUpdateDeliveryDetails = async () => {
     try {
       const data = {
@@ -73,7 +84,12 @@ function Header() {
         <div className={styles.headerSideIcon}>
           <img src="/Svg/searchIcon.svg" alt="searchIcon" className={styles.vector1} />
           <img src="/Svg/BellIcon.svg" alt="BellIcon" className={styles.vector1} />
-          <img src="/Svg/UserIcon1.svg" alt="UserIcon" className={styles.vector1} onClick={() => setShowCanvas(true)} />
+          <img
+            src="/Svg/UserIcon1.svg"
+            alt="UserIcon"
+            className={styles.vector1}
+            onClick={() => setShowCanvas(true)}
+          />
         </div>
       </div>
 
@@ -94,9 +110,9 @@ function Header() {
             Delivery Details
           </button>
 
-          <button className={styles.btn}>
-            <img src="Svg/setting.svg" alt="icon" className={styles.icon} />
-            Settings
+          <button className={styles.btn} onClick={handleEdit}>
+            <img src="Svg/black-edit.svg" alt="icon" className={styles.icon} />
+            Edit Profile
           </button>
 
           <button className={`${styles.btn} ${styles.logoutBtn}`} onClick={handleLogout}>
@@ -107,6 +123,7 @@ function Header() {
           <div className={styles.divider}></div>
         </div>
       </OffCanvas>
+
 
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
         <div className={styles.formGroup}>
@@ -145,6 +162,7 @@ function Header() {
             />
           </div>
         )}
+
 
         <button className={styles.submitButton} onClick={handleUpdateDeliveryDetails}>Update</button>
       </Modal>

@@ -193,7 +193,7 @@ progressColor['In_Transit']?.progressColor
 
           {/* ETD & ETA */}
           <p className={styles.orderDetails}>
-            <strong>ETD :</strong>   {item.expectedDeliveryDate.slice(0, 10)} | <strong>ETA :</strong> {item.
+            <strong>ETD :</strong>   {item?.expectedDeliveryDate?.slice(0, 10)} | <strong>ETA :</strong> {item.
 expectedArrivalDate}
           </p>
 
