@@ -44,9 +44,9 @@ const List = () => {
 
                     {/* Transaction 1 */}
                     <div className={styles.transactionItem}>
-                        <img src="Images/sofa.png" alt="Rounded Sofe" className={styles.image} />
+                        <img src="Svg/pdf-icon.svg" alt="pdf-icon" className={styles.image} />
                         <div className={styles.details}>
-                            <p className={styles.title}>Rounded Sofe</p>
+                            <p className={styles.title}>Invoice 1</p>
                             <div className={styles.track}>
                                 <div className={styles.DFlex}>
                                 <img src="Svg/timer.svg" alt="" />
@@ -62,9 +62,9 @@ const List = () => {
 
                     {/* Transaction 2 */}
                     <div className={styles.transactionItem}>
-                        <img src="Images/sofaset.png" alt="7 seater sofa set" className={styles.image} />
+                        <img src="Svg/pdf-icon.svg" alt="7 seater sofa set" className={styles.image} />
                         <div className={styles.details}>
-                            <p className={styles.title}>7 seater sofa set</p>
+                            <p className={styles.title}>Invoice 2</p>
                             <div className={styles.track}>
                             <div className={styles.DFlex}>
                                 <img src="Svg/timer.svg" alt="" />
@@ -78,9 +78,9 @@ const List = () => {
 
                     {/* Transaction 3 */}
                     <div className={styles.transactionItem}>
-                        <img src="Images/table.png" alt="Boss Table" className={styles.image} />
+                        <img src="Svg/pdf-icon.svg" alt="Boss Table" className={styles.image} />
                         <div className={styles.details}>
-                            <p className={styles.title}>Boss Table</p>
+                            <p className={styles.title}>Invoice 3</p>
                             <div className={styles.track}>
                             <div className={styles.DFlex}>
                                 <img src="Svg/timer.svg" alt="" />
@@ -94,9 +94,9 @@ const List = () => {
 
                     {/* Transaction 4 */}
                     <div className={styles.transactionItem}>
-                        <img src="Images/cupboard.png" alt="Cupboard" className={styles.image} />
+                        <img src="Svg/pdf-icon.svg" alt="Cupboard" className={styles.image} />
                         <div className={styles.details}>
-                            <p className={styles.title}>Cupboard</p>
+                            <p className={styles.title}>Invoice 4</p>
                             <div className={styles.track}>
                             <div className={styles.DFlex}>
                                 <img src="Svg/timer.svg" alt="" /> 

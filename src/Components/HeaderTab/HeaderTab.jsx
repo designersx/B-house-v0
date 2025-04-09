@@ -1,11 +1,13 @@
 import React from 'react';
 import styles from '../HeaderTab/HeaderTab.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const HeaderTab = ({ title,subtitle }) => {
+    const navigate = useNavigate();
     return (
         <div className={styles.headerMain}>
             <div className={styles.titleDiv}>
-                <div>
+                <div onClick={() => navigate(-1)} style={{ cursor: "pointer" }}>
                     <img src='Svg/back-arrow.svg' alt='Back' />
                 </div>
                 <div>
