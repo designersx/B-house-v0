@@ -5,7 +5,7 @@ import URL from '../../config/api';
 import { useNavigate } from 'react-router-dom';
 
 const Verify = () => {
-  const [otp, setOtp] = useState(['', '', '', '']);
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [newPassword, setNewPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -13,14 +13,14 @@ const Verify = () => {
   const [resendMsg, setResendMsg] = useState('');
   const navigate = useNavigate();
 
-  const email = localStorage.getItem('resetEmail'); // must be set from Forget page
+  const email = localStorage.getItem('otpEmail'); 
 
   const handleChangeOtp = (index, value) => {
     if (!/^[0-9]?$/.test(value)) return;
     const updatedOtp = [...otp];
     updatedOtp[index] = value;
     setOtp(updatedOtp);
-    if (value && index < 3) {
+    if (value && index < 5) {
       document.getElementById(`otp-${index + 1}`)?.focus();
     }
   };
@@ -28,12 +28,12 @@ const Verify = () => {
   const handleSubmit = async () => {
     try {
       const finalOtp = otp.join('');
-      if (finalOtp.length !== 4 || !newPassword) {
+      if (finalOtp.length !== 6 || !newPassword) {
         setError('Please enter a valid OTP and password');
         return;
       }
 
-      const response = await axios.post(`${URL}/reset-password-otp`, {
+      const response = await axios.post(`${URL}/customer/reset-password-otp`, {
         email,
         otp: finalOtp,
         newPassword,
@@ -41,7 +41,7 @@ const Verify = () => {
       
       setSuccessMsg(response.data.message || "Password reset successful!");
       setTimeout(() => {
-        navigate('/sign');
+        navigate('/');
       }, 1500);
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong.');

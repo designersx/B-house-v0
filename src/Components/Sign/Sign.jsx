@@ -125,7 +125,7 @@ const Sign = () => {
           Not registered yet?{" "}
           <a
             className={styles.registerLink}
-            onClick={() => navigate("/createaccount")}
+            onClick={() => navigate("/create-account")}
           >
             Request to Create an Account
           </a>
