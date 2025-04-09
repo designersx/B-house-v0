@@ -156,7 +156,7 @@ function ProjectDelivery({ selectedProject }) {
                 <p className={styles.orderDetails}>
                   <strong>ETD :</strong>{' '}
                   {item.expectedDeliveryDate?.slice(0, 10)} |{' '}
-                  <strong>ETA :</strong> {item.expectedArrivalDate.slice(0,10)}
+                  <strong>ETA :</strong> {item.expectedArrivalDate?.slice(0,10)}
                 </p>
 
                 {/* Comment Box */}
