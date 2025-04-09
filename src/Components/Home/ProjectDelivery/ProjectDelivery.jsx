@@ -79,6 +79,36 @@ function ProjectDelivery({ selectedProject }) {
       fetchComments();
     }
   }, [data]);
+  function formatTime(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now - date; // difference in milliseconds
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+  
+    // If the time difference is less than 7 days, show relative time
+    if (days < 7) {
+      if (minutes < 1) {
+        return "just now";
+      } else if (minutes < 60) {
+        return minutes === 1 ? "1 min ago" : `${minutes} min ago`;
+      } else if (hours < 24) {
+        return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
+      } else {
+        return days === 1 ? "1 day ago" : `${days} days ago`;
+      }
+    } else {
+      // For dates older than 7 days, show an absolute formatted date.
+      // Here, we use the 'toLocaleDateString' method for formatting.
+      // You can adjust the options as per your requirements.
+      return date.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
+  }
 
   return (
     <div>
@@ -110,7 +140,7 @@ function ProjectDelivery({ selectedProject }) {
                         progressColor['In_Transit'].progressColor,
                     }}
                   >
-                    {item.status}
+                  ({item.status}) 
                     <span
                       className={styles.LineColor}
                       style={{
@@ -126,7 +156,7 @@ function ProjectDelivery({ selectedProject }) {
                 <p className={styles.orderDetails}>
                   <strong>ETD :</strong>{' '}
                   {item.expectedDeliveryDate?.slice(0, 10)} |{' '}
-                  <strong>ETA :</strong> {item.expectedArrivalDate}
+                  <strong>ETA :</strong> {item.expectedArrivalDate.slice(0,10)}
                 </p>
 
                 {/* Comment Box */}
@@ -142,7 +172,8 @@ function ProjectDelivery({ selectedProject }) {
                         {latestComment.createdByName}
                       </p>
                       <p className={styles.commentTime}>
-                        {new Date(latestComment.createdAt).toLocaleString()}
+                        {/* {new Date(latestComment.createdAt).toLocaleString()} */}
+                        { formatTime(latestComment.createdAt)}
                       </p>
                     </div>
                     <p className={styles.commentMessage}>
@@ -155,6 +186,7 @@ function ProjectDelivery({ selectedProject }) {
                 <div className={styles.orderFooter}>
                   <span className={styles.TimeFlex}>
                     <img src="/Svg/TimeIcon.svg" alt="Time" />
+                   { formatTime(item?.createdAt)}
                   </span>
                   <button className={styles.addComment}>
                     <img src="/Svg/CommentIcon.svg" alt="Comment" />
