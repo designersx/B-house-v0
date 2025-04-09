@@ -1,8 +1,15 @@
-import React from 'react';
+import React,{useState} from 'react';
 import styles from '../Punchlist/Punchlist.module.css';
+import Modal from '../Modal/Modal';
+import CommentThread from '../CommentThread/CommentThread';
 function Punchlist() {
- 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeIssue, setActiveIssue] = useState(null);
 
+  const handleCommentClick = (issue) => {
+    setActiveIssue(issue);
+    setIsModalOpen(true);
+  };
   const issues = [
     {
       status: "Un-Resolved",
@@ -77,7 +84,7 @@ function Punchlist() {
               )}
             </div>
 
-            <div className={styles.commentLink}>
+            <div className={styles.commentLink} onClick={() => handleCommentClick(issue)}>
               <img src="Svg/edit-icon.svg" alt="edit" />
               <p>Add Comment</p>
             </div>
@@ -98,7 +105,9 @@ function Punchlist() {
         </div>
       ))}
 
-      
+<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} height="80%">
+        {activeIssue && <CommentThread issue={activeIssue} />}
+      </Modal>
     </div>
   );
 }

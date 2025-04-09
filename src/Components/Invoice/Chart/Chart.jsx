@@ -5,8 +5,7 @@ import "react-circular-progressbar/dist/styles.css";
 const Chart = () => {
 
     //    ......... Circule chart.......////
-
-    const totalCost = 12310;
+    const totalCost = 123410;
     const paidAmount = 3880;
     const remaining = totalCost - paidAmount;
     const percentage = (paidAmount / totalCost) * 100;
