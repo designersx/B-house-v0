@@ -12,9 +12,6 @@ import URL from '../../config/api';
 function Header() {
   const [showCanvas, setShowCanvas] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [deliveryHours, setDeliveryHours] = useState('');
-  const [customHours, setCustomHours] = useState('');
-
   const navigate = useNavigate();
 
   const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
