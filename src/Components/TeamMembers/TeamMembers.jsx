@@ -5,8 +5,10 @@ import Modal from '../Modal/Modal';
 import axios from 'axios';
 import URL from '../../config/api';
 import { useLocation } from 'react-router-dom';
+import Loader from '../Loader/Loader';
 // import { url2 } from '../../config/url';
 const TeamMembers = () => {
+  const [loading , setIsloading] = useState(false)
   const location = useLocation();
   const visibleIds = location.state?.visible || [];
   const remainingIds = location.state?.remaining || [];
@@ -39,8 +41,12 @@ const TeamMembers = () => {
   ];
 
   const fetchTeamMembers = async () => {
+    setIsloading(true)
     try {
       const { data } = await axios.get(`${URL}/auth/getAllUsers`);
+      if(data){
+        setIsloading(false)
+      }
       setAllUsers(data);
     } catch (err) {
       console.error("Error fetching users", err);
@@ -61,95 +67,98 @@ const TeamMembers = () => {
 
   return (
     <div>
-      <HeaderTab title='Team Members' />
+      {loading ? <Loader/> :<>
+        <HeaderTab title='Team Members' />
 
-      <div className={styles.contactList}>
-        {visibleUsers.length > 0 && (
-          <>
-    
-            {visibleUsers.map((user) => (
-              <div key={user.id} className={styles.contactCard}>
-                <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
-                <div className={styles.info}>
-                  <div className={styles.name}>
-                    {user.firstName} <span className={styles.role}>({user.userRole})</span>
-                  </div>
-                  <div className={styles.phone}>{user.mobileNumber}</div>
-                </div>
-                <div className={styles.buttons}>
-                  <button className={styles.callBtn}>Book a Call</button>
-                  <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
-                    Send Message
-                  </button>
-                </div>
-              </div>
-            ))}
-          </>
-        )}
+<div className={styles.contactList}>
+  {visibleUsers.length > 0 && (
+    <>
 
-        {remainingUsers.length > 0 && (
-          <>
-            
-            {remainingUsers.map((user) => (
-              <div key={user.id} className={styles.contactCard}>
-                <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
-                <div className={styles.info}>
-                  <div className={styles.name}>
-                    {user.firstName} <span className={styles.role}>({user.userRole})</span>
-                  </div>
-                  <div className={styles.phone}>{user.mobileNumber}</div>
-                </div>
-                <div className={styles.buttons}>
-                  <button className={styles.callBtn}>Book a Call</button>
-                  <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
-                    Send Message
-                  </button>
-                </div>
-              </div>
-            ))}
-          </>
-        )}
-      </div>
-
-      {/* Modal with custom content */}
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} height="80vh">
-        <div>
-          <div className={styles.header}>
-            <p><b>Team Member -</b> {selectedContact?.firstName}</p>
+      {visibleUsers.map((user) => (
+        <div key={user.id} className={styles.contactCard}>
+          <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
+          <div className={styles.info}>
+            <div className={styles.name}>
+              {user.firstName} <span className={styles.role}>({user.userRole})</span>
+            </div>
+            <div className={styles.phone}>{user.mobileNumber}</div>
           </div>
-
-          <div className={styles.messages}>
-            {messages.map((msg, index) => (
-              msg.sender === 'support' ? (
-                <div key={index} className={styles.supportMessageRow}>
-                  <img src="Svg/user-icon.svg" alt="avatar" className={styles.avatar} />
-                  <div>
-                    <div className={styles.messageBubbleSupport}>{msg.text}</div>
-                    <div className={styles.timestamp}>{msg.timestamp}</div>
-                  </div>
-                </div>
-              ) : (
-                <div key={index} className={styles.userMessageRow}>
-                  <div>
-                    <div className={styles.messageBubbleUser}>{msg.text}</div>
-                    <div className={styles.timestamp2}>{msg.timestamp}</div>
-                  </div>
-                  <div style={{ width: 40, marginLeft: 8 }}></div>
-                </div>
-              )
-            ))}
-          </div>
-
-          <div className={styles.commentBox}>
-            <input
-              type="text"
-              placeholder="Comment or (Leave your thought here)"
-              className={styles.inputField}
-            />
-            <button className={styles.commentButton}>COMMENT</button>
+          <div className={styles.buttons}>
+            <button className={styles.callBtn}>Book a Call</button>
+            <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
+              Send Message
+            </button>
           </div>
         </div>
-      </Modal>
+      ))}
+    </>
+  )}
+
+  {remainingUsers.length > 0 && (
+    <>
+      
+      {remainingUsers.map((user) => (
+        <div key={user.id} className={styles.contactCard}>
+          <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
+          <div className={styles.info}>
+            <div className={styles.name}>
+              {user.firstName} <span className={styles.role}>({user.userRole})</span>
+            </div>
+            <div className={styles.phone}>{user.mobileNumber}</div>
+          </div>
+          <div className={styles.buttons}>
+            <button className={styles.callBtn}>Book a Call</button>
+            <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
+              Send Message
+            </button>
+          </div>
+        </div>
+      ))}
+    </>
+  )}
+</div>
+
+{/* Modal with custom content */}
+<Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} height="80vh">
+  <div>
+    <div className={styles.header}>
+      <p><b>Team Member -</b> {selectedContact?.firstName}</p>
+    </div>
+
+    <div className={styles.messages}>
+      {messages.map((msg, index) => (
+        msg.sender === 'support' ? (
+          <div key={index} className={styles.supportMessageRow}>
+            <img src="Svg/user-icon.svg" alt="avatar" className={styles.avatar} />
+            <div>
+              <div className={styles.messageBubbleSupport}>{msg.text}</div>
+              <div className={styles.timestamp}>{msg.timestamp}</div>
+            </div>
+          </div>
+        ) : (
+          <div key={index} className={styles.userMessageRow}>
+            <div>
+              <div className={styles.messageBubbleUser}>{msg.text}</div>
+              <div className={styles.timestamp2}>{msg.timestamp}</div>
+            </div>
+            <div style={{ width: 40, marginLeft: 8 }}></div>
+          </div>
+        )
+      ))}
+    </div>
+
+    <div className={styles.commentBox}>
+      <input
+        type="text"
+        placeholder="Comment or (Leave your thought here)"
+        className={styles.inputField}
+      />
+      <button className={styles.commentButton}>COMMENT</button>
+    </div>
+  </div>
+</Modal>
+      </>}
+     
     </div>
   );
 };
