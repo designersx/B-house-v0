@@ -13,7 +13,11 @@ import OrderDetail from "./Components/Home/OrderDetail/OrderDetail";
 import CreateAccount from "./Components/CreateAccount/CreateAccount";
 import Verify from "./Components/Verify/Verify";
 import EditProfile from "./Components/EditProfile/EditProfile";
+
 import OrderInfo from "./Components/Home/OrderInfo/OrderInfo";
+
+import TeamMembers from "./Components/TeamMembers/TeamMembers";
+
 
 
 
@@ -29,6 +33,7 @@ function App() {
           <Route path="/reset" element={<Reset />}></Route>
           <Route path="/verify" element={<Verify />}></Route>
           <Route path="/edit-profile" element={<EditProfile />}></Route>
+          <Route path="/team-members" element={<TeamMembers />}></Route>
 
           <Route path="/create-account" element={<CreateAccount />}></Route>
           <Route path="/onboarding" element={<Onboarding />}></Route>
