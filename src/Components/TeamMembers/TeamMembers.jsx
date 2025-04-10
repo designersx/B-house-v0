@@ -15,7 +15,7 @@ const TeamMembers = () => {
   let b = localStorage.getItem("remaining")
   
   const visibleIds = location.state?.visible || a;
-  const remainingIds = location.state?.remaining ||b;
+  const remainingIds = location.state?.remaining || b;
 console.log(visibleIds)
 console.log(remainingIds)
   const [modalOpen, setModalOpen] = useState(false);
@@ -65,7 +65,10 @@ console.log(remainingIds)
   const visibleUsers = allUsers.filter(
     user => visibleIds.includes(user.id) && user.id !== 1
   );
-  const remainingUsers = allUsers.filter(user => remainingIds.includes(user.id));
+ 
+  const remainingUsers = allUsers?.filter(
+    user => remainingIds?.includes(user.id) && user.id !== 1
+  );
 console.log(visibleUsers)
   const handleSendMessage = (contact) => {
     setSelectedContact(contact);
