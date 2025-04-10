@@ -47,7 +47,19 @@ function ProjectOverView({ selectedProject }) {
   const totalPunchItems = punchList.length;
   const resolvedPunchItems = punchList.filter(item => item.status === "Resolved").length;
 
+  let teamUsers = [];
+  try {
+    const roles = Array.isArray(project?.assignedTeamRoles)
+      ? project.assignedTeamRoles
+      : JSON.parse(project?.assignedTeamRoles || "[]");
 
+    teamUsers = roles.flatMap(role => role.users || []);
+  } catch (err) {
+    console.error("Error parsing team data:", err);
+  }
+
+  const visible = teamUsers.slice(0, 4);
+  const remaining = teamUsers.length - 4;
 
   return (
     <div>
@@ -74,43 +86,25 @@ function ProjectOverView({ selectedProject }) {
               </div>
 
 
-              <div className={styles.team} onClick={() => navigate('/team-members')}>
-                <div className={styles.avatars}>
-                  {(() => {
-                    let teamUsers = [];
-                    try {
-                      const roles = Array.isArray(project?.assignedTeamRoles)
-                        ? project.assignedTeamRoles
-                        : JSON.parse(project?.assignedTeamRoles || "[]");
-
-                      // roles = [{ role: "Designer", users: [ { id, profileImage, firstName } ] }]
-                      teamUsers = roles.flatMap(role => role.users || []);
-                    } catch (err) {
-                      console.error("Error parsing team data:", err);
-                    }
-
-                    const visible = teamUsers.slice(0, 4);
-                    const remaining = teamUsers.length - 4;
-
-                    return (
-                      <>
-                        {visible.map((user, idx) => (
-                          <img
-                            key={idx}
-                            src={user?.profileImage ? user.profileImage : "/Images/profile-picture.webp"}
-                            alt={`User ${user?.firstName || ""}`}
-                            className={styles.avatar}
-                          />
-                        ))}
-                        {remaining > 0 && (
-                          <span className={styles.plus}>+{remaining}</span>
-                        )}
-                      </>
-                    );
-                  })()}
-                </div>
-                <p className={styles.label}>Team Member</p>
-              </div>
+              <div
+      className={styles.team}
+      onClick={() => navigate('/team-members', { state: { visible, remaining: teamUsers.slice(4) } })}
+    >
+      <div className={styles.avatars}>
+        {visible.map((user, idx) => (
+          <img
+            key={idx}
+            src={user?.profileImage || "/Images/profile-picture.webp"}
+            alt={`User ${user?.firstName || ""}`}
+            className={styles.avatar}
+          />
+        ))}
+        {remaining > 0 && (
+          <span className={styles.plus}>+{remaining}</span>
+        )}
+      </div>
+      <p className={styles.label}>Team Member</p>
+    </div>
 
 
             </div>
