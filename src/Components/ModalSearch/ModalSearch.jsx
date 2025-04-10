@@ -68,7 +68,7 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
     const handleClearAll = () => {
         setHistory([]);
         localStorage.removeItem("searchHistory");
-        setSearchTerm("");q
+        setSearchTerm("");
     };
 
     if (!isOpen) return null;
