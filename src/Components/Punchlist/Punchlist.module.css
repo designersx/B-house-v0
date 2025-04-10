@@ -30,15 +30,23 @@
 
 .resolved {
     background-color: #28a745;
-}
-
-.unresolved {
-    background-color: #ffc107;
     color: #FFFFFF;
     font-size: 14px;
     font-weight: 500;
 }
 
+.pending {
+    background-color: #ffc107;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
+.rejected {
+    background-color: #dc3545;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
 .date {
     font-size: 14px;
     color: #26211F;
