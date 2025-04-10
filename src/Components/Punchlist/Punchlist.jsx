@@ -1,86 +1,104 @@
-import React,{useState} from 'react';
-import styles from '../Punchlist/Punchlist.module.css';
-import Modal from '../Modal/Modal';
-import CommentThread from '../CommentThread/CommentThread';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import styles from "../Punchlist/Punchlist.module.css";
+import Modal from "../Modal/Modal";
+import CommentThread from "../CommentThread/CommentThread";
+import URL from "../../config/api";
+import { url2 } from "../../config/url";
+
 function Punchlist() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIssue, setActiveIssue] = useState(null);
+  const [issues, setIssues] = useState([]);
+
+  const projectId = localStorage.getItem("selectedProjectId");
 
   const handleCommentClick = (issue) => {
     setActiveIssue(issue);
     setIsModalOpen(true);
   };
-  const issues = [
-    {
-      status: "Un-Resolved",
-      date: "13 MAR 03:45 PM",
-      title: "Davis Chairs",
-      description: "Right Side Handle Broken",
-      images: ["Images/chair1.png", "Images/chair2.png", "Images/chair3.png"],
 
-      comments: false,
-    },
-    {
-      status: "Resolved",
-      date: "05 MAR 03:45 PM",
-      title: "Davis Table",
-      description: "Right Corner Damages",
-      images: ["Images/chair1.png", "Images/chair2.png", "Images/chair3.png"],
-      comments: false,
-    },
-    {
-      status: "Un-Resolved",
-      date: "10 MAR 10:12 AM",
-      title: "Andreu World",
-      description: "Loose Hinges or Handles",
-      images: [
-        "Images/chair1.png",
-        "Images/chair2.png",
-        "Images/chair3.png",
-        "Images/chair4.png",
-        "Images/chair5.png",
-      ],
-      comments: {
-        userimg: "Images/userImg.png",
-        user: "John Vick",
-        time: "12 MAR 11:38 PM",
-        message: "This is not an issue, it's just an adjustment.",
-      },
-    },
-    {
-      status: "Resolved",
-      date: "05 MAR 03:45 PM",
-      title: "Davis Table",
-      description: "Right Corner Damages",
-      images: ["Images/chair1.png", "Images/chair2.png", "Images/chair3.png"],
-      comments: false,
-    },
-  ];
+  useEffect(() => {
+    // Fetch punch list for the project based on projectId
+    const fetchPunchList = async () => {
+      try {
+        const response = await axios.get(`${URL}/projects/${projectId}/punch-list`);
+        const punchListData = response.data;
+
+        // Parse productImages from stringified JSON array to actual array
+        const parsedIssues = punchListData.map(issue => ({
+          ...issue,
+          productImages: JSON.parse(issue.productImages) // Parsing the string to an array
+        }));
+
+        // Update the state with the fetched and parsed data
+        setIssues(parsedIssues);
+      } catch (err) {
+        console.error("Error fetching punch list:", err);
+      }
+    };
+
+    if (projectId) {
+      fetchPunchList();
+    }
+  }, [projectId]);
+
+  // Format the created date for display
+  const formatDate = (date) => {
+    const today = new Date();
+    const createdDate = new Date(date);
+    const timeDiff = today - createdDate;
+    const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+    if (daysDiff === 0) {
+      return "Today";
+    } else if (daysDiff === 1) {
+      return "Yesterday";
+    } else {
+      return createdDate.toLocaleDateString(); 
+    }
+  };
+
+  const handleImageClick = (imagePath) => {
+    window.open(`${url2}/${imagePath}`, "_blank");
+  };
 
   return (
     <div className={styles.container}>
       {issues.map((issue, index) => (
         <div key={index} className={styles.card}>
           <div className={styles.topRow}>
-            <span
-              className={`${styles.status} ${issue.status === 'Resolved' ? styles.resolved : styles.unresolved}`}
-            >
-              {issue.status}
-            </span>
-            <span className={styles.date}>{issue.date}</span>
+          <span
+  className={`${styles.status} 
+    ${issue.status === "Resolved" ? styles.resolved : ""}
+    ${issue.status === "Rejected" ? styles.rejected : ""}
+    ${issue.status === "Pending" ? styles.pending : ""}`}
+>
+  {issue.status}
+</span>
+
+            <span className={styles.date}>{formatDate(issue.createdAt)}</span>
           </div>
 
           <div className={styles.title}>
-            <b>{issue.title}</b> – {issue.description}
+            <b>{issue.category}</b> – {issue.issueDescription}
           </div>
 
           <div className={styles.flexD}>
             <div className={styles.imageRow}>
-              {issue.images.slice(0, 3).map((img, i) => (
-                <img key={i} src={img} alt="issue" className={styles.image} />
+              {/* Render images */}
+              {issue.productImages.slice(0, 3).map((img, i) => (
+                <img
+                  key={i}
+                  src={`${url2}/${img}`} 
+                  alt={`Issue image ${i + 1}`}
+                  className={styles.image}
+                  onClick={() => handleImageClick(img)} 
+                />
               ))}
-              {issue.images.length > 3 && (
-                <div className={styles.moreImages}>+{issue.images.length - 3}</div>
+              {/* If there are more than 3 images, show the counter */}
+              {issue.productImages.length > 3 && (
+                <div className={styles.moreImages}>+{issue.productImages.length - 3}</div>
               )}
             </div>
 
@@ -105,7 +123,7 @@ function Punchlist() {
         </div>
       ))}
 
-<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} height="80%">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} height="80%">
         {activeIssue && <CommentThread issue={activeIssue} />}
       </Modal>
     </div>
