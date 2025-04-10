@@ -53,7 +53,7 @@
     margin: 5px 0 15px;
     border: 1px solid #ccc;
     border-radius: 20px;
-    min-height: 30px;
+    min-height: 50px;
 }
 
 input:focus {
@@ -66,6 +66,9 @@ input:focus {
     width: 100%;
     border: 1px solid #ccc;
     margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    min-height: 50px;
 
 }
 
@@ -79,7 +82,7 @@ input:focus {
 .eyeIcon {
     position: absolute;
     right: 10px;
-    top: 50%;
+    top: 55%;
     transform: translateY(-50%);
     cursor: pointer;
 }
@@ -124,10 +127,11 @@ input[type="checkbox"] {
     padding: 10px;
     background: #e0f0ff;
     border: none;
-    border-radius: 5px;
+    border-radius: 16px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 800;
     color: #004680;
+    min-height: 50px;
 }
 
 .registerText {

@@ -52,8 +52,8 @@
     padding: 10px;
     margin: 5px 0 15px;
     border: 1px solid #E0E5F2;
-    border-radius: 20px;
-    min-height: 30px;
+    border-radius: 16px;
+    min-height: 50px;
 }
 
 input:focus {
@@ -66,6 +66,7 @@ input:focus {
     color: #A3AED0;
     border: 1px solid #E0E5F2;
     border-radius: 20px;
+    margin: 5px 0 15px;
  
 
   }
@@ -126,11 +127,12 @@ input:focus {
     padding: 10px;
     background: #e0f0ff;
     border: none;
-    border-radius: 5px;
+    border-radius: 16px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 800;
     color: #004680;
-    margin-top: 2rem;
+    margin-top: 1rem;
+    min-height: 50px;
 }
 
 .footer {

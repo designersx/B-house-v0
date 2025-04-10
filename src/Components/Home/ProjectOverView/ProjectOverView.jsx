@@ -65,7 +65,7 @@ function ProjectOverView({ selectedProject }) {
                 <p className={styles.label}>Lead Time</p>
               </div>
 
-              <div>
+              <div onClick={() => navigate('/punchlist')}>
                 <p className={styles.bigText}>
                   {resolvedPunchItems}
                   <span className={styles.subText}> out of {totalPunchItems}</span>
@@ -74,7 +74,7 @@ function ProjectOverView({ selectedProject }) {
               </div>
 
 
-              <div className={styles.team} onClick={() => navigate('/team-members')}>
+              <div className={styles.team} onClick={() => navigate('/team')}>
                 <div className={styles.avatars}>
                   {(() => {
                     let teamUsers = [];
@@ -119,7 +119,7 @@ function ProjectOverView({ selectedProject }) {
               <div>
                 <p className={styles.bigText}>
                   {project?.totalValue?.toLocaleString() || 0}
-                  <span className={styles.subText}>$</span>
+                  <span className={styles.subText}> $</span>
                 </p>
                 <p className={styles.label}>Total Value</p>
               </div>
@@ -127,7 +127,7 @@ function ProjectOverView({ selectedProject }) {
               <div>
                 <p className={styles.bigText}>
                   {(project?.totalValue - project?.advancePayment)?.toLocaleString() || 0}
-                  <span className={styles.subText}>$</span>
+                  <span className={styles.subText}> $</span>
                 </p>
                 <p className={styles.label}>Balance Due</p>
               </div>

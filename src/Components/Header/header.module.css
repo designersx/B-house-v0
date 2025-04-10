@@ -12,7 +12,7 @@
 .headerSideIcon {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
 /* SideBar Css  */
@@ -98,7 +98,7 @@
 
 /* Modale CSS START */
 .formGroup {
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
 .formGroup label {
@@ -107,7 +107,6 @@
     margin-bottom: 8px;
     color: rgb(0, 0, 0);
 }
-
 
 .formGroup input,
 
@@ -135,6 +134,7 @@
     color: #787C81;
     font-size: 16px;
     outline: none;
+    min-height: 50px;
 }
 
 .submitButton {
@@ -142,11 +142,12 @@
     background-color: #EEF7FF;
     color: #004680;
     border: none;
-    border-radius: 5px;
+    border-radius: 16px;
     cursor: pointer;
     margin-block: 1rem;
     transition: background-color 0.3s ease;
     width: 100%;
+    min-height: 50px;
     font-weight: 600;
     font-size: 18px;
 }
