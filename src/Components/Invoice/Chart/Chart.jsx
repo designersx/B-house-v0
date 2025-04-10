@@ -26,6 +26,13 @@ const Chart = () => {
                     return sum + (invoice.advancePaid || 0);  
                 }, 0);
 
+
+    //    ......... Circule chart.......////
+    const totalCost = 123410;
+    const paidAmount = 3880;
+    const remaining = totalCost - paidAmount;
+    const percentage = (paidAmount / totalCost) * 100;
+
                 const balanceDue = totalAmount - totalPaid;
 
                 // Update state with the calculated values
