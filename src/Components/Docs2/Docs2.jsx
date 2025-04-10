@@ -84,7 +84,7 @@ let handleDoc=async()=>{
                 </p>
             </div>
 
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="90vh">
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="80vh">
                 <div className={styles.modalInner}>
                     <h2 className={styles.modalTitle}>{selectedDoc?.title}</h2>
                     <div className={styles.previewBox}>

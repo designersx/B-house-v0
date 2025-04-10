@@ -83,7 +83,7 @@ const Sign = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span
+            <p
               className={styles.eyeIcon}
               onClick={() => setShowPassword(!showPassword)}
               style={{ cursor: "pointer" }}
@@ -92,7 +92,7 @@ const Sign = () => {
                 src={showPassword ? "Svg/eye.svg" : "Svg/eye-close.svg"}
                 alt=""
               />
-            </span>
+            </p>
           </div>
 
           {error && <p className={styles.errorMessage}>{error}</p>}

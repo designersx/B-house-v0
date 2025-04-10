@@ -77,13 +77,14 @@ function ProjectOverView({ selectedProject }) {
                 <p className={styles.label}>Lead Time</p>
               </div>
 
-              <div>
+              <div onClick={() => navigate('/punchlist')}>
                 <p className={styles.bigText}>
                   {resolvedPunchItems}
                   <span className={styles.subText}> out of {totalPunchItems}</span>
                 </p>
                 <p className={styles.label}>Punchlist</p>
               </div>
+
 
 
               <div
@@ -107,13 +108,14 @@ function ProjectOverView({ selectedProject }) {
     </div>
 
 
+
             </div>
 
             <div className={styles.grid}>
               <div>
                 <p className={styles.bigText}>
                   {project?.totalValue?.toLocaleString() || 0}
-                  <span className={styles.subText}>$</span>
+                  <span className={styles.subText}> $</span>
                 </p>
                 <p className={styles.label}>Total Value</p>
               </div>
@@ -121,7 +123,7 @@ function ProjectOverView({ selectedProject }) {
               <div>
                 <p className={styles.bigText}>
                   {(project?.totalValue - project?.advancePayment)?.toLocaleString() || 0}
-                  <span className={styles.subText}>$</span>
+                  <span className={styles.subText}> $</span>
                 </p>
                 <p className={styles.label}>Balance Due</p>
               </div>

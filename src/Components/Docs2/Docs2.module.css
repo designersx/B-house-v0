@@ -91,6 +91,7 @@
 .previewBox img {
     width:100%;
     height: auto;
+    max-height: 250px;
 }
 
 .commentList {
@@ -155,8 +156,9 @@
     padding: 10px;
     font-weight: 600;
     border: none;
-    border-radius: 8px;
+    border-radius: 16px;
     cursor: pointer;
     font-size: 18px;
+    min-height: 50px;
 
 }

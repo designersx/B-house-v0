@@ -53,6 +53,7 @@
     font-size: 18px;
     font-weight: 600;
     color: #26211F;
+    text-transform: capitalize;
   }
   
   .orderStatus {

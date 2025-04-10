@@ -145,7 +145,9 @@ console.log(customer)
       <button className={styles.backButton} onClick={() => navigate(-1)}>
         <img src="Svg/back-arrow.svg" alt="Back" />
         <h2 className={styles.title}>Edit Profile</h2>
+
       </button>
+      <div className={styles.LampDiv}><img src='Svg/lamp.svg' alt=''/></div>
 
       <div className={styles.ProfileSection}>
         <div className={styles.imageSection}>
