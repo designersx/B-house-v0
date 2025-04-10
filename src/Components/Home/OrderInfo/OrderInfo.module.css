@@ -4,8 +4,8 @@
     border-radius: 8px;
     padding: 30px;
     max-width: 1000px;
-    margin: 20px auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+  
   }
   
   .header {
@@ -89,7 +89,7 @@
     position: absolute;
     width: 100%;
     bottom: -22px;
-    left: 0;;
+    left: 0;
     height: 22px;
   }
 
@@ -119,7 +119,7 @@
   
   .projectDetails {
     background-color: white;
-    padding: 20px;
+   
     border-radius: 8px;
   }
   
@@ -306,4 +306,143 @@
     width: 100%;
     padding: 0px 0 20px 0;
     margin: 0px 0 20px 0;
+  }
+
+
+
+  /* commentbox */
+
+  .commentHistory{
+    font-size: 22px;
+    color: #26211F;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .commentbox{
+    border: 1px solid #F2F4F5;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fff;
+    
+  }
+
+
+  .CommentInner{
+    padding: 10px;
+    max-height: 300px;
+    overflow: auto;
+  }
+
+  .BHousecomment{
+    display: flex;
+    gap: 20px;
+    align-items: start;
+    width: 100%;
+  }
+
+  .BHousecommentText{
+    background-color: #EEF7FF;
+    border-radius: 6px;
+    min-height: 43px;
+    padding: 5px 10px;
+  }
+
+  .BHousecommentText p{
+    font-size: 14px;
+    color: #26211F;
+    font-weight: 400;
+    margin: 0px;
+    text-align: start;
+  }
+
+  .BHousecomment .BTime{
+    font-size: 12px;
+    font-weight: 400;
+    color: #444444;
+    margin-top: 5px;
+  }
+
+  .BHousecomment img{
+    width: 37px;
+    height: 37px;
+    
+  }
+
+  .BHousecommentMain{
+    width: 100%;
+    margin: 0 10% 0 0px;
+  }
+
+  .UsercommentText{
+    background-color: #004680;
+    border-radius: 6px;
+    min-height: 43px;
+    padding: 5px 10px;
+    margin: 0 0 0 10%;
+  }
+  .Userpara{
+    font-size: 14px;
+    color: #fff;
+    font-weight: 400;
+    margin: 0px;
+    text-align: start;
+    text-align: end;
+  }
+
+  .UserBTime{
+    font-size: 12px;
+    font-weight: 400;
+    color: #444444;
+    margin-top: 5px;
+    text-align: end;
+
+  }
+  .Usercomment{
+    width: 100%;
+    margin-left: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+ 
+  }
+
+  
+
+  .UsercommentMain{
+/* margin: 0px 0px 0 10%; */
+    width: 100%;
+  }
+
+
+  .Commenrtextarea{
+    border: 1px solid #F2F4F5;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fff;
+    width: 100%;
+    font-size: 16px;
+    color: #26211F;
+    margin-top: 20px;
+    min-height: 70px;
+
+  }
+  
+  .Commenrtextarea::-webkit-input-placeholder {
+    color: #26211F;
+    font-size: 16px;
+    font-weight: 300;
+  }
+
+  .CommenrButton{
+    background-color: #EEF7FF;
+    color: #004680;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+        margin-top: 20px;
+    margin-left: auto;
   }

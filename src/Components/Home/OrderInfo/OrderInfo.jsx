@@ -1,8 +1,10 @@
 import React from 'react'
 import styles from './OrderInfo.module.css';
+import CommentBox from './CommentBox';
 
 function OrderInfo() {
   return (
+    <div>
     <div className={styles.container}>
     <div className={styles.header}>
       <div className={styles.etdEta}>
@@ -94,11 +96,15 @@ function OrderInfo() {
 
 <div>
 
+</div>
+
+
+  </div>
     <div className={styles.commentSection}>
-</div>
-</div>
 
+<CommentBox/>
 
+</div>
   </div>
   )
 }
