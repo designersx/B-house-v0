@@ -89,7 +89,7 @@ function ProjectOverView({ selectedProject }) {
 
               <div
       className={styles.team}
-      onClick={() => navigate('/team-members', { state: { visible, remaining: teamUsers.slice(4) } })}
+      onClick={() => navigate('/team', { state: { visible, remaining: teamUsers.slice(4) } })}
     >
       <div className={styles.avatars}>
         {visible.map((user, idx) => (
