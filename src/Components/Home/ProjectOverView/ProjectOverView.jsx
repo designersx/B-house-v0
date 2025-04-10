@@ -15,13 +15,7 @@ function ProjectOverView({ selectedProject }) {
     const fetchProject = async () => {
       const projectId = localStorage.getItem("selectedProjectId");
    
-      JSON.stringify(localStorage.setItem("visible" , visible    ))
-      if(remaining===0){
-        JSON.stringify(localStorage.setItem( "remaining"  , ""  ))
-      }
-      else{
-        JSON.stringify(localStorage.setItem("remaining" , remaining   ))
-      }
+    
       if (!projectId) return;
 
       try {
@@ -69,7 +63,12 @@ function ProjectOverView({ selectedProject }) {
   const visible = teamUsers.slice(0, 4);
   const remaining = teamUsers.length - 4;
   
-
+  JSON.stringify(localStorage.setItem("visible" , visible    ))
+    
+        // JSON.stringify(localStorage.setItem( "remaining"  , ""  ))
+      
+        JSON.stringify(localStorage.setItem("remaining" , remaining   ))
+   
   return (
     <div>
       <div className={styles.container}>
