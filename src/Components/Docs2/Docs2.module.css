@@ -1,5 +1,5 @@
 .container {
-    max-width: 400px;
+    /* max-width: 400px; */
     margin: auto;
 }
 
@@ -69,7 +69,7 @@
 .modalInner {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 5px;
     max-height: -webkit-fill-available;
     overflow-y: auto;
 }
@@ -82,23 +82,21 @@
 }
 
 .previewBox {
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: center;
-    background: #f4f4f4;
-    height: 320px;
-    border-radius: 8px;
+    align-items: center; */
+
 }
 
 .previewBox img {
-    width: 80px;
+    width:100%;
     height: auto;
 }
 
 .commentList {
     display: flex;
     flex-direction: column;
-    max-height: 200px;
+    /* max-height: 200px; */
     overflow-y: auto;
     padding-right: 10px;
 }
