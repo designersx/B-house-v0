@@ -4,20 +4,18 @@ import React, { useEffect, useState } from 'react';
 import styles from './header.module.css';
 import OffCanvas from '../OffCanvas/OffCanvas';
 import Modal from '../Modal/Modal';
+import ModalSearch from '../ModalSearch/ModalSearch';
 import { useNavigate } from 'react-router-dom';
-
 import axios from 'axios';
 import URL from '../../config/api';
 
 function Header() {
+  const navigate = useNavigate();
   const [showCanvas, setShowCanvas] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
-  const navigate = useNavigate();
-
+  const [showModalSearch, setShowModalSearch] = useState(false);
   const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
   const projectId = localStorage.getItem('selectedProjectId');
-
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryHours, setDeliveryHours] = useState('');
   const [customHours, setCustomHours] = useState('');
@@ -80,7 +78,7 @@ function Header() {
         </div>
 
         <div className={styles.headerSideIcon}>
-          <img src="/Svg/searchIcon.svg" alt="searchIcon" className={styles.vector1} />
+          <img src='Svg/searchSvg.svg' alt='Search' className={styles.vector1} onClick={() => setShowModalSearch(true)} />
           <img src="/Svg/BellIcon.svg" alt="BellIcon" className={styles.vector1} />
           <img
             src="/Svg/UserIcon1.svg"
@@ -164,6 +162,10 @@ function Header() {
 
         <button className={styles.submitButton} onClick={handleUpdateDeliveryDetails}>Update</button>
       </Modal>
+      <ModalSearch isOpen={showModalSearch}
+        onClose={() => setShowModalSearch(false)}
+        height="50%">
+      </ModalSearch>
     </div>
   );
 }

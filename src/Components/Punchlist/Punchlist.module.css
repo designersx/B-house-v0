@@ -30,15 +30,23 @@
 
 .resolved {
     background-color: #28a745;
-}
-
-.unresolved {
-    background-color: #ffc107;
     color: #FFFFFF;
     font-size: 14px;
     font-weight: 500;
 }
 
+.pending {
+    background-color: #ffc107;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
+.rejected {
+    background-color: #dc3545;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
 .date {
     font-size: 14px;
     color: #26211F;
@@ -69,10 +77,10 @@
   }
   
   .image {
-    width: 55px;
-    height: 55px;
+    width: 38px;
+    height: 38px;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 12px;
     margin-left: -10px;
     border: 2px solid white;
     background: #fff;
@@ -84,9 +92,9 @@
   }
   
   .moreImages {
-    width: 55px;
-    height: 55px;
-    border-radius: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
     background-color: #f5f5f5;
     font-weight: 600;
     font-size: 14px;
