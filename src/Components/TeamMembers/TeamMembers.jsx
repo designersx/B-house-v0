@@ -7,16 +7,21 @@ import URL from '../../config/api';
 import { useLocation } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 // import { url2 } from '../../config/url';
+
 const TeamMembers = () => {
   const [loading , setIsloading] = useState(false)
   const location = useLocation();
-  const visibleIds = location.state?.visible || [];
-  const remainingIds = location.state?.remaining || [];
-
+  let a = localStorage.getItem("visible")
+  let b = localStorage.getItem("remaining")
+  
+  const visibleIds = location.state?.visible || a;
+  const remainingIds = location.state?.remaining ||b;
+console.log(visibleIds)
+console.log(remainingIds)
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
-
+// let user = JSON.parse
   const messages = [
     {
       sender: 'support',
@@ -57,9 +62,11 @@ const TeamMembers = () => {
     fetchTeamMembers();
   }, []);
 
-  const visibleUsers = allUsers.filter(user => visibleIds.includes(user.id));
+  const visibleUsers = allUsers.filter(
+    user => visibleIds.includes(user.id) && user.id !== 1
+  );
   const remainingUsers = allUsers.filter(user => remainingIds.includes(user.id));
-
+console.log(visibleUsers)
   const handleSendMessage = (contact) => {
     setSelectedContact(contact);
     setModalOpen(true);
