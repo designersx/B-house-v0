@@ -13,6 +13,7 @@ import OrderDetail from "./Components/Home/OrderDetail/OrderDetail";
 import CreateAccount from "./Components/CreateAccount/CreateAccount";
 import Verify from "./Components/Verify/Verify";
 import EditProfile from "./Components/EditProfile/EditProfile";
+import OrderInfo from "./Components/Home/OrderInfo/OrderInfo";
 
 
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/docs" element={<DocsPage />}></Route>
           <Route path="/punchlist" element={<PunchPage />}></Route>
           <Route path="/order/:id" element={<OrderDetail />} />
+          <Route path="/OrderInfo" element={<OrderInfo />} />
         </Routes>
       </BrowserRouter>
     </>

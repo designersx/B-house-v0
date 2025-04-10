@@ -30,7 +30,7 @@ const progressColor = {
 function ProjectDelivery({ selectedProject }) {
   const [data, setData] = useState([]);
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
- 
+  // const location = useLocation();
 
   const fetchManufacturers = async () => {
     const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
@@ -123,9 +123,9 @@ function ProjectDelivery({ selectedProject }) {
 
           return (
             <Link
-              to={`/order/`}
+              to={`/order/${item.id}`}
               key={item.id}
-              state=""
+              state={{ item }}
               className={styles.linkStyle}
             >
               <div className={styles.orderCard}>

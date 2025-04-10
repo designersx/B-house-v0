@@ -6,9 +6,9 @@ function OrderDetail() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const order = location.state?.order;
+  const order = location.state;
 
-
+console.log("Order Detail:", order);
   if (!order) {
     navigate("/", { replace: true });
     return null;
@@ -27,7 +27,7 @@ function OrderDetail() {
       )}
 
       {/* Order Details */}
-      <p><strong>ETD:</strong> {order.etd}</p>
+      <p><strong>ETD:</strong>{order?.item?.expectedDeliveryDate.slice(0,10)}</p>
       <p><strong>ETA:</strong> {order.eta}</p>
       <p><strong>Status:</strong> {order.status}</p>
 
@@ -50,6 +50,9 @@ function OrderDetail() {
         ></div>
       </div>
     </div>
+
+
+
   );
 }
 
