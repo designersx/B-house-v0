@@ -161,7 +161,8 @@
   }
   
   .plusButton {
-   
+   width: 60px;
+   height: 60px;
     cursor: pointer;
     /* background: #e0f2ff; */
     border:none;
@@ -178,7 +179,25 @@
        border-radius: 8px;
      }
 
-    
+    @media(max-width:400px){
+      .docTitle {
+        font-size: 14px;
+        
+      }
+
+      .docSubtitle{
+        font-size: 11px;
+      }
+
+      .plusButton{
+max-width: 50px;
+max-height: 50px;
+      }
+      .plusButton img{
+        width: 100%;
+      }
+
+    }
 
 
      
