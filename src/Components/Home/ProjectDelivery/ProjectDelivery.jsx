@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import styles from './ProjectDelivery.module.css';
-import { Link } from 'react-router-dom';
-import URL from '../../../config/api';
-import axios from 'axios';
-import { url2 } from '../../../config/url';
+import React, { useEffect, useState } from "react";
+import styles from "./ProjectDelivery.module.css";
+import { Link } from "react-router-dom";
+import URL from "../../../config/api";
+import axios from "axios";
+import { url2 } from "../../../config/url";
 
 const progressColor = {
   Installed: {
-    progressWidth: '100%',
-    progressColor: 'Green',
-    statusColor: 'LinearGreen',
+    progressWidth: "100%",
+    progressColor: "Green",
+    statusColor: "LinearGreen",
   },
   Delivered: {
-    progressColor: '#FEAD37',
-    statusColor: 'FEAD37',
-    progressWidth: '50%',
+    progressColor: "#FEAD37",
+    statusColor: "FEAD37",
+    progressWidth: "50%",
   },
   Pending: {
-    statusColor: '#FF5E00',
-    progressColor: '#FF5E00',
-    progressWidth: '25%',
+    statusColor: "#FF5E00",
+    progressColor: "#FF5E00",
+    progressWidth: "25%",
   },
   In_Transit: {
-    progressColor: '#6C35B1',
-    statusColor: 'LinearGreen',
-    progressWidth: '60%',
+    progressColor: "#6C35B1",
+    statusColor: "LinearGreen",
+    progressWidth: "60%",
   },
 };
 
@@ -34,7 +34,7 @@ function ProjectDelivery({ selectedProject }) {
   // const location = useLocation();
 
   const fetchManufacturers = async () => {
-    const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+    const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
 
     try {
       const res = await axios.get(`${URL}/items/${projectId}`);
@@ -42,7 +42,7 @@ function ProjectDelivery({ selectedProject }) {
         setData(res.data);
       }
     } catch (error) {
-      console.log('Error fetching items:', error);
+      console.log("Error fetching items:", error);
     }
   };
 
@@ -64,7 +64,7 @@ function ProjectDelivery({ selectedProject }) {
 
       setLatestCommentsByItem(latestComments);
     } catch (error) {
-      console.log('Error fetching comments:', error);
+      console.log("Error fetching comments:", error);
     }
   };
 
@@ -72,7 +72,6 @@ function ProjectDelivery({ selectedProject }) {
   useEffect(() => {
     fetchManufacturers();
   }, [selectedProject]);
-
 
   // Fetch comments once items are available
   useEffect(() => {
@@ -112,46 +111,27 @@ function ProjectDelivery({ selectedProject }) {
   }
 
   return (
-
-
-    
     <div>
       <div className={styles.DeliveryUpdate}>
         <h4>Project Delivery Update</h4>
         <button className={styles.button}>View All</button>
       </div>
-      <div className={styles.dlDate}><p>2025-04-11</p></div>
-
-
-
-
+      <div className={styles.dlDate}>
+        <p>2025-04-11</p>
+      </div>
 
       <div className={styles.Container}>
+        {data
+          ?.filter((item) => item.itemName && item.itemName.trim() !== "") //
+          .map((item) => {
+            const latestComment = latestCommentsByItem[item.id];
 
-  {data
-    ?.filter(item => item.itemName && item.itemName.trim() !== '') // ✅ Only include items with valid itemName
-    .map((item) => {
-      const latestComment = latestCommentsByItem[item.id];
-
-      return (
-        <Link
-          to={`/orderinfo`}
-          key={item.id}
-          state={{ item }}
-          className={styles.linkStyle}
-        >
-          <div className={styles.orderCard}>
-            {/* Header */}
-            <div className={styles.orderHeader}>
-              <h2 className={styles.orderTitle}>{item.itemName}</h2>
-              <span
-                className={styles.orderStatus}
-                style={{
-                  color:
-                    progressColor[item.status]?.progressColor ||
-                    progressColor['In_Transit'].progressColor,
-                }}
-
+            return (
+              <Link
+                to={`/order/${item.id}`}
+                key={item.id}
+                state={{ item }}
+                className={styles.linkStyle}
               >
                 <div className={styles.orderCard}>
                   {/* Header */}
@@ -162,7 +142,7 @@ function ProjectDelivery({ selectedProject }) {
                       style={{
                         color:
                           progressColor[item.status]?.progressColor ||
-                          progressColor['In_Transit'].progressColor,
+                          progressColor["In_Transit"].progressColor,
                       }}
                     >
                       {item.status}
@@ -171,7 +151,7 @@ function ProjectDelivery({ selectedProject }) {
                         style={{
                           backgroundColor:
                             progressColor[item.status]?.progressColor ||
-                            progressColor['In_Transit'].progressColor,
+                            progressColor["In_Transit"].progressColor,
                         }}
                       ></span>
                     </span>
@@ -179,9 +159,10 @@ function ProjectDelivery({ selectedProject }) {
 
                   {/* ETD & ETA */}
                   <p className={styles.orderDetails}>
-                    <strong>ETD :</strong>{' '}
-                    {item.expectedDeliveryDate?.slice(0, 10)} |{' '}
-                    <strong>ETA :</strong> {item.expectedArrivalDate?.slice(0, 10)}
+                    <strong>ETD :</strong>{" "}
+                    {item.expectedDeliveryDate?.slice(0, 10)} |{" "}
+                    <strong>ETA :</strong>{" "}
+                    {item.expectedArrivalDate?.slice(0, 10)}
                   </p>
 
                   {/* Comment Box */}
@@ -225,10 +206,10 @@ function ProjectDelivery({ selectedProject }) {
                       style={{
                         width:
                           progressColor[item.status]?.progressWidth ||
-                          progressColor['In_Transit'].progressWidth,
+                          progressColor["In_Transit"].progressWidth,
                         backgroundColor:
                           progressColor[item.status]?.progressColor ||
-                          progressColor['In_Transit'].progressColor,
+                          progressColor["In_Transit"].progressColor,
                       }}
                     ></div>
                   </div>
@@ -237,7 +218,6 @@ function ProjectDelivery({ selectedProject }) {
             );
           })}
       </div>
-
     </div>
   );
 }
