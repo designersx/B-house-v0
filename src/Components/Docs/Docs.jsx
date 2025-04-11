@@ -4,6 +4,8 @@ import Docs2 from '../Docs2/Docs2';
 import URL from '../../config/api';
 import axios from 'axios';
 import PopUp from '../PopUp/PopUp';
+import Comments from '../CommentThread/Comments';
+import Modal from '../Modal/Modal';
 
 const docs = [
   "Sample COI",
@@ -20,6 +22,8 @@ function Docs() {
   const [currentDocType, setCurrentDocType] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedDocId, setSelectedDocId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));
@@ -59,10 +63,9 @@ function Docs() {
       };
 
       const res = await axios(config);
-
       if (res?.status === 201 || res?.status === 200) {
         setShowPopup(true);
-        fetchDocs(); // Refresh list after update
+        fetchDocs();
       }
     } catch (err) {
       console.error('Upload/Update failed:', err);
@@ -75,6 +78,16 @@ function Docs() {
   const handleUploadClick = (docType) => {
     setCurrentDocType(docType);
     fileInputRef.current.click();
+  };
+
+  const openCommentModal = (docId) => {
+    setSelectedDocId(docId);
+    setIsModalOpen(true);
+  };
+
+  const closeCommentModal = () => {
+    setSelectedDocId(null);
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -107,8 +120,7 @@ function Docs() {
       {activeTab === 'JENNY WILSON' ? (
         <div className={styles.docList}>
           {docs.map((doc, idx) => {
-            const hasDoc = docsData.find(d => d.documentType === doc);
-
+            const foundDoc = docsData.find(d => d.documentType === doc);
             return (
               <div key={idx} className={styles.docItem}>
                 <div className={styles.leftSection}>
@@ -117,17 +129,24 @@ function Docs() {
                   </div>
                   <span className={styles.docTitle}>{doc}</span>
                 </div>
+
                 <div className={styles.rightSection}>
                   <button
                     className={styles.updateBtn}
                     onClick={() => handleUploadClick(doc)}
                     disabled={isLoading}
                   >
-                    {hasDoc ? 'Update' : 'Upload'}
+                    {foundDoc ? 'Update' : 'Upload'}
                   </button>
+
                   <div className={styles.editFlex}>
-                    <img src='Svg/edit-icon.svg' alt='edit-icon' />
-                    <p>Comment</p>
+                    <img src="Svg/edit-icon.svg" alt="edit-icon" />
+                    <p
+                      onClick={() => foundDoc && openCommentModal(foundDoc.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      Comment
+                    </p>
                   </div>
                 </div>
               </div>
@@ -151,6 +170,17 @@ function Docs() {
         <p className={styles.note}>
           If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
         </p>
+      )}
+
+      {/* Comment Modal */}
+      {selectedDocId && (
+        <Modal isOpen={isModalOpen} onClose={closeCommentModal} height="80%">
+          <Comments
+            documentId={selectedDocId}
+            customerId={JSON.parse(localStorage.getItem('customerId'))}
+            onClose={closeCommentModal}
+          />
+        </Modal>
       )}
     </div>
   );
