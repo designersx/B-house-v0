@@ -62,11 +62,11 @@ function ProjectOverView({ selectedProject }) {
 
   const visible = teamUsers.slice(0, 4);
   const remaining = teamUsers.length - 4;
-  
+  console.log(remaining , "remiaing")
   JSON.stringify(localStorage.setItem("visible" , visible    ))
-    
+  JSON.stringify(localStorage.setItem("teamusers" , teamUsers    ))
         // JSON.stringify(localStorage.setItem( "remaining"  , ""  ))
-      
+      console.log(teamUsers)
         JSON.stringify(localStorage.setItem("remaining" , remaining   ))
    
   return (

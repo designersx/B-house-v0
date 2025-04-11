@@ -11,11 +11,11 @@ import Loader from '../Loader/Loader';
 const TeamMembers = () => {
   const [loading , setIsloading] = useState(false)
   const location = useLocation();
-  let a = localStorage.getItem("visible")
-  let b = localStorage.getItem("remaining")
+  let a = localStorage.getItem("teamusers")
+  // let b = localStorage.getItem("remaining")
   
   const visibleIds = location.state?.visible || a;
-  const remainingIds = location.state?.remaining || b;
+  const remainingIds = location.state?.remaining
 console.log(visibleIds)
 console.log(remainingIds)
   const [modalOpen, setModalOpen] = useState(false);
