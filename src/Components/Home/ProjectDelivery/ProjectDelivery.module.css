@@ -11,6 +11,7 @@
 
    .DeliveryUpdate h4{
     font-size: 22px;
+    font-size: clamp(17px, 5vw, 22px);
     color:#26211F;
    }
 
@@ -20,7 +21,12 @@
     color:#004680;
     border: none;background-color: transparent;
    }
-
+   .dlDate{
+    padding-inline: 20px;
+    padding-bottom: 10px;
+    color: #26211F;
+    font-size: 16px;
+   }
 
  /* OrderCard.module.css */
 

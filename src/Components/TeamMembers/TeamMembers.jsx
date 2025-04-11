@@ -9,19 +9,19 @@ import Loader from '../Loader/Loader';
 // import { url2 } from '../../config/url';
 
 const TeamMembers = () => {
-  const [loading , setIsloading] = useState(false)
+  const [loading, setIsloading] = useState(false)
   const location = useLocation();
   let a = localStorage.getItem("visible")
   let b = localStorage.getItem("remaining")
-  
+
   const visibleIds = location.state?.visible || a;
   const remainingIds = location.state?.remaining || b;
-console.log(visibleIds)
-console.log(remainingIds)
+  console.log(visibleIds)
+  console.log(remainingIds)
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
-// let user = JSON.parse
+  // let user = JSON.parse
   const messages = [
     {
       sender: 'support',
@@ -49,7 +49,7 @@ console.log(remainingIds)
     setIsloading(true)
     try {
       const { data } = await axios.get(`${URL}/auth/getAllUsers`);
-      if(data){
+      if (data) {
         setIsloading(false)
       }
       setAllUsers(data);
@@ -65,11 +65,11 @@ console.log(remainingIds)
   const visibleUsers = allUsers.filter(
     user => visibleIds.includes(user.id) && user.id !== 1
   );
- 
+
   const remainingUsers = allUsers?.filter(
     user => remainingIds?.includes(user.id) && user.id !== 1
   );
-console.log(visibleUsers)
+  console.log(visibleUsers)
   const handleSendMessage = (contact) => {
     setSelectedContact(contact);
     setModalOpen(true);
@@ -77,98 +77,99 @@ console.log(visibleUsers)
 
   return (
     <div>
-      {loading ? <Loader/> :<>
+      {loading ? <Loader /> : <>
+        <div className="HeaderTop">
         <HeaderTab title='Team Members' />
-
-<div className={styles.contactList}>
-  {visibleUsers.length > 0 && (
-    <>
-
-      {visibleUsers.map((user) => (
-        <div key={user.id} className={styles.contactCard}>
-          <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
-          <div className={styles.info}>
-            <div className={styles.name}>
-              {user.firstName} <span className={styles.role}>({user.userRole})</span>
-            </div>
-            <div className={styles.phone}>{user.mobileNumber}</div>
-          </div>
-          <div className={styles.buttons}>
-            <button className={styles.callBtn}>Book a Call</button>
-            <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
-              Send Message
-            </button>
-          </div>
         </div>
-      ))}
-    </>
-  )}
+        <div className={styles.contactList}>
+          {visibleUsers.length > 0 && (
+            <>
 
-  {remainingUsers.length > 0 && (
-    <>
-      
-      {remainingUsers.map((user) => (
-        <div key={user.id} className={styles.contactCard}>
-          <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
-          <div className={styles.info}>
-            <div className={styles.name}>
-              {user.firstName} <span className={styles.role}>({user.userRole})</span>
-            </div>
-            <div className={styles.phone}>{user.mobileNumber}</div>
-          </div>
-          <div className={styles.buttons}>
-            <button className={styles.callBtn}>Book a Call</button>
-            <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
-              Send Message
-            </button>
-          </div>
+              {visibleUsers.map((user) => (
+                <div key={user.id} className={styles.contactCard}>
+                  <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
+                  <div className={styles.info}>
+                    <div className={styles.name}>
+                      {user.firstName} <span className={styles.role}>({user.userRole})</span>
+                    </div>
+                    <div className={styles.phone}>{user.mobileNumber}</div>
+                  </div>
+                  <div className={styles.buttons}>
+                    <button className={styles.callBtn}>Book a Call</button>
+                    <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
+                      Send Message
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
+
+          {remainingUsers.length > 0 && (
+            <>
+
+              {remainingUsers.map((user) => (
+                <div key={user.id} className={styles.contactCard}>
+                  <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
+                  <div className={styles.info}>
+                    <div className={styles.name}>
+                      {user.firstName} <span className={styles.role}>({user.userRole})</span>
+                    </div>
+                    <div className={styles.phone}>{user.mobileNumber}</div>
+                  </div>
+                  <div className={styles.buttons}>
+                    <button className={styles.callBtn}>Book a Call</button>
+                    <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
+                      Send Message
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
         </div>
-      ))}
-    </>
-  )}
-</div>
 
-{/* Modal with custom content */}
-<Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} height="80vh">
-  <div>
-    <div className={styles.header}>
-      <p><b>Team Member -</b> {selectedContact?.firstName}</p>
-    </div>
+        {/* Modal with custom content */}
+        <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} height="80vh">
+          <div>
+            <div className={styles.header}>
+              <p><b>Team Member -</b> {selectedContact?.firstName}</p>
+            </div>
 
-    <div className={styles.messages}>
-      {messages.map((msg, index) => (
-        msg.sender === 'support' ? (
-          <div key={index} className={styles.supportMessageRow}>
-            <img src="Svg/user-icon.svg" alt="avatar" className={styles.avatar} />
-            <div>
-              <div className={styles.messageBubbleSupport}>{msg.text}</div>
-              <div className={styles.timestamp}>{msg.timestamp}</div>
+            <div className={styles.messages}>
+              {messages.map((msg, index) => (
+                msg.sender === 'support' ? (
+                  <div key={index} className={styles.supportMessageRow}>
+                    <img src="Svg/user-icon.svg" alt="avatar" className={styles.avatar} />
+                    <div>
+                      <div className={styles.messageBubbleSupport}>{msg.text}</div>
+                      <div className={styles.timestamp}>{msg.timestamp}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div key={index} className={styles.userMessageRow}>
+                    <div>
+                      <div className={styles.messageBubbleUser}>{msg.text}</div>
+                      <div className={styles.timestamp2}>{msg.timestamp}</div>
+                    </div>
+                    <div style={{ width: 40, marginLeft: 8 }}></div>
+                  </div>
+                )
+              ))}
+            </div>
+
+            <div className={styles.commentBox}>
+              <input
+                type="text"
+                placeholder="Comment or (Leave your thought here)"
+                className={styles.inputField}
+              />
+              <button className={styles.commentButton}>COMMENT</button>
             </div>
           </div>
-        ) : (
-          <div key={index} className={styles.userMessageRow}>
-            <div>
-              <div className={styles.messageBubbleUser}>{msg.text}</div>
-              <div className={styles.timestamp2}>{msg.timestamp}</div>
-            </div>
-            <div style={{ width: 40, marginLeft: 8 }}></div>
-          </div>
-        )
-      ))}
-    </div>
-
-    <div className={styles.commentBox}>
-      <input
-        type="text"
-        placeholder="Comment or (Leave your thought here)"
-        className={styles.inputField}
-      />
-      <button className={styles.commentButton}>COMMENT</button>
-    </div>
-  </div>
-</Modal>
+        </Modal>
       </>}
-     
+
     </div>
   );
 };

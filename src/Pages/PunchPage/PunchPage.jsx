@@ -6,10 +6,12 @@ import Loader from '../../Components/Loader/Loader'
 const PunchPage = () => {
   return (
     <div>
-      <HeaderTab title='Punchlist' />
+      <div className="HeaderTop">
+        <HeaderTab title='Punchlist' />
+      </div>
       <Punchlist />
-      
       <Footer />
+
     </div>
   )
 }
