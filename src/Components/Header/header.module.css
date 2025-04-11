@@ -7,12 +7,20 @@
     border-bottom: 2px solid;
     border-image: linear-gradient(to right, #EAEAEA, #004680, #EAEAEA) 1;
     padding: 20px 20px 10px 20px;
+    /* position: fixed; */
+    width: 100%;
+    background-color: #ffff;
+    top: 0;
+    margin: 0px 0px 0 0;
+    z-index: 1;
+    height: 91px;
+
 }
 
 .headerSideIcon {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 5px;
 }
 
 /* SideBar Css  */
