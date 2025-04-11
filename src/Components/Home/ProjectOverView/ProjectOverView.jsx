@@ -14,6 +14,8 @@ function ProjectOverView({ selectedProject }) {
   useEffect(() => {
     const fetchProject = async () => {
       const projectId = localStorage.getItem("selectedProjectId");
+   
+    
       if (!projectId) return;
 
       try {
@@ -60,7 +62,13 @@ function ProjectOverView({ selectedProject }) {
 
   const visible = teamUsers.slice(0, 4);
   const remaining = teamUsers.length - 4;
-
+  
+  JSON.stringify(localStorage.setItem("visible" , visible    ))
+    
+        // JSON.stringify(localStorage.setItem( "remaining"  , ""  ))
+      
+        JSON.stringify(localStorage.setItem("remaining" , remaining   ))
+   
   return (
     <div>
       <div className={styles.container}>
@@ -117,7 +125,7 @@ function ProjectOverView({ selectedProject }) {
                   {project?.totalValue?.toLocaleString() || 0}
                   <span className={styles.subText}> $</span>
                 </p>
-                <p className={styles.label}>Total Value</p>
+                <p onClick={()=>navigate('/invoice')} className={styles.label}>Total Value</p>
               </div>
 
               <div>
@@ -125,11 +133,11 @@ function ProjectOverView({ selectedProject }) {
                   {(project?.totalValue - project?.advancePayment)?.toLocaleString() || 0}
                   <span className={styles.subText}> $</span>
                 </p>
-                <p className={styles.label}>Balance Due</p>
+                <p onClick={()=>navigate('/invoice')} className={styles.label}>Balance Due</p>
               </div>
 
               <div className={styles.advance}>
-                <p className={styles.advanceText}>Advance Paid</p>
+                <p onClick={()=>navigate('/invoice')} className={styles.advanceText}>Advance Paid</p>
                 <p className={styles.bigTextbox}>
                   {project?.advancePayment?.toLocaleString() || 0}
                   <span>$</span>
