@@ -127,17 +127,31 @@ function ProjectDelivery({ selectedProject }) {
 
 
       <div className={styles.Container}>
-        {data
-          ?.filter(item => item.itemName && item.itemName.trim() !== '') // 
-          .map((item) => {
-            const latestComment = latestCommentsByItem[item.id];
 
-            return (
-              <Link
-                to={`/order/${item.id}`}
-                key={item.id}
-                state={{ item }}
-                className={styles.linkStyle}
+  {data
+    ?.filter(item => item.itemName && item.itemName.trim() !== '') // ✅ Only include items with valid itemName
+    .map((item) => {
+      const latestComment = latestCommentsByItem[item.id];
+
+      return (
+        <Link
+          to={`/orderinfo`}
+          key={item.id}
+          state={{ item }}
+          className={styles.linkStyle}
+        >
+          <div className={styles.orderCard}>
+            {/* Header */}
+            <div className={styles.orderHeader}>
+              <h2 className={styles.orderTitle}>{item.itemName}</h2>
+              <span
+                className={styles.orderStatus}
+                style={{
+                  color:
+                    progressColor[item.status]?.progressColor ||
+                    progressColor['In_Transit'].progressColor,
+                }}
+
               >
                 <div className={styles.orderCard}>
                   {/* Header */}
