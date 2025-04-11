@@ -13,27 +13,19 @@ const docs = [
   "Final Invoice",
 ];
 
-// Map to match frontend labels with backend keys
-const docKeyMap = {
-  "Sample COI": "sample_coi",
-  "COI (Certificate)": "coi_certificate",
-  "Sales Agreement": "sales_agreement",
-  "Pro Forma Invoice": "pro_forma_invoice",
-  "Final Invoice": "final_invoice"
-};
-
 function Docs() {
   const [activeTab, setActiveTab] = useState('JENNY WILSON');
-  const [docsData, setDocsData] = useState({});
+  const [docsData, setDocsData] = useState([]);
   const fileInputRef = useRef(null);
   const [currentDocType, setCurrentDocType] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));
     try {
       const res = await axios.get(`${URL}/customerDoc/document/${id}`);
-      setDocsData(res.data);
+      setDocsData(res.data || []);
     } catch (err) {
       console.error('Failed to fetch documents:', err);
     }
@@ -46,27 +38,37 @@ function Docs() {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file || !currentDocType) return;
-  
-    setLoading(true); // Start loading
-    const key = docKeyMap[currentDocType];
-    const hasDoc = docsData[key];
-    const endpoint = hasDoc ? 'update' : 'add';
-  
+
+    setLoading(true);
+    const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+
+    const existingDoc = docsData.find(d => d.documentType === currentDocType);
+    const endpoint = existingDoc ? 'update' : 'add';
+    const method = existingDoc ? 'put' : 'post';
+
     const formData = new FormData();
     formData.append('documentType', currentDocType);
     formData.append('document', file);
-    formData.append('projectId', JSON.parse(localStorage.getItem('selectedProjectId')));
-  
+    formData.append('projectId', projectId);
+
     try {
-      const res = await axios.post(`${URL}/customerDoc/${endpoint}`, formData);
-  
-      if (res?.status === 201) {
-        setShowPopup(true); // show success
+      const config = {
+        method,
+        url: `${URL}/customerDoc/${endpoint}`,
+        data: formData,
+      };
+
+      const res = await axios(config);
+
+      if (res?.status === 201 || res?.status === 200) {
+        setShowPopup(true);
+        fetchDocs(); // Refresh list after update
       }
     } catch (err) {
       console.error('Upload/Update failed:', err);
     } finally {
-      setLoading(false); // end loading
+      setLoading(false);
+      setCurrentDocType('');
     }
   };
 
@@ -74,18 +76,22 @@ function Docs() {
     setCurrentDocType(docType);
     fileInputRef.current.click();
   };
+
   useEffect(() => {
     if (showPopup) {
       const timer = setTimeout(() => setShowPopup(false), 3000);
       return () => clearTimeout(timer);
     }
   }, [showPopup]);
+
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>List of Docs</h2>
+
       {showPopup && !isLoading && (
-  <PopUp type="success" message="File has been uploaded" />
-)}
+        <PopUp type="success" message="File has been uploaded" />
+      )}
+
       <div className={styles.tabs}>
         {['JENNY WILSON', 'B-HOUSE DOCS'].map(tab => (
           <button
@@ -101,8 +107,7 @@ function Docs() {
       {activeTab === 'JENNY WILSON' ? (
         <div className={styles.docList}>
           {docs.map((doc, idx) => {
-            const key = docKeyMap[doc];
-            const hasDoc = docsData[key];
+            const hasDoc = docsData.find(d => d.documentType === doc);
 
             return (
               <div key={idx} className={styles.docItem}>
@@ -116,6 +121,7 @@ function Docs() {
                   <button
                     className={styles.updateBtn}
                     onClick={() => handleUploadClick(doc)}
+                    disabled={isLoading}
                   >
                     {hasDoc ? 'Update' : 'Upload'}
                   </button>
