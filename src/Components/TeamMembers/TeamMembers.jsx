@@ -9,17 +9,13 @@ import Loader from '../Loader/Loader';
 import  {url2}  from '../../config/url';
 
 const TeamMembers = () => {
-  const [loading, setIsloading] = useState(false)
+  const [loading , setIsloading] = useState(false)
   const location = useLocation();
-
-  let a = localStorage.getItem("teamusers")
-  // let b = localStorage.getItem("remaining")
+  let a = localStorage.getItem("visible")
+  let b = localStorage.getItem("remaining")
   
   const visibleIds = location.state?.visible || a;
-
-  const remainingIds = location.state?.remaining
-
-
+  const remainingIds = location.state?.remaining || b;
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
@@ -68,12 +64,11 @@ const TeamMembers = () => {
   
       
 
-
   const fetchTeamMembers = async () => {
     setIsloading(true)
     try {
       const { data } = await axios.get(`${URL}/auth/getAllUsers`);
-      if (data) {
+      if(data){
         setIsloading(false)
       }
       setAllUsers(data);
@@ -89,48 +84,19 @@ const TeamMembers = () => {
   const visibleUsers = allUsers.filter(
     user => visibleIds.includes(user.id) && user.id !== 1
   );
-
+ 
   const remainingUsers = allUsers?.filter(
     user => remainingIds?.includes(user.id) && user.id !== 1
   );
 
-
-  const handleSendMessage = (contact) => {
-    setSelectedContact(contact);
-    setModalOpen(true);
-  };
-
-
   return (
     <div>
-      {loading ? <Loader /> : <>
-        <div className="HeaderTop">
+      {loading ? <Loader/> :<>
         <HeaderTab title='Team Members' />
-        </div>
-        <div className={styles.contactList}>
-          {visibleUsers.length > 0 && (
-            <>
 
-              {visibleUsers.map((user) => (
-                <div key={user.id} className={styles.contactCard}>
-                  <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
-                  <div className={styles.info}>
-                    <div className={styles.name}>
-                      {user.firstName} <span className={styles.role}>({user.userRole})</span>
-                    </div>
-                    <div className={styles.phone}>{user.mobileNumber}</div>
-                  </div>
-                  <div className={styles.buttons}>
-                    <button className={styles.callBtn}>Book a Call</button>
-                    <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
-                      Send Message
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-
+<div className={styles.contactList}>
+  {visibleUsers.length > 0 && (
+    <>
 
       {visibleUsers.map((user) => (
         <div key={user.id} className={styles.contactCard}>
@@ -156,34 +122,36 @@ const TeamMembers = () => {
     </>
   )}
 
-
-              {remainingUsers.map((user) => (
-                <div key={user.id} className={styles.contactCard}>
-                  <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
-                  <div className={styles.info}>
-                    <div className={styles.name}>
-                      {user.firstName} <span className={styles.role}>({user.userRole})</span>
-                    </div>
-                    <div className={styles.phone}>{user.mobileNumber}</div>
-                  </div>
-                  <div className={styles.buttons}>
-                    <button className={styles.callBtn}>Book a Call</button>
-                    <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
-                      Send Message
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-
-        {/* Modal with custom content */}
-        <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} height="80vh">
-          <div>
-            <div className={styles.header}>
-              <p><b>Team Member -</b> {selectedContact?.firstName}</p>
+  {remainingUsers.length > 0 && (
+    <>
+      
+      {remainingUsers.map((user) => (
+        <div key={user.id} className={styles.contactCard}>
+          <img src={user.profileImage || "/Images/profile-picture.webp"} alt={user.firstName} className={styles.avatar} />
+          <div className={styles.info}>
+            <div className={styles.name}>
+              {user.firstName} <span className={styles.role}>({user.userRole})</span>
             </div>
+            <div className={styles.phone}>{user.mobileNumber}</div>
+          </div>
+          <div className={styles.buttons}>
+            <button className={styles.callBtn}>Book a Call</button>
+            <button className={styles.msgBtn} onClick={() => handleSendMessage(user)}>
+              Send Message
+            </button>
+          </div>
+        </div>
+      ))}
+    </>
+  )}
+</div>
+
+{/* Modal with custom content */}
+<Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} height="80vh">
+  <div>
+    <div className={styles.header}>
+      <p><b>Team Member -</b> {selectedContact?.firstName}</p>
+    </div>
 
     <div className={styles.messages}>
   {[...userComments].reverse().map((msg, index) => (
@@ -234,9 +202,8 @@ const TeamMembers = () => {
 
   </div>
 </Modal>
-
       </>}
-
+     
     </div>
   );
 };
