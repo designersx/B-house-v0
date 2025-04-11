@@ -49,6 +49,9 @@ console.log("Order Detail:", order);
           style={{ width: order.progressWidth, backgroundColor: order.progressColor }}
         ></div>
       </div>
+      <div className={styles.slider}>
+        Slider
+      </div>
     </div>
 
 

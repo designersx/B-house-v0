@@ -3,7 +3,7 @@ import styles from '../Chart/Chart.module.css';
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import axios from 'axios';
-import URL from '../../../config/api'; 
+import URL from '../../../config/api';
 
 const Chart = () => {
     const [totalCost, setTotalCost] = useState(0);
@@ -21,17 +21,17 @@ const Chart = () => {
                 const totalAmount = invoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0);
                 const totalPaid = invoices.reduce((sum, invoice) => {
                     if (invoice.status === 'Paid') {
-                        return sum + invoice.totalAmount; 
+                        return sum + invoice.totalAmount;
                     }
-                    return sum + (invoice.advancePaid || 0);  
+                    return sum + (invoice.advancePaid || 0);
                 }, 0);
 
 
-    //    ......... Circule chart.......////
-    const totalCost = 123410;
-    const paidAmount = 3880;
-    const remaining = totalCost - paidAmount;
-    const percentage = (paidAmount / totalCost) * 100;
+                //    ......... Circule chart.......////
+                const totalCost = 123410;
+                const paidAmount = 3880;
+                const remaining = totalCost - paidAmount;
+                const percentage = (paidAmount / totalCost) * 100;
 
                 const balanceDue = totalAmount - totalPaid;
 

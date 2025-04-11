@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import URL from '../../../config/api';
 import axios from 'axios';
 import { url2 } from '../../../config/url';
+
 const progressColor = {
   Installed: {
     progressWidth: '100%',
@@ -111,12 +112,19 @@ function ProjectDelivery({ selectedProject }) {
   }
 
   return (
+
+
+    
     <div>
       <div className={styles.DeliveryUpdate}>
         <h4>Project Delivery Update</h4>
         <button className={styles.button}>View All</button>
       </div>
       <div className={styles.dlDate}><p>2025-04-11</p></div>
+
+
+
+
 
       <div className={styles.Container}>
         {data
