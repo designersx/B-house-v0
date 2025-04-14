@@ -5,7 +5,9 @@ import Docs from '../../Components/Docs/Docs'
 const DocsPage = () => {
     return (
         <div>
-            <HeaderTab title='Document' />
+             <div className="HeaderTop">
+             <HeaderTab title='Document' />
+             </div>
             <Docs />
             <Footer />
         </div>

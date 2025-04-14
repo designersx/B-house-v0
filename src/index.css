@@ -54,6 +54,7 @@ body {
   }
 }
 
+<<<<<<< HEAD
 .PunchImageSlider .slick-next {
   right: 0 !important;
 }
@@ -71,3 +72,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+=======
+.HeaderTop{
+  /* display: flex; */
+  position: sticky;
+  top: 0;
+  z-index: 11;
+  width: 100%;
+}
+
+>>>>>>> origin/dev_rebase

@@ -7,9 +7,11 @@ import List from '../../Components/Invoice/List/List.jsx'
 const InvoicePage = () => {
     return (
         <div>
-            <HeaderTab title='Invoice List' />
-            <Chart/>
-            <List/>
+            <div className="HeaderTop">
+                <HeaderTab title='Invoice List' />
+            </div>
+            <Chart />
+            <List />
 
             <Footer />
         </div>

@@ -7,13 +7,18 @@ import ProjectOverView from "./ProjectOverView/ProjectOverView";
 import ProjectDelivery from "./ProjectDelivery/ProjectDelivery";
 const Home = () => {
   return (
-    <div className={styles.homeMain}>
+    <div>
+      <div className="HeaderTop">
       <Header />
+      </div>
+<div className={styles.homeMain}>
 
       <Proposal />
   
       <Footer />
     </div>
+    </div>
+    
   );
 };
 

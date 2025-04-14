@@ -39,8 +39,8 @@ const Forget = () => {
           <img src="Svg/resetLock.svg" alt="Reset Icon" />
         </div>
         <div className={styles.Title}>
-          <h1>Reset Password to Access</h1>
-          <p>Please enter your email to receive a reset OTP.</p>
+          <h1>Forgot Password</h1>
+          <p>Please enter your email address to reset your password.</p>
         </div>
 
         <div className={styles.confirmDivMian}>

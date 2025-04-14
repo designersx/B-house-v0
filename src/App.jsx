@@ -41,8 +41,6 @@ function App() {
           <Route path="/invoice" element={<InvoicePage />}></Route>
           <Route path="/docs" element={<DocsPage />}></Route>
           <Route path="/punchlist" element={<PunchPage />}></Route>
-
-
           <Route path="/order/:id" element={<OrderDetail />} />
           <Route path="/OrderInfo" element={<OrderInfo />} />
           <Route path="/punchlistdetail" element={<PunchListDetail />} />
