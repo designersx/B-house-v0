@@ -1,10 +1,15 @@
 import React from 'react'
 import styles from './OrderInfo.module.css';
 import CommentBox from './CommentBox';
+import HeaderTab from '../../HeaderTab/HeaderTab';
 
 function OrderInfo() {
   return (
     <div>
+  <div className='HeaderTop'>
+<HeaderTab title={"Davis Chairs" }/>
+</div>
+
     <div className={styles.container}>
     <div className={styles.header}>
       <div className={styles.etdEta}>

@@ -2,12 +2,16 @@ import React from 'react'
 import styles from '../Home/OrderInfo/OrderInfo.module.css';
 import CommentBox from '../Home/OrderInfo/CommentBox';
 import Slider from "./PunchSlider";
-
+import HeaderTab from '../HeaderTab/HeaderTab';
 
 
 function PunchListDetail() {
-  return (
+  return (<>
+  <div className='HeaderTop'>
+<HeaderTab title={"Punchlist Detail" }/>
+</div>
     <div className={styles.PunchSlider}>
+
     <div className={styles.container}>
     <div className={styles.header}>
       <div className={styles.etdEta}>
@@ -105,6 +109,7 @@ function PunchListDetail() {
 
 </div>
   </div>
+  </>
   )
 }
 
