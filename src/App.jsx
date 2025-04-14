@@ -15,6 +15,8 @@ import Verify from "./Components/Verify/Verify";
 import EditProfile from "./Components/EditProfile/EditProfile";
 import OrderInfo from "./Components/Home/OrderInfo/OrderInfo";
 import TeamMembers from "./Components/TeamMembers/TeamMembers";
+import PunchListDetail from "./Components/Punchlist/Punchlistdestail";
+import SimpleSlider from "./Components/Punchlist/PunchSlider";
 
 
 
@@ -41,6 +43,8 @@ function App() {
           <Route path="/punchlist" element={<PunchPage />}></Route>
           <Route path="/order/:id" element={<OrderDetail />} />
           <Route path="/OrderInfo" element={<OrderInfo />} />
+          <Route path="/punchlistdetail" element={<PunchListDetail />} />
+          <Route path="/simpleslider" element={<SimpleSlider />} />
         </Routes>
       </BrowserRouter>
     </>
