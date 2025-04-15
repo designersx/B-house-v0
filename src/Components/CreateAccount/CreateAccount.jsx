@@ -14,37 +14,94 @@ const CreateAccount = () => {
     description: "",
     address: ""
   });
+  const [errors, setErrors] = useState({});
+
 const Navigate = useNavigate();
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.phone || !formData.companyName || !formData.description) {
-      toast.error("Please fill all required fields.");
-      return;
-    }
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData((prev) => ({ ...prev, [name]: value }));
 
-    try {
-      await axios.post(`${URL}/requests`, formData);
-      toast.success("Account request submitted successfully!");
-      Navigate("/");
-        setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        companyName: "",
-        description: "",
-        address: ""
-      });
-    } catch (err) {
-      console.error("Request failed:", err);
-      const message = err.response?.data?.message || "Submission failed. Please try again.";
-      toast.error(message);
-    }
-  };
+  // Validate individual field
+  validateField(name, value);
+};
+const validateField = (name, value) => {
+  let message = "";
+  const nameRegex = /^[a-zA-Z\s]+$/;
+  const phoneRegex = /^\d{10}$/;
+  const companyRegex = /^[a-zA-Z0-9\s]+$/;
+
+  switch (name) {
+    case "fullName":
+      if (!value.trim()) message = "Full name is required.";
+      else if (!nameRegex.test(value)) message = "Only letters and spaces allowed.";
+      break;
+
+    case "email":
+      if (!value.trim()) message = "Email is required.";
+      else if (!/\S+@\S+\.\S+/.test(value)) message = "Invalid email address.";
+      break;
+
+      case "phone":
+        if (!value.trim()) message = "Phone number is required.";
+        else if (!phoneRegex.test(value)) message = "Phone number must be exactly 10 digits.";
+        break;
+      
+
+    case "companyName":
+      if (!value.trim()) message = "Company name is required.";
+      else if (!companyRegex.test(value)) message = "Alphanumeric and spaces only.";
+      break;
+
+    case "description":
+      if (!value.trim()) message = "Description is required.";
+      else if (value.length < 10) message = "Minimum 10 characters required.";
+      break;
+
+    case "address":
+      if (value.length > 100) message = "Max 100 characters allowed.";
+      break;
+
+    default:
+      break;
+  }
+
+  setErrors((prev) => ({ ...prev, [name]: message }));
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // Validate all fields before submitting
+  Object.entries(formData).forEach(([key, value]) => validateField(key, value));
+
+  const hasErrors = Object.values(errors).some((msg) => msg);
+  if (hasErrors) {
+    toast.error("Please correct the highlighted errors.");
+    return;
+  }
+
+  try {
+    await axios.post(`${URL}/requests`, formData);
+    toast.success("Account request submitted successfully!");
+    Navigate("/");
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      companyName: "",
+      description: "",
+      address: ""
+    });
+    setErrors({});
+  } catch (err) {
+    console.error("Request failed:", err);
+    const message = err.response?.data?.message || "Submission failed. Please try again.";
+    toast.error(message);
+  }
+};
+
+  
 
   return (
     <div className={styles.signMain}>
@@ -73,6 +130,7 @@ const Navigate = useNavigate();
             value={formData.fullName}
             onChange={handleChange}
           />
+          {errors.fullName && <p className={styles.error}>{errors.fullName}</p>}
 
           <label>Email*</label>
           <input
@@ -83,6 +141,7 @@ const Navigate = useNavigate();
             value={formData.email}
             onChange={handleChange}
           />
+          {errors.email && <p className={styles.error}>{errors.email}</p>}
 
           <label>Phone Number*</label>
           <input
@@ -93,6 +152,7 @@ const Navigate = useNavigate();
             value={formData.phone}
             onChange={handleChange}
           />
+          {errors.phone && <p className={styles.error}>{errors.phone}</p>}
 
           <label>Company Name*</label>
           <input
@@ -103,6 +163,7 @@ const Navigate = useNavigate();
             value={formData.companyName}
             onChange={handleChange}
           />
+          {errors.companyName && <p className={styles.error}>{errors.companyName}</p>}
 
           <label>Description*</label>
           <textarea
@@ -113,6 +174,7 @@ const Navigate = useNavigate();
             value={formData.description}
             onChange={handleChange}
           />
+          {errors.description && <p className={styles.error}>{errors.description}</p>}
 
           <label>Address (Optional)</label>
           <input
@@ -123,6 +185,7 @@ const Navigate = useNavigate();
             value={formData.address}
             onChange={handleChange}
           />
+          {errors.address && <p className={styles.error}>{errors.address}</p>}
 
           <button type="submit" className={styles.signInButton}>
             Request to Create an Account

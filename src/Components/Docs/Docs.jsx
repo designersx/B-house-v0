@@ -24,7 +24,9 @@ function Docs() {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const customer = JSON.parse(localStorage.getItem('customerInfo'));
+  const customerName = customer?.full_name || "My Docs";
+  
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));
     try {
@@ -106,7 +108,7 @@ function Docs() {
       )}
 
       <div className={styles.tabs}>
-        {['JENNY WILSON', 'B-HOUSE DOCS'].map(tab => (
+      {[customerName, 'B-HOUSE DOCS'].map(tab => (
           <button
             key={tab}
             className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
@@ -117,7 +119,7 @@ function Docs() {
         ))}
       </div>
 
-      {activeTab === 'JENNY WILSON' ? (
+      {activeTab === customerName ? (
         <div className={styles.docList}>
           {docs.map((doc, idx) => {
             const foundDoc = docsData.find(d => d.documentType === doc);
