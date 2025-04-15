@@ -1,119 +1,141 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../Sign/Sign.module.css";
-import axios from 'axios';
-import URL from '../../config/api';
+import axios from "axios";
+import URL from "../../config/api";
 
 const Sign = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
-    const [error, setError] = useState('');
-    const [showPassword, setShowPassword] = useState(false); 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("savedEmail");
+    const savedPassword = localStorage.getItem("savedPassword");
+    if (savedEmail && savedPassword) {
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+      setRememberMe(true);
+    }
+  }, []);
 
-    const navigate = useNavigate();
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${URL}/customer/login`, {
+        email,
+        password,
+      });
 
+      const { token, firstLogin, customer } = response.data;
+      localStorage.setItem("customerToken", token);
+      localStorage.setItem("customerInfo", JSON.stringify(customer));
+      if (rememberMe) {
+        localStorage.setItem("savedEmail", email);
+        localStorage.setItem("savedPassword", password);
+      } else {
+        localStorage.removeItem("savedEmail");
+        localStorage.removeItem("savedPassword");
+      }
 
-    useEffect(() => {
-        const savedEmail = localStorage.getItem("savedEmail");
-        const savedPassword = localStorage.getItem("savedPassword");
-        if (savedEmail && savedPassword) {
-            setEmail(savedEmail);
-            setPassword(savedPassword);
-            setRememberMe(true);
-        }
-    }, []);
+      if (firstLogin) {
+        navigate("/reset");
+      } else {
+        navigate("/home");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(err.response?.data?.message || "Login failed");
+    }
+  };
 
-    const handleSignIn = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post(`${URL}/customer/login`, {
-                email,
-                password,
-            });
+  return (
+    <div className={styles.signMain}>
+      <div className={styles.ImgDiv}>
+        <img src="Images/Home-img.png" alt="" />
+      </div>
+      <div className={styles.logoContainer}>
+        <img src="Svg/b-houseLogo.svg" alt="" />
+      </div>
+      <div className={styles.signPart}>
+        <h2 className={styles.heading}>Sign In</h2>
+        <p className={styles.subtext}>
+          Enter your email and password to sign in!
+        </p>
+        <form className={styles.form} onSubmit={handleSignIn}>
+          <label>Email*</label>
+          <input
+            type="email"
+            placeholder="Youremail@gmail.com"
+            className={styles.input}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-            const { token, firstLogin, customer } = response.data;
-            localStorage.setItem('customerToken', token);
-            localStorage.setItem('customerInfo', JSON.stringify(customer));
-            if (rememberMe) {
-                localStorage.setItem("savedEmail", email);
-                localStorage.setItem("savedPassword", password);
-            } else {
-                localStorage.removeItem("savedEmail");
-                localStorage.removeItem("savedPassword");
-            }
+          <label>Password*</label>
+          <div className={styles.passwordContainer}>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Min. 8 characters"
+              className={styles.inputPassword}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <p
+              className={styles.eyeIcon}
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ cursor: "pointer" }}
+            >
+              <img
+                src={showPassword ? "Svg/eye.svg" : "Svg/eye-close.svg"}
+                alt=""
+              />
+            </p>
+          </div>
 
-            if (firstLogin) {
-                navigate('/reset');
-            } else {
-                navigate('/home');
-            }
+          {error && <p className={styles.errorMessage}>{error}</p>}
 
-        } catch (err) {
-            console.error("Login error:", err);
-            setError(err.response?.data?.message || "Login failed");
-        }
-    };
-
-    return (
-        <div className={styles.signMain}>
-            <div className={styles.ImgDiv}>
-                <img src='Images/Home-img.png' alt='' />
+          <div className={styles.options}>
+            <div className={styles.checkBoxDiv}>
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+              />
+              <label htmlFor="rememberMe"> Keep me logged in</label>
             </div>
-            <div className={styles.logoContainer}><img src='Svg/b-houseLogo.svg' alt=''/></div>
-            <div className={styles.signPart}>
-                <h2 className={styles.heading}>Sign In</h2>
-                <p className={styles.subtext}>Enter your email and password to sign in!</p>
-                <form className={styles.form} onSubmit={handleSignIn}>
-                    <label>Email*</label>
-                    <input
-                        type="email"
-                        placeholder="Youremail@gmail.com"
-                        className={styles.input}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-
-                    <label>Password*</label>
-                    <div className={styles.passwordContainer}>
-                        <input
-                            type={showPassword ? "text" : "password"} 
-                            placeholder="Min. 8 characters"
-                            className={styles.inputPassword}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <span className={styles.eyeIcon} onClick={() => setShowPassword(!showPassword)} style={{ cursor: "pointer" }}>
-                            <img src={showPassword ? 'Svg/eye.svg' : 'Svg/eye-close.svg'} alt='' />
-                        </span>
-                    </div>
-
-                    {error && <p className={styles.errorMessage}>{error}</p>}
-
-                    <div className={styles.options}>
-                        <div className={styles.checkBoxDiv}>
-                            <input
-                                type="checkbox"
-                                id="rememberMe"
-                                checked={rememberMe}
-                                onChange={() => setRememberMe(!rememberMe)}
-                            />
-                            <label htmlFor="rememberMe"> Keep me logged in</label>
-                        </div>
-                        <div>
-                            <a className={styles.forgotPassword} onClick={() => navigate("/forget")}>Forget password?</a>
-                        </div>
-                    </div>
-
-                    <button type="submit" className={styles.signInButton}>Sign In</button>
-                </form>
-                <p className={styles.registerText}>Not registered yet? <a className={styles.registerLink} onClick={() => navigate("/createAccount")}>Request to Create an Account</a></p>
-                <footer className={styles.footer}>
-                    &copy; 2025 Bhouse. All rights reserved.
-                </footer>
+            <div>
+              <a
+                className={styles.forgotPassword}
+                onClick={() => navigate("/forget")}
+              >
+                Forget password?
+              </a>
             </div>
-        </div>
-    );
+          </div>
+
+          <button type="submit" className={styles.signInButton}>
+            Sign In
+          </button>
+        </form>
+        <p className={styles.registerText}>
+          Not registered yet?{" "}
+          <a
+            className={styles.registerLink}
+            onClick={() => navigate("/create-account")}
+          >
+            Request to Create an Account
+          </a>
+        </p>
+        <footer className={styles.footer}>
+          &copy; 2025 Bhouse. All rights reserved.
+        </footer>
+      </div>
+    </div>
+  );
 };
 
 export default Sign;

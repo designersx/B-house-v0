@@ -1,0 +1,164 @@
+.container {
+    /* max-width: 400px; */
+    margin: auto;
+}
+
+.card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    background-color: #e6f0fb;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #232323;
+}
+
+.commentLink {
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.commentLink p {
+    font-size: 14px;
+    font-weight: 600;
+    color: #004680;
+}
+
+.commentLink img {
+    width: 16px;
+    height: 16px;
+}
+
+.note {
+    font-size: 13px;
+    color: #4a5568;
+    margin-top: 10px;
+    padding: 0 4px;
+    text-align: center;
+}
+
+/* Modale Conent CSS Start */
+.modalInner {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: -webkit-fill-available;
+    overflow-y: auto;
+}
+
+.modalTitle {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #232323;
+}
+
+.previewBox {
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+
+}
+
+.previewBox img {
+    width:100%;
+    height: auto;
+    max-height: 250px;
+}
+
+.commentList {
+    display: flex;
+    flex-direction: column;
+    /* max-height: 200px; */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.commentList span {
+    color: #444444;
+    text-align: right;
+    font-size: 12px;
+    margin-block: 10px 20px;
+}
+
+.commentBubble {
+    align-self: flex-end;
+    background-color: #0057a3;
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 75%;
+    position: relative;
+}
+
+.commentBubble p{
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
+.commentBubble span {
+    font-size: 10px;
+    color: #ccc;
+    display: block;
+    margin-top: 4px;
+    text-align: right;
+}
+
+.commentInput {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.inputBox {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    min-height: 70px;
+}
+
+.inputBox::placeholder {
+    font-size: 16px;
+    color: #26211F;
+}
+
+.commentButton {
+    background-color: #EEF7FF;
+    color: #004680;
+    padding: 10px;
+    font-weight: 600;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 18px;
+    min-height: 50px;
+
+}

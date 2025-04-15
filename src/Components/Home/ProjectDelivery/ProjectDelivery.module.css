@@ -11,6 +11,7 @@
 
    .DeliveryUpdate h4{
     font-size: 22px;
+    font-size: clamp(17px, 5vw, 22px);
     color:#26211F;
    }
 
@@ -20,7 +21,12 @@
     color:#004680;
     border: none;background-color: transparent;
    }
-
+   .dlDate{
+    padding-inline: 20px;
+    padding-bottom: 10px;
+    color: #26211F;
+    font-size: 16px;
+   }
 
  /* OrderCard.module.css */
 
@@ -52,6 +58,8 @@
   .orderTitle {
     font-size: 18px;
     font-weight: 600;
+    color: #26211F;
+    text-transform: capitalize;
   }
   
   .orderStatus {
@@ -95,6 +103,7 @@
   .commentMessage {
     font-size: 14px;
     margin-top: 4px;
+    color: #26211F;
   }
   
   /* Bottom Section */
@@ -164,6 +173,7 @@
     display: flex;
     align-items: center;
     gap:5px;
+    color: #444444;
     
   }
 
@@ -207,3 +217,6 @@
     text-decoration: none;
     color: inherit;
   }
+
+
+  

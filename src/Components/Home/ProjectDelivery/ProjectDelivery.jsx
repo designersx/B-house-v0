@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import styles from './ProjectDelivery.module.css';
-import { Link } from 'react-router-dom';
-import URL from '../../../config/api';
-import axios from 'axios';
-import { url2 } from '../../../config/url';
+
+import React, { useEffect, useState } from "react";
+import styles from "./ProjectDelivery.module.css";
+import { Link } from "react-router-dom";
+import URL from "../../../config/api";
+import axios from "axios";
+import { url2 } from "../../../config/url";
+
 const progressColor = {
   Installed: {
     progressWidth: '100%',
@@ -16,9 +18,11 @@ const progressColor = {
     progressWidth: '50%',
   },
   Pending: {
+
     statusColor: '#FF5E00',
     progressColor: '#FF5E00',
     progressWidth: '25%',
+
   },
   In_Transit: {
     progressColor: '#6C35B1',
@@ -30,10 +34,12 @@ const progressColor = {
 function ProjectDelivery({ selectedProject }) {
   const [data, setData] = useState([]);
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
+
  
 
   const fetchManufacturers = async () => {
     const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+
 
     try {
       const res = await axios.get(`${URL}/items/${projectId}`);
@@ -41,6 +47,7 @@ function ProjectDelivery({ selectedProject }) {
         setData(res.data);
       }
     } catch (error) {
+
       console.log('Error fetching items:', error);
     }
   };
@@ -179,6 +186,7 @@ function ProjectDelivery({ selectedProject }) {
             </Link>
           );
         })}
+
       </div>
     </div>
   );
