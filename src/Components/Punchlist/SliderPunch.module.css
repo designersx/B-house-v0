@@ -1,0 +1,34 @@
+.PunchImageSlider{
+    width: 100% !important;
+    /* max-width: 600px !important; */
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* border: 1px solid #000; */
+    overflow: auto;
+    
+}
+
+.PunchImageSlider1{
+    display: grid;
+}
+
+.PunchImageSlider .slick-slider{
+    width: 100%;
+} 
+
+.slideImg{
+    width: 75px;
+    height: 75px;
+}
+
+.slideImg img{
+    width: 100%;
+    max-width: 75px;
+}
+
+
+.orderDetails1 {
+    display: grid;
+    width: 100%;
+    overflow: auto;}

@@ -78,7 +78,7 @@ const Sign = () => {
           <div className={styles.passwordContainer}>
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Min. 8 characters"
+              placeholder="Min. 6 characters"
               className={styles.inputPassword}
               value={password}
               onChange={(e) => setPassword(e.target.value)}

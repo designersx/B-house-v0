@@ -5,8 +5,10 @@ import Modal from "../Modal/Modal";
 import CommentThread from "../CommentThread/CommentThread";
 import URL from "../../config/api";
 import { url2 } from "../../config/url";
+import { useNavigate } from 'react-router-dom';
 
 function Punchlist() {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIssue, setActiveIssue] = useState(null);
   const [issues, setIssues] = useState([]);
@@ -55,7 +57,7 @@ function Punchlist() {
     } else if (daysDiff === 1) {
       return "Yesterday";
     } else {
-      return createdDate.toLocaleDateString(); 
+      return createdDate.toLocaleDateString();
     }
   };
 
@@ -66,16 +68,16 @@ function Punchlist() {
   return (
     <div className={styles.container}>
       {issues.map((issue, index) => (
-        <div key={index} className={styles.card}>
+        <div key={index} className={styles.card}  onClick={() => navigate('/punchlist-detail')}>
           <div className={styles.topRow}>
-          <span
-  className={`${styles.status} 
+            <span
+              className={`${styles.status} 
     ${issue.status === "Resolved" ? styles.resolved : ""}
     ${issue.status === "Rejected" ? styles.rejected : ""}
     ${issue.status === "Pending" ? styles.pending : ""}`}
->
-  {issue.status}
-</span>
+            >
+              {issue.status}
+            </span>
 
             <span className={styles.date}>{formatDate(issue.createdAt)}</span>
           </div>
@@ -90,10 +92,10 @@ function Punchlist() {
               {issue.productImages.slice(0, 3).map((img, i) => (
                 <img
                   key={i}
-                  src={`${url2}/${img}`} 
+                  src={`${url2}/${img}`}
                   alt={`Issue image ${i + 1}`}
                   className={styles.image}
-                  onClick={() => handleImageClick(img)} 
+                  onClick={() => handleImageClick(img)}
                 />
               ))}
               {/* If there are more than 3 images, show the counter */}

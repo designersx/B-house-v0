@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './App.css'
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Home from '../src/Components/Home/Home'
 import Sign from "./Components/Sign/Sign";
 import Reset from "./Components/Reset/Reset";
@@ -15,6 +15,7 @@ import Verify from "./Components/Verify/Verify";
 import EditProfile from "./Components/EditProfile/EditProfile";
 import OrderInfo from "./Components/Home/OrderInfo/OrderInfo";
 import TeamMembers from "./Components/TeamMembers/TeamMembers";
+import PunchListDetail from "./Components/Punchlist/Punchlistdestail";
 
 
 
@@ -22,10 +23,19 @@ import TeamMembers from "./Components/TeamMembers/TeamMembers";
 
 function App() {
 
+  const ScrollToTop = () => {
+    const { pathname } = useLocation();
 
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+  };
   return (
     <>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Sign />}></Route>
           <Route path="/home" element={<Home />}></Route>
@@ -40,8 +50,10 @@ function App() {
           <Route path="/docs" element={<DocsPage />}></Route>
           <Route path="/punchlist" element={<PunchPage />}></Route>
           <Route path="/order/:id" element={<OrderDetail />} />
-          <Route path="/OrderInfo" element={<OrderInfo />} />
-          
+
+          <Route path="/orderInfo" element={<OrderInfo />} />
+          <Route path="/punchlist-detail" element={<PunchListDetail />} />
+
         </Routes>
       </BrowserRouter>
     </>
