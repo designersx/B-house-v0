@@ -6,23 +6,25 @@ import HeaderTab from '../../HeaderTab/HeaderTab';
 function OrderInfo() {
   return (
     <div>
-<div className='HeaderTop'>
-      <HeaderTab title={"Davis Chairs"} />
-    </div>
+      <div className='HeaderTop'>
+        <HeaderTab title={"Davis Chairs"} />
+      </div>
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.etdEta}>
-            <div className={styles.etd}>
-              <h5>ETD</h5>
-              <p>18 April 2025, 16:45</p>
-            </div>
-            <hr></hr>
-            <div className={styles.eta}>
-              <h5>ETA</h5>
-
-              <p>20 April 2025, 16:45</p>
+            <div className={styles.topFlex}>
+              <div className={styles.etd}>
+                <h5>ETD</h5>
+                <p>18 Apr 2025, 16:45</p>
+              </div>
+              <div className={styles.divider}></div>
+              <div className={styles.eta}>
+                <h5>ETA</h5>
+                <p>25 Mar 2025, 20:15</p>
+              </div>
             </div>
           </div>
+
           <div className={styles.orderInfo}>
             <div className={styles.orderDetails}>
 

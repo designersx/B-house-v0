@@ -16,16 +16,16 @@ function PunchListDetail() {
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.etdEta}>
-            {/* <img src='Images/DetailsBg.png' alt=''/> */}
-            <div className={styles.etd}>
-              <h5>ETD</h5>
-              <p>18 April 2025, 16:45</p>
-            </div>
-            <hr></hr>
-            <div className={styles.eta}>
-              <h5>ETA</h5>
-
-              <p>20 April 2025, 16:45</p>
+            <div className={styles.topFlex}>
+              <div className={styles.etd}>
+                <h5>ETD</h5>
+                <p>18 April 2025, 16:45</p>
+              </div>
+              <div className={styles.divider}></div>
+              <div className={styles.eta}>
+                <h5>ETA</h5>
+                <p>25 April 2025, 20:15</p>
+              </div>
             </div>
           </div>
           <div className={styles.orderInfo}>

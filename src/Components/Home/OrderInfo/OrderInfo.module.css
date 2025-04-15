@@ -16,40 +16,53 @@
     margin-bottom: 30px;
     /* padding: 20px; */
 }
-
 .etdEta {
-    border-radius: 10px;
-      background-color: #004680;
-    display: flex;
-    padding: 10px;
-    /* flex-direction: column; */
-    text-align: center;
-  }
-  
-  .etd,
-  .eta {
-    font-size: 14px;
-    color: #1a73e8;
-    margin: 5px 0;
-    width: 50%;
-    text-align: start;
-    padding: 0 0 0 20px;
-  }
+  background-image: url('/Images/DetailsBg.png'); /* use your decorative background */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  color: rgb(255, 255, 255);
+}
 
-  .etd h5 ,
-  .eta h5 {
-    font-size: 27px;
-    color: #fff;
-    margin: 5px 0;
-  }
+.topFlex {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+  width: 100%;
+}
 
-  .etd p ,
-  .eta p {
-    font-size: 16px;
-    color: #fff;
-    margin: 5px 0;
-  }
-  
+.etd, .eta {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  flex: 1;
+}
+
+.etd h5, .eta h5 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.etd p, .eta p {
+  font-size: 16px;
+}
+
+.divider {
+  height: 60px;
+  width: 1px;
+  background-color: white;
+  opacity: 0.5;
+}
+
   .orderInfo {
     padding: 20px;
     /* display: flex; */
