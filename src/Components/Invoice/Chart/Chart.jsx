@@ -45,7 +45,6 @@ const Chart = () => {
                 const paidFromInvoices = invoices.reduce((sum, invoice) => {
                     let paid = 0;
                     if (invoice.status === 'Paid') {
-
                         paid += Number(invoice.totalAmount || 0);
                     } else {
                         paid += Number(invoice.advancePaid || 0);
@@ -57,7 +56,6 @@ const Chart = () => {
                 const balanceDue = totalProjectCost - totalPaid;
     
                 setTotalCost(totalProjectCost);
-
                 setTotalPaidAmount(totalPaid);
                 setRemaining(balanceDue);
             } catch (err) {

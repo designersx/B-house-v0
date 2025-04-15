@@ -102,7 +102,7 @@ const TeamMembers = () => {
         <div key={user.id} className={styles.contactCard}>
           <img src={
                  user.profileImage
-                   ? `${url2}/${msg.profileImage}`
+                   ? `${url2}/${user?.profileImage}`
                    : 'Svg/user-icon.svg'
                } alt={user.firstName} className={styles.avatar} />
           <div className={styles.info}>
