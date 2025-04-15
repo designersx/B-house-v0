@@ -7,49 +7,72 @@ import URL from '../../../config/api';
 
 const Chart = () => {
     const [totalCost, setTotalCost] = useState(0);
-    const [totalPaidAmount, setTotalPaidAmount] = useState(0);  // This will store the total paid amount
+    const [totalPaidAmount, setTotalPaidAmount] = useState(0);
     const [remaining, setRemaining] = useState(0);
-
-    // Get projectId from localStorage
     const projectId = localStorage.getItem('selectedProjectId');
 
     useEffect(() => {
-        const fetchInvoices = async () => {
+        const fetchFinanceData = async () => {
             try {
-                const response = await axios.get(`${URL}/projects/${projectId}/invoice`);
-                const invoices = Array.isArray(response.data) ? response.data : [response.data];
-                const totalAmount = invoices.reduce((sum, invoice) => sum + invoice.totalAmount, 0);
-                const totalPaid = invoices.reduce((sum, invoice) => {
-                    if (invoice.status === 'Paid') {
-                        return sum + invoice.totalAmount;
+                const projectRes = await axios.get(`${URL}/projects/${projectId}`);
+                const project = projectRes.data;
+    
+                const baseTotalAmount = Number(project.totalValue || 0);
+                const baseAdvance = Number(project.advancePayment || 0);
+    
+                let invoices = [];
+                
+                try {
+                    const invoiceRes = await axios.get(`${URL}/projects/${projectId}/invoice`);
+                    invoices = Array.isArray(invoiceRes.data) ? invoiceRes.data : [invoiceRes.data];
+                } catch (invoiceErr) {
+                    if (invoiceErr.response && invoiceErr.response.status === 404) {
+                        // No invoices, use only project data
+                        setTotalCost(baseTotalAmount);
+                        setTotalPaidAmount(baseAdvance);
+                        setRemaining(baseTotalAmount - baseAdvance);
+                        return;
+                    } else {
+                        // Some other error — rethrow
+                        throw invoiceErr;
                     }
-                    return sum + (invoice.advancePaid || 0);
+                }
+    
+                // Invoices exist — continue with full logic
+                const invoiceTotal = invoices.reduce((sum, invoice) => sum + Number(invoice.totalAmount || 0), 0);
+                const totalProjectCost = Math.max(baseTotalAmount, invoiceTotal);
+    
+                const paidFromInvoices = invoices.reduce((sum, invoice) => {
+                    let paid = 0;
+                    if (invoice.status === 'Paid') {
+
+                        paid += Number(invoice.totalAmount || 0);
+                    } else {
+                        paid += Number(invoice.advancePaid || 0);
+                    }
+                    return sum + paid;
                 }, 0);
+    
+                const totalPaid = baseAdvance + paidFromInvoices;
+                const balanceDue = totalProjectCost - totalPaid;
+    
+                setTotalCost(totalProjectCost);
 
-
-                //    ......... Circule chart.......////
-                const totalCost = 123410;
-                const paidAmount = 3880;
-                const remaining = totalCost - paidAmount;
-                const percentage = (paidAmount / totalCost) * 100;
-
-                const balanceDue = totalAmount - totalPaid;
-
-                // Update state with the calculated values
-                setTotalCost(totalAmount);
                 setTotalPaidAmount(totalPaid);
                 setRemaining(balanceDue);
             } catch (err) {
-                console.error('Error fetching invoices:', err);
+                console.error('Error fetching finance data:', err);
             }
         };
-
+    
         if (projectId) {
-            fetchInvoices();
+            fetchFinanceData();
         }
     }, [projectId]);
+    
+    
 
-    const percentage = (totalPaidAmount / totalCost) * 100;
+    const percentage = totalCost > 0 ? (totalPaidAmount / totalCost) * 100 : 0;
 
     return (
         <div className={styles.ChartMain}>
@@ -61,7 +84,6 @@ const Chart = () => {
                     </div>
 
                     <div className={styles.chartContainer}>
-                        {/* Progress Circle */}
                         <CircularProgressbar
                             value={percentage}
                             styles={buildStyles({
@@ -71,10 +93,13 @@ const Chart = () => {
                             })}
                         />
 
-                        {/* Custom text inside the circle */}
                         <div className={styles.overlayText}>
-                            <div className={styles.amount}>${remaining.toLocaleString()}</div>
-                            <div className={styles.label}>Balance Due</div>
+                            <div className={styles.amount}>
+                                ${Math.abs(remaining).toLocaleString()}
+                            </div>
+                            <div className={styles.label}>
+                                {remaining >= 0 ? "Balance Due" : "Overpaid"}
+                            </div>
                         </div>
                     </div>
 

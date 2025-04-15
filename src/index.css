@@ -54,6 +54,25 @@ body {
   }
 }
 
+
+.PunchImageSlider .slick-next {
+  right: 0 !important;
+}
+
+.PunchImageSlider .slick-prev {
+  left: 0 !important;
+}
+
+.PunchImageSlider .slick-prev:before, .PunchImageSlider .slick-next:before {
+  font-family: 'slick';
+  font-size: 20px;
+  line-height: 1;
+  opacity: .75;
+  color: #004680;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .HeaderTop{
   /* display: flex; */
   position: sticky;

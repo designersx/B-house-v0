@@ -1,14 +1,16 @@
 import React from 'react'
-import styles from './OrderInfo.module.css';
-import CommentBox from './CommentBox';
-import HeaderTab from '../../HeaderTab/HeaderTab';
+import styles from '../Home/OrderInfo/OrderInfo.module.css';
+import CommentBox from '../Home/OrderInfo/CommentBox';
+import Slider from "./PunchSlider";
+import HeaderTab from '../HeaderTab/HeaderTab';
 
-function OrderInfo() {
-  return (
-    <div>
+
+function PunchListDetail() {
+  return (<>
   <div className='HeaderTop'>
-<HeaderTab title={"Davis Chairs" }/>
+<HeaderTab title={"Punchlist Detail" }/>
 </div>
+    <div className={styles.PunchSlider}>
 
     <div className={styles.container}>
     <div className={styles.header}>
@@ -25,28 +27,24 @@ function OrderInfo() {
         </div>
       </div>
       <div className={styles.orderInfo}>
-        <div className={styles.orderDetails}>
+        <div className={styles.orderDetails1}>
           
             <div className={styles.orderD1}>
           <p className={styles.orderNumber}>Order No : <strong>#125793</strong></p>
-          <p className={styles.TimeHour}>3 hrs ago</p>
+          {/* <p className={styles.TimeHour}>3 hrs ago</p> */}
           </div>
 
-<div className={styles.orderD2}>
-        <div className={styles.orderImage}>
-          <img
-            src="/Images/ChairImg.png"
-            className={styles.productImage} 
-            alt="Order" />
-        </div>
-          <p className={styles.productName}>Executive ErgoPro</p>
 
-          </div>
 
-          <div className={styles.orderD3}>
-          <p className={styles.productUpdate}>Project Delivery Update</p>
-          <button className={styles.bookCall}>Book a Call</button>
-          </div>
+    <Slider/>
+
+                 
+          <p className={styles.productName}>Davis Chairs</p>
+          <p className={styles.productUpdate1}>The right-side handle of the chair is broken and no longer provides proper support. It may cause discomfort or imbalance while sitting and needs to be repaired or replaced to ensure safe and comfortable use.</p>
+
+
+
+      
         </div>
         <div className={styles.CutPicDesign}>
              <img src="/Svg/CutPicDesign.svg" alt="Status" />
@@ -56,7 +54,7 @@ function OrderInfo() {
 
 
     <div className={styles.projectDetails}>
-      <h4>Project Details</h4>
+      <h4>Comments History</h4>
       <div className={styles.details}>
         <div className={styles.contactInfo}>
           <div className={styles.contactItem}>
@@ -111,7 +109,8 @@ function OrderInfo() {
 
 </div>
   </div>
+  </>
   )
 }
 
-export default OrderInfo
+export default PunchListDetail
