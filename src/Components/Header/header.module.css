@@ -64,6 +64,7 @@
 
 .btn {
     background: transparent;
+    color: #26211F;
     border: none;
     text-align: left;
     padding: 10px 12px;
@@ -90,6 +91,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #26211F;
 }
 
 .icon {
