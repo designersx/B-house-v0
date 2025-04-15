@@ -41,6 +41,7 @@ function App() {
           <Route path="/punchlist" element={<PunchPage />}></Route>
           <Route path="/order/:id" element={<OrderDetail />} />
           <Route path="/OrderInfo" element={<OrderInfo />} />
+          
         </Routes>
       </BrowserRouter>
     </>

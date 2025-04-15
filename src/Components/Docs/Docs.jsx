@@ -138,16 +138,18 @@ function Docs() {
                   >
                     {foundDoc ? 'Update' : 'Upload'}
                   </button>
-
+                  {foundDoc ?  
                   <div className={styles.editFlex}>
-                    <img src="Svg/edit-icon.svg" alt="edit-icon" />
-                    <p
-                      onClick={() => foundDoc && openCommentModal(foundDoc.id)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      Comment
-                    </p>
-                  </div>
+                  <img src="Svg/edit-icon.svg" alt="edit-icon" />
+                  <p
+                    onClick={() => foundDoc && openCommentModal(foundDoc.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Comment
+                  </p>
+                </div>
+                  :  null}
+                  
                 </div>
               </div>
             );

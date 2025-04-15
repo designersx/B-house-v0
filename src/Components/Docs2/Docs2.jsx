@@ -1,70 +1,104 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../Docs2/Docs2.module.css';
-import Modal from '../Modal/Modal'; // Make sure the import path is correct
+import Modal from '../Modal/Modal';
 import { url2 } from '../../config/url';
 import URL from '../../config/api';
 import axios from 'axios';
-const Docs2 = ({ data }) => {
+
+const Docs2 = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDoc, setSelectedDoc] = useState(null);
-    const [comments, setComments] = useState()
-    const fetchComments = async () => {
-        let id = JSON.parse(localStorage.getItem('selectedProjectId'))
-        let filePath = selectedDoc?.fileUrl?.replace(/^\/+/, ''); // removes leading "/"
+    const [comments, setComments] = useState([]);
+    const [projectData, setProjectData] = useState({
+        proposals: [],
+        floorPlans: [],
+        otherDocuments: [],
+    });
 
-        // Step 2: Replace all forward slashes with backslashes
-        filePath = filePath.replaceAll('/', '\\');
+    const fetchProject = async () => {
+        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+        try {
+            const res = await axios.get(`${URL}/projects/${projectId}`);
+            const project = res.data;
 
-        // Step 3: Encode the path
-        const encodedPath = encodeURIComponent(filePath);
-
-        // Step 4: Use in URL
-        const data = await axios.get(
-            `http://localhost:5000/api/projects/${id}/file-comments?filePath=${encodedPath}`
-        );
-        console.log(data, "data")
-        setComments(data?.data)
-
-    }
-    useEffect(() => {
-        fetchComments()
-    }, [selectedDoc])
-    const documents = [
-        { title: "Detailed Proposal", icon: "Svg/Coi.svg" },
-        { title: "Options Presentation", icon: "Svg/Coi.svg" },
-        { title: "Floor Plan", icon: "Svg/Coi.svg" },
-        { title: "CAD File", icon: "Svg/Coi.svg" },
-        { title: "Sales Agreement", icon: "Svg/Coi.svg" },
-    ];
-
-    const proposals = JSON.parse(data.proposals || '[]');
-    const floorPlans = JSON.parse(data.floorPlans || '[]');
-
-    const handleCommentClick = (doc) => {
-        let fileUrl = null;
-
-        if (doc.title === "Detailed Proposal" && proposals.length > 0) {
-            fileUrl = `/${proposals[0].replace(/\\/g, '/')}`;
-        } else if (doc.title === "Floor Plan" && floorPlans.length > 0) {
-            fileUrl = `/${floorPlans[0].replace(/\\/g, '/')}`;
+            setProjectData({
+                proposals: JSON.parse(project.proposals || '[]'),
+                floorPlans: JSON.parse(project.floorPlans || '[]'),
+                otherDocuments: JSON.parse(project.otherDocuments || '[]'),
+            });
+        } catch (err) {
+            console.error('Failed to fetch project:', err);
         }
+    };
 
-        setSelectedDoc({ ...doc, fileUrl });
+    const fetchComments = async (fileUrl) => {
+        if (!fileUrl) return;
+        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+        const filePath = encodeURIComponent(fileUrl.replace(/^\/+/, ''));
+
+        try {
+            const res = await axios.get(`${URL}/projects/${projectId}/file-comments?filePath=${filePath}`);
+            setComments(res.data || []);
+        } catch (err) {
+            console.error('Failed to fetch comments:', err);
+        }
+    };
+
+    useEffect(() => {
+        fetchProject();
+    }, []);
+
+    const handleCommentClick = (docTitle, fileUrl) => {
+        const normalizedUrl = `/${fileUrl.replace(/\\/g, '/')}`;
+        setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
+        fetchComments(normalizedUrl);
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setSelectedDoc(null);
+        setComments([]);
     };
-    console.log(encodeURI(`${url2}${selectedDoc?.fileUrl}`))
-    let handleDoc = async () => {
-        window.open(`${url2}${selectedDoc?.fileUrl}`)
-    }
+
+    const handleDoc = () => {
+        if (selectedDoc?.fileUrl) {
+            window.open(`${url2}${selectedDoc.fileUrl}`, '_blank');
+        }
+    };
+
+    const docList = [
+        {
+            title: 'Detailed Proposal',
+            icon: 'Svg/Coi.svg',
+            fileUrl: projectData.proposals[0] || null,
+        },
+        {
+            title: 'Options Presentation',
+            icon: 'Svg/Coi.svg',
+            fileUrl: null, // Placeholder
+        },
+        {
+            title: 'Floor Plan',
+            icon: 'Svg/Coi.svg',
+            fileUrl: projectData.floorPlans[0] || null,
+        },
+        {
+            title: 'CAD File',
+            icon: 'Svg/Coi.svg',
+            fileUrl: null, // Placeholder
+        },
+        {
+            title: 'Sales Agreement',
+            icon: 'Svg/Coi.svg',
+            fileUrl: null, // Placeholder
+        },
+    ];
+
     return (
         <div>
             <div className={styles.container}>
-                {documents.map((doc, index) => (
+                {docList.map((doc, index) => (
                     <div key={index} className={styles.card}>
                         <div className={styles.left}>
                             <div className={styles.icon}>
@@ -72,10 +106,20 @@ const Docs2 = ({ data }) => {
                             </div>
                             <span className={styles.title}>{doc.title}</span>
                         </div>
-                        <div className={styles.commentLink} onClick={() => handleCommentClick(doc)}>
-                            <img src='Svg/edit-icon.svg' alt="comment" />
-                            <p>Comment</p>
-                        </div>
+
+                        {doc.fileUrl ? (
+                            <div
+                                className={styles.commentLink}
+                                onClick={() => handleCommentClick(doc.title, doc.fileUrl)}
+                            >
+                                <img src="Svg/edit-icon.svg" alt="comment" />
+                                <p>Comment</p>
+                            </div>
+                        ) : (
+                            <div className={styles.noFile}>
+                                <p style={{ color: 'gray', fontSize: '12px' }}>Not uploaded yet</p>
+                            </div>
+                        )}
                     </div>
                 ))}
 
@@ -87,47 +131,50 @@ const Docs2 = ({ data }) => {
             <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="80vh">
                 <div className={styles.modalInner}>
                     <h2 className={styles.modalTitle}>{selectedDoc?.title}</h2>
-                    <div className={styles.previewBox}>
-                        {selectedDoc?.fileUrl ? (
-                            selectedDoc?.fileUrl.endsWith('.pdf') ? (
+
+                    {selectedDoc?.fileUrl && (
+                        <div className={styles.previewBox}>
+                            {selectedDoc.fileUrl.endsWith('.pdf') ? (
                                 <>
-                                    <img src="Svg/pdf.svg" alt="PDF Placeholder" />
-                                    <div onClick={handleDoc}>View pdf</div></>
-
-
+                                    <img src="Svg/pdf.svg" alt="PDF" />
+                                    <div onClick={handleDoc}>View PDF</div>
+                                </>
                             ) : (
                                 <img
-                                    src={`${url2}${selectedDoc.fileUrl}`}
-                                    alt={selectedDoc.title}
-                                    style={{ width: '100%', maxHeight: '400px', borderRadius: '8px', objectFit: 'contain' }}
+                                    src={`${url2}${selectedDoc?.fileUrl}`}
+                                    alt={selectedDoc?.title}
+                                    style={{
+                                        width: '100%',
+                                        maxHeight: '400px',
+                                        borderRadius: '8px',
+                                        objectFit: 'contain',
+                                    }}
                                 />
-                            )
-                        ) : (
-                            <img src="Svg/pdf.svg" alt="PDF Placeholder" />
-                        )}
-                    </div>
-                    {comments?.length ? (
-                        <>
-                            {comments.map((item, index) => (
-                                <div className={styles.commentList} key={index}>
-                                    <div className={styles.commentBubble}>
-                                        <p>{item.comment}</p> {/* Assuming item.comment contains the text */}
-                                    </div>
-                                    <span>
-                                        {new Date(item.createdAt)
-                                            .toLocaleString('en-GB', {
-                                                day: '2-digit',
-                                                month: 'long',
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                                hour12: true,
-                                            })
-                                            .replace(',', '')} by {item?.user?.userRole}
-                                    </span> {/* Assuming item.date contains the timestamp */}
+                            )}
+                        </div>
+                    )}
+
+                    {comments?.length > 0 &&
+                        comments.map((item, index) => (
+                            <div className={styles.commentList} key={index}>
+                                <div className={styles.commentBubble}>
+                                    <p>{item.comment}</p>
                                 </div>
-                            ))}
-                        </>
-                    ) : null}
+                                <span>
+                                    {new Date(item.createdAt)
+                                        .toLocaleString('en-GB', {
+                                            day: '2-digit',
+                                            month: 'long',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true,
+                                        })
+                                        .replace(',', '')}{' '}
+                                    by {item?.user?.userRole}
+                                </span>
+                            </div>
+                        ))}
+
                     <div className={styles.commentInput}>
                         <input
                             type="text"
@@ -144,4 +191,4 @@ const Docs2 = ({ data }) => {
     );
 };
 
-export default Docs2; 
+export default Docs2;
