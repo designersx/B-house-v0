@@ -11,48 +11,62 @@ const HeaderTab = ({ title, subtitle }) => {
 
     return (
         <>
-         <div className={styles.headerMain}>
-            <div className={styles.titleDiv}>
-                <div onClick={() => navigate(-1)} style={{ cursor: "pointer" }}>
-                    <img src='Svg/back-arrow.svg' alt='Back' />
+            <div className={styles.headerMain}>
+                <div className={styles.titleDiv}>
+                    <div onClick={() => navigate(-1)} style={{ cursor: "pointer" }}>
+                        <img src='Svg/back-arrow.svg' alt='Back' />
+                    </div>
+                    <div>
+                        <h2>{title}</h2>
+                        <p>{subtitle}</p>
+                    </div>
                 </div>
-                <div>
-                    <h2>{title}</h2>
-                    <p>{subtitle}</p>
+
+                <div className={styles.IconBoth}>
+                    <div className={styles.iconSearch} onClick={() => setShowModalSearch(true)}>
+                        <img src='Svg/searchSvg.svg' alt='Search' />
+                    </div>
+                    <div className={styles.iconFillter} onClick={() => setShowCanvas(true)}>
+                        <img src='Svg/filterSvg.svg' alt='Filter' />
+                    </div>
                 </div>
+
+                <ModalSearch
+                    isOpen={showModalSearch}
+                    onClose={() => setShowModalSearch(false)}
+                    minHeight="30%"
+                />
+
+
             </div>
-
-            <div className={styles.IconBoth}>
-                <div className={styles.iconSearch} onClick={() => setShowModalSearch(true)}>
-                    <img src='Svg/searchSvg.svg' alt='Search' />
-                </div>
-                <div className={styles.iconFillter} onClick={() => setShowCanvas(true)}>
-                    <img src='Svg/filterSvg.svg' alt='Filter' />
-                </div>
-            </div>
-
-            <ModalSearch
-                isOpen={showModalSearch}
-                onClose={() => setShowModalSearch(false)}
-                minHeight="30%"
-            />
-
-           
-        </div>
-        <OffCanvas
+            <OffCanvas
                 isOpen={showCanvas}
                 onClose={() => setShowCanvas(false)}
                 direction="right"
                 width="80%"
                 overlay={true}
             >
-                <div style={{ padding: '20px' }}>
-                    <h3>Filters</h3>
-                    <p>filter </p>
+                <div className={styles.filterWrap}>
+                    <h3 className={styles.heading}>Filter Data</h3>
+
+                    <label className={styles.checkboxItem}>
+                        <input type="checkbox" />
+                        <span>Lead Time</span>
+                    </label>
+
+                    <label className={styles.checkboxItem}>
+                        <input type="checkbox" />
+                        <span>Punchlist</span>
+                    </label>
+
+                    <label className={styles.checkboxItem}>
+                        <input type="checkbox" />
+                        <span>Team Member</span>
+                    </label>
                 </div>
             </OffCanvas>
         </>
-       
+
     );
 };
 

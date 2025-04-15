@@ -22,3 +22,31 @@
     display: flex;
     gap: 10px;
 }
+
+/* Canvas Css start */
+
+.filterWrap {
+    padding: 20px;
+  }
+  
+  .heading {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  
+  .checkboxItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    gap: 10px;
+    cursor: pointer;
+  }
+  
+  .checkboxItem input {
+    width: 16px;
+    height: 16px;
+    accent-color: #004680;
+  }
+  
