@@ -128,12 +128,12 @@ function ProjectDelivery({ selectedProject }) {
 
             return (
               <Link
-                to={`/order/${item.id}`}
+                to='/orderinfo'
                 key={item.id}
                 state={{ item }}
                 className={styles.linkStyle}
               >
-                <div className={styles.orderCard}>
+                <div className={styles.orderCard} >
                   {/* Header */}
                   <div className={styles.orderHeader}>
                     <h2 className={styles.orderTitle}>{item.itemName}</h2>
