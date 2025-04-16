@@ -64,10 +64,30 @@
     border-radius: 6px;
     text-align: center;
     width: max-content;
+
 }
 
 .etd p,
 .eta p {
+
+  }
+  /* Add these new status-specific styles */
+.resolved {
+    background-color: #28a745; 
+    color: white;
+  }
+  
+  .rejected {
+    background-color: #dc3545; 
+    color: white;
+  }
+  
+  .pending {
+    background-color: #ffc107;
+    color: #000;
+  }
+  .etd p, .eta p {
+
     font-size: 16px;
 }
 

@@ -10,7 +10,7 @@ const CommentThread = ({ issue }) => {
   const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
   const isCustomer = !!customerInfo;
   const customerId = customerInfo?.id;
-  const messagesEndRef = useRef(null); // Ref to bottom
+  const messagesEndRef = useRef(null); 
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -54,9 +54,7 @@ const CommentThread = ({ issue }) => {
 
   return (
     <div className={styles.threadContainer}>
-      <div className={styles.header}>
-        <p><b>{issue.category} – </b>{issue.issueDescription}</p>
-      </div>
+      <h4 className={styles.commentHistory}>Comments History</h4>
       <div className={styles.messages}>
       {[...comments].reverse().map((msg, index) => (
           msg.createdByType === 'user' ? (

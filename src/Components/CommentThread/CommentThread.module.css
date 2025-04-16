@@ -131,4 +131,9 @@
   .image:hover {
     transform: scale(1.05);
   }
-  
+  .commentHistory{
+    font-size: 22px;
+    color: #26211F;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
