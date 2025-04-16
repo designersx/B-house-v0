@@ -25,7 +25,7 @@
   background: none;
   border: none;
   font-size: 16px;
-  color: #555;
+  color: #26211F;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@
   padding: 8px 12px;
   cursor: pointer;
   font-size: 14px;
-  color: #333;
+  color: #26211F;
 }
 
 .dropdownMenu li:hover {

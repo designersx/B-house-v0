@@ -28,6 +28,7 @@
     background: none;
     font-weight: 500;
     cursor: pointer;
+    text-transform: uppercase;
 }
 
 .activeTab {
