@@ -67,63 +67,61 @@ console.log(customer)
   // Validation function
   const validateForm = () => {
     const errors = {};
-
-    // Full Name: required, min length 2, max length 50
+  
+    // Full Name: required, only letters & spaces, min 2, max 50
+    const nameRegex = /^[a-zA-Z\s]{2,50}$/;
     if (!formData.full_name.trim()) {
       errors.full_name = 'Full name is required';
-    } else if (formData.full_name.trim().length < 2) {
-      errors.full_name = 'Full name must be at least 2 characters';
-    } else if (formData.full_name.trim().length > 50) {
-      errors.full_name = 'Full name must be less than 50 characters';
+    } else if (!nameRegex.test(formData.full_name.trim())) {
+      errors.full_name = 'Full name should contain only letters & spaces (2–50 chars)';
     }
-
-    // Email: required, must match regex
+  
+    // Email
     if (!formData.email.trim()) {
       errors.email = 'Email is required';
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData.email)) {
-        errors.email = 'Email is not valid';
+        errors.email = 'Email format is not valid';
       }
     }
-
-    // Phone: required, must match regex (allowing digits and dashes)
+  
+    // Phone: exactly 10 digits
     if (!formData.phone.trim()) {
       errors.phone = 'Phone number is required';
     } else {
-      const phoneRegex = /^[0-9-]{8,15}$/;
+      const phoneRegex = /^\d{10}$/;
       if (!phoneRegex.test(formData.phone)) {
-        errors.phone = 'Phone number is not valid';
+        errors.phone = 'Phone must be exactly 10 digits';
       }
     }
-
-    // Company Name: required, min length 2, max length 50
+  
+    // Company Name: required, alphanumeric with spaces
+    const companyRegex = /^[a-zA-Z0-9\s]{2,50}$/;
     if (!formData.company_name.trim()) {
       errors.company_name = 'Company name is required';
-    } else if (formData.company_name.trim().length < 2) {
-      errors.company_name = 'Company name must be at least 2 characters';
-    } else if (formData.company_name.trim().length > 50) {
-      errors.company_name = 'Company name must be less than 50 characters';
+    } else if (!companyRegex.test(formData.company_name.trim())) {
+      errors.company_name = 'Company name must be alphanumeric (2–50 chars)';
     }
-
-    // Address: required, min length 5, max length 100
+  
+    // Address
     if (!formData.address.trim()) {
       errors.address = 'Address is required';
     } else if (formData.address.trim().length < 5) {
       errors.address = 'Address must be at least 5 characters';
     } else if (formData.address.trim().length > 100) {
-      errors.address = 'Address must be less than 100 characters';
+      errors.address = 'Address must be under 100 characters';
     }
-
+  
     setErrors(errors);
-    // Return true if there are no errors
     return Object.keys(errors).length === 0;
   };
+  
 
   // Handle submit
   const handleSubmit = async () => {
     if (!validateForm()) {
-      return; // If validation fails, do not proceed
+      return; 
     }
     
     try {

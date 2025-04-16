@@ -21,19 +21,14 @@ function Punchlist() {
   };
 
   useEffect(() => {
-    // Fetch punch list for the project based on projectId
     const fetchPunchList = async () => {
       try {
         const response = await axios.get(`${URL}/projects/${projectId}/punch-list`);
         const punchListData = response.data;
-
-        // Parse productImages from stringified JSON array to actual array
         const parsedIssues = punchListData.map(issue => ({
           ...issue,
-          productImages: JSON.parse(issue.productImages) // Parsing the string to an array
+          productImages: JSON.parse(issue.productImages)
         }));
-
-        // Update the state with the fetched and parsed data
         setIssues(parsedIssues);
       } catch (err) {
         console.error("Error fetching punch list:", err);
@@ -67,69 +62,71 @@ function Punchlist() {
 
   return (
     <div className={styles.container}>
-      {issues.map((issue, index) => (
-        <div key={index} className={styles.card}  onClick={() => navigate('/punchlist-detail')}>
-          <div className={styles.topRow}>
-            <span
-              className={`${styles.status} 
-    ${issue.status === "Resolved" ? styles.resolved : ""}
-    ${issue.status === "Rejected" ? styles.rejected : ""}
-    ${issue.status === "Pending" ? styles.pending : ""}`}
-            >
-              {issue.status}
-            </span>
-
-            <span className={styles.date}>{formatDate(issue.createdAt)}</span>
-          </div>
-
-          <div className={styles.title}>
-            <b>{issue.category}</b> – {issue.issueDescription}
-          </div>
-
-          <div className={styles.flexD}>
-            <div className={styles.imageRow}>
-              {/* Render images */}
-              {issue.productImages.slice(0, 3).map((img, i) => (
-                <img
-                  key={i}
-                  src={`${url2}/${img}`}
-                  alt={`Issue image ${i + 1}`}
-                  className={styles.image}
-                  onClick={() => handleImageClick(img)}
-                />
-              ))}
-              {/* If there are more than 3 images, show the counter */}
-              {issue.productImages.length > 3 && (
-                <div className={styles.moreImages}>+{issue.productImages.length - 3}</div>
-              )}
+      {issues.length === 0 ? (
+        <div className={styles.noData}>No punch list available.</div>
+      ) : (
+        issues.map((issue, index) => (
+          <div key={index} className={styles.card} onClick={() => navigate('/punchlist-detail')}>
+            <div className={styles.topRow}>
+              <span
+                className={`${styles.status} 
+                  ${issue.status === "Resolved" ? styles.resolved : ""}
+                  ${issue.status === "Rejected" ? styles.rejected : ""}
+                  ${issue.status === "Pending" ? styles.pending : ""}`}
+              >
+                {issue.status}
+              </span>
+              <span className={styles.date}>{formatDate(issue.createdAt)}</span>
             </div>
-
-            <div className={styles.commentLink} onClick={() => handleCommentClick(issue)}>
-              <img src="Svg/edit-icon.svg" alt="edit" />
-              <p>Add Comment</p>
+  
+            <div className={styles.title}>
+              <b>{issue.category}</b> – {issue.issueDescription}
             </div>
-          </div>
-
-          {issue.comments && (
-            <div className={styles.commentBox}>
-              <div className={styles.userFlex}>
-                <div className={styles.commentUser}>
-                  <img src={issue.comments.userimg} alt="user" />
-                  <p>{issue.comments.user}</p>
-                </div>
-                <div className={styles.commentTime}>{issue.comments.time}</div>
+  
+            <div className={styles.flexD}>
+              <div className={styles.imageRow}>
+                {issue.productImages.slice(0, 3).map((img, i) => (
+                  <img
+                    key={i}
+                    src={`${url2}/${img}`}
+                    alt={`Issue image ${i + 1}`}
+                    className={styles.image}
+                    onClick={() => handleImageClick(img)}
+                  />
+                ))}
+                {issue.productImages.length > 3 && (
+                  <div className={styles.moreImages}>+{issue.productImages.length - 3}</div>
+                )}
               </div>
-              <div className={styles.commentMsg}>{issue.comments.message}</div>
+  
+              <div className={styles.commentLink} onClick={() => handleCommentClick(issue)}>
+                <img src="Svg/edit-icon.svg" alt="edit" />
+                <p>Add Comment</p>
+              </div>
             </div>
-          )}
-        </div>
-      ))}
-
+  
+            {issue.comments && (
+              <div className={styles.commentBox}>
+                <div className={styles.userFlex}>
+                  <div className={styles.commentUser}>
+                    <img src={issue.comments.userimg} alt="user" />
+                    <p>{issue.comments.user}</p>
+                  </div>
+                  <div className={styles.commentTime}>{issue.comments.time}</div>
+                </div>
+                <div className={styles.commentMsg}>{issue.comments.message}</div>
+              </div>
+            )}
+          </div>
+        ))
+      )}
+  
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} height="80%">
         {activeIssue && <CommentThread issue={activeIssue} />}
       </Modal>
     </div>
   );
+  
 }
 
 export default Punchlist;
