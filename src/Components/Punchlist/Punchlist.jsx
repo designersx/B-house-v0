@@ -69,7 +69,11 @@ function Punchlist() {
         </div>
       ) : (
         issues.map((issue, index) => (
-          <div key={index} className={styles.card} onClick={() => navigate('/punchlist-detail')}>
+          <div key={index} className={styles.card} onClick={() => navigate('/punchlist-detail' ,   {
+            state : {
+              punchId : issue?.id
+            }
+          })}>
             <div className={styles.topRow}>
               <span
                 className={`${styles.status} 

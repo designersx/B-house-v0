@@ -6,6 +6,7 @@ import URL from '../../config/api';
 import axios from 'axios';
 
 const Docs2 = () => {
+    const [newComment, setNewComment] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDoc, setSelectedDoc] = useState(null);
     const [comments, setComments] = useState([]);
@@ -18,7 +19,43 @@ const Docs2 = () => {
         presentation : []
 
     });
-
+    const handleAddComment = async () => {
+        const commentText = newComment.trim();
+        if (!commentText || !selectedDoc?.fileUrl) return;
+    
+        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+        const clientInfo = JSON.parse(localStorage.getItem('customerInfo'));
+    
+        // Convert fileUrl from / to \ (for backend Windows-style paths)
+        const windowsPath = selectedDoc.fileUrl.replace(/^\/+/, '').replace(/\//g, '\\');
+    
+        // Map title to category
+        const titleToCategory = {
+            'Detailed Proposal': 'proposals',
+            'Options Presentation': 'presentation',
+            'Floor Plan': 'floorPlans',
+            'CAD File': 'cad',
+            'Sales Agreement': 'salesAggrement',
+        };
+    
+        const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
+    
+        try {
+            await axios.post(`${URL}/projects/${projectId}/file-comments`, {
+                comment: commentText,
+                filePath: windowsPath, // raw Windows-style path (not encoded)
+                clientId: clientInfo?.id, // corrected key name
+                category,
+            });
+    
+            setNewComment('');
+            fetchComments(selectedDoc.fileUrl); // Refresh comments
+        } catch (error) {
+            console.error('Error posting comment:', error);
+        }
+    };
+    
+    
     const fetchProject = async () => {
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
         try {
@@ -151,7 +188,9 @@ const Docs2 = () => {
                         <div className={styles.previewBox}>
                             {selectedDoc.fileUrl.endsWith('.pdf') ? (
                                 <>
-                                    <img src="Svg/pdf.svg" alt="PDF" />
+                                    {/* <img src="Svg/pdf.svg" alt="PDF" /> */}
+                                    <iframe 
+                                    src='http://localhost:5000/uploads/projects/1744803924788-pkpadmin,+1008-4741-1-CE.pdf' />
                                     <div onClick={handleDoc}>View PDF</div>
                                 </>
                             ) : (
@@ -206,16 +245,19 @@ const Docs2 = () => {
                             </div>
                         ))}
 
-                    <div className={styles.commentInput}>
-                        <input
-                            type="text"
-                            placeholder="Comment or (Leave your thought here)"
-                            className={styles.inputBox}
-                        />
-                        <button className={styles.commentButton} onClick={handleCloseModal}>
-                            COMMENT
-                        </button>
-                    </div>
+<div className={styles.commentInput}>
+    <input
+        type="text"
+        placeholder="Comment or (Leave your thought here)"
+        className={styles.inputBox}
+        value={newComment}
+        onChange={(e) => setNewComment(e.target.value)}
+    />
+    <button className={styles.commentButton} onClick={handleAddComment}>
+        COMMENT
+    </button>
+</div>
+
                 </div>
             </Modal>
         </div>
