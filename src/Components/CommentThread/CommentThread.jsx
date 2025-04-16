@@ -37,7 +37,7 @@ const CommentThread = ({ issue }) => {
         }
       );
       setCommentInput('');
-      await fetchComments(); // Refresh comment list
+      await fetchComments(); 
     } catch (err) {
       console.error('Error posting comment:', err);
     }

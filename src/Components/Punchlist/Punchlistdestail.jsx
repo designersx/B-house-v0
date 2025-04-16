@@ -6,6 +6,7 @@ import Slider from "./PunchSlider";
 import HeaderTab from '../HeaderTab/HeaderTab';
 
 
+
 function PunchListDetail() {
   return (<>
     <div className='HeaderTop'>

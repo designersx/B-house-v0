@@ -63,6 +63,7 @@ const HeaderTab = ({ title, subtitle }) => {
                         <input type="checkbox" />
                         <span>Team Member</span>
                     </label>
+                    <div className={styles.subBtn}><button>Submit</button></div>
                 </div>
             </OffCanvas>
         </>
