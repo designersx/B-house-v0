@@ -149,7 +149,7 @@ function Proposal() {
             className={styles.counttip}
             style={{ borderColor: step.colorSmall }}
           ></span>
-          <span>{step.count}</span>
+          <span className={step.id === 1 ? styles.whiteCount : ""}>{step.count}</span>
         </div>
         <img src={step.img} alt={step.label} className={styles.icon} />
       </div>

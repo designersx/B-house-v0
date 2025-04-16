@@ -8,6 +8,7 @@ import URL from '../../config/api';
 import CommentThread from '../CommentThread/CommentThread';
 import { url2 } from "../../config/url";
 
+
 function PunchListDetail() {
   const location = useLocation();
   const { punchId } = location.state || {};

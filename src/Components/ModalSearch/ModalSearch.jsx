@@ -11,19 +11,16 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
     const [charIndex, setCharIndex] = useState(0);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    // Load history on mount
     useEffect(() => {
         const storedHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
         setHistory(storedHistory);
     }, []);
 
-    // Disable scroll when open
     useEffect(() => {
         document.body.style.overflow = isOpen ? "hidden" : "auto";
         return () => (document.body.style.overflow = "auto");
     }, [isOpen]);
 
-    // Save to history & localStorage
     useEffect(() => {
         if (searchTerm.trim()) {
             const timer = setTimeout(() => {
@@ -37,7 +34,6 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
         }
     }, [searchTerm]);
 
-    // Typewriter effect
     useEffect(() => {
         if (!isOpen) return;
 
@@ -75,57 +71,46 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
 
     return (
         <div className={styles.overlay} onClick={onClose}>
-            <div
-                className={styles.modal}
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                    minHeight,
-                    maxHeight,
-                }}
-            >
-                <div className={styles.header}>
-                    <input
-                        className={styles.searchInput}
-                        type="text"
-                        placeholder={`Search for ${placeholder}`}
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    {searchTerm && (
-                        <button
-                            className={styles.clearBtn}
-                            onClick={() => setSearchTerm("")}
-                        >
-                            ✕
-                        </button>
-                    )}
-                </div>
-
-                <div className={styles.historyWrapper}>
-                    <div className={styles.historyHeader}>
-                        <h4>Recent Searches</h4>
-                        {history.length > 0 && (
-                            <p className={styles.clearAllBtn} onClick={handleClearAll}>
-                                Clear All
-                            </p>
+            <div className={styles.modalWrapper} onClick={(e) => e.stopPropagation()}>
+                <button className={styles.outsideCloseBtn} onClick={onClose}>✕</button>
+                <div className={styles.modal} style={{ minHeight, maxHeight }}>
+                    <div className={styles.header}>
+                        <input
+                            className={styles.searchInput}
+                            type="text"
+                            placeholder={`Search for ${placeholder}`}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        {searchTerm && (
+                            <button className={styles.clearBtn} onClick={() => setSearchTerm("")}>
+                                ✕
+                            </button>
                         )}
                     </div>
 
-                    {history.length > 0 ? (
-                        <ul className={styles.historyList}>
-                            {history.map((item, idx) => (
-                                <li
-                                    key={idx}
-                                    onClick={() => setSearchTerm(item)}
-                                    className={styles.historyItem}
-                                >
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className={styles.emptyText}>No recent searches</p>
-                    )}
+                    <div className={styles.historyWrapper}>
+                        <div className={styles.historyHeader}>
+                            <h4>Recent Searches</h4>
+                            {history.length > 0 && (
+                                <p className={styles.clearAllBtn} onClick={handleClearAll}>
+                                    Clear All
+                                </p>
+                            )}
+                        </div>
+
+                        {history.length > 0 ? (
+                            <ul className={styles.historyList}>
+                                {history.map((item, idx) => (
+                                    <li key={idx} onClick={() => setSearchTerm(item)} className={styles.historyItem}>
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className={styles.emptyText}>No recent searches</p>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

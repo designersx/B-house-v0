@@ -78,7 +78,7 @@
   /* Order Details */
   .orderDetails {
     font-size: 16px;
-    color: #444444;
+    color: #26211F;
     margin: 8px 0;
   }
   
@@ -173,7 +173,7 @@
     display: flex;
     align-items: center;
     gap:5px;
-    color: #444444;
+    color: #26211F;
     
   }
 

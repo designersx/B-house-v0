@@ -8,14 +8,11 @@
     align-items: flex-start;
 }
 
-.modal {
-    background: #fff;
+.modalWrapper {
+    position: relative;
     width: 100%;
     max-width: 600px;
-    border-radius: 0px 0px 16px 16px;
     animation: slideDown 0.35s ease forwards;
-    padding: 16px;
-    box-sizing: border-box;
 }
 
 @keyframes slideDown {
@@ -23,11 +20,19 @@
         transform: translateY(-100%);
         opacity: 0;
     }
-
     to {
         transform: translateY(0%);
         opacity: 1;
     }
+}
+
+.modal {
+    background: #fff;
+    width: 100%;
+    border-radius: 0px 0px 16px 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    border-bottom: 5px solid #26211f;
 }
 
 .header {
@@ -65,10 +70,17 @@
     font-size: 16px;
     color: #444;
 }
-.historyHeader{
+
+.historyHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.clearAllBtn {
+    font-size: 14px;
+    color: #26211F;
+    cursor: pointer;
 }
 
 .historyList {
@@ -77,19 +89,12 @@
     margin: 0;
 }
 
-.historyList li {
-    padding: 10px;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 15px;
-    color: #333;
-    cursor: pointer;
-}
-
 .historyItem {
     padding: 8px 0;
     cursor: pointer;
-    color: #333;
+    color: #26211F;
     transition: color 0.2s;
+    border-bottom: 1px solid #e3e3e3;
 }
 
 .historyItem:hover {
@@ -101,4 +106,27 @@
     font-size: 14px;
     text-align: center;
 }
+
+.outsideCloseBtn {
+    position: absolute;
+    bottom: -35%; 
+    left: 50%;
+    transform: translateX(-50%);
+    background: #26211f;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff;
+    z-index: 1001;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+
 
