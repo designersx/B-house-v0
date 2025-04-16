@@ -129,6 +129,7 @@ const handleSubmit = async (e) => {
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
+            maxLength={30}
           />
           {errors.fullName && <p className={styles.error}>{errors.fullName}</p>}
 
@@ -140,6 +141,7 @@ const handleSubmit = async (e) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
+            maxLength={50}
           />
           {errors.email && <p className={styles.error}>{errors.email}</p>}
 
@@ -151,6 +153,7 @@ const handleSubmit = async (e) => {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
+            maxLength={10}
           />
           {errors.phone && <p className={styles.error}>{errors.phone}</p>}
 
@@ -162,6 +165,7 @@ const handleSubmit = async (e) => {
             name="companyName"
             value={formData.companyName}
             onChange={handleChange}
+            maxLength={30}
           />
           {errors.companyName && <p className={styles.error}>{errors.companyName}</p>}
 
@@ -173,6 +177,7 @@ const handleSubmit = async (e) => {
             rows="3"
             value={formData.description}
             onChange={handleChange}
+            maxLength={200}
           />
           {errors.description && <p className={styles.error}>{errors.description}</p>}
 
@@ -184,6 +189,7 @@ const handleSubmit = async (e) => {
             name="address"
             value={formData.address}
             onChange={handleChange}
+            maxLength={100}
           />
           {errors.address && <p className={styles.error}>{errors.address}</p>}
 
