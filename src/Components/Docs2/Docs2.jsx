@@ -12,7 +12,11 @@ const Docs2 = () => {
     const [projectData, setProjectData] = useState({
         proposals: [],
         floorPlans: [],
+        cad : [] , 
+        salesAggrement : [] , 
         otherDocuments: [],
+        presentation : []
+
     });
 
     const fetchProject = async () => {
@@ -24,6 +28,12 @@ const Docs2 = () => {
             setProjectData({
                 proposals: JSON.parse(project.proposals || '[]'),
                 floorPlans: JSON.parse(project.floorPlans || '[]'),
+                cad: JSON.parse(project.cad || '[]'),
+                salesAggrement: JSON.parse(project.salesAggrement || '[]'),
+                presentation: JSON.parse(project.presentation || '[]'),
+
+
+
                 otherDocuments: JSON.parse(project.otherDocuments || '[]'),
             });
         } catch (err) {
@@ -81,7 +91,7 @@ const Docs2 = () => {
         {
             title: 'Options Presentation',
             icon: 'Svg/Coi.svg',
-            fileUrl: null, // Placeholder
+            fileUrl: projectData?.presentation[0] || null, // Placeholder
         },
         {
             title: 'Floor Plan',
@@ -91,12 +101,12 @@ const Docs2 = () => {
         {
             title: 'CAD File',
             icon: 'Svg/Coi.svg',
-            fileUrl: null, // Placeholder
+            fileUrl: projectData?.cad[0] || null // Placeholder
         },
         {
             title: 'Sales Agreement',
             icon: 'Svg/Coi.svg',
-            fileUrl: null, // Placeholder
+            fileUrl:  projectData?.salesAggrement[0] ||null, // Placeholder
         },
     ];
 
@@ -162,10 +172,14 @@ const Docs2 = () => {
                     {comments?.length > 0 &&
                         comments.map((item, index) => (
                             <div className={styles.commentList} key={index}>
-                                <div className={styles.commentBubble}>
-                                    <p>{item.comment}</p>
+                                <div className={styles.commentBubble}  style={{
+  backgroundColor: item.customer ? "red" : "blue"
+}} >
+                                <p>
+  {item.comment}
+</p>
                                 </div>
-                                <span>
+                                {item?.user?.userRole ?  <span>
                                     {new Date(item.createdAt)
                                         .toLocaleString('en-GB', {
                                             day: '2-digit',
@@ -176,7 +190,19 @@ const Docs2 = () => {
                                         })
                                         .replace(',', '')}{' '}
                                     by {item?.user?.userRole}
-                                </span>
+                                </span>:  <span>
+                                {new Date(item.createdAt)
+                                        .toLocaleString('en-GB', {
+                                            day: '2-digit',
+                                            month: 'long',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: true,
+                                        })
+                                        .replace(',', '')}{' '}
+                                   
+                                </span> }
+                               
                             </div>
                         ))}
 
