@@ -18,12 +18,12 @@ function PunchListDetail() {
           <div className={styles.etdEta}>
             <div className={styles.topFlex}>
               <div className={styles.etd}>
-                <h5>ETD</h5>
-                <p>18 April 2025, 16:45</p>
+                <h5>STATUS</h5>
+                <h4 className={styles.statusBadge}>Un-Resolved</h4>
               </div>
               <div className={styles.divider}></div>
               <div className={styles.eta}>
-                <h5>ETA</h5>
+                <h5>UPDATE</h5>
                 <p>25 April 2025, 20:15</p>
               </div>
             </div>
@@ -31,10 +31,10 @@ function PunchListDetail() {
           <div className={styles.orderInfo}>
             <div className={styles.orderDetails1}>
 
-              <div className={styles.orderD1}>
+              {/* <div className={styles.orderD1}>
                 <p className={styles.orderNumber}>Order No : <strong>#125793</strong></p>
-                {/* <p className={styles.TimeHour}>3 hrs ago</p> */}
-              </div>
+                
+              </div> */}
 
 
 

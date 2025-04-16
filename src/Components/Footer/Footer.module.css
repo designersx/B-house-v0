@@ -1,5 +1,5 @@
-.footerSideIcon{
-    padding:  0 20px;
+.footerSideIcon {
+    padding: 0 20px;
     /* width: 100%; */
     display: flex;
     justify-content: space-between;
@@ -7,9 +7,9 @@
 }
 
 
-.footerIcon{
-    
-    
+.footerIcon {
+
+
     display: flex;
     align-items: center;
     gap: 10px;
@@ -17,8 +17,8 @@
 
 
 
-.footerFixed{
-    position:fixed;
+.footerFixed {
+    position: fixed;
     bottom: 0;
     width: 100%;
     background-color: #fff;
@@ -30,11 +30,11 @@
 
 }
 
-.footerSideIcon a svg{
+.footerSideIcon a svg {
     margin: auto;
 }
 
-.footerSideIcon a{
+.footerSideIcon a {
     display: grid;
     justify-content: center;
     text-align: center;
@@ -45,22 +45,81 @@
     font-weight: 600;
 }
 
-.footerMain{
+.footerMain {
     margin: 0 0 49px 0;
 }
 
-.footerSideIcon a span{
+.footerSideIcon a span {
     /* display: none; */
     visibility: hidden;
 }
 
-.footerSideIcon a.activeLink span{
-visibility: visible;
+.footerSideIcon a.activeLink span {
+    visibility: visible;
     color: #004680;
 }
 
-.footerSideIcon a.activeLink svg path{
+.footerSideIcon a.activeLink svg path {
     fill: #004680;
-    
-        color: #004680;
+
+    color: #004680;
+}
+
+
+
+/* Animation CSS START */
+
+@keyframes bounceZoom {
+    0% {
+        transform: scale(0.95) translateY(0);
+        opacity: 0.6;
     }
+
+    50% {
+        transform: scale(1.05) translateY(-4px);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeUp {
+    0% {
+        transform: translateY(4px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.activeLink svg {
+    animation: bounceZoom 0.4s ease;
+
+}
+
+.activeLink span {
+    animation: fadeUp 0.4s ease forwards;
+
+}
+/* 
+@keyframes fadeUp {
+    0% {
+      transform: translateY(4px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .activeLink span {
+    animation: fadeUp 0.4s ease forwards;
+    color: #000;
+  } */

@@ -144,7 +144,10 @@ const List = () => {
       <div className={styles.transactionList}>
         {/* Render filtered invoices dynamically */}
         {filteredInvoices.length === 0 ? (
-          <p>No invoices available.</p>
+           <div className={styles.noData}>
+                    <div><img src="Svg/notfound.svg" alt=""/>
+                    <div className={styles.NoDataTittle}><p>No items found yet</p><img src="Svg/EYE1.svg" alt=""/></div></div>
+                  </div>
         ) : (
           filteredInvoices.map((invoice, index) => {
             return (

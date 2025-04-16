@@ -29,7 +29,7 @@ export default function SimpleSlider() {
         breakpoint: 320,
         settings: {
           slidesToShow: 2, 
-          centerPadding: "25px",
+          centerPadding: "35px",
         },
       },
     ],
