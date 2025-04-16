@@ -57,7 +57,7 @@ function ProjectDelivery({ selectedProject }) {
           const itemComments = res?.data;
 
           if (itemComments && itemComments.length > 0) {
-            latestComments[item.id] = itemComments[0]; // latest comment
+            latestComments[item.id] = itemComments[0]; 
           }
         })
       );
@@ -99,9 +99,6 @@ function ProjectDelivery({ selectedProject }) {
         return days === 1 ? "1 day ago" : `${days} days ago`;
       }
     } else {
-      // For dates older than 7 days, show an absolute formatted date.
-      // Here, we use the 'toLocaleDateString' method for formatting.
-      // You can adjust the options as per your requirements.
       return date.toLocaleDateString("en-US", {
         day: "numeric",
         month: "long",
