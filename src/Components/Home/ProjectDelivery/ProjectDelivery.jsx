@@ -57,8 +57,16 @@ function ProjectDelivery({ selectedProject }) {
           const itemComments = res?.data;
 
           if (itemComments && itemComments.length > 0) {
-            latestComments[item.id] = itemComments[0]; 
+            const userComments = itemComments.filter(
+              (cmt) => cmt.createdByType === "user"
+            );
+          
+            if (userComments.length > 0) {
+              userComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+              latestComments[item.id] = userComments[0]; 
+            }
           }
+          
         })
       );
 
