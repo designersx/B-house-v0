@@ -13,7 +13,7 @@
 
 .OnboardingTitle h1 {
     font-size: 22px;
-    color: #000;
+    color: #26211F;
     font-weight: 500;
 }
 
@@ -85,7 +85,7 @@
 .bodypart h2 {
     margin-top: -5px;
     font-size: 18px;
-    color: #000;
+    color: #26211F;
 }
 
 .bodypart2 {
@@ -104,7 +104,7 @@
 .bodypart2 h2 {
     margin-top: -5px;
     font-size: 18px;
-    color: #000;
+    color: #26211F;
 }
 
 .signP {
@@ -169,7 +169,7 @@
     display: block;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #000;
+    color: #26211F;
 }
 
 .formGroup input,

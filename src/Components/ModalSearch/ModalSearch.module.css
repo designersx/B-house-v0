@@ -32,6 +32,7 @@
     border-radius: 0px 0px 16px 16px;
     padding: 16px;
     box-sizing: border-box;
+    border-bottom: 5px solid #26211f;
 }
 
 .header {
@@ -78,7 +79,7 @@
 
 .clearAllBtn {
     font-size: 14px;
-    color: #000000;
+    color: #26211F;
     cursor: pointer;
 }
 
@@ -111,7 +112,7 @@
     bottom: -35%; 
     left: 50%;
     transform: translateX(-50%);
-    background: #000000;
+    background: #26211f;
     border: none;
     font-size: 20px;
     cursor: pointer;
