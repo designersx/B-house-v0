@@ -34,8 +34,13 @@ const Docs2 = () => {
     const fetchComments = async (fileUrl) => {
         if (!fileUrl) return;
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
-        const filePath = encodeURIComponent(fileUrl.replace(/^\/+/, ''));
-
+    
+        // Step 1: Convert / to \ to match backend format
+        const windowsPath = fileUrl.replace(/^\/+/, '').replace(/\//g, '\\');
+    
+        // Step 2: Encode manually so \ becomes %5C and other special chars are encoded
+        const filePath = encodeURIComponent(windowsPath);
+    
         try {
             const res = await axios.get(`${URL}/projects/${projectId}/file-comments?filePath=${filePath}`);
             setComments(res.data || []);
