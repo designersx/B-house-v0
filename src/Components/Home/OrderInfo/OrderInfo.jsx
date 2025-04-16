@@ -1,9 +1,73 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import styles from './OrderInfo.module.css';
 import CommentBox from './CommentBox';
 import HeaderTab from '../../HeaderTab/HeaderTab';
-
+import { useLocation } from 'react-router-dom';
+import URL from '../../../config/api'; 
+import {url2} from '../../../config/url'; 
 function OrderInfo() {
+  const location = useLocation();
+const { item } = location.state || {};
+const [project, setProject] = useState(null);
+const [allUsers, setAllUsers] = useState([]);
+const [accountManager, setAccountManager] = useState(null);
+const [latestUserComment, setLatestUserComment] = useState(null);
+
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
+      if (!projectId) return;
+
+      const [projectRes, usersRes] = await Promise.all([
+        axios.get(`${URL}/projects/${projectId}`),
+        axios.get(`${URL}/auth/getAllUsers`)
+      ]);
+
+      const fetchedProject = projectRes.data;
+      const fetchedUsers = usersRes.data;
+
+      // Parse assignedTeamRoles (same as in your other page)
+      fetchedProject.assignedTeamRoles = Array.isArray(fetchedProject.assignedTeamRoles)
+        ? fetchedProject.assignedTeamRoles
+        : JSON.parse(fetchedProject.assignedTeamRoles || '[]');
+
+      setProject(fetchedProject);
+      setAllUsers(fetchedUsers);
+
+      // Find account manager from assigned users
+      let foundAccountManager = null;
+
+      for (const roleGroup of fetchedProject.assignedTeamRoles) {
+        if (roleGroup.role === "accountmanager") {
+          const userId = roleGroup.users[0]; // assuming only one account manager
+          foundAccountManager = fetchedUsers.find(u => u.id.toString() === userId.toString());
+          break;
+        }
+      }
+
+      setAccountManager(foundAccountManager);
+const commentsRes = await axios.get(`${URL}/items/${item.id}/comments`);
+const allComments = commentsRes.data;
+
+const userComments = allComments.filter(cmt => cmt.createdByType === "user");
+
+// Get the latest one
+if (userComments.length > 0) {
+  setLatestUserComment(userComments[0]); 
+}
+
+    } catch (error) {
+      console.error("Error fetching project or users:", error);
+    }
+  };
+
+  fetchData();
+}, []);
+
+
   return (
     <div>
       <div className='HeaderTop'>
@@ -13,21 +77,21 @@ function OrderInfo() {
         <div className={styles.header}>
           <div className={styles.etdEta}>
             <div className={styles.topFlex}>
-              <div className={styles.etd}>
-                <h5>ETD</h5>
-                <p>18 Apr 2025, 16:45</p>
-              </div>
+            <div className={styles.etd}>
+  <h5>ETD</h5>
+  <p>{new Date(item?.expectedDeliveryDate).toLocaleDateString()}</p>
+</div>
+
               <div className={styles.divider}></div>
               <div className={styles.eta}>
-                <h5>ETA</h5>
-                <p>25 Mar 2025, 20:15</p>
-              </div>
+  <h5>ETA</h5>
+  <p>{new Date(item?.expectedArrivalDate).toLocaleDateString()}</p>
+</div>
             </div>
           </div>
 
           <div className={styles.orderInfo}>
             <div className={styles.orderDetails}>
-
               <div className={styles.orderD1}>
              <img src='Svg/timer.svg' alt=''/>
                 <p className={styles.TimeHour}>3 hrs ago</p>
@@ -59,39 +123,71 @@ function OrderInfo() {
         <div className={styles.projectDetails}>
           <h4>Project Details</h4>
           <div className={styles.details}>
-            <div className={styles.contactInfo}>
-              <div className={styles.contactItem}>
-                <img src="/Svg/telecall.svg" alt="Contact" />
-                <div className={styles.contactText}>
-                  <p className={styles.contactTextpara}>Lloyed <span>(Account Manager) </span></p>
-                  <p className={styles.contactTextpara1}>+1 (555) 555-12345</p>
+          <div className={styles.contactInfo}>
+  <div className={styles.contactItem}>
+    <img src="/Svg/telecall.svg" alt="Contact" />
+    <div className={styles.contactText}>
+      <p className={styles.contactTextpara}>
+        {accountManager
+          ? `${accountManager.firstName} ${accountManager.lastName}`
+          : "No account manager assigned"}
+        <span> (Account Manager)</span>
+      </p>
+      <p className={styles.contactTextpara1}>
+        {accountManager?.mobileNumber || "N/A"}
+      </p>
+    </div>
+  </div>
+</div>
 
-                </div>
-              </div>
-            </div>
 
-            <div className={styles.address}>
-              <img src="/Svg/Location-bhouse.svg" alt="Contact" />
-              <p className={styles.contactTextpara1}>St, 2659 Buyer Lane </p>
-
-            </div>
+<div className={styles.address}>
+  <img src="/Svg/Location-bhouse.svg" alt="Address" />
+  <p className={styles.contactTextpara1}>
+    {project?.deliveryAddress || 'No address provided'}
+  </p>
+</div>
 
 
 
-            <div className={styles.DestinationAd}>
 
-              <img src="/Images/DefaultImg.png" alt="Image" />
+<div className={styles.DestinationAd}>
+<img
+  src={
+    latestUserComment?.profilePhoto
+      ? `${url2}/${latestUserComment.profilePhoto}`
+      : `/assets/Default_pfp.jpg`
+  }
+  alt="User Profile"
+  className={styles.userProfileImage}
+/>
 
-              <div className={styles.status}>
+  <div className={styles.status}>
+    <p className={styles.contactTextpara1}>
+      {latestUserComment?.comment || "No updates yet from team."}
+    </p>
+    {latestUserComment && (
+      <div className={styles.footer}>
+        <p className={styles.footerp1}>
+          {latestUserComment.createdByName}
+          {latestUserComment.userRole && (
+            <span className={styles.userRole}> ({latestUserComment.userRole})</span>
+          )}
+        </p>
+        <p className={styles.footerp2}>
+          {new Date(latestUserComment.createdAt).toLocaleString("en-US", {
+            day: "numeric",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          })}
+        </p>
+      </div>
+    )}
+  </div>
+</div>
 
-                <p className={styles.contactTextpara1}>The order has arrived in <b>Florida</b> and is being processed for further delivery.</p>
-                <div className={styles.footer}>
-                  <p className={styles.footerp1}>John Vick </p>
-                  <p className={styles.footerp2}>13 Mar 03:45 PM</p>
-                </div>
-
-              </div>
-            </div>
 
 
           </div>
