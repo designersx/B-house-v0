@@ -29,17 +29,17 @@ function OrderInfo() {
             <div className={styles.orderDetails}>
 
               <div className={styles.orderD1}>
-                <p className={styles.orderNumber}>Order No : <strong>#125793</strong></p>
+             <img src='Svg/timer.svg' alt=''/>
                 <p className={styles.TimeHour}>3 hrs ago</p>
               </div>
 
               <div className={styles.orderD2}>
-                <div className={styles.orderImage}>
+                {/* <div className={styles.orderImage}>
                   <img
                     src="/Images/ChairImg.png"
                     className={styles.productImage}
                     alt="Order" />
-                </div>
+                </div> */}
                 <p className={styles.productName}>Executive ErgoPro</p>
 
               </div>
