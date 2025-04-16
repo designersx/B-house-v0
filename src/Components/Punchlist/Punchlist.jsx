@@ -69,7 +69,8 @@ function Punchlist() {
         </div>
       ) : (
         issues.map((issue, index) => (
-          <div key={index} className={styles.card} onClick={() => navigate('/punchlist-detail')}>
+          <div key={index} className={styles.card} onClick={() => navigate('/punchlist-detail', { state: { punchId: issue.id } })}
+>
             <div className={styles.topRow}>
               <span
                 className={`${styles.status} 
@@ -83,7 +84,12 @@ function Punchlist() {
             </div>
   
             <div className={styles.title}>
-              <b>{issue.category}</b> – {issue.issueDescription}
+            <div className={styles.title} title={issue.issueDescription}>
+  <b>{issue.category}</b> – {issue.issueDescription.length > 20 
+    ? `${issue.issueDescription.slice(0, 20)}...` 
+    : issue.issueDescription}
+</div>
+
             </div>
   
             <div className={styles.flexD}>

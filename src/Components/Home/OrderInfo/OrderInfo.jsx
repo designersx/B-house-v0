@@ -67,6 +67,25 @@ if (userComments.length > 0) {
   fetchData();
 }, []);
 
+const formatTimeAgo = (dateString) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diff = now - date;
+
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+
+  if (days >= 1) {
+    return days === 1 ? "1 day ago" : `${days} days ago`;
+  } else if (hours >= 1) {
+    return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
+  } else if (minutes >= 1) {
+    return minutes === 1 ? "1 min ago" : `${minutes} mins ago`;
+  } else {
+    return "just now";
+  }
+};
 
   return (
     <div>
@@ -94,7 +113,10 @@ if (userComments.length > 0) {
             <div className={styles.orderDetails}>
               <div className={styles.orderD1}>
              <img src='Svg/timer.svg' alt=''/>
-                <p className={styles.TimeHour}>3 hrs ago</p>
+             <p className={styles.TimeHour}>
+  {formatTimeAgo(item?.createdAt)}
+</p>
+
               </div>
 
               <div className={styles.orderD2}>
@@ -104,7 +126,7 @@ if (userComments.length > 0) {
                     className={styles.productImage}
                     alt="Order" />
                 </div> */}
-                <p className={styles.productName}>Executive ErgoPro</p>
+                 <p className={styles.productName}>{item?.itemName || "Unnamed Item"}</p>
 
               </div>
 
