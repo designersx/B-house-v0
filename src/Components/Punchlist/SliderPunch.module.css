@@ -1,24 +1,22 @@
 .PunchImageSlider {
     width: 100% !important;
-    /* max-width: 600px !important; */
     margin: 0 auto;
     margin-top: 20px;
     margin-bottom: 20px;
-    /* border: 1px solid #000; */
     overflow: auto;
     position: relative;
-
 }
 
 .slideImg {
     padding: 0;
 }
-.flexImages{
+
+.flexImages {
     display: flex;
     gap: 1rem;
-    /* justify-content: center; */
     flex-wrap: wrap;
 }
+
 .PunchImageSlider1 {
     display: grid;
 }
