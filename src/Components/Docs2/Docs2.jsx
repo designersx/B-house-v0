@@ -27,7 +27,10 @@ const Docs2 = () => {
         const clientInfo = JSON.parse(localStorage.getItem('customerInfo'));
     
         // Convert fileUrl from / to \ (for backend Windows-style paths)
-        const windowsPath = selectedDoc.fileUrl.replace(/^\/+/, '').replace(/\//g, '\\');
+        let windowsPath = selectedDoc.fileUrl;
+if (windowsPath.startsWith("/")) {
+  windowsPath = windowsPath.substring(1);
+}
     
         // Map title to category
         const titleToCategory = {
@@ -83,13 +86,21 @@ const Docs2 = () => {
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
     
         // Step 1: Convert / to \ to match backend format
-        const windowsPath = fileUrl.replace(/^\/+/, '').replace(/\//g, '\\');
+        
     
         // Step 2: Encode manually so \ becomes %5C and other special chars are encoded
-        const filePath = encodeURIComponent(windowsPath);
+        let filePath = fileUrl;
+        if (filePath.startsWith("/")) {
+            filePath = filePath.substring(1);
+        }
+       
     
         try {
-            const res = await axios.get(`${URL}/projects/${projectId}/file-comments?filePath=${filePath}`);
+            const res = await axios.get(`${URL}/projects/${projectId}/file-comments` , 
+                {
+                    params: { filePath }
+                  }
+            );
             setComments(res.data || []);
         } catch (err) {
             console.error('Failed to fetch comments:', err);
