@@ -12,7 +12,7 @@ function CommentBox() {
   const [newComment, setNewComment] = useState("");
 
   const customerInfo = JSON.parse(localStorage.getItem("customerInfo"));
-const customerId = customerInfo?.id;
+  const customerId = customerInfo?.id;
 
   const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
 
@@ -66,7 +66,6 @@ const customerId = customerInfo?.id;
         <div className={styles.CommentInner}>
           {comments.map((cmt, idx) =>
             cmt.createdById === customerId ? (
-              // ✅ Customer comment - right side, blue bubble
               <div key={idx} className={styles.Usercomment}>
                 <div className={styles.UsercommentMain}>
                   <div className={styles.UsercommentText}>
@@ -77,32 +76,32 @@ const customerId = customerInfo?.id;
               </div>
             ) : (
               <div key={idx} className={styles.BHousecomment}>
-  <img
-    src={
-      cmt.profilePhoto
-        ? `${url2}/${cmt.profilePhoto}`
-        : "/Svg/ChatBHouse.svg"
-    }
-    alt="chat"
-  />
-  <div className={styles.BHousecommentMain}>
-    <div className={styles.BHousecommentText}>
-      <p className={styles.para}>{cmt.comment}</p>
-    </div>
+                <img
+                  src={
+                    cmt.profilePhoto
+                      ? `${url2}/${cmt.profilePhoto}`
+                      : "/Svg/ChatBHouse.svg"
+                  }
+                  alt="chat"
+                />
+                <div className={styles.BHousecommentMain}>
+                  <div className={styles.BHousecommentText}>
+                    <p className={styles.para}>{cmt.comment}</p>
+                  </div>
 
-    <div className={styles.BTime}>
-      <span>
-        {cmt.createdByName}
-        {cmt.userRole && (
-          <span className={styles.userRole}>
-            {" "}({cmt.userRole})
-          </span>
-        )}
-      </span>
-      <span style={{ marginLeft: "10px" }}>{formatTime(cmt.createdAt)}</span>
-    </div>
-  </div>
-</div>
+                  <div className={styles.BTime}>
+                    <span>
+                      {cmt.createdByName}
+                      {cmt.userRole && (
+                        <span className={styles.userRole}>
+                          {" "}({cmt.userRole})
+                        </span>
+                      )}
+                    </span>
+                    <span style={{ marginLeft: "10px" }}>{formatTime(cmt.createdAt)}</span>
+                  </div>
+                </div>
+              </div>
 
             )
           )}
