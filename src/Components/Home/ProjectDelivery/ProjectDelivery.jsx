@@ -60,13 +60,14 @@ function ProjectDelivery({ selectedProject }) {
             const userComments = itemComments.filter(
               (cmt) => cmt.createdByType === "user"
             );
-          
+
             if (userComments.length > 0) {
-              userComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-              latestComments[item.id] = userComments[0]; 
+              userComments.sort(
+                (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+              );
+              latestComments[item.id] = userComments[0];
             }
           }
-          
         })
       );
 
@@ -133,12 +134,12 @@ function ProjectDelivery({ selectedProject }) {
 
             return (
               <Link
-                to='/orderinfo'
+                to="/orderinfo"
                 key={item.id}
                 state={{ item }}
                 className={styles.linkStyle}
               >
-                <div className={styles.orderCard} >
+                <div className={styles.orderCard}>
                   {/* Header */}
                   <div className={styles.orderHeader}>
                     <h2 className={styles.orderTitle}>{item.itemName}</h2>
@@ -163,12 +164,18 @@ function ProjectDelivery({ selectedProject }) {
                   </div>
 
                   {/* ETD & ETA */}
-                  <p className={styles.orderDetails}>
-                    <strong>ETD :</strong>{" "}
-                    {item.expectedDeliveryDate?.slice(0, 10)} |{" "}
-                    <strong>ETA :</strong>{" "}
-                    {item.expectedArrivalDate?.slice(0, 10)}
-                  </p>
+                  {item.expectedDeliveryDate ? (
+                    <>
+                      <p className={styles.orderDetails}>
+                        <strong>ETD :</strong>{" "}
+                        {item.expectedDeliveryDate?.slice(0, 10)} |{" "}
+                        <strong>ETA :</strong>{" "}
+                        {item.expectedArrivalDate?.slice(0, 10)}
+                      </p>
+                    </>
+                  ) : (
+                    "TBD"
+                  )}
 
                   {/* Comment Box */}
                   {latestComment && (
