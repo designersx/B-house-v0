@@ -174,15 +174,18 @@ const formatTimeAgo = (dateString) => {
 
 
 <div className={styles.DestinationAd}>
-<img
+{latestUserComment?.comment ? 
+  <img
   src={
     latestUserComment?.profilePhoto
       ? `${url2}/${latestUserComment.profilePhoto}`
-      : `/assets/Default_pfp.jpg`
+      : `Images/profle.png`
   }
   alt="User Profile"
   className={styles.userProfileImage}
 />
+: null}
+
 
   <div className={styles.status}>
     <p className={styles.contactTextpara1}>
