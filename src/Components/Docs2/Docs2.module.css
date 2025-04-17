@@ -81,16 +81,16 @@
     color: #232323;
 }
 
-.previewBox{
-    /* min-height: 300px; */
-    /* max-height: 300px !important; */
-    /* border: 1px solid red; */
-}
+/* .previewBox{
+    min-height: 300px;
+    max-height: 300px !important;
+    border: 1px solid red;
+} */
 
 .previewBox img {
     width: 100% !important;
     max-height: 100%;
-    /* object-fit: cover; */
+    object-fit: cover;
 }
 
 

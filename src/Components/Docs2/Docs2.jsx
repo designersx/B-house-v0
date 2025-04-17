@@ -294,7 +294,7 @@ const Docs2 = () => {
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
                         />
-                        <button className={styles.commentButton} onClick={!loading ?handleAddComment  : null}>
+                        <button disabled={ newComment === "" ? true : false} className={styles.commentButton} onClick={!loading ?handleAddComment  : null}>
                            {!loading ? "COMMENT" : <Loader size = {20} />}
                         </button>
                     </div>
