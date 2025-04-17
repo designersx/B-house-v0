@@ -95,7 +95,9 @@ const formatTimeAgo = (dateString) => {
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.etdEta}>
-            <div className={styles.topFlex}>
+           {item.expectedDeliveryDate ?(
+            <>
+             <div className={styles.topFlex}>
             <div className={styles.etd}>
   <h5>ETD</h5>
   <p>{new Date(item?.expectedDeliveryDate).toLocaleDateString()}</p>
@@ -106,7 +108,8 @@ const formatTimeAgo = (dateString) => {
   <h5>ETA</h5>
   <p>{new Date(item?.expectedArrivalDate).toLocaleDateString()}</p>
 </div>
-            </div>
+            </div></>
+           ): ("TBD")}
           </div>
 
           <div className={styles.orderInfo}>
