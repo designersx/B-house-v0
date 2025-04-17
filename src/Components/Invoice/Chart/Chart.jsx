@@ -74,6 +74,7 @@ const Chart = () => {
 
     return (
         <div className={styles.ChartMain}>
+            
             <div className={styles.card}>
                 <div className={styles.financeBox}>
                     <div className={styles.cost}>

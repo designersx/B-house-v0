@@ -156,7 +156,7 @@ const List = () => {
                   src="Svg/pdf-icon.svg"
                   alt="pdf-icon"
                   className={styles.image}
-                  onClick={() => handleOpenFile(invoice.invoiceFilePath.split("/").pop())}
+                  onClick={() => handleOpenFile(invoice.invoiceFilePath)}
                 />
                 <div></div>
                 <div className={styles.details}>

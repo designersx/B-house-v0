@@ -5,7 +5,7 @@ import URL from "../../../config/api";
 import ProjectOverView from "../ProjectOverView/ProjectOverView";
 import ProjectDelivery from "../ProjectDelivery/ProjectDelivery";
 import { useNavigate } from "react-router-dom";
-
+import Loader from '../../Loader/Loader'
 function Proposal() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
@@ -104,73 +104,78 @@ function Proposal() {
  
 
   return (
-    <div className={styles.container}>
-      {/* Header Section */}
-      <div className={styles.header}>
-        <h4 className={styles.statusBadge}>
-          {selectedProject ? selectedProject.status : "Loading..."}
-        </h4>
+    <>
+      {!selectedProject ? <Loader/> :   
+      <div className={styles.container}>
+    {/* Header Section */}
+    <div className={styles.header}>
+      <h4 className={styles.statusBadge}>
+        {selectedProject ? selectedProject.status : "Loading..."}
+      </h4>
 
-        <div className={styles.projectSelector}>
-          <span className={styles.projectTitle}>Project: </span>
-          <select
-            value={selectedProjectId || ""}
-            onChange={handleProjectChange}
-          >
-            {projects.map((proj) => (
-              <option key={proj.id} value={proj.id}>
-                {proj.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <p className={styles.subText}>
-          Here's what's happening with your projects
-        </p>
-      </div>
-
-      {/* Progress Tracker Section */}
-     
-<div className={styles.progressTracker}>
-  {steps.map((step) => (
-    <div
-      key={step.id}
-      className={styles.step}
-      onClick={() => navigate(`/${step.label.toLowerCase()}`)} 
-      style={{ cursor: "pointer" }}
-    >
-      <div className={styles.circle}>
-        <div
-          className={styles.count}
-          style={{ backgroundColor: step.colorSmall }}
+      <div className={styles.projectSelector}>
+        <span className={styles.projectTitle}>Project: </span>
+        <select
+          value={selectedProjectId || ""}
+          onChange={handleProjectChange}
         >
-          <span
-            className={styles.counttip}
-            style={{ borderColor: step.colorSmall }}
-          ></span>
-          <span className={step.id === 1 ? styles.whiteCount : ""}>{step.count}</span>
-        </div>
-        <img src={step.img} alt={step.label} className={styles.icon} />
+          {projects.map((proj) => (
+            <option key={proj.id} value={proj.id}>
+              {proj.name}
+            </option>
+          ))}
+        </select>
       </div>
-      <p className={styles.label}>{step.label}</p>
+
+      <p className={styles.subText}>
+        Here's what's happening with your projects
+      </p>
     </div>
-  ))}
+
+    {/* Progress Tracker Section */}
+   
+<div className={styles.progressTracker}>
+{steps.map((step) => (
+  <div
+    key={step.id}
+    className={styles.step}
+    onClick={() => navigate(`/${step.label.toLowerCase()}`)} 
+    style={{ cursor: "pointer" }}
+  >
+    <div className={styles.circle}>
+      <div
+        className={styles.count}
+        style={{ backgroundColor: step.colorSmall }}
+      >
+        <span
+          className={styles.counttip}
+          style={{ borderColor: step.colorSmall }}
+        ></span>
+        <span className={step.id === 1 ? styles.whiteCount : ""}>{step.count}</span>
+      </div>
+      <img src={step.img} alt={step.label} className={styles.icon} />
+    </div>
+    <p className={styles.label}>{step.label}</p>
+  </div>
+))}
 </div>
 
-      {/* Progress Bar */}
-      <div className={styles.progressBar}>
-        {steps.map((step) => (
-          <div
-            key={step.id}
-            className={styles.barSegment}
-            style={{ backgroundColor: step.color }}
-          ></div>
-        ))}
-      </div>
-      <ProjectOverView  selectedProject={selectedProject}/>
-      <ProjectDelivery selectedProject={selectedProject}/>
+    {/* Progress Bar */}
+    <div className={styles.progressBar}>
+      {steps.map((step) => (
+        <div
+          key={step.id}
+          className={styles.barSegment}
+          style={{ backgroundColor: step.color }}
+        ></div>
+      ))}
     </div>
+    <ProjectOverView  selectedProject={selectedProject}/>
+    <ProjectDelivery selectedProject={selectedProject}/>
+  </div> }
+    </>
+  
+  
   );
 }
 
