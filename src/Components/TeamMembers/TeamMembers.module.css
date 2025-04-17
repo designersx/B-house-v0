@@ -72,14 +72,11 @@
 
 
 .threadContainer {
-
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
-    padding: 16px;
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+   
 }
 
 .header {
@@ -159,8 +156,13 @@
 .commentBox {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 24px;
+    gap: 15px;
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    left: 0;
+    padding-inline: 20px;
+    background-color: #fff;
 }
 
 .inputField {

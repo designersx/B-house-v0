@@ -87,7 +87,7 @@ const CommentThread = ({ issue }) => {
             </div>
           ) : (
             <div key={index} className={styles.userMessageRow}>
-              <div>
+              <div className={styles.right}>
                 <div className={styles.messageBubbleUser}>{msg.comment}</div>
                 <div className={styles.timestamp2}>
                   {new Date(msg.createdAt).toLocaleString()}
