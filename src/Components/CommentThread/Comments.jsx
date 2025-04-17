@@ -108,7 +108,8 @@ const Comments = ({ documentId }) => {
           onKeyDown={(e) => e.key === 'Enter' && postComment()}
         />
         <button className={styles.commentButton} onClick={ !loading  ? postComment : null }>
-          {!loading? <Loader size={20}/>: "COMMENT"}
+          {loading? <Loader size={20}/>: "COMMENT"}
+
         </button>
       </div>
     </div>
