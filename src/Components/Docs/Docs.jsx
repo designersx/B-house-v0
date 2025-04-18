@@ -26,7 +26,7 @@ function Docs() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const customer = JSON.parse(localStorage.getItem('customerInfo'));
   const customerName = customer?.full_name || "My Docs";
-  
+
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));
     try {
