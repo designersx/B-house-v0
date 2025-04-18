@@ -137,10 +137,10 @@ function ProjectOverView({ selectedProject }) {
               </div>
 
               <div className={styles.advance}>
-                <p onClick={()=>navigate('/invoice')} className={styles.advanceText}>Advance Paid</p>
+                <p onClick={()=>navigate('/invoice')} className={styles.advanceText}>Advance Paid </p>
                 <p className={styles.bigTextbox}>
                   {project?.advancePayment?.toLocaleString() || 0}
-                  <span>$</span>
+                  <span> $</span>
                 </p>
               </div>
             </div>

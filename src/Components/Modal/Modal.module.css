@@ -20,6 +20,8 @@
   padding: 20px;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
   position: relative;
+  border-top: 5px solid #004680;
+
 }
 
 .slideUp {
@@ -50,8 +52,8 @@
 
 .closeButton {
   position: absolute;
-  top: -4%;
-  right: 15px;
+  top: 0;
+  right: 10px;
   background: none;
   border: none;
   cursor: pointer;

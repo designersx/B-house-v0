@@ -47,7 +47,9 @@
     margin-top: 10px;
     font-weight: bold;
 }
-
+.required{
+    color:#004680;
+}
 .input {
     padding: 10px;
     margin: 5px 0 15px;
