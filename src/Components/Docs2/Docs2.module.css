@@ -81,26 +81,86 @@
     color: #232323;
 }
 
-.previewBox {
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
-
+.previewBox{
+    /* min-height: 300px; */
+    /* max-height: 300px !important; */
+    /* border: 1px solid red; */
 }
 
 .previewBox img {
-    width:100%;
-    height: auto;
-    max-height: 250px;
+    width: 100% !important;
+    max-height: 100%;
+    /* object-fit: cover; */
 }
 
-.commentList {
+
+.chatWrapper {
+    max-height: 200px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    /* max-height: 200px; */
-    overflow-y: auto;
-    padding-right: 10px;
+    gap: 10px;
+    padding-block: 2rem;
 }
+
+.commentItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.left {
+    align-self: flex-start;
+    text-align: left;
+}
+
+.right {
+    align-self: flex-end;
+    text-align: right;
+}
+
+.adminBlock {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.adminBubble {
+    background-color: #f1f7ff;
+    color: #000;
+    padding: 10px 15px;
+    border-radius: 12px;
+    width: max-content;
+    font-size: 14px;
+}
+
+.userBubble {
+    background-color: #003f70;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 12px;
+    width: max-content;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.timestamp {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #555;
+}
+
+
+
+
+
 
 .commentList span {
     color: #26211F;
@@ -109,20 +169,13 @@
     margin-block: 10px 20px;
 }
 
-.commentBubble {
-    align-self: flex-end;
-    background-color: #0057a3;
-    padding: 10px 14px;
-    border-radius: 12px;
-    max-width: 75%;
-    position: relative;
-}
 
-.commentBubble p{
-    color: #FFFFFF;
+
+.commentBubble p {
     font-size: 14px;
     font-weight: 500;
 }
+
 .commentBubble span {
     font-size: 10px;
     color: #ccc;
@@ -135,6 +188,12 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    left: 0;
+    padding-inline: 20px;
+    background-color: #ffff;
 }
 
 .inputBox {
