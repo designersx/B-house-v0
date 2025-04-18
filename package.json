@@ -12,6 +12,7 @@
   "dependencies": {
     "@react-pdf/renderer": "^4.3.0",
     "axios": "^1.8.4",
+    "firebase": "^11.6.0",
     "pdf-viewer-reactjs": "^2.2.3",
     "pdfjs-dist": "^5.1.91",
     "react": "^19.0.0",
