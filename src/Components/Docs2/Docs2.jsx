@@ -124,11 +124,7 @@ if (windowsPath.startsWith("/")) {
         setComments([]);
     };
 
-    const handleDoc = () => {
-        if (selectedDoc?.fileUrl) {
-            window.open(`${url2}${selectedDoc.fileUrl}`, '_blank');
-        }
-    };
+
 
     const docList = [
         {
@@ -201,8 +197,10 @@ if (windowsPath.startsWith("/")) {
                                 <>
                                     {/* <img src="Svg/pdf.svg" alt="PDF" /> */}
                                     <iframe 
-                                    src='http://localhost:5000/uploads/projects/1744803924788-pkpadmin,+1008-4741-1-CE.pdf' />
-                                    <div onClick={handleDoc}>View PDF</div>
+                                    height="300px"
+                                    width="100%"
+                                    src={`${url2}${selectedDoc?.fileUrl}`} />
+                                    {/* <div onClick={handleDoc}>View PDF</div> */}
                                 </>
                             ) : (
                                 <img
