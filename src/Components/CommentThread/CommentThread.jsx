@@ -37,7 +37,7 @@ const CommentThread = ({ issue }) => {
         }
       );
       setCommentInput('');
-      await fetchComments(); 
+      await fetchComments();
     } catch (err) {
       console.error('Error posting comment:', err);
     }
@@ -58,32 +58,32 @@ const CommentThread = ({ issue }) => {
         <p><b>{issue.category} – </b>{issue.issueDescription}</p>
       </div>
       <div className={styles.messages}>
-      {[...comments].reverse().map((msg, index) => (
+        {[...comments].reverse().map((msg, index) => (
           msg.createdByType === 'user' ? (
             <div key={index} className={styles.supportMessageRow}>
-              
-  <div className={styles.imageRow}>
 
-     <img
-     src={
-       msg.profileImage
-         ? `${url2}/${msg.profileImage}`
-         : 'Svg/user-icon.svg'
-     }
-     alt="avatar"
-     className={styles.avatar}
-   />
+              <div className={styles.imageRow}>
 
-  </div>
+                <img
+                  src={
+                    msg.profileImage
+                      ? `${url2}/${msg.profileImage}`
+                      : 'Svg/user-icon.svg'
+                  }
+                  alt="avatar"
+                  className={styles.avatar}
+                />
+
+              </div>
 
 
-  <div>
-    <div className={styles.messageBubbleSupport}>{msg.comment}</div>
-    <div className={styles.timestamp}>
-      {msg.name}
-      {msg.userRole ? ` (${msg.userRole})` : ''} • {new Date(msg.createdAt).toLocaleString()}
-    </div>
-  </div>
+              <div>
+                <div className={styles.messageBubbleSupport}>{msg.comment}</div>
+                <div className={styles.timestamp}>
+                  {msg.name}
+                  {msg.userRole ? ` (${msg.userRole})` : ''} • {new Date(msg.createdAt).toLocaleString()}
+                </div>
+              </div>
             </div>
           ) : (
             <div key={index} className={styles.userMessageRow}>

@@ -6,8 +6,8 @@ import axios from 'axios';
 import URL from '../../config/api';
 
 const onboardingItems = [
-  { img: 'Svg/Coi.svg', title: 'Building Delivery Hours' },
-  { img: 'Svg/Coi.svg', title: 'Building Sample (COI)' }
+  { img: 'Svg/delivery-hour.svg', title: 'Building Delivery Hours' },
+  { img: 'Svg/sample-icon.svg', title: 'Building Sample (COI)' }
 ];
 
 const Onboarding = () => {
@@ -105,7 +105,7 @@ const Onboarding = () => {
 
         <div className={styles.bodypart2}>
           <div className={styles.FlexDiv}>
-            <div className={styles.iconLogo}><img src='Svg/Coi.svg' alt='Coi' /></div>
+            <div className={styles.iconLogo}><img src='Svg/occupancy-date.svg' alt='Coi' /></div>
             <div className={styles.Date}>
               <h2>Est. Occupancy date</h2>
               <p>{formatDate(selectedDate)}</p>
