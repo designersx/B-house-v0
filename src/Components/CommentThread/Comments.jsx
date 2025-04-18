@@ -71,7 +71,7 @@ const Comments = ({ documentId }) => {
             <div key={index} className={styles.supportMessageRow}>
               <div className={styles.imageRow}>
                 <img
-                  src="Svg/user.svg"
+                  src="Svg/admin.svg"
                   alt="avatar"
                   className={styles.avatar}
                 />
@@ -85,7 +85,7 @@ const Comments = ({ documentId }) => {
             </div>
           ) : (
             <div key={index} className={styles.userMessageRow}>
-              <div>
+              <div className={styles.right}>
                 <div className={styles.messageBubbleUser}>{msg.message}</div>
                 <div className={styles.timestamp2}>
                   {new Date(msg.createdAt).toLocaleString()} – {msg.Customer?.name || 'Customer'}
@@ -107,7 +107,7 @@ const Comments = ({ documentId }) => {
           onChange={(e) => setCommentInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && postComment()}
         />
-        <button className={styles.commentButton} onClick={ !loading  ? postComment : null }>
+        <button disabled={ commentInput === "" ? true : false} className={styles.commentButton} onClick={ !loading  ? postComment : null }>
           {loading? <Loader size={20}/>: "COMMENT"}
 
         </button>

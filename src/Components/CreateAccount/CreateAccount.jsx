@@ -121,7 +121,7 @@ const handleSubmit = async (e) => {
         </p>
 
         <form className={styles.form} onSubmit={handleSubmit}>
-          <label>Full Name*</label>
+          <label>Full Name<span className={styles.required}>*</span></label>
           <input
             type="text"
             placeholder="Full name"
@@ -133,7 +133,7 @@ const handleSubmit = async (e) => {
           />
           {errors.fullName && <p className={styles.error}>{errors.fullName}</p>}
 
-          <label>Email*</label>
+          <label>Email<span className={styles.required}>*</span></label>
           <input
             type="email"
             placeholder="youremail@gmail.com"
@@ -145,7 +145,7 @@ const handleSubmit = async (e) => {
           />
           {errors.email && <p className={styles.error}>{errors.email}</p>}
 
-          <label>Phone Number*</label>
+          <label>Phone Number<span className={styles.required}>*</span></label>
           <input
             type="tel"
             placeholder="88-XXX-XXX-88"
@@ -157,7 +157,7 @@ const handleSubmit = async (e) => {
           />
           {errors.phone && <p className={styles.error}>{errors.phone}</p>}
 
-          <label>Company Name*</label>
+          <label>Company Name<span className={styles.required}>*</span></label>
           <input
             type="text"
             placeholder="XYZ Company"
@@ -169,7 +169,7 @@ const handleSubmit = async (e) => {
           />
           {errors.companyName && <p className={styles.error}>{errors.companyName}</p>}
 
-          <label>Description*</label>
+          <label>Description<span className={styles.required}>*</span></label>
           <textarea
             className={styles.textarea}
             name="description"

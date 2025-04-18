@@ -10,7 +10,7 @@ const CommentThread = ({ issue }) => {
   const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
   const isCustomer = !!customerInfo;
   const customerId = customerInfo?.id;
-  const messagesEndRef = useRef(null); 
+  const messagesEndRef = useRef(null); // Ref to bottom
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -54,7 +54,9 @@ const CommentThread = ({ issue }) => {
 
   return (
     <div className={styles.threadContainer}>
-      <h4 className={styles.commentHistory}>Comments History</h4>
+      <div className={styles.header}>
+        <p><b>{issue.category} – </b>{issue.issueDescription}</p>
+      </div>
       <div className={styles.messages}>
       {[...comments].reverse().map((msg, index) => (
           msg.createdByType === 'user' ? (
@@ -85,7 +87,7 @@ const CommentThread = ({ issue }) => {
             </div>
           ) : (
             <div key={index} className={styles.userMessageRow}>
-              <div>
+              <div className={styles.right}>
                 <div className={styles.messageBubbleUser}>{msg.comment}</div>
                 <div className={styles.timestamp2}>
                   {new Date(msg.createdAt).toLocaleString()}

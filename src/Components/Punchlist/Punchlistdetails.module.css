@@ -84,7 +84,7 @@
   
   .pending {
     background-color: #ffc107;
-    color: #000;
+    color: #26211F;
   }
   .etd p, .eta p {
 
@@ -404,7 +404,7 @@
 
 .BHousecomment {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     align-items: start;
     width: 100%;
 }
@@ -429,11 +429,13 @@
     font-weight: 400;
     color: #26211F;
     margin-top: 5px;
+    text-transform: uppercase;
 }
 
 .BHousecomment img {
     width: 37px;
     height: 37px;
+    border-radius: 50%;
 
 }
 
@@ -465,6 +467,7 @@
     color: #26211F;
     margin-top: 5px;
     text-align: end;
+    text-transform: uppercase;
 
 }
 

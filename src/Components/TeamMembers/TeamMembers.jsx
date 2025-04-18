@@ -157,7 +157,7 @@ const TeamMembers = () => {
               {[...userComments].reverse().map((msg, index) => (
                 msg.createdByType === 'customer' ? (
                   <div key={index} className={styles.userMessageRow}>
-                    <div>
+                    <div className={styles.right}>
                       <div className={styles.messageBubbleUser}>{msg.comment}</div>
                       <div className={styles.timestamp2}>{new Date(msg.createdAt).toLocaleString()}</div>
                     </div>

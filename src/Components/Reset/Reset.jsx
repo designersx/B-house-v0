@@ -12,7 +12,7 @@ const Reset = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
-const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -60,32 +60,32 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
         </div>
         <div className={styles.confirmDivMian}>
           <div className={styles.confirmDiv}>
-          <div className={styles.Input1}>
-  <input
-    type={showNewPassword ? "text" : "password"}
-    placeholder="Enter your new password"
-    className={styles.inputField}
-    value={newPassword}
-    onChange={(e) => setNewPassword(e.target.value)}
-  />
-  <div onClick={() => setShowNewPassword(prev => !prev)} style={{ cursor: "pointer" }}>
-    {showNewPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-  </div>
-</div>
+            <div className={styles.Input1}>
+              <input
+                type={showNewPassword ? "text" : "password"}
+                placeholder="Enter your new password"
+                className={styles.inputField}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <div onClick={() => setShowNewPassword(prev => !prev)} style={{ cursor: "pointer" }}>
+                {showNewPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+              </div>
+            </div>
 
 
-<div className={styles.Input2}>
-  <input
-    type={showConfirmPassword ? "text" : "password"}
-    placeholder="Confirm new password"
-    className={styles.inputField}
-    value={confirmPassword}
-    onChange={(e) => setConfirmPassword(e.target.value)}
-  />
-  <div onClick={() => setShowConfirmPassword(prev => !prev)} style={{ cursor: "pointer" }}>
-    {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-  </div>
-</div>
+            <div className={styles.Input2}>
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm new password"
+                className={styles.inputField}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <div onClick={() => setShowConfirmPassword(prev => !prev)} style={{ cursor: "pointer" }}>
+                {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+              </div>
+            </div>
 
           </div>
 

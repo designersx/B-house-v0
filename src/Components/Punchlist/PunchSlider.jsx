@@ -17,7 +17,7 @@ export default function SimpleSlider({ images = [] }) {
     slidesToScroll: 1,
     centerMode: true,
     centerPadding: "40px",
-    autoplay: false,
+    autoplay: true,
     responsive: [
       {
         breakpoint: 376,

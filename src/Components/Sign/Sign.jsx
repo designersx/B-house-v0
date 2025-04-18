@@ -75,7 +75,7 @@ const Sign = () => {
           Enter your email and password to sign in!
         </p>
         <form className={styles.form} onSubmit={handleSignIn}>
-          <label>Email*</label>
+          <label>Email<span className={styles.required}>*</span></label>
           <input
             type="email"
             placeholder="Youremail@gmail.com"
@@ -84,7 +84,7 @@ const Sign = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
 
-          <label>Password*</label>
+          <label>Password<span className={styles.required}>*</span></label>
           <div className={styles.passwordContainer}>
             <input
               type={showPassword ? "text" : "password"}

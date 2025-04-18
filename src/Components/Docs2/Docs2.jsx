@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from '../Docs2/Docs2.module.css';
 import Modal from '../Modal/Modal';
 import { url2 } from '../../config/url';
@@ -10,7 +10,7 @@ const Docs2 = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDoc, setSelectedDoc] = useState(null);
     const [comments, setComments] = useState([]);
-    const [loading , setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [projectData, setProjectData] = useState({
         proposals: [],
         floorPlans: [],
@@ -216,7 +216,7 @@ const Docs2 = () => {
                                 <img
                                     src={`${url2}${selectedDoc?.fileUrl}`}
                                     alt={selectedDoc?.title}
-                              
+
                                 />
                             )}
                         </div>
@@ -294,8 +294,8 @@ const Docs2 = () => {
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
                         />
-                        <button className={styles.commentButton} onClick={!loading ?handleAddComment  : null}>
-                           {!loading ? "COMMENT" : <Loader size = {20} />}
+                        <button disabled={newComment === "" ? true : false} className={styles.commentButton} onClick={!loading ? handleAddComment : null}>
+                            {!loading ? "COMMENT" : <Loader size={20} />}
                         </button>
                     </div>
 
