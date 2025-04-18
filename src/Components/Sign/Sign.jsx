@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styles from "../Sign/Sign.module.css";
 import axios from "axios";
 import URL from "../../config/api";
+import { getFcmToken } from "../../../firebase/getFCMToken/getToken";
+import { sendFcmToken } from "../../../firebase/sendFcmTokenToDb/sendFcmToDb";
 
 const Sign = () => {
   const [email, setEmail] = useState("");
@@ -28,18 +30,26 @@ const Sign = () => {
         email,
         password,
       });
-
-      const { token, firstLogin, customer } = response.data;
+      const { token, firstLogin, customer} = response.data;
       localStorage.setItem("customerToken", token);
       localStorage.setItem("customerInfo", JSON.stringify(customer));
       if (rememberMe) {
         localStorage.setItem("savedEmail", email);
         localStorage.setItem("savedPassword", password);
+        //save Fcm
+        const FCM_Token = await getFcmToken();
+        await sendFcmToken(FCM_Token,customer.id)
+        console.log(FCM_Token, "getFcmToken")
+        console.log(customer.id)
       } else {
         localStorage.removeItem("savedEmail");
         localStorage.removeItem("savedPassword");
+        //save Fcm
+        const FCM_Token = await getFcmToken();
+        await sendFcmToken(FCM_Token,customer.id)
+        console.log(FCM_Token, "getFcmToken")
+        console.log(customer.id)
       }
-
       if (firstLogin) {
         navigate("/reset");
       } else {

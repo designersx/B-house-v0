@@ -16,23 +16,37 @@ import EditProfile from "./Components/EditProfile/EditProfile";
 import OrderInfo from "./Components/Home/OrderInfo/OrderInfo";
 import TeamMembers from "./Components/TeamMembers/TeamMembers";
 import PunchListDetail from "./Components/Punchlist/Punchlistdestail";
-
-
-
-
-
-
+import { use } from "react";
+import { getFcmToken } from "../firebase/getFCMToken/getToken";
+import { messaging } from "../firebase/firebaseConfig/firebaseConfig";
 function App() {
-
   const ScrollToTop = () => {
     const { pathname } = useLocation();
-
     useEffect(() => {
       window.scrollTo(0, 0);
     }, [pathname]);
-
     return null;
   };
+  //Check User has Permission
+  const requestPermission = async () => {
+    console.log('Requesting permission...');
+    try {
+      const permission = await Notification.requestPermission();
+
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+      } else {
+        console.warn('Notification permission denied.');
+      }
+
+    } catch (error) {
+      console.error('An error occurred while requesting permission or getting token:', error);
+    }
+  };
+  //function lock
+  useEffect(() => {
+    requestPermission()
+  }, [])
   return (
     <>
       <BrowserRouter>
