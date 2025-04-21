@@ -101,6 +101,7 @@
     flex-direction: column;
     gap: 10px;
     padding-block: 1rem 4rem;
+    padding-right: 10px;
 }
 
 .commentItem {
@@ -129,9 +130,9 @@
     color: #26211F;
     padding: 10px 15px;
     border-radius: 12px;
-    /* width: min-content; */
     font-size: 14px;
     display: inline-block;
+    max-width: 70%;
 }
 
 .userBubble {
@@ -139,9 +140,10 @@
     color: #fff;
     padding: 10px 15px;
     border-radius: 12px;
-    /* width: min-content; */
     font-size: 14px;
     display: inline-block;
+    max-width: 70%;
+    text-align: left;
 }
 
 .avatar {

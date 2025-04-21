@@ -6,8 +6,8 @@ import axios from 'axios';
 import URL from '../../config/api';
 
 const onboardingItems = [
-  { img: 'Svg/Coi.svg', title: 'Building Delivery Hours' },
-  { img: 'Svg/Coi.svg', title: 'Building Sample (COI)' }
+  { img: 'Svg/delivery-hour.svg', title: 'Building Delivery Hours' },
+  { img: 'Svg/sample-icon.svg', title: 'Building Sample (COI)' }
 ];
 
 const Onboarding = () => {
@@ -86,26 +86,35 @@ const Onboarding = () => {
       </div>
 
       <div className={styles.bodyMain}>
-        {onboardingItems.map((item, index) => (
-          <div
-            key={index}
-            className={`${styles.bodypart} ${completedSteps.includes(index) ? styles.completedStepBorder : ''}`}
-          >
-            <div className={styles.FlexDiv}>
-              <div className={`${styles.iconLogo} ${completedSteps.includes(index) ? styles.completedStep : ''}`}>
-                <img src={item.img} alt='' />
-              </div>
-              <div><h2>{item.title}</h2></div>
-            </div>
-            <div onClick={() => setOpenModalIndex(index)} style={{ cursor: 'pointer' }}>
-              <img src={completedSteps.includes(index) ? 'Svg/done.svg' : 'Svg/start.svg'} alt='icon' />
-            </div>
-          </div>
-        ))}
+       {onboardingItems.map((item, index) => {
+  const isCompleted = completedSteps.includes(index);
+
+  return (
+    <div
+      key={index}
+      className={`
+        ${styles.bodypart}
+        ${!isCompleted ? styles.pendingStepBorder : ''}
+        ${isCompleted ? styles.completedStepBorder : ''}
+      `}
+    >
+      <div className={styles.FlexDiv}>
+        <div className={`${styles.iconLogo} ${isCompleted ? styles.completedStep : ''}`}>
+          <img src={item.img} alt='' />
+        </div>
+        <div><h2>{item.title}</h2></div>
+      </div>
+      <div onClick={() => setOpenModalIndex(index)} style={{ cursor: 'pointer' }}>
+        <img src={isCompleted ? 'Svg/done.svg' : 'Svg/start.svg'} alt='icon' />
+      </div>
+    </div>
+  );
+})}
+
 
         <div className={styles.bodypart2}>
           <div className={styles.FlexDiv}>
-            <div className={styles.iconLogo}><img src='Svg/Coi.svg' alt='Coi' /></div>
+            <div className={styles.iconLogo}><img src='Svg/occupancy-date.svg' alt='Coi' /></div>
             <div className={styles.Date}>
               <h2>Est. Occupancy date</h2>
               <p>{formatDate(selectedDate)}</p>

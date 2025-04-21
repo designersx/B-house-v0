@@ -363,7 +363,6 @@
     color: #26211F;
     padding: 10px 15px;
     border-radius: 12px;
-    /* width: min-content; */
     font-size: 14px;
     display: inline-block;
   }
@@ -405,7 +404,6 @@
     color: #fff;
     padding: 10px 15px;
     border-radius: 12px;
-    /* width: min-content; */
     max-width: 70%;
     font-size: 14px;
     display: inline-block;
