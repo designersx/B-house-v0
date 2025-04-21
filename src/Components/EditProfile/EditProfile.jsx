@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import URL from '../../config/api';
 import {url2} from '../../config/url';
+import Loader from '../Loader/Loader';
 import { fetchData } from 'pdfjs-dist';
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const EditProfile = () => {
   const [errors, setErrors] = useState({});
   const [profileImage, setProfileImage] = useState();
   const [, setProfileFile] = useState();
-
+  const [loading , setLoading] = useState(false)
   const [formData, setFormData] = useState({
     full_name: '',
     email: '',
@@ -36,7 +37,7 @@ const EditProfile = () => {
           phone: res.data.phone || '',
           company_name: res.data.company_name || '',
           address: res.data.address || '',
-          imageUrl : res?.data?.profilePhoto|| 'Images/profle.png'
+          imageUrl : res?.data?.profilePhoto ? `${url2}/${res?.data?.profilePhoto}` :  'Images/profle.png'
         });
         
       } catch (err) {
@@ -67,7 +68,7 @@ console.log(formData)
      
       const formDataToSend = new FormData();
       formDataToSend.append('profileImage', file); // change key if backend expects different
-
+      setLoading(true)
       try {
         const response = await axios.put(
           `${URL}/customer/profile/${customerId}`,
@@ -79,6 +80,7 @@ console.log(formData)
           }
         );
        if (response){
+        setLoading(false)
        setImageUpdate(response.data?.customer?.profilePhoto)
        }
       } catch (error) {
@@ -169,7 +171,8 @@ console.log(formData)
 
       <div className={styles.ProfileSection}>
         <div className={styles.imageSection}>
-          <img src={`${url2}/${formData?.imageUrl}`} alt="Profile" className={styles.profileImage} />
+          {loading ? <Loader size={25}/> : <img src={`${formData?.imageUrl}` } alt="Profile" className={styles.profileImage} /> }
+         
           <button className={styles.editIcon} onClick={handleImageClick}>
             <img src="/Svg/roundEdit.svg" alt="Edit" />
           </button>

@@ -8,6 +8,7 @@ import ModalSearch from '../ModalSearch/ModalSearch';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import URL from '../../config/api';
+import { url2 } from '../../config/url';
 
 function Header() {
   const navigate = useNavigate();
@@ -19,7 +20,22 @@ function Header() {
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryHours, setDeliveryHours] = useState('');
   const [customHours, setCustomHours] = useState('');
+const [data , setData] = useState()
 
+useEffect(() => {
+  const fetchCustomer = async () => {
+    try {
+      const res = await axios.get(`${URL}/customer/${customerInfo?.id}`);
+      setData(res.data);
+   console.log(res.data , "data")
+      
+    } catch (err) {
+      console.error('Failed to fetch customer data:', err);
+    }
+  };
+
+  fetchCustomer();
+}, []);
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
@@ -27,6 +43,7 @@ function Header() {
 
         const res = await axios.get(`${URL}/projects/${projectId}`);
         const project = res.data;
+        console.log(project)
 
         setDeliveryAddress(project.deliveryAddress || '');
         setDeliveryHours(project.deliveryHours || '');
@@ -94,7 +111,7 @@ function Header() {
           <p className={styles.sectionTitle}>Profile</p>
 
           <div className={styles.userInfo}>
-            <img src="Svg/DP.svg" alt="user" className={styles.avatar} />
+            <img src={data?.profilePhoto ? `${url2}/${data?.profilePhoto}` : 'Images/profle.png'} alt="user" className={styles.avatar} />
             <div>
               <p className={styles.userName}>{customerInfo?.full_name || "User"}</p>
               <p className={styles.userEmail}>{customerInfo?.email || "email@example.com"}</p>
