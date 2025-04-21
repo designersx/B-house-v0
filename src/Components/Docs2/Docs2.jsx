@@ -17,7 +17,10 @@ const Docs2 = () => {
         cad: [],
         salesAggrement: [],
         otherDocuments: [],
-        presentation: []
+        presentation: [] , 
+        acknowledgements : [] , 
+        receivingReports : []
+
 
     });
     const handleAddComment = async () => {
@@ -28,19 +31,22 @@ const Docs2 = () => {
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
         const clientInfo = JSON.parse(localStorage.getItem('customerInfo'));
 
-        // Convert fileUrl from / to \ (for backend Windows-style paths)
+       
         let windowsPath = selectedDoc.fileUrl;
         if (windowsPath.startsWith("/")) {
             windowsPath = windowsPath.substring(1);
         }
+        windowsPath = windowsPath.replace(/\//g, '\\');
 
-        // Map title to category
+     
         const titleToCategory = {
             'Detailed Proposal': 'proposals',
             'Options Presentation': 'presentation',
             'Floor Plan': 'floorPlans',
             'CAD File': 'cad',
             'Sales Agreement': 'salesAggrement',
+            'Receiving Reports' : "receivingReports" , 
+            "Acknowledgements" : "acknowledgements"
         };
 
         const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
@@ -48,13 +54,13 @@ const Docs2 = () => {
         try {
             await axios.post(`${URL}/projects/${projectId}/file-comments`, {
                 comment: commentText,
-                filePath: windowsPath, // raw Windows-style path (not encoded)
-                clientId: clientInfo?.id, // corrected key name
+                filePath: windowsPath,
+                clientId: clientInfo?.id, 
                 category,
             });
 
             setNewComment('');
-            fetchComments(selectedDoc.fileUrl); // Refresh comments
+            fetchComments(selectedDoc.fileUrl); 
             setLoading(false)
         } catch (error) {
             console.error('Error posting comment:', error);
@@ -78,6 +84,10 @@ const Docs2 = () => {
 
 
                 otherDocuments: JSON.parse(project.otherDocuments || '[]'),
+                receivingReports: JSON.parse(project.receivingReports || '[]'),
+
+                acknowledgements: JSON.parse(project.acknowledgements || '[]'),
+
             });
         } catch (err) {
             console.error('Failed to fetch project:', err);
@@ -88,10 +98,10 @@ const Docs2 = () => {
         if (!fileUrl) return;
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
 
-        // Step 1: Convert / to \ to match backend format
+    
 
 
-        // Step 2: Encode manually so \ becomes %5C and other special chars are encoded
+      
         let filePath = fileUrl;
         if (filePath.startsWith("/")) {
             filePath = filePath.substring(1);
@@ -154,6 +164,16 @@ const Docs2 = () => {
             title: 'Sales Agreement',
             icon: 'Svg/sales-icon.svg',
             fileUrl: projectData?.salesAggrement[0] || null, // Placeholder
+        },
+        {
+            title: 'Receiving Reports',
+            icon: 'Svg/Coi.svg',
+            fileUrl: projectData?.receivingReports[0] || null, // Placeholder
+        },
+        {
+            title: 'Acknowledgements',
+            icon: 'Svg/Coi.svg',
+            fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
         },
     ];
     const bottomRef = useRef(null);
