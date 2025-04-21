@@ -20,9 +20,48 @@ function Header() {
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryHours, setDeliveryHours] = useState('');
   const [customHours, setCustomHours] = useState('');
+
   const [openOffcanvas, setOpenOffcanvas] = useState(false)
   const [notification, setNotification] = useState([])
   const info=JSON.parse(localStorage.getItem("customerInfo"))
+
+const [data , setData] = useState()
+
+useEffect(() => {
+  const fetchCustomer = async () => {
+    try {
+      const res = await axios.get(`${URL}/customer/${customerInfo?.id}`);
+      setData(res.data);
+   console.log(res.data , "data")
+      
+    } catch (err) {
+      console.error('Failed to fetch customer data:', err);
+    }
+  };
+
+  fetchCustomer();
+}, []);
+  useEffect(() => {
+    const fetchProjectDetails = async () => {
+      try {
+        if (!projectId) return;
+
+        const res = await axios.get(`${URL}/projects/${projectId}`);
+        const project = res.data;
+        console.log(project)
+
+        setDeliveryAddress(project.deliveryAddress || '');
+        setDeliveryHours(project.deliveryHours || '');
+        setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(project.deliveryHours) ? '' : project.deliveryHours);
+      } catch (err) {
+        console.error("Error fetching project data:", err);
+      }
+    };
+
+    fetchProjectDetails();
+  }, [projectId]);
+
+
   const handleLogout = () => {
     localStorage.removeItem('customerToken');
     localStorage.removeItem('customerInfo');
@@ -148,7 +187,7 @@ function Header() {
           <p className={styles.sectionTitle}>Profile</p>
 
           <div className={styles.userInfo}>
-            <img src="Svg/DP.svg" alt="user" className={styles.avatar} />
+            <img src={data?.profilePhoto ? `${url2}/${data?.profilePhoto}` : 'Images/profle.png'} alt="user" className={styles.avatar} />
             <div>
               <p className={styles.userName}>{customerInfo?.full_name || "User"}</p>
               <p className={styles.userEmail}>{customerInfo?.email || "email@example.com"}</p>
