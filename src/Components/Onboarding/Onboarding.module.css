@@ -54,6 +54,15 @@
 .completedStepBorder {
     position: relative;
 }
+.pendingStepBorder::after {
+    content: "";
+    position: absolute;
+    left: 10%;
+    bottom: -18px;
+    height: 15px;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, #969696, #969696 5px, transparent 5px, transparent 10px);
+  }
 
 .completedStepBorder::after {
     content: "";
@@ -64,6 +73,7 @@
     width: 2px;
     background: repeating-linear-gradient(to bottom, #004680, #004680 5px, transparent 5px, transparent 10px);
 }
+
 
 .completedStepBorder:last-of-type::after {
     display: none;
@@ -80,6 +90,7 @@
     margin: 10px 10px 20px 10px;
     background-color: rgb(255, 255, 255);
     min-height: 70px;
+    position: relative;
 }
 
 .bodypart h2 {
@@ -138,6 +149,8 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: 800;
+    letter-spacing: 1px;
 }
 
 .skipDiv {

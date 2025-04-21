@@ -169,11 +169,11 @@ const handleSubmit = async (e) => {
           />
           {errors.companyName && <p className={styles.error}>{errors.companyName}</p>}
 
-          <label>Description<span className={styles.required}>*</span></label>
+          <label>Description</label>
           <textarea
             className={styles.textarea}
             name="description"
-            placeholder="Describe your need or use case"
+            placeholder="Describe "
             rows="3"
             value={formData.description}
             onChange={handleChange}

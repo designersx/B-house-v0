@@ -15,6 +15,14 @@ const docs = [
   "Final Invoice",
 ];
 
+const iconMap = {
+  "Sample COI": "Svg/Coi.svg",
+  "COI (Certificate)": "Svg/certificate-coi-icon.svg",
+  "Sales Agreement": "Svg/sales-icon.svg",
+  "Pro Forma Invoice": "Svg/proforma-invoice.svg",
+  "Final Invoice": "Svg/final-invoice.svg",
+};
+
 function Docs() {
   const [activeTab, setActiveTab] = useState('JENNY WILSON');
   const [docsData, setDocsData] = useState([]);
@@ -26,7 +34,7 @@ function Docs() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const customer = JSON.parse(localStorage.getItem('customerInfo'));
   const customerName = customer?.full_name || "My Docs";
-  
+
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));
     try {
@@ -108,7 +116,7 @@ function Docs() {
       )}
 
       <div className={styles.tabs}>
-      {[customerName, 'B-HOUSE DOCS'].map(tab => (
+        {[customerName, 'B-HOUSE DOCS'].map(tab => (
           <button
             key={tab}
             className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
@@ -123,11 +131,13 @@ function Docs() {
         <div className={styles.docList}>
           {docs.map((doc, idx) => {
             const foundDoc = docsData.find(d => d.documentType === doc);
+            const iconSrc = iconMap[doc] || 'Svg/default-icon.svg';
+
             return (
               <div key={idx} className={styles.docItem}>
                 <div className={styles.leftSection}>
                   <div className={styles.icon}>
-                    <img src="Svg/Coi.svg" alt="icon" />
+                    <img src={iconSrc} alt="icon" />
                   </div>
                   <span className={styles.docTitle}>{doc}</span>
                 </div>
@@ -140,18 +150,18 @@ function Docs() {
                   >
                     {foundDoc ? 'Update' : 'Upload'}
                   </button>
-                  {foundDoc ?  
-                  <div className={styles.editFlex}>
-                  <img src="Svg/edit-icon.svg" alt="edit-icon" />
-                  <p
-                    onClick={() => foundDoc && openCommentModal(foundDoc.id)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    Comment
-                  </p>
-                </div>
-                  :  null}
-                  
+
+                  {foundDoc && (
+                    <div className={styles.editFlex}>
+                      <img src="Svg/edit-icon.svg" alt="edit-icon" />
+                      <p
+                        onClick={() => openCommentModal(foundDoc.id)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        Comment
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             );

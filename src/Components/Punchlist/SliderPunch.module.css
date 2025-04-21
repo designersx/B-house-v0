@@ -44,9 +44,10 @@
 
 
 /* Arrow base styles */
+
 .arrow {
     position: absolute;
-    top: 45%;
+    top: 50%;
     transform: translateY(-50%);
     background-color: #004680;
     border: 2px solid #ffffff00;
