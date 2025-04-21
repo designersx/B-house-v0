@@ -5,7 +5,6 @@ import axios from "axios";
 import URL from "../../config/api";
 import { getFcmToken } from "../../../firebase/getFCMToken/getToken";
 import { sendFcmToken } from "../../../firebase/sendFcmTokenToDb/sendFcmToDb";
-
 const Sign = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,16 +38,12 @@ const Sign = () => {
         //save Fcm
         const FCM_Token = await getFcmToken();
         await sendFcmToken(FCM_Token,customer.id)
-        console.log(FCM_Token, "getFcmToken")
-        console.log(customer.id)
       } else {
         localStorage.removeItem("savedEmail");
         localStorage.removeItem("savedPassword");
         //save Fcm
         const FCM_Token = await getFcmToken();
         await sendFcmToken(FCM_Token,customer.id)
-        console.log(FCM_Token, "getFcmToken")
-        console.log(customer.id)
       }
       if (firstLogin) {
         navigate("/reset");
