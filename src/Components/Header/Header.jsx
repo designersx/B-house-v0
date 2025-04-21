@@ -20,6 +20,11 @@ function Header() {
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryHours, setDeliveryHours] = useState('');
   const [customHours, setCustomHours] = useState('');
+
+  const [openOffcanvas, setOpenOffcanvas] = useState(false)
+  const [notification, setNotification] = useState([])
+  const info=JSON.parse(localStorage.getItem("customerInfo"))
+
 const [data , setData] = useState()
 
 useEffect(() => {
@@ -56,6 +61,7 @@ useEffect(() => {
     fetchProjectDetails();
   }, [projectId]);
 
+
   const handleLogout = () => {
     localStorage.removeItem('customerToken');
     localStorage.removeItem('customerInfo');
@@ -63,12 +69,9 @@ useEffect(() => {
     localStorage.removeItem('selectedProjectId');
     navigate('/');
   };
-
   const handleEdit = () => {
     navigate('/edit-profile')
   }
-
-
   const handleUpdateDeliveryDetails = async () => {
     try {
       const data = {
@@ -87,6 +90,79 @@ useEffect(() => {
     }
   };
 
+
+  const handleOpenOffcanvas = () => {
+    setOpenOffcanvas(true)
+  }
+  const handleCloseOffcanvas = () => {setOpenOffcanvas(false);}
+
+  const getNotificationsByUser = async (id) => {
+    const response = await axios.get(`${URL}/getNotificationsByClient/${id}`);
+    return response
+  }
+  const fetchNotification = async () => {
+    try {
+      const response = await getNotificationsByUser(info?.id)
+      console.log(response)
+      setNotification(response.data.notifications
+      )
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+  function formatNotificationTime(dateString) {
+    const inputDate = new Date(dateString);
+    const now = new Date();
+
+    const isToday =
+      inputDate.toDateString() === now.toDateString();
+
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+
+    const isYesterday =
+      inputDate.toDateString() === yesterday.toDateString();
+
+    const time = inputDate.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+
+    if (isToday) {
+      return `Today at ${time}`;
+    } else if (isYesterday) {
+      return `Yesterday at ${time}`;
+    } else {
+      const month = inputDate.toLocaleString('default', { month: 'short' });
+      const day = inputDate.getDate();
+      return `${month} ${day} at ${time}`;
+    }
+  }
+
+  useEffect(() => {
+    fetchNotification()
+  }, [])
+
+  useEffect(() => {
+    const fetchProjectDetails = async () => {
+      try {
+        if (!projectId) return;
+
+        const res = await axios.get(`${URL}/projects/${projectId}`);
+        const project = res.data;
+
+        setDeliveryAddress(project.deliveryAddress || '');
+        setDeliveryHours(project.deliveryHours || '');
+        setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(project.deliveryHours) ? '' : project.deliveryHours);
+      } catch (err) {
+        console.error("Error fetching project data:", err);
+      }
+    };
+
+    fetchProjectDetails();
+  }, [projectId]);
   return (
     <div>
       <div className={styles.headerMain}>
@@ -96,7 +172,7 @@ useEffect(() => {
 
         <div className={styles.headerSideIcon}>
           <img src='Svg/searchSvg.svg' alt='Search' className={styles.vector1} onClick={() => setShowModalSearch(true)} />
-          <img src="/Svg/BellIcon.svg" alt="BellIcon" className={styles.vector1} />
+          <img onClick={handleOpenOffcanvas} src="/Svg/BellIcon.svg" alt="BellIcon" className={styles.vector1} />
           <img
             src="/Svg/UserIcon1.svg"
             alt="UserIcon"
@@ -183,6 +259,24 @@ useEffect(() => {
         onClose={() => setShowModalSearch(false)}
         height="50%">
       </ModalSearch>
+      {openOffcanvas && <OffCanvas  onClose={handleCloseOffcanvas} isOpen={openOffcanvas}  >
+        {notification.map((message) => {
+          return (
+            <><div className="notification-container">
+              <div className="notification-card">
+                <div className="notification-header">
+                  <span className="sender-name">{message.senderName}</span>
+                  <span className="notification-time">{formatNotificationTime(message.createdAt)}</span>
+                </div>
+                <div className="notification-message">
+                  {message.message}
+                </div>
+              </div>
+            </div></>
+          )
+        })}
+
+      </OffCanvas>}
     </div>
   );
 }

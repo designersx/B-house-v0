@@ -19,6 +19,7 @@ const OffCanvas = ({ isOpen, onClose, children, direction = 'right', width = '80
                     height: direction === 'top' || direction === 'bottom' ? height : '100%',
                 }}
             >
+               
                 {children}
             </div>
         </div>
