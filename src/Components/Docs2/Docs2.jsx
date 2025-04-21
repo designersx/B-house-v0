@@ -31,13 +31,14 @@ const Docs2 = () => {
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
         const clientInfo = JSON.parse(localStorage.getItem('customerInfo'));
 
-        // Convert fileUrl from / to \ (for backend Windows-style paths)
+       
         let windowsPath = selectedDoc.fileUrl;
         if (windowsPath.startsWith("/")) {
             windowsPath = windowsPath.substring(1);
         }
+        windowsPath = windowsPath.replace(/\//g, '\\');
 
-        // Map title to category
+     
         const titleToCategory = {
             'Detailed Proposal': 'proposals',
             'Options Presentation': 'presentation',
@@ -53,13 +54,13 @@ const Docs2 = () => {
         try {
             await axios.post(`${URL}/projects/${projectId}/file-comments`, {
                 comment: commentText,
-                filePath: windowsPath, // raw Windows-style path (not encoded)
-                clientId: clientInfo?.id, // corrected key name
+                filePath: windowsPath,
+                clientId: clientInfo?.id, 
                 category,
             });
 
             setNewComment('');
-            fetchComments(selectedDoc.fileUrl); // Refresh comments
+            fetchComments(selectedDoc.fileUrl); 
             setLoading(false)
         } catch (error) {
             console.error('Error posting comment:', error);
@@ -97,10 +98,10 @@ const Docs2 = () => {
         if (!fileUrl) return;
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
 
-        // Step 1: Convert / to \ to match backend format
+    
 
 
-        // Step 2: Encode manually so \ becomes %5C and other special chars are encoded
+      
         let filePath = fileUrl;
         if (filePath.startsWith("/")) {
             filePath = filePath.substring(1);
