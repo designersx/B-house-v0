@@ -8,6 +8,7 @@
     top: 10%;
     left: 50%;
     transform: translate(-50%, -50%);
+   
 }
 
 /* Signin.module.css */
@@ -72,6 +73,10 @@ input:focus {
  
 
   }
+  .textarea::placeholder {
+    font-family: "Montserrat", sans-serif;
+    color: #A3AED0; 
+  }
   
   .textarea:focus {
     outline: none;
@@ -135,6 +140,7 @@ input:focus {
     color: #004680;
     margin-top: 1rem;
     min-height: 50px;
+    font-family: "Montserrat", sans-serif;
 }
 
 .footer {

@@ -21,11 +21,13 @@
     font-size: 32px;
     font-weight: 600;
     color: #26211F;
-    margin-block: 0px;
+    margin-block: 10px;
+    line-height: 35px;
 }
 .Title p{
     color:#828389;
     font-weight: 500;
+    margin-block: 20px;
 }
 .confirmDiv {
     display: flex;
@@ -61,8 +63,14 @@
 
 .Input2 input {
     border: none;
+    
 }
-
+.errorText{
+    color: rgb(255, 0, 0);
+    text-align: left;
+    padding-inline: 20px;
+    padding-top: 5px;
+}
 .BtnDiv {
     display: flex;
     align-items: center;

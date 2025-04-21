@@ -86,22 +86,31 @@ const Onboarding = () => {
       </div>
 
       <div className={styles.bodyMain}>
-        {onboardingItems.map((item, index) => (
-          <div
-            key={index}
-            className={`${styles.bodypart} ${completedSteps.includes(index) ? styles.completedStepBorder : ''}`}
-          >
-            <div className={styles.FlexDiv}>
-              <div className={`${styles.iconLogo} ${completedSteps.includes(index) ? styles.completedStep : ''}`}>
-                <img src={item.img} alt='' />
-              </div>
-              <div><h2>{item.title}</h2></div>
-            </div>
-            <div onClick={() => setOpenModalIndex(index)} style={{ cursor: 'pointer' }}>
-              <img src={completedSteps.includes(index) ? 'Svg/done.svg' : 'Svg/start.svg'} alt='icon' />
-            </div>
-          </div>
-        ))}
+       {onboardingItems.map((item, index) => {
+  const isCompleted = completedSteps.includes(index);
+
+  return (
+    <div
+      key={index}
+      className={`
+        ${styles.bodypart}
+        ${!isCompleted ? styles.pendingStepBorder : ''}
+        ${isCompleted ? styles.completedStepBorder : ''}
+      `}
+    >
+      <div className={styles.FlexDiv}>
+        <div className={`${styles.iconLogo} ${isCompleted ? styles.completedStep : ''}`}>
+          <img src={item.img} alt='' />
+        </div>
+        <div><h2>{item.title}</h2></div>
+      </div>
+      <div onClick={() => setOpenModalIndex(index)} style={{ cursor: 'pointer' }}>
+        <img src={isCompleted ? 'Svg/done.svg' : 'Svg/start.svg'} alt='icon' />
+      </div>
+    </div>
+  );
+})}
+
 
         <div className={styles.bodypart2}>
           <div className={styles.FlexDiv}>

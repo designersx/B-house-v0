@@ -141,7 +141,7 @@ const Sign = () => {
           </a>
         </p>
         <footer className={styles.footer}>
-          &copy; 2025 Bhouse. All rights reserved.
+          &copy; 2025 Bhouse. All rights reserved for the use of terms related to Bhouse.
         </footer>
       </div>
     </div>
