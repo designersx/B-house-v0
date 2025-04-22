@@ -176,9 +176,13 @@ const TeamMembers = () => {
                     />
                     <div>
                       <div className={styles.messageBubbleSupport}>
-                        <b>{msg.name}</b> ({msg.userRole})<br />
-                        {msg.comment}
+                        <p>   {msg.comment}</p>
+                   
+                     
                       </div>
+                      <br/>
+                      <div className={styles.superadmin}>   <b>{msg.name}</b> ({msg.userRole})</div>
+                   
                       <div className={styles.timestamp}>{new Date(msg.createdAt).toLocaleString()}</div>
                     </div>
                   </div>
