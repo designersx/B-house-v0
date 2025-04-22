@@ -167,7 +167,11 @@ function Docs() {
               </div>
             );
           })}
+          <p className={styles.note}>
+          If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
+        </p>
         </div>
+        
       ) : (
         <div className={styles.bHouseContent}>
           <Docs2 data={docsData} />
