@@ -30,14 +30,14 @@ body {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: #26211F;
     background-color: #ffffff !important;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
+    color: #26211F;
     background-color: #ffffff !important;
   }
 
