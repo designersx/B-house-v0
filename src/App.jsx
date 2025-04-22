@@ -41,6 +41,7 @@ function App() {
       console.error('An error occurred while requesting permission or getting token:', error);
     }
   };
+  
   //function lock
   useEffect(() => {
     requestPermission()
