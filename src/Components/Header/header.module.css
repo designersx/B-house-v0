@@ -1,0 +1,167 @@
+.headerMain {
+    display: flex;
+    justify-content: space-between;
+    /* border-width: 4px; */
+    /* border-style: solid; */
+    padding: 0 0 10px 0;
+    border-bottom: 2px solid;
+    border-image: linear-gradient(to right, #EAEAEA, #004680, #EAEAEA) 1;
+    padding: 20px 20px 10px 20px;
+    /* position: fixed; */
+    width: 100%;
+    background-color: #ffff;
+    top: 0;
+    margin: 0px 0px 0 0;
+    z-index: 1;
+    height: 91px;
+
+}
+
+.headerSideIcon {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* SideBar Css  */
+.sidebarContainer {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sectionTitle {
+    font-size: 16px;
+    color: #64748B;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.userName {
+    font-weight: bold;
+    margin: 0;
+    color: rgb(0, 0, 0);
+}
+
+.userEmail {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin: 0;
+}
+
+.btn {
+    background: transparent;
+    color: #26211F;
+    border: none;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background 0.2s;
+}
+
+.btn:hover {
+    background-color: #f3f4f6;
+}
+
+.active {
+    background-color: #E7EAEE;
+}
+
+.logoutBtn {
+    background-color: #E7EAEE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #26211F;
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+}
+
+.divider {
+    margin-top: 10px;
+    border-top: 1px solid #D0D5DD;
+}
+
+
+
+/* Modale CSS START */
+.formGroup {
+    margin-bottom: 1rem;
+}
+
+.formGroup label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: rgb(0, 0, 0);
+}
+
+.formGroup input,
+
+.formGroup select,textarea  , 
+
+
+.formGroup textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    color: #787C81;
+    font-size: 16px;
+}
+.formGroup textarea {
+    resize: none;
+    height: 100px;
+}
+.formGroup input,
+.formGroup select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    color: #787C81;
+    font-size: 16px;
+    outline: none;
+    min-height: 50px;
+}
+
+.submitButton {
+    padding: 10px 20px;
+    background-color: #EEF7FF;
+    color: #004680;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    margin-block: 1rem;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    min-height: 50px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.submitButton :hover {
+    background-color: #004680;
+}

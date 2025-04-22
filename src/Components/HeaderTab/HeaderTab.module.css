@@ -1,0 +1,70 @@
+.headerMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 10px 10px 10px;
+  background-color: #F7F6F9;
+}
+
+.titleDiv {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.titleDiv h2 {
+  margin-block: 3px;
+  color: #26211F;
+
+}
+
+.IconBoth {
+  display: flex;
+  gap: 10px;
+}
+
+/* Canvas Css start */
+
+.filterWrap {
+  padding: 20px;
+}
+
+.heading {
+  font-size:30px;
+  color: #26211F;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.checkboxItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.checkboxItem input {
+  width: 16px;
+  height: 16px;
+  accent-color: #004680;
+}
+
+.subBtn button {
+  border: none;
+  background-color: #004680;
+  color: white;
+  padding: 10px;
+  border-radius: 16px;
+  width: 100%;
+  font-size: 18px;
+  margin-top: 1rem;
+
+}
+
+.subBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,178 @@
+.ImgDiv img {
+    width: 100%;
+    position: relative;
+}
+
+.logoContainer {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Signin.module.css */
+
+
+
+.signPart {
+    padding: 20px;
+
+}
+
+.heading {
+    font-size: 36px;
+    font-weight: bold;
+    color: #26211F;
+    margin: 0px;
+}
+
+.subtext {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form label {
+    margin-bottom: 5px;
+    color: #26211F;
+    font-weight: 500;
+}
+
+.label {
+    text-align: left;
+    margin-top: 10px;
+    font-weight: bold;
+}
+.required{
+    color:#004680;
+}
+.input {
+    padding: 10px;
+    margin: 5px 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    min-height: 50px;
+}
+
+input:focus {
+    outline: none;
+}
+
+.passwordContainer {
+    position: relative;
+    border-radius: 20px;
+    width: 100%;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+
+}
+
+.inputPassword {
+    padding: 10px;
+    border-radius: 20px;
+    min-height: 30px;
+    border: none;
+}
+
+.eyeIcon {
+    position: absolute;
+    right: 10px;
+    top: 55%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    margin: 10px 0 20px;
+}
+
+input[type="checkbox"] {
+    accent-color: #004680;
+}
+
+.checkbox {
+    margin-right: 5px;
+}
+
+.checkBoxDiv label {
+    font-size: 14px;
+    color: #004680;
+    margin-bottom: 0px;
+
+}
+
+.errorMessage {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.forgotPassword {
+    color: #004680;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.signInButton {
+    width: 100%;
+    padding: 10px;
+    background: #e0f0ff;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 800;
+    color: #004680;
+    min-height: 50px;
+}
+
+.registerText {
+    margin-top: 10px;
+    color: #2B3674;
+    font-size: 14px;
+}
+
+.registerLink {
+    font-weight: bold;
+    color: #004680;
+    text-decoration: none;
+}
+
+.footer {
+    font-size: 14px;
+    color: #999;
+    margin-top: 3rem;
+    font-weight: 500;
+    text-align: center;
+    padding-inline: 20px;
+}
+
+.checkBoxDiv{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkBoxDiv input {
+    width: 14px;
+    height: 14px;
+    accent-color: #004680;
+}
+
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px rgb(255, 255, 255) inset !important;
+} */

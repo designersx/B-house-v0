@@ -1,0 +1,206 @@
+.container {
+    margin: 0 auto;
+    padding: 20px 16px;
+    background-color: #f9f9f9;
+}
+
+.heading {
+    font-size: 22px;
+    font-weight: 600;
+    color: #26211F;
+
+
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tab {
+    padding: 10px 14px;
+    font-size: 15px;
+    color: #BCBCBC;
+    border: none;
+    background: none;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.activeTab {
+    color: #26211F;
+    border-bottom: 2px solid #26211F;
+}
+
+.docList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.docItem {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 0 1px #eee;
+}
+
+.docItem::before {
+    content: "";
+    position: absolute;
+    left: 8%;
+    bottom: -34px;
+    height: 30px;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, #004680,  #004680 5px, transparent 5px,  transparent 10px);
+}
+
+.docItem:last-of-type::before {
+    display: none;
+}
+
+
+.leftSection {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    background: #e1f1ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.docTitle {
+    font-size: 18px;
+    font-weight: 500;
+    color: #232323;
+}
+
+.rightSection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.updateBtn {
+    background: #26211F;
+    color: white;
+    font-size: 14px;
+    padding: 6px 20px;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.editFlex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.editFlex p {
+    font-size: 14px;
+    font-weight: 600;
+    color: #004680;
+
+}
+
+.note {
+    margin-top: 24px;
+    font-size: 14px;
+    color: #66676E;
+
+}
+
+.submitButton {
+    padding: 10px 20px;
+    background-color: #004680;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    float: right;
+}
+
+
+/* B-House Css Start */
+.container {
+  margin: auto;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  background-color: #e6f0fb;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .icon img {
+  width: 24px;
+  height: 24px;
+} */
+
+.title {
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.commentLink {
+  font-size: 14px;
+  color: #0d6efd;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.commentLink img {
+  width: 16px;
+  height: 16px;
+}
+
+.note {
+  font-size: 13px;
+  color: #4a5568;
+  margin-top: 10px;
+  margin-bottom: 1rem;
+  padding: 0 4px;
+  text-align: center;
+}

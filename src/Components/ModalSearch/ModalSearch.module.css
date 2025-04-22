@@ -1,0 +1,132 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.modalWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    animation: slideDown 0.35s ease forwards;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+.modal {
+    background: #fff;
+    width: 100%;
+    border-radius: 0px 0px 16px 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    border-bottom: 5px solid #26211f;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    margin-top: 1rem;
+}
+
+.searchInput {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    outline: none;
+    min-height: 50px;
+}
+
+.clearBtn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.historyWrapper {
+    margin-top: 20px;
+}
+
+.historyWrapper h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #444;
+}
+
+.historyHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.clearAllBtn {
+    font-size: 14px;
+    color: #26211F;
+    cursor: pointer;
+}
+
+.historyList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.historyItem {
+    padding: 8px 0;
+    cursor: pointer;
+    color: #26211F;
+    transition: color 0.2s;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.historyItem:hover {
+    color: #007bff;
+}
+
+.emptyText {
+    color: #aaa;
+    font-size: 14px;
+    text-align: center;
+}
+
+.outsideCloseBtn {
+    position: absolute;
+    bottom: -35%; 
+    left: 50%;
+    transform: translateX(-50%);
+    background: #26211f;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff;
+    z-index: 1001;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+
+
