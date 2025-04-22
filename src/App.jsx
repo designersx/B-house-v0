@@ -16,9 +16,86 @@ import EditProfile from "./Components/EditProfile/EditProfile";
 import OrderInfo from "./Components/Home/OrderInfo/OrderInfo";
 import TeamMembers from "./Components/TeamMembers/TeamMembers";
 import PunchListDetail from "./Components/Punchlist/Punchlistdestail";
+
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getMessaging, onMessage } from "firebase/messaging";
+// Initialize Firebase App
+const firebaseConfig = {
+  apiKey: "AIzaSyDblY3fqpz8K5KXDA3HacPUzHxBnZHT1o0",
+  authDomain: "bhouse-dc970.firebaseapp.com",
+  projectId: "bhouse-dc970",
+  storageBucket: "bhouse-dc970.appspot.com",
+  messagingSenderId: "577116029205",
+  appId: "1:577116029205:web:659adeb7405b59ad21691c",
+  measurementId: "G-RFFMNTE7XQ"
+};
+
 import ProtectedRoute from "./Components/Private/ProtectedRoute";
 
+
 function App() {
+  // Initialize App
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  const messaging = getMessaging(app);
+  // Check User has Permission
+  const requestPermission = async () => {
+    if (!isNewNotificationSupported()) {
+      console.warn('Notifications are not supported in this browser.');
+      return;
+    }
+
+    console.log('Requesting permission...');
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+      } else {
+        console.warn('Notification permission denied.');
+      }
+    } catch (error) {
+      console.error('An error occurred while requesting permission:', error);
+    }
+  };
+  function isNewNotificationSupported() {
+    if (!window.Notification || !Notification.requestPermission)
+      return false;
+    if (Notification.permission === 'granted')
+      throw new Error('You must only call this *before* calling Notification.requestPermission(), otherwise this feature detect would bug the user with an actual notification!');
+    try {
+      new Notification('');
+    } catch (e) {
+      if (e.name === 'TypeError') return false;
+    }
+    return true;
+  }
+  useEffect(() => {
+    requestPermission();
+    // Foreground notification listener
+    onMessage(messaging, (payload) => {
+      const notificationTitle = payload.data.title || 'B-House Notification';
+      const notificationBody = payload.data.body || 'You have a new message';
+      const clickActionURL = payload.data.click_action || 'https://your-default-url.com/';
+
+      // Create a simple notification without actions
+      if (Notification.permission === 'granted') {
+        new Notification(notificationTitle, {
+          body: notificationBody,
+          icon: '/Svg/b-houseLogo.svg'
+        });
+      }
+    });
+
+    // Register the service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+    }
+  }, [messaging]);
   const ScrollToTop = () => {
     const { pathname } = useLocation();
     useEffect(() => {
@@ -26,27 +103,6 @@ function App() {
     }, [pathname]);
     return null;
   };
-  //Check User has Permission
-  const requestPermission = async () => {
-    console.log('Requesting permission...');
-    try {
-      const permission = await Notification.requestPermission();
-
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-      } else {
-        console.warn('Notification permission denied.');
-      }
-
-    } catch (error) {
-      console.error('An error occurred while requesting permission or getting token:', error);
-    }
-  };
-  
-  //function lock
-  useEffect(() => {
-    requestPermission()
-  }, [])
   return (
     <>
       <BrowserRouter>
