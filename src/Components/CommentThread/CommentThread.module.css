@@ -99,6 +99,7 @@
     width: 100%;
     left: 0;
     padding-inline: 20px;
+    padding-block: 10px;
     background-color: #ffff;
 }
 

@@ -15,7 +15,8 @@
 .titleDiv h2 {
   margin-block: 3px;
   color: #26211F;
-
+  font-size: 25px;
+  line-height: 25px;
 }
 
 .IconBoth {

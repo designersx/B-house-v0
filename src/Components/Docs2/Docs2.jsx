@@ -210,9 +210,9 @@ const Docs2 = () => {
                     </div>
                 ))}
 
-                {/* <p className={styles.note}>
-                    If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
-                </p> */}
+              <p className={styles.note}>
+                        If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
+                      </p>
             </div>
 
             <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="90vh">

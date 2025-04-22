@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "../List/List.module.css";
-import URL from "../../../config/api"; 
-import {url2} from "../../../config/url";
+import URL from "../../../config/api";
+import { url2 } from "../../../config/url";
 const List = () => {
   const [invoices, setInvoices] = useState([]);
   const [filteredInvoices, setFilteredInvoices] = useState([]);
@@ -119,77 +119,80 @@ const List = () => {
 
   return (
     <div className={styles.ListMian}>
-      <div className={styles.Part1}>
-        <div className={styles.title}>
-          <p>All Invoice List</p>
-        </div>
-        <div className={styles.dropdown}>
-          <button className={styles.dropdownBtn} onClick={toggleDropdown}>
-            {selectedOption}
-            <span className={`${styles.arrow} ${isOpen ? styles.rotate : ""}`}>
-              <img src="Svg/drop-Arrow.svg" alt="drop-Arrow" />
-            </span>
-          </button>
-          {isOpen && (
-            <ul className={styles.dropdownMenu}>
-              <li onClick={() => handleSelect("Recent")}>Recent</li>
-              <li onClick={() => handleSelect("1 Month")}>1 Month</li>
-              <li onClick={() => handleSelect("3 Months")}>3 Months</li>
-              <li onClick={() => handleSelect("6 Months")}>6 Months</li>
-            </ul>
-          )}
-        </div>
-      </div>
+
 
       <div className={styles.transactionList}>
         {/* Render filtered invoices dynamically */}
         {filteredInvoices.length === 0 ? (
-           <div className={styles.noData}>
-                    <div><img src="Svg/notfound.svg" alt=""/>
-                    <div className={styles.NoDataTittle}><p>No items found yet</p><img src="Svg/EYE1.svg" alt=""/></div></div>
-                  </div>
+          <div className={styles.noData}>
+            <div><img src="Svg/notfound.svg" alt="" />
+              <div className={styles.NoDataTittle}><p>No items found yet</p><img src="Svg/EYE1.svg" alt="" /></div></div>
+          </div>
         ) : (
           filteredInvoices.map((invoice, index) => {
             return (
-              <div key={invoice.id} className={styles.transactionItem}>
-                <img
-                  src="Svg/pdf-icon.svg"
-                  alt="pdf-icon"
-                  className={styles.image}
-                  onClick={() => handleOpenFile(invoice.invoiceFilePath)}
-                />
-                <div></div>
-                <div className={styles.details}>
-                  <p className={styles.title}>{`Invoice ${index + 1}`}</p>
-                  <div className={styles.track}>
-                    <div className={styles.DFlex}>
-                      <img src="Svg/timer.svg" alt="" />
-                      <p className={styles.date}>
-                        {formatDate(invoice.createdAt)}
-                      </p>
-                    </div>
-                    {/* Show advance paid as 'Advance Paid / Total Amount' */}
-                    <p className={styles.amount}>
-                      {invoice.advancePaid
-                        ? `${invoice.advancePaid.toLocaleString()} out of ${invoice.totalAmount.toLocaleString()}`
-                        : `${invoice.totalAmount.toLocaleString()}`}
-                    </p>
+              <>
+                <div className={styles.Part1}>
+                  <div className={styles.title}>
+                    <p>All Invoice List</p>
+                  </div>
+                  <div className={styles.dropdown}>
+                    <button className={styles.dropdownBtn} onClick={toggleDropdown}>
+                      {selectedOption}
+                      <span className={`${styles.arrow} ${isOpen ? styles.rotate : ""}`}>
+                        <img src="Svg/drop-Arrow.svg" alt="drop-Arrow" />
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <ul className={styles.dropdownMenu}>
+                        <li onClick={() => handleSelect("Recent")}>Recent</li>
+                        <li onClick={() => handleSelect("1 Month")}>1 Month</li>
+                        <li onClick={() => handleSelect("3 Months")}>3 Months</li>
+                        <li onClick={() => handleSelect("6 Months")}>6 Months</li>
+                      </ul>
+                    )}
                   </div>
                 </div>
-                <span
-                  className={`${styles.status} ${
-                    invoice.status === "Partly Paid"
-                      ? styles.PartlyPaid
-                      : invoice.status === "Paid"
-                      ? styles.Paid
-                      : invoice.status === "Pending"
-                      ? styles.Pending
-                      : ""
-                  }`}
-                >
-                  {invoice.status}
-                </span>
-              </div>
+                <div key={invoice.id} className={styles.transactionItem}>
+                  <img
+                    src="Svg/pdf-icon.svg"
+                    alt="pdf-icon"
+                    className={styles.image}
+                    onClick={() => handleOpenFile(invoice.invoiceFilePath)}
+                  />
+                  <div></div>
+                  <div className={styles.details}>
+                    <p className={styles.title}>{`Invoice ${index + 1}`}</p>
+                    <div className={styles.track}>
+                      <div className={styles.DFlex}>
+                        <img src="Svg/timer.svg" alt="" />
+                        <p className={styles.date}>
+                          {formatDate(invoice.createdAt)}
+                        </p>
+                      </div>
+                      {/* Show advance paid as 'Advance Paid / Total Amount' */}
+                      <p className={styles.amount}>
+                        {invoice.advancePaid
+                          ? `${invoice.advancePaid.toLocaleString()} out of ${invoice.totalAmount.toLocaleString()}`
+                          : `${invoice.totalAmount.toLocaleString()}`}
+                      </p>
+                    </div>
+                  </div>
+                  <span
+                    className={`${styles.status} ${invoice.status === "Partly Paid"
+                        ? styles.PartlyPaid
+                        : invoice.status === "Paid"
+                          ? styles.Paid
+                          : invoice.status === "Pending"
+                            ? styles.Pending
+                            : ""
+                      }`}
+                  >
+                    {invoice.status}
+                  </span>
+                </div>
+              </>
+
             );
           })
         )}
