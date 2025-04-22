@@ -16,9 +16,9 @@ import EditProfile from "./Components/EditProfile/EditProfile";
 import OrderInfo from "./Components/Home/OrderInfo/OrderInfo";
 import TeamMembers from "./Components/TeamMembers/TeamMembers";
 import PunchListDetail from "./Components/Punchlist/Punchlistdestail";
-
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getMessaging, onMessage } from "firebase/messaging";
+import ProtectedRoute from "./Components/Private/ProtectedRoute";
 // Initialize Firebase App
 const firebaseConfig = {
   apiKey: "AIzaSyDblY3fqpz8K5KXDA3HacPUzHxBnZHT1o0",
@@ -29,10 +29,6 @@ const firebaseConfig = {
   appId: "1:577116029205:web:659adeb7405b59ad21691c",
   measurementId: "G-RFFMNTE7XQ"
 };
-
-import ProtectedRoute from "./Components/Private/ProtectedRoute";
-
-
 function App() {
   // Initialize App
   const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
@@ -43,7 +39,6 @@ function App() {
       console.warn('Notifications are not supported in this browser.');
       return;
     }
-
     console.log('Requesting permission...');
     try {
       const permission = await Notification.requestPermission();
@@ -68,6 +63,7 @@ function App() {
     }
     return true;
   }
+  //function lock
   useEffect(() => {
     requestPermission();
     // Foreground notification listener
@@ -109,8 +105,8 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Sign />}></Route>
-        
-          <Route path="/home" element={   <ProtectedRoute><Home /></ProtectedRoute>}></Route>
+
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>}></Route>
           <Route path="/reset" element={<ProtectedRoute><Reset /></ProtectedRoute>}></Route>
           <Route path="/verify" element={<ProtectedRoute><Verify /></ProtectedRoute>}></Route>
           <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>}></Route>
