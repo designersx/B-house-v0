@@ -62,7 +62,7 @@ const Comments = ({ documentId }) => {
   return (
     <div className={styles.threadContainer}>
       <div className={styles.header}>
-        <p><b>Comments</b></p>
+    
       </div>
 
       <div className={styles.messages}>

@@ -110,7 +110,7 @@ const Chart = () => {
           <div className={styles.cashflowMessage}>
             <img src='Svg/cashFlow.svg' alt=''/>
            <div className={styles.cashFlowTextMain }>
-            <p className={styles.cashflowTitle }><b>Cashflow Looks Good!</b></p>
+            <p className={styles.cashflowTitle }>Cashflow Looks Good!</p>
             <p className={styles.cashflowText}>You're managing it well, stay consistent!</p>
            </div>
 

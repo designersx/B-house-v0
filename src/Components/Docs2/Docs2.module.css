@@ -148,6 +148,7 @@
     font-size: 14px;
     display: inline-block;
     max-width: 70%;
+    word-break: break-all;
 }
 
 .userBubble {
@@ -159,6 +160,8 @@
     display: inline-block;
     max-width: 70%;
     text-align: left;
+    word-break: break-all;
+
 }
 
 .avatar {

@@ -127,8 +127,11 @@
     max-width: 70%;
     font-size: 14px;
     display: inline-block;
+    word-break: break-all;
 }
-
+.superadmin{
+    font-size: 10px;
+}
 .right {
     align-self: flex-end;
     text-align: right;
@@ -143,6 +146,7 @@
     font-size: 14px;
     display: inline-block;
     text-align: left;
+    word-break: break-all;
 }
 
 .timestamp {
@@ -150,7 +154,7 @@
     font-weight: 500;
     color: #26211F;
     margin-top: 4px;
-    padding-left: 4px;
+    /* padding-left: 4px; */
     text-transform: uppercase;
 }
 
