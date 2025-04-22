@@ -23,6 +23,8 @@ const TeamMembers = () => {
   const [commentText, setCommentText] = useState("");
   const customerInfo = JSON.parse(localStorage.getItem("customerInfo"));
   const selectedProject = JSON.parse(localStorage.getItem("selectedProject"));
+  const selectedProjectId = JSON.parse(localStorage.getItem("selectedProjectId"));
+  
   const messagesEndRef = React.useRef(null);
 
   const scrollToBottom = () => {
@@ -31,7 +33,7 @@ const TeamMembers = () => {
 
   const fetchCommentsForUser = async (userId) => {
     try {
-      const { data } = await axios.get(`${URL}/projects/${selectedProject.id}/user-comments/${userId}`);
+      const { data } = await axios.get(`${URL}/projects/${selectedProjectId}/user-comments/${userId}`);
       setUserComments(data);
       setTimeout(scrollToBottom, 100);
     } catch (err) {
@@ -49,7 +51,7 @@ const TeamMembers = () => {
         comment: commentText
       };
 
-      await axios.post(`${URL}/projects/${selectedProject.id}/user-comments`, payload);
+      await axios.post(`${URL}/projects/${selectedProjectId}/user-comments`, payload);
       setCommentText("");
       fetchCommentsForUser(selectedContact.id);
     } catch (err) {

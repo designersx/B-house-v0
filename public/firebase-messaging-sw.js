@@ -11,46 +11,6 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
-
-
-
-
-
-// messaging.onBackgroundMessage(function(payload) {
-//     console.log("onBackgroundMessage-------", payload);
-  
-//     // Extract title, body, and URL from the data object
-//     const notificationTitle = payload.data.title || 'Default Title';
-//     const notificationBody = payload.data.body || 'Default Body';
-//     const clickActionURL = payload.data.click_action || 'https://your-default-url.com/';
-  
-//     const notificationOptions = {
-//       body: notificationBody,
-//       icon: '/Svg/b-houseLogo.svg',
-//       data: {
-//         url: clickActionURL
-//       }
-//     };
-  
-//     return self.registration.showNotification(notificationTitle, notificationOptions);
-//   });
-  
-  
-// self.addEventListener('notificationclick', function (event) {
-//   const click_action = event.notification.data?.url;
-//   event.notification.close();
-
-//   event.waitUntil(
-//     clients.openWindow(click_action)
-//   );
-// });
-
-
-
-
-
-
-
 messaging.onBackgroundMessage(function(payload) {
     console.log("onBackgroundMessage-------", payload);
   

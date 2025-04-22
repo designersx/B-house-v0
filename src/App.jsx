@@ -29,7 +29,6 @@ function App() {
   };
   //Check User has Permission
   const requestPermission = async () => {
-    console.log('Requesting permission...');
     try {
       const permission = await Notification.requestPermission();
 
