@@ -228,7 +228,7 @@ const Docs2 = () => {
                                     <iframe 
                                     height="300px"
                                     width="100%"
-                                    src={`${url2}${selectedDoc?.fileUrl}`} />
+                                    src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />
                                     {/* <div onClick={handleDoc}>View PDF</div> */}
 
                                 </>
