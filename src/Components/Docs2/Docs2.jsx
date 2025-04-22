@@ -36,7 +36,7 @@ const Docs2 = () => {
         if (windowsPath.startsWith("/")) {
             windowsPath = windowsPath.substring(1);
         }
-        windowsPath = windowsPath.replace(/\//g, '\\');
+        // windowsPath = windowsPath.replace(/\//g, '\\');
 
      
         const titleToCategory = {
