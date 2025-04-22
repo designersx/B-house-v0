@@ -24,7 +24,9 @@ const iconMap = {
 };
 
 function Docs() {
-  const [activeTab, setActiveTab] = useState('JENNY WILSON');
+  const customer = JSON.parse(localStorage.getItem('customerInfo'));
+  const customerName = customer?.full_name || "My Docs";
+  const [activeTab, setActiveTab] = useState(customerName);
   const [docsData, setDocsData] = useState([]);
   const fileInputRef = useRef(null);
   const [currentDocType, setCurrentDocType] = useState('');
@@ -32,8 +34,7 @@ function Docs() {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const customer = JSON.parse(localStorage.getItem('customerInfo'));
-  const customerName = customer?.full_name || "My Docs";
+ 
 
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));

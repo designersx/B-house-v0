@@ -9,6 +9,21 @@ import Loader from '../../Loader/Loader'
 function Proposal() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
+  const [docData ,  setDocsData] = useState()
+  const fetchDocs = async () => {
+    const id = JSON.parse(localStorage.getItem('selectedProjectId'));
+    try {
+      const res = await axios.get(`${URL}/customerDoc/document/${id}`);
+      setDocsData(res.data || []);
+      console.log(res.data  , "data" )
+    } catch (err) {
+      console.error('Failed to fetch documents:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchDocs();
+  }, []);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -17,7 +32,7 @@ function Proposal() {
       id: 1,
       img: "/Svg/docs.svg",
       label: "Docs",
-      count: "08",
+      count: `0${docData?.length}`,
       color: "#015369",
       colorSmall: "#015369",
     },
@@ -101,7 +116,6 @@ function Proposal() {
     localStorage.setItem("selectedProjectId", projectId);
 
   };
- 
 
   return (
     <>

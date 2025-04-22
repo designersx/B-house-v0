@@ -9,8 +9,21 @@ function ProjectOverView({ selectedProject }) {
   const [project, setProject] = useState(null);
   const [leadTimeDays, setLeadTimeDays] = useState(0);
   const [punchList, setPunchList] = useState([]);
+const [docData ,  setDocsData] = useState()
+  const fetchDocs = async () => {
+    const id = JSON.parse(localStorage.getItem('selectedProjectId'));
+    try {
+      const res = await axios.get(`${URL}/customerDoc/document/${id}`);
+      setDocsData(res.data || []);
+      console.log(res.data  , "data" )
+    } catch (err) {
+      console.error('Failed to fetch documents:', err);
+    }
+  };
 
-
+  useEffect(() => {
+    fetchDocs();
+  }, []);
   useEffect(() => {
     const fetchProject = async () => {
       const projectId = localStorage.getItem("selectedProjectId");
@@ -151,12 +164,12 @@ function ProjectOverView({ selectedProject }) {
             <div className={styles.docStyle}>
               <img src="/Svg/UploadDocument.svg" alt="Document" className={styles.docImage} />
               <div>
-                <p className={styles.docTitle}>04 / 05 Document Received</p>
+                <p className={styles.docTitle}> 0{docData?.length}/05 Document Received</p>
                 <p className={styles.docSubtitle}>Upload latest COI document ASAP!</p>
               </div>
             </div>
             <button className={styles.plusButton}>
-              <img src="/Svg/PlusIcon.svg" alt="Add" className={styles.docImage} />
+              <img onClick={()=>navigate('/docs')} src="/Svg/PlusIcon.svg" alt="Add" className={styles.docImage} />
             </button>
           </div>
         </div>
