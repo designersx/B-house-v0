@@ -53,6 +53,7 @@
     margin: 0;
     color: #26211F;
     text-align: start;
+    word-break: break-all;
 
   }
 
@@ -62,6 +63,8 @@
     margin: 0;
     color: #26211F;
     text-align: start;
+    word-break: break-all;
+
   }
 
   .bigTextbox span{
@@ -146,7 +149,7 @@
     border-bottom-right-radius: 32px;
     border-bottom-left-radius: 6px;
     margin-top: 10px;
-    border-left: 2px solid #004680;
+    border-left: 3px solid #004680;
     
   }
   

@@ -133,11 +133,13 @@ function Proposal() {
           value={selectedProjectId || ""}
           onChange={handleProjectChange}
         >
-          {projects.map((proj) => (
-            <option key={proj.id} value={proj.id}>
-              {proj.name}
-            </option>
-          ))}
+        {projects
+  .filter((proj) => proj.status !== "Archived")
+  .map((proj) => (
+    <option key={proj.id} value={proj.id}>
+      {proj.name}
+    </option>
+))}
         </select>
       </div>
 

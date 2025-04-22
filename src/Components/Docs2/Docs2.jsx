@@ -36,7 +36,7 @@ const Docs2 = () => {
         if (windowsPath.startsWith("/")) {
             windowsPath = windowsPath.substring(1);
         }
-        windowsPath = windowsPath.replace(/\//g, '\\');
+        // windowsPath = windowsPath.replace(/\//g, '\\');
 
      
         const titleToCategory = {
@@ -215,7 +215,7 @@ const Docs2 = () => {
                       </p>
             </div>
 
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="90vh">
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="95vh">
                 <div className={styles.modalInner}>
                     <h2 className={styles.modalTitle}>{selectedDoc?.title}</h2>
 
@@ -226,7 +226,7 @@ const Docs2 = () => {
                                     {/* <img src="Svg/pdf.svg" alt="PDF" /> */}
 
                                     <iframe 
-                                    height="300px"
+                                    height="400px"
                                     width="100%"
                                     src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />
                                     {/* <div onClick={handleDoc}>View PDF</div> */}
