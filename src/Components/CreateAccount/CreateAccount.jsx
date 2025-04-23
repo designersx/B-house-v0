@@ -30,6 +30,7 @@ const validateField = (name, value) => {
   const nameRegex = /^[a-zA-Z\s]+$/;
   const phoneRegex = /^\d{10}$/;
   const companyRegex = /^[a-zA-Z0-9\s]+$/;
+  const emojiRegex = /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu;
 
   switch (name) {
     case "fullName":
@@ -42,11 +43,10 @@ const validateField = (name, value) => {
       else if (!/\S+@\S+\.\S+/.test(value)) message = "Invalid email address.";
       break;
 
-      case "phone":
-        if (!value.trim()) message = "Phone number is required.";
-        else if (!phoneRegex.test(value)) message = "Phone number must be exactly 10 digits.";
-        break;
-      
+    case "phone":
+      if (!value.trim()) message = "Phone number is required.";
+      else if (!phoneRegex.test(value)) message = "Phone number must be exactly 10 digits.";
+      break;
 
     case "companyName":
       if (!value.trim()) message = "Company name is required.";
@@ -56,6 +56,7 @@ const validateField = (name, value) => {
     case "description":
       if (!value.trim()) message = "Description is required.";
       else if (value.length < 10) message = "Minimum 10 characters required.";
+      else if (emojiRegex.test(value)) message = "Emojis are not allowed in the description.";
       break;
 
     case "address":
@@ -68,6 +69,7 @@ const validateField = (name, value) => {
 
   setErrors((prev) => ({ ...prev, [name]: message }));
 };
+
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -169,7 +171,7 @@ const handleSubmit = async (e) => {
           />
           {errors.companyName && <p className={styles.error}>{errors.companyName}</p>}
 
-          <label>Description</label>
+          <label>Description<span className={styles.required}>*</span></label>
           <textarea
             className={styles.textarea}
             name="description"

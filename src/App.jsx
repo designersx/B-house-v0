@@ -129,13 +129,13 @@ function App() {
           <Route path="/" element={<Sign />}></Route>
 
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>}></Route>
-          <Route path="/reset" element={<ProtectedRoute><Reset /></ProtectedRoute>}></Route>
-          <Route path="/verify" element={<ProtectedRoute><Verify /></ProtectedRoute>}></Route>
+          <Route path="/reset" element={<Reset />}></Route>
+          <Route path="/verify" element={<Verify />}></Route>
           <Route path="/edit-profile" element={<ProtectedRoute><EditProfile /></ProtectedRoute>}></Route>
           <Route path="/team" element={<ProtectedRoute><TeamMembers /></ProtectedRoute>}></Route>
-          <Route path="/create-account" element={<ProtectedRoute><CreateAccount /></ProtectedRoute>}></Route>
+          <Route path="/create-account" element={<CreateAccount />}></Route>
           <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>}></Route>
-          <Route path="/forget" element={<ProtectedRoute><Forget /></ProtectedRoute>}></Route>
+          <Route path="/forget" element={<Forget />}></Route>
           <Route path="/invoice" element={<ProtectedRoute><InvoicePage /></ProtectedRoute>}></Route>
           <Route path="/docs" element={<ProtectedRoute><DocsPage /></ProtectedRoute>}></Route>
           <Route path="/punchlist" element={<ProtectedRoute><PunchPage /></ProtectedRoute>}></Route>
