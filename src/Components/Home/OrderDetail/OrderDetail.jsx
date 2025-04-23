@@ -5,10 +5,7 @@ import styles from "./OrderDetail.module.css";
 function OrderDetail() {
   const location = useLocation();
   const navigate = useNavigate();
-
   const order = location.state;
-
-console.log("Order Detail:", order);
   if (!order) {
     navigate("/", { replace: true });
     return null;
