@@ -5,12 +5,14 @@ import axios from "axios";
 import URL from "../../config/api";
 import { getFcmToken } from "../../../src/firebase/getFCMToken/getToken";
 import { sendFcmToken } from "../../../src/firebase/sendFcmTokenToDb/sendFcmToDb";
+import Loader from "../Loader/Loader";
 const Sign = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading,setLoading]=useState(false)
   const navigate = useNavigate();
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
@@ -25,6 +27,7 @@ const Sign = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const response = await axios.post(`${URL}/customer/login`, {
         email,
         password,
@@ -38,19 +41,25 @@ const Sign = () => {
         //save Fcm
         const FCM_Token = await getFcmToken();
         await sendFcmToken(FCM_Token,customer.id)
+        setLoading(false)
       } else {
         localStorage.removeItem("savedEmail");
         localStorage.removeItem("savedPassword");
         //save Fcm
         const FCM_Token = await getFcmToken();
         await sendFcmToken(FCM_Token,customer.id)
+        setLoading(false)
       }
       if (firstLogin) {
+        setLoading(false)
         navigate("/reset");
+        
       } else {
+        setLoading(false)
         navigate("/home");
       }
     } catch (err) {
+      setLoading(false)
       console.error("Login error:", err);
       setError(err.response?.data?.message || "Login failed");
     }
@@ -123,7 +132,8 @@ const Sign = () => {
           </div>
 
           <button type="submit" className={styles.signInButton}>
-            Sign In
+            {loading? <Loader size={20}/>: "Sign In"}
+            
           </button>
         </form>
         <p className={styles.registerText}>

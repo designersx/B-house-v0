@@ -92,6 +92,16 @@ function App() {
   //       });
   //   }
   // }, [messaging]);
+  useEffect(() => {
+    if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          console.log('Permission granted!HY DOSTO');
+        }
+      });
+    }
+  }, []);
+
 
   onMessage(messaging, (payload) => {
     const title = payload.data.title || 'New Notification';
