@@ -26,7 +26,19 @@ body {
   margin: 0;
 }
 
-
+:root {
+  color-scheme: only light !important;
+}
+    
+    #my-onlylight-element {
+  color-scheme: only light;
+}
+    
+    @media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: light;
+    }
+}
 
 @media (prefers-color-scheme: light) {
   :root {
