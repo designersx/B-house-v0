@@ -55,7 +55,7 @@ const CommentThread = ({ issue }) => {
   return (
     <div className={styles.threadContainer}>
       <div className={styles.header}>
-        <p><b>{issue.category} – </b>{issue.issueDescription}</p>
+        <p><b>Comments History</b></p>
       </div>
       <div className={styles.messages}>
         {[...comments].reverse().map((msg, index) => (

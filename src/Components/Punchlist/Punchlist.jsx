@@ -66,13 +66,13 @@ function Punchlist() {
 
   return (
     <div className={styles.container}>
-      {loading ? <Loader /> : issues.length < 0 ? (
+      {loading ? <Loader /> : issues.length <= 0 ? (
         <div className={styles.noData}>
           <div><img src="Svg/notfound.svg" alt="" />
             <div className={styles.NoDataTittle}><p>No items found yet</p><img src="Svg/EYE1.svg" alt="" /></div></div>
         </div>
       ) : (
-        issues.map((issue, index) => (
+        issues?.map((issue, index) => (
 
           <div key={index} className={styles.card} onClick={() => navigate('/punchlist-detail', {
             state: {

@@ -116,7 +116,7 @@ const Onboarding = () => {
 
     return (
       <span>
-        <span className={styles.day}>{day} </span> 
+        <span className={styles.day}>{day} </span>
         <span className={styles.month}>{month}</span>
       </span>
     );
@@ -259,7 +259,7 @@ const Onboarding = () => {
             {openModalIndex === 0 && (
               <>
                 <div className={styles.formGroup}>
-                  <label>Delivery Address*</label>
+                  <label>Project Address*</label>
                   <input
                     type="text"
                     placeholder="Write delivery address"
@@ -269,7 +269,7 @@ const Onboarding = () => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label>Delivery Hours*</label>
+                  <label>Project Hours*</label>
                   <select
                     value={deliveryHours}
                     onChange={(e) => {
@@ -298,6 +298,47 @@ const Onboarding = () => {
             )}
 
             {openModalIndex === 1 && (
+               <>
+               <div className={styles.formGroup}>
+                 <label>Delivery Address*</label>
+                 <input
+                   type="text"
+                   placeholder="Write delivery address"
+                   value={deliveryAddress}
+                   onChange={(e) => setDeliveryAddress(e.target.value)}
+                 />
+               </div>
+
+               <div className={styles.formGroup}>
+                 <label>Delivery Hours*</label>
+                 <select
+                   value={deliveryHours}
+                   onChange={(e) => {
+                     setDeliveryHours(e.target.value);
+                     if (e.target.value !== "Other") setCustomHours('');
+                   }}
+                 >
+                   <option>Regular Hours</option>
+                   <option>Before 9 AM</option>
+                   <option>After 6 PM</option>
+                   <option>Other</option>
+                 </select>
+               </div>
+
+               {deliveryHours === "Other" && (
+                 <div className={styles.formGroup}>
+                   <label>Other</label>
+                   <textarea
+                     placeholder="Enter custom hours"
+                     value={customHours}
+                     onChange={(e) => setCustomHours(e.target.value)}
+                   />
+                 </div>
+               )}
+             </>
+            )}
+
+            {openModalIndex === 2 && (
               <>
                 <div className={styles.formGroup}>
                   <label>Insurance Provider Names*</label>

@@ -1,3 +1,12 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    margin-bottom: 4rem;
+    word-break: break-all;
+}
+
 .contactList {
     width: 100%;
     max-width: 600px;
@@ -203,3 +212,44 @@
 .commentButton:hover {
     background-color: #d0e7fd;
 }
+.noData {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.noData>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+.NoDataTittle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 20px;
+    color: #5A6479;
+}
+
+.noData img:first-child {
+    animation: floatUpDown 3s ease-in-out infinite;
+}@keyframes floatUpDown {
+
+    0%,
+    100% {
+        transform: translateY(-20px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+

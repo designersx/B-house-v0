@@ -20,18 +20,18 @@ function PunchListDetail() {
       try {
         const res = await axios.get(`${URL}/punch-list/${punchId}`);
         const data = res.data;
-    
+
         // Make sure productImages is an array
         data.productImages = Array.isArray(data.productImages)
           ? data.productImages
           : JSON.parse(data.productImages || '[]');
-    
+
         setPunchItem(data);
       } catch (err) {
         console.error("Error fetching punch item details:", err);
       }
     };
-    
+
     if (punchId) {
       fetchPunchItem();
     }
@@ -65,16 +65,15 @@ function PunchListDetail() {
                     <div className={styles.etd}>
                       <h5>STATUS</h5>
                       <h4
-  className={`${styles.statusBadge} ${
-    punchItem.status === 'Resolved'
-      ? styles.resolved
-      : punchItem.status === 'Rejected'
-      ? styles.rejected
-      : styles.pending
-  }`}
->
-  {punchItem.status}
-</h4>
+                        className={`${styles.statusBadge} ${punchItem.status === 'Resolved'
+                            ? styles.resolved
+                            : punchItem.status === 'Rejected'
+                              ? styles.rejected
+                              : styles.pending
+                          }`}
+                      >
+                        {punchItem.status}
+                      </h4>
 
                     </div>
                     <div className={styles.divider}></div>
@@ -86,13 +85,13 @@ function PunchListDetail() {
                 </div>
 
                 <div className={styles.orderInfo}>
-                {punchItem && (
-                  <div className={styles.orderDetails1}>
-                  <Slider images={punchItem.productImages} />
-                    <p className={styles.productName}>{punchItem.category}</p>
-                    <p className={styles.productUpdate1}>{punchItem.issueDescription}</p>
-                  </div>
-                )}
+                  {punchItem && (
+                    <div className={styles.orderDetails1}>
+                      <Slider images={punchItem.productImages} />
+                      <p className={styles.productName}>{punchItem.category}</p>
+                      <p className={styles.productUpdate1}>{punchItem.issueDescription}</p>
+                    </div>
+                  )}
                   <div className={styles.CutPicDesign}>
                     <img src="/Svg/CutPicDesign.svg" alt="Status" />
                   </div>
