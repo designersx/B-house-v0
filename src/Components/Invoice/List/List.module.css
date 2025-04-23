@@ -210,6 +210,7 @@
 
 .noData img:first-child {
   animation: floatUpDown 3s ease-in-out infinite;
+  width: 100px;
 }
 
 @keyframes floatUpDown {
