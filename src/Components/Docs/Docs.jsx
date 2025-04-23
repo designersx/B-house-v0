@@ -34,6 +34,7 @@ function Docs() {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedDocId, setSelectedDocId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDocTitle, setSelectedDocTitle] = useState('');
  
 
   const fetchDocs = async () => {
@@ -91,8 +92,9 @@ function Docs() {
     fileInputRef.current.click();
   };
 
-  const openCommentModal = (docId) => {
+  const openCommentModal = (docId,docTitle) => {
     setSelectedDocId(docId);
+    setSelectedDocTitle(docTitle);
     setIsModalOpen(true);
   };
 
@@ -156,7 +158,7 @@ function Docs() {
                     <div className={styles.editFlex}>
                       <img src="Svg/edit-icon.svg" alt="edit-icon" />
                       <p
-                        onClick={() => openCommentModal(foundDoc.id)}
+                        onClick={() => openCommentModal(foundDoc.id,doc)}
                         style={{ cursor: 'pointer' }}
                       >
                         Comment
@@ -167,7 +169,11 @@ function Docs() {
               </div>
             );
           })}
+          <p className={styles.note}>
+          If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
+        </p>
         </div>
+        
       ) : (
         <div className={styles.bHouseContent}>
           <Docs2 data={docsData} />
@@ -190,6 +196,7 @@ function Docs() {
       {/* Comment Modal */}
       {selectedDocId && (
         <Modal isOpen={isModalOpen} onClose={closeCommentModal} height="80%">
+         <h2 className={styles.modalTitle}>{selectedDocTitle}</h2>
           <Comments
             documentId={selectedDocId}
             customerId={JSON.parse(localStorage.getItem('customerId'))}

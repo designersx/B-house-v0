@@ -6,6 +6,7 @@ import axios from 'axios';
 import URL from '../../config/api';
 
 const onboardingItems = [
+  { img: 'Svg/project-address.svg', title: 'Project Address' },
   { img: 'Svg/delivery-hour.svg', title: 'Building Delivery Hours' },
   { img: 'Svg/sample-icon.svg', title: 'Building Sample (COI)' }
 ];

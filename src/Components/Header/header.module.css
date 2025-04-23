@@ -165,3 +165,11 @@
 .submitButton :hover {
     background-color: #004680;
 }
+
+
+/* Notifictaion */
+.notificationTitle{
+    color: #26211F;
+    padding: 16px;
+    font-size: 28px;
+}

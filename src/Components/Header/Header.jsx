@@ -23,24 +23,24 @@ function Header() {
 
   const [openOffcanvas, setOpenOffcanvas] = useState(false)
   const [notification, setNotification] = useState([])
-  const info=JSON.parse(localStorage.getItem("customerInfo"))
+  const info = JSON.parse(localStorage.getItem("customerInfo"))
 
-const [data , setData] = useState()
+  const [data, setData] = useState()
 
-useEffect(() => {
-  const fetchCustomer = async () => {
-    try {
-      const res = await axios.get(`${URL}/customer/${customerInfo?.id}`);
-      setData(res.data);
-   console.log(res.data , "data")
-      
-    } catch (err) {
-      console.error('Failed to fetch customer data:', err);
-    }
-  };
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const res = await axios.get(`${URL}/customer/${customerInfo?.id}`);
+        setData(res.data);
+        console.log(res.data, "data")
 
-  fetchCustomer();
-}, []);
+      } catch (err) {
+        console.error('Failed to fetch customer data:', err);
+      }
+    };
+
+    fetchCustomer();
+  }, []);
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
@@ -94,7 +94,7 @@ useEffect(() => {
   const handleOpenOffcanvas = () => {
     setOpenOffcanvas(true)
   }
-  const handleCloseOffcanvas = () => {setOpenOffcanvas(false);}
+  const handleCloseOffcanvas = () => { setOpenOffcanvas(false); }
 
   const getNotificationsByUser = async (id) => {
     const response = await axios.get(`${URL}/getNotificationsByClient/${id}`);
@@ -259,20 +259,24 @@ useEffect(() => {
         onClose={() => setShowModalSearch(false)}
         height="50%">
       </ModalSearch>
-      {openOffcanvas && <OffCanvas  onClose={handleCloseOffcanvas} isOpen={openOffcanvas}  >
+      {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="300px">
+        <h1 className={styles.notificationTitle}>Nitification</h1>
         {notification.map((message) => {
           return (
-            <><div className="notification-container">
-              <div className="notification-card">
-                <div className="notification-header">
-                  <span className="sender-name">{message.senderName}</span>
-                  <span className="notification-time">{formatNotificationTime(message.createdAt)}</span>
+            <>
+
+              <div className="notification-container">
+
+                <div className="notification-card">
+                  <div className="notification-header">
+                    <span className="sender-name">{message.senderName}</span>
+                    <span className="notification-time">{formatNotificationTime(message.createdAt)}</span>
+                  </div>
+                  <div className="notification-message">
+                    {message.message}
+                  </div>
                 </div>
-                <div className="notification-message">
-                  {message.message}
-                </div>
-              </div>
-            </div></>
+              </div></>
           )
         })}
 
