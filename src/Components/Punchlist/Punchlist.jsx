@@ -6,13 +6,14 @@ import CommentThread from "../CommentThread/CommentThread";
 import URL from "../../config/api";
 import { url2 } from "../../config/url";
 import { useNavigate } from 'react-router-dom';
+import Loader from "../Loader/Loader";
 
 function Punchlist() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIssue, setActiveIssue] = useState(null);
   const [issues, setIssues] = useState([]);
-
+  const [loading, setLoading] = useState(false)
   const projectId = localStorage.getItem("selectedProjectId");
 
   const handleCommentClick = (issue) => {
@@ -23,6 +24,7 @@ function Punchlist() {
   useEffect(() => {
     const fetchPunchList = async () => {
       try {
+        setLoading(true)
         const response = await axios.get(`${URL}/projects/${projectId}/punch-list`);
         const punchListData = response.data;
         const parsedIssues = punchListData.map(issue => ({
@@ -30,8 +32,10 @@ function Punchlist() {
           productImages: JSON.parse(issue.productImages)
         }));
         setIssues(parsedIssues);
+        setLoading(false)
       } catch (err) {
         console.error("Error fetching punch list:", err);
+        setLoading(false)
       }
     };
 
@@ -62,17 +66,17 @@ function Punchlist() {
 
   return (
     <div className={styles.container}>
-      {issues.length === 0 ? (
+      {loading ? <Loader /> : issues.length < 0 ? (
         <div className={styles.noData}>
-          <div><img src="Svg/notfound.svg" alt=""/>
-          <div className={styles.NoDataTittle}><p>No items found yet</p><img src="Svg/EYE1.svg" alt=""/></div></div>
+          <div><img src="Svg/notfound.svg" alt="" />
+            <div className={styles.NoDataTittle}><p>No items found yet</p><img src="Svg/EYE1.svg" alt="" /></div></div>
         </div>
       ) : (
         issues.map((issue, index) => (
 
-          <div key={index} className={styles.card} onClick={() => navigate('/punchlist-detail' ,   {
-            state : {
-              punchId : issue?.id
+          <div key={index} className={styles.card} onClick={() => navigate('/punchlist-detail', {
+            state: {
+              punchId: issue?.id
             }
           })}>
 
@@ -87,16 +91,16 @@ function Punchlist() {
               </span>
               <span className={styles.date}>{formatDate(issue.createdAt)}</span>
             </div>
-  
+
             <div className={styles.title}>
-            <div className={styles.title} title={issue.issueDescription}>
-  <b>{issue.category}</b> – {issue.issueDescription.length > 20 
-    ? `${issue.issueDescription.slice(0, 20)}...` 
-    : issue.issueDescription}
-</div>
+              <div className={styles.title} title={issue.issueDescription}>
+                <b>{issue.category}</b> – {issue.issueDescription.length > 20
+                  ? `${issue.issueDescription.slice(0, 20)}...`
+                  : issue.issueDescription}
+              </div>
 
             </div>
-  
+
             <div className={styles.flexD}>
               <div className={styles.imageRow}>
                 {issue.productImages.slice(0, 3).map((img, i) => (
@@ -112,13 +116,13 @@ function Punchlist() {
                   <div className={styles.moreImages}>+{issue.productImages.length - 3}</div>
                 )}
               </div>
-  
+
               <div className={styles.commentLink} onClick={() => handleCommentClick(issue)}>
                 <img src="Svg/edit-icon.svg" alt="edit" />
                 <p>Add Comment</p>
               </div>
             </div>
-  
+
             {issue.comments && (
               <div className={styles.commentBox}>
                 <div className={styles.userFlex}>
@@ -134,13 +138,13 @@ function Punchlist() {
           </div>
         ))
       )}
-  
+
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} height="80%">
         {activeIssue && <CommentThread issue={activeIssue} />}
       </Modal>
     </div>
   );
-  
+
 }
 
 export default Punchlist;

@@ -15,7 +15,6 @@ const [docData ,  setDocsData] = useState()
     try {
       const res = await axios.get(`${URL}/customerDoc/document/${id}`);
       setDocsData(res.data || []);
-      console.log(res.data  , "data" )
     } catch (err) {
       console.error('Failed to fetch documents:', err);
     }
@@ -75,11 +74,9 @@ const [docData ,  setDocsData] = useState()
 
   const visible = teamUsers.slice(0, 4);
   const remaining = teamUsers.length - 4;
-  console.log(remaining , "remiaing")
   JSON.stringify(localStorage.setItem("visible" , visible    ))
   JSON.stringify(localStorage.setItem("teamusers" , teamUsers    ))
         // JSON.stringify(localStorage.setItem( "remaining"  , ""  ))
-      console.log(teamUsers)
         JSON.stringify(localStorage.setItem("remaining" , remaining   ))
    
   return (

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import URL from '../../config/api';
 import { url2 } from '../../config/url';
+import { deleteFcmToken } from '../../utils/deleteFcmToken';
 
 function Header() {
   const navigate = useNavigate();
@@ -20,7 +21,6 @@ function Header() {
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryHours, setDeliveryHours] = useState('');
   const [customHours, setCustomHours] = useState('');
-
   const [openOffcanvas, setOpenOffcanvas] = useState(false)
   const [notification, setNotification] = useState([])
   const info = JSON.parse(localStorage.getItem("customerInfo"))
@@ -62,11 +62,12 @@ function Header() {
   }, [projectId]);
 
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem('customerToken');
     localStorage.removeItem('customerInfo');
     localStorage.removeItem('selectedProject');
     localStorage.removeItem('selectedProjectId');
+    await deleteFcmToken(customerInfo.id)
     navigate('/');
   };
   const handleEdit = () => {
@@ -260,13 +261,11 @@ function Header() {
         height="50%">
       </ModalSearch>
       {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="300px">
-        <h1 className={styles.notificationTitle}>Nitification</h1>
+        <h1 className={styles.notificationTitle}>Notification</h1>
         {notification.map((message) => {
           return (
             <>
-
               <div className="notification-container">
-
                 <div className="notification-card">
                   <div className="notification-header">
                     <span className="sender-name">{message.senderName}</span>
@@ -279,8 +278,8 @@ function Header() {
               </div></>
           )
         })}
-
       </OffCanvas>}
+
     </div>
   );
 }
