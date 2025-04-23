@@ -135,7 +135,7 @@ function App() {
           <Route path="/team" element={<ProtectedRoute><TeamMembers /></ProtectedRoute>}></Route>
           <Route path="/create-account" element={<CreateAccount />}></Route>
           <Route path="/onboarding" element={<ProtectedRoute><Onboarding /></ProtectedRoute>}></Route>
-          <Route path="/forget" element={<ProtectedRoute><Forget /></ProtectedRoute>}></Route>
+          <Route path="/forget" element={<Forget />}></Route>
           <Route path="/invoice" element={<ProtectedRoute><InvoicePage /></ProtectedRoute>}></Route>
           <Route path="/docs" element={<ProtectedRoute><DocsPage /></ProtectedRoute>}></Route>
           <Route path="/punchlist" element={<ProtectedRoute><PunchPage /></ProtectedRoute>}></Route>
