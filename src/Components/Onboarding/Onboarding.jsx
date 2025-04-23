@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from '../Onboarding/Onboarding.module.css';
 import Modal from '../Modal/Modal';
 import { useNavigate } from 'react-router-dom';
@@ -73,6 +73,64 @@ const Onboarding = () => {
     }
   };
 
+  const inputRef = useRef(null);
+  const [deliveryDate, setDeliveryDate] = useState("");
+  const [rangeValue, setRangeValue] = useState(0);
+
+  useEffect(() => {
+    const today = new Date();
+    const iso = today.toISOString().split("T")[0];
+    setDeliveryDate(iso);
+    setRangeValue(getDayDiffFromToday(iso));
+  }, []);
+
+  const openCalendar = () => {
+    try {
+      inputRef.current?.showPicker?.();
+    } catch {
+      inputRef.current?.click();
+    }
+  };
+
+  const handleDateChange = (e) => {
+    const newDate = e.target.value;
+    setDeliveryDate(newDate);
+    setRangeValue(getDayDiffFromToday(newDate));
+  };
+
+  const handleRangeChange = (e) => {
+    const daysToAdd = parseInt(e.target.value, 10);
+    const today = new Date();
+    today.setDate(today.getDate() + daysToAdd);
+    const newDate = today.toISOString().split("T")[0];
+    setDeliveryDate(newDate);
+    setRangeValue(daysToAdd);
+  };
+
+  const formatDate2 = (dateStr) => {
+    const date = new Date(dateStr);
+    const formattedDate = date.toLocaleDateString("en-GB", { day: '2-digit', month: 'short' });
+
+    // Split the formatted date into day and month
+    const [day, month] = formattedDate.split(' ');
+
+    return (
+      <span>
+        <span className={styles.day}>{day} </span> 
+        <span className={styles.month}>{month}</span>
+      </span>
+    );
+  };
+
+
+
+  const getDayDiffFromToday = (dateStr) => {
+    const today = new Date();
+    const given = new Date(dateStr);
+    return Math.round((given - today) / (1000 * 60 * 60 * 24));
+  };
+
+
   return (
     <div className={styles.OnboardingMain}>
       <div className={styles.headerPart}>
@@ -87,30 +145,85 @@ const Onboarding = () => {
       </div>
 
       <div className={styles.bodyMain}>
-       {onboardingItems.map((item, index) => {
-  const isCompleted = completedSteps.includes(index);
 
-  return (
-    <div
-      key={index}
-      className={`
+        <div className={styles.dateDiv}>
+          <p className={styles.title}>Select Desired Delivery Date</p>
+
+          <div className={styles.flexrange}>
+            <div className={styles.range}>
+              <input
+                type="range"
+                min="0"
+                max="365"
+                value={rangeValue}
+                onChange={handleRangeChange}
+                className={styles.rangeInput}
+              />
+              <div
+                className={styles.selectedDate}
+                style={{
+                  left: `calc(${(rangeValue / 365) * 85}%`,
+                  transform:
+                    rangeValue === 0
+                      ? "translateX(0%)"
+                      : rangeValue === 365
+                        ? "translateX(0%)"
+                        : "translateX(0%)",
+                }}
+              >
+                <p className={styles.dateP}>
+                  {formatDate2(deliveryDate)}
+                </p>
+
+              </div>
+            </div>
+
+
+            <div className={styles.datePickerWrapper}>
+              <label htmlFor="deliveryDate" className={styles.label} onClick={openCalendar}>
+                <img src="Svg/calendar-icon.svg" alt="Calendar Icon" />
+              </label>
+              <p>  Date Picker</p>
+
+
+              <input
+                type="date"
+                id="deliveryDate"
+                name="deliveryDate"
+                ref={inputRef}
+                value={deliveryDate}
+                onChange={handleDateChange}
+                className={styles.dateInput}
+              />
+            </div>
+          </div>
+        </div>
+
+
+        {onboardingItems.map((item, index) => {
+          const isCompleted = completedSteps.includes(index);
+
+          return (
+            <div
+              key={index}
+              className={`
         ${styles.bodypart}
         ${!isCompleted ? styles.pendingStepBorder : ''}
         ${isCompleted ? styles.completedStepBorder : ''}
       `}
-    >
-      <div className={styles.FlexDiv}>
-        <div className={`${styles.iconLogo} ${isCompleted ? styles.completedStep : ''}`}>
-          <img src={item.img} alt='' />
-        </div>
-        <div><h2>{item.title}</h2></div>
-      </div>
-      <div onClick={() => setOpenModalIndex(index)} style={{ cursor: 'pointer' }}>
-        <img src={isCompleted ? 'Svg/done.svg' : 'Svg/start.svg'} alt='icon' />
-      </div>
-    </div>
-  );
-})}
+            >
+              <div className={styles.FlexDiv}>
+                <div className={`${styles.iconLogo} ${isCompleted ? styles.completedStep : ''}`}>
+                  <img src={item.img} alt='' />
+                </div>
+                <div><h2>{item.title}</h2></div>
+              </div>
+              <div onClick={() => setOpenModalIndex(index)} style={{ cursor: 'pointer' }}>
+                <img src={isCompleted ? 'Svg/done.svg' : 'Svg/start.svg'} alt='icon' />
+              </div>
+            </div>
+          );
+        })}
 
 
         <div className={styles.bodypart2}>
