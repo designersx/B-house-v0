@@ -4,7 +4,8 @@ import Modal from '../Modal/Modal';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import URL from '../../config/api';
-
+import { url2 } from '../../config/url';
+import Loader from '../Loader/Loader';
 const onboardingItems = [
   { img: 'Svg/project-address.svg', title: 'Project Address' },
   { img: 'Svg/delivery-hour.svg', title: 'Building Delivery Hours' },
@@ -23,31 +24,64 @@ const Onboarding = () => {
   const [deliveryHours, setDeliveryHours] = useState('');
   const [customHours, setCustomHours] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-
+  const [projects, setProjects] = useState([]);
+    const [docsData, setDocsData] = useState([]);
+const [docFile , setDocFile] = useState()
   // Fetch project data
   useEffect(() => {
     const fetchProject = async () => {
       try {
         const res = await axios.get(`${URL}/projects/client/${clientId}`);
-        const project = res.data[0];
-        if (!project) return;
-
-        setProjectId(project.id);
-        const full = await axios.get(`${URL}/projects/${project.id}`);
-        const data = full.data;
-
-        setDeliveryAddress(data.deliveryAddress || '');
-        setDeliveryHours(data.deliveryHours || '');
-        setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(data.deliveryHours) ? '' : data.deliveryHours);
-        setSelectedDate(data.estimatedCompletion?.split('T')[0] || selectedDate);
+        const allProjects = res.data;
+  
+        if (!allProjects.length) return;
+  
+        setProjects(allProjects); // Store all projects
+        const firstProject = allProjects[0];
+  
+        setProjectId(firstProject.id); // Default select first project
+        fetchProjectDetails(firstProject.id);
       } catch (err) {
-        console.error('Error fetching project:', err);
+        console.error('Error fetching projects:', err);
       }
     };
-
+  
     if (clientId) fetchProject();
   }, [clientId]);
+  const [laoding , setLoading] = useState(false)
+    const fetchDocs = async () => {
+      setLoading(true)
+    const id = projectId;
+    try {
+      const res = await axios.get(`${URL}/customerDoc/document/${id}`);
+      setDocsData(res.data || []);
+      const sampleCOIDoc = res.data.find(doc => doc.documentType === "Sample COI");
+      setDocFile(sampleCOIDoc?.filePath)
+      console.log(sampleCOIDoc , "sample")
+    } catch (err) {
+      console.error('Failed to fetch documents:', err);
+    }
+    finally{
+      setLoading(false)
+    }
+  };
 
+  useEffect(() => {
+    fetchDocs();
+  }, [openModalIndex]);
+  const fetchProjectDetails = async (id) => {
+    try {
+      const full = await axios.get(`${URL}/projects/${id}`);
+      const data = full.data;
+  
+      setDeliveryAddress(data.deliveryAddress || '');
+      setDeliveryHours(data.deliveryHours || '');
+      setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(data.deliveryHours) ? '' : data.deliveryHours);
+      setSelectedDate(data.estimatedCompletion?.split('T')[0] || selectedDate);
+    } catch (err) {
+      console.error('Error fetching project details:', err);
+    }
+  };
   const formatDate = (dateStr) => {
     if (!dateStr) return '';
     return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -129,7 +163,29 @@ const Onboarding = () => {
     const given = new Date(dateStr);
     return Math.round((given - today) / (1000 * 60 * 60 * 24));
   };
+  const [file, setFile] = useState(null);
+  const handleUploadDoc = async () => {
+    if (!file) {
+      alert("Please select a file");
+      return;
+    }
 
+    const formData = new FormData();
+    formData.append("document", file);
+    formData.append("projectId", projectId); 
+    formData.append("documentType", "Sample COI");
+
+    try {
+      const response = await axios.post(`${URL}/customerDoc/add`, 
+         formData
+      );
+      alert("File uploaded successfully!");
+    
+    } catch (err) {
+      console.error("Upload failed", err);
+      alert("Upload failed!");
+    }
+  };
 
   return (
     <div className={styles.OnboardingMain}>
@@ -196,6 +252,21 @@ const Onboarding = () => {
                 className={styles.dateInput}
               />
             </div>
+
+            <select
+  value={projectId}
+  onChange={(e) => {
+    const selectedId = e.target.value;
+    setProjectId(selectedId);
+    fetchProjectDetails(selectedId);
+  }}
+>
+  {projects.map((project) => (
+    <option key={project.id} value={project.id}>
+      {project.name}
+    </option>
+  ))}
+</select>
           </div>
         </div>
 
@@ -219,7 +290,7 @@ const Onboarding = () => {
                 <div><h2>{item.title}</h2></div>
               </div>
               <div onClick={() => setOpenModalIndex(index)} style={{ cursor: 'pointer' }}>
-                <img src={isCompleted ? 'Svg/done.svg' : 'Svg/start.svg'} alt='icon' />
+                <img onClick={fetchDocs} src={isCompleted ? 'Svg/done.svg' : 'Svg/start.svg'} alt='icon' />
               </div>
             </div>
           );
@@ -343,7 +414,7 @@ const Onboarding = () => {
 
             {openModalIndex === 2 && (
               <>
-                <div className={styles.formGroup}>
+                {/* <div className={styles.formGroup}>
                   <label>Insurance Provider Names*</label>
                   <select>
                     <option>Ex-UnitedHealth Group</option>
@@ -351,22 +422,40 @@ const Onboarding = () => {
                     <option>BlueCross BlueShield</option>
                     <option>Cigna</option>
                   </select>
-                </div>
+                </div> */}
 
                 <div className={styles.formGroup}>
-                  <label>Upload COI Document</label>
-                  <input type="file" />
+                  {laoding ? <Loader/>: <>
+                    {docFile ? 
+                 <iframe 
+                                                     height="300px"
+                                                     width="100%"
+                                                     src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${docFile}`)}&embedded=true`} /> :
+                  <>
+                    <label>Upload COI Document</label>
+                  <input
+        type="file"
+        accept=".pdf,.doc,.docx,.jpg,.png"
+        onChange={(e) => setFile(e.target.files[0])}
+      />
+                  </>
+                
+                }
+                  </>}
+                 
+                  
+      
                 </div>
 
-                <div className={styles.formGroup}>
+                {/* <div className={styles.formGroup}>
                   <label>Comments or Notes</label>
                   <textarea placeholder="Leave your thought here" />
-                </div>
+                </div> */}
               </>
             )}
           </div>
 
-          <button onClick={handleSubmit} className={styles.submitButton}>Update</button>
+          <button onClick={ openModalIndex ==1 ? handleSubmit:handleUploadDoc} className={styles.submitButton}>{openModalIndex ==1 || (!docFile && openModalIndex==2) ? "Update" : null}</button>
         </Modal>
       )}
     </div>
