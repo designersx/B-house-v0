@@ -78,10 +78,13 @@ function Proposal() {
         const res = await axios.get(`${URL}/projects/client/${customer.id}`);
         const projectsData = res.data || [];
         setProjects(projectsData);
+        // Store all project IDs in localStorage
+        const allProjectIds = projectsData.map(project => project.id);
+        localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
         // Check if a previously selected project exists
         if (storedProjectId) {
           const matched = projectsData.find(p => p.id.toString() === storedProjectId);
-          console.log(matched.id,"MATCH DATA")
+          console.log(matched.id, "MATCH DATA")
           if (matched) {
             setSelectedProjectId(matched.id);
             setSelectedProject(matched);
