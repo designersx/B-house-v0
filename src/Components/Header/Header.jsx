@@ -270,7 +270,7 @@ function Header() {
         onClose={() => setShowModalSearch(false)}
         height="50%">
       </ModalSearch>
-      {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="450px">
+      {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="100%">
         <h1 className={styles.notificationTitle}>Notification</h1>
         {notification.map((message) => {
           const cardStyle = {
