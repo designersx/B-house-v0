@@ -10,6 +10,7 @@ import axios from 'axios';
 import URL from '../../config/api';
 import { url2 } from '../../config/url';
 import { deleteFcmToken } from '../../utils/deleteFcmToken';
+import NotificationView from '../NotificationModal/NotificationView';
 function Header() {
   const navigate = useNavigate();
   const [showCanvas, setShowCanvas] = useState(false);
@@ -23,7 +24,9 @@ function Header() {
   const [openOffcanvas, setOpenOffcanvas] = useState(false)
   const [notification, setNotification] = useState([])
   const [data, setData] = useState()
-  const [unreadNotification,setUnreadNotification]=useState()
+  const [unreadNotification, setUnreadNotification] = useState()
+  const [message, setMessage] = useState("")
+  const handleCloseOffcanvas = () => { setOpenOffcanvas(false); }
   const handleLogout = async () => {
     localStorage.removeItem('customerToken');
     localStorage.removeItem('customerInfo');
@@ -54,22 +57,26 @@ function Header() {
   };
   const handleOpenOffcanvas = () => {
     setOpenOffcanvas(true)
-    fetchNotification()
   }
-  const handleCloseOffcanvas = () => { setOpenOffcanvas(false); }
-  const getNotificationsByProjectId = async (id) => {
-    const response = await axios.get(`${URL}/getNotificationsByProjectId/${id}`);
+  const getNotificationsByProjectId = async (ids) => {
+    const response = await axios.get(`${URL}/getNotificationWithMultipleProjectId`, {
+      params: {
+        projectIds: ids // this should be an array
+      }
+    });
+
     return response
   }
   const fetchNotification = async () => {
-    const updatedProjectId = localStorage.getItem('selectedProjectId')
+    const allProjectIds = JSON.parse(localStorage.getItem('allProjectIds'))
+    console.log(allProjectIds, "HELLO")
     try {
-      // user_id
-      const response = await getNotificationsByProjectId(updatedProjectId)
+      const response = await getNotificationsByProjectId(allProjectIds)
       console.log(response)
       const filterNotificationWithRole = response.data.notifications.filter((item) => item.role == "customer")
-      setNotification(filterNotificationWithRole)
-      setUnreadNotification(filterNotificationWithRole.length)
+      setNotification(filterNotificationWithRole.reverse())
+      const unread = filterNotificationWithRole.filter(n => !n.isRead);
+      setUnreadNotification(unread.length)
     } catch (error) {
       console.log(error)
     }
@@ -104,6 +111,35 @@ function Header() {
       return `${month} ${day} at ${time}`;
     }
   }
+  const handleOpenModal = (message) => {
+    setShowModal(true)
+    handleNotificationClick(message.id)
+    setMessage(message)
+  }
+  const handleNotificationClick = async (notification_id) => {
+    console.log(notification_id, "id")
+    if (!notification.isRead) {
+      try {
+        await axios.put(`${URL}/notificationMarkedRead/${notification_id}`);
+        // Reduce the count only if it was unread
+        setNotification((prev) => {
+          const updated = prev.map((item) =>
+            item.id === notification_id ? { ...item, isRead: true } : item
+          );
+
+          // Update unread count
+          const newUnreadCount = updated.filter((item) => !item.isRead).length;
+          setUnreadNotification(newUnreadCount);
+
+          return updated;
+        });
+        fetchNotification();
+      }
+      catch (error) {
+        console.error('Failed to mark notification as read:', error.message);
+      }
+    }
+  };
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
@@ -131,27 +167,9 @@ function Header() {
         console.error("Error fetching project data:", err);
       }
     };
-   
+
     fetchProjectDetails();
   }, [projectId]);
-  useEffect(()=>{
-    const updatedProjectId = localStorage.getItem('selectedProjectId')
-    const updatedNotificationCount=async()=>{
-
-    
-    try {
-      // user_id
-      const response = await getNotificationsByProjectId(updatedProjectId)
-      console.log(response)
-      const filterNotificationWithRole = response.data.notifications.filter((item) => item.role == "customer")
-      setNotification(filterNotificationWithRole)
-   
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  updatedNotificationCount()
-  },[projectId])
   useEffect(() => {
     fetchNotification()
   }, [])
@@ -161,10 +179,11 @@ function Header() {
         <div className={styles.headerLogo}>
           <img src="/Svg/Logo-Bhouse.svg" alt="logo" className={styles.logo} />
         </div>
-
         <div className={styles.headerSideIcon}>
           <img src='Svg/searchSvg.svg' alt='Search' className={styles.vector1} onClick={() => setShowModalSearch(true)} />
-         <h6 style={{color:"red"}}> {unreadNotification}</h6>
+          {unreadNotification > 0 && (
+            <h6 style={{ color: "red" }}>{unreadNotification}</h6>
+          )}
           <img onClick={handleOpenOffcanvas} src="/Svg/BellIcon.svg" alt="BellIcon" className={styles.vector1} />
           <img
             src="/Svg/UserIcon1.svg"
@@ -175,7 +194,9 @@ function Header() {
         </div>
       </div>
 
+
       <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="70%"   showCloseBtn={false}>
+
         <div className={styles.sidebarContainer}>
           <p className={styles.sectionTitle}>Profile</p>
 
@@ -205,8 +226,6 @@ function Header() {
           <div className={styles.divider}></div>
         </div>
       </OffCanvas>
-
-
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
         <div className={styles.formGroup}>
           <label>Delivery Address*</label>
@@ -245,7 +264,6 @@ function Header() {
           </div>
         )}
 
-
         <button className={styles.submitButton} onClick={handleUpdateDeliveryDetails}>Update</button>
       </Modal>
       <ModalSearch isOpen={showModalSearch}
@@ -255,10 +273,17 @@ function Header() {
       {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="450px">
         <h1 className={styles.notificationTitle}>Notification</h1>
         {notification.map((message) => {
+          const cardStyle = {
+            backgroundColor: message.isRead === false ? "#EEF7FF" : "#fff", // default color white
+            padding: "10px",
+            marginBottom: "10px",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+          };
           return (
             <>
               <div className="notification-container">
-                <div className="notification-card">
+                <div className="notification-card" style={cardStyle} onClick={() => handleOpenModal(message)}>
                   <div className="notification-header">
                     <span className="sender-name">{message.senderName}</span>
                     <span className="notification-time">{formatNotificationTime(message.createdAt)}</span>
@@ -271,7 +296,10 @@ function Header() {
           )
         })}
       </OffCanvas>}
-
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
+        <NotificationView showModal={showModal}
+          setShowModal={setShowModal} message={message} />
+      </Modal>
     </div>
   );
 }
