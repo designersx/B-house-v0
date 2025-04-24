@@ -91,7 +91,7 @@
 .transactionItem {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
 }

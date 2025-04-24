@@ -117,7 +117,7 @@ function Proposal() {
   };
   return (
     <>
-      {!selectedProject ? <Loader /> :
+      {!selectedProject ? <div className={styles.ForLoder}><Loader /></div> :
         <div className={styles.container}>
           {/* Header Section */}
           <div className={styles.header}>

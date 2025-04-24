@@ -32,8 +32,10 @@ const Forget = () => {
   return (
     <div className={styles.resetMain}>
       <div className={styles.detailsDiv}>
-        <div className={styles.blackLogo}>
-          <img src="Svg/b-houseBlack.svg" alt="Bhouse Logo" />
+        <div className="HeaderTop">
+          <div className={styles.blackLogo}>
+            <img src="Svg/b-houseBlack.svg" alt="Bhouse Logo" />
+          </div>
         </div>
         <div className={styles.resetLockDiv}>
           <img src="Svg/resetLock.svg" alt="Reset Icon" />

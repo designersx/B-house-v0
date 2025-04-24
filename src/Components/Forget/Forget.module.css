@@ -5,13 +5,17 @@
 }
 
 .blackLogo {
-    margin-top: 2rem;
-}
+    padding-top: 2rem ;
+    padding-bottom: 1rem;
+    background-color: #ffffff;
+  }
 
 .resetLockDiv {
     margin-top: 1rem;
 }
-
+.resetLockDiv img{
+    width: 40%;
+}
 .Title {
     width: 80%;
     margin: auto;

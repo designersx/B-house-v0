@@ -142,6 +142,10 @@
     font-weight: bold;
 
   }
-  
-
+  .error{
+    color: red;
+  }
+  .required{
+    color: #004680;
+  }
   

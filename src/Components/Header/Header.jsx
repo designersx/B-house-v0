@@ -193,7 +193,10 @@ function Header() {
           />
         </div>
       </div>
-      <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="300px">
+
+
+      <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="70%"   showCloseBtn={false}>
+
         <div className={styles.sidebarContainer}>
           <p className={styles.sectionTitle}>Profile</p>
 
