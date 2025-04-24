@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 
 import styles from './header.module.css';
 import OffCanvas from '../OffCanvas/OffCanvas';
@@ -10,7 +10,6 @@ import axios from 'axios';
 import URL from '../../config/api';
 import { url2 } from '../../config/url';
 import { deleteFcmToken } from '../../utils/deleteFcmToken';
-
 function Header() {
   const navigate = useNavigate();
   const [showCanvas, setShowCanvas] = useState(false);
@@ -23,45 +22,8 @@ function Header() {
   const [customHours, setCustomHours] = useState('');
   const [openOffcanvas, setOpenOffcanvas] = useState(false)
   const [notification, setNotification] = useState([])
-  const info = JSON.parse(localStorage.getItem("customerInfo"))
-
   const [data, setData] = useState()
-
-  useEffect(() => {
-    const fetchCustomer = async () => {
-      try {
-        const res = await axios.get(`${URL}/customer/${customerInfo?.id}`);
-        setData(res.data);
-        console.log(res.data, "data")
-
-      } catch (err) {
-        console.error('Failed to fetch customer data:', err);
-      }
-    };
-
-    fetchCustomer();
-  }, []);
-  useEffect(() => {
-    const fetchProjectDetails = async () => {
-      try {
-        if (!projectId) return;
-
-        const res = await axios.get(`${URL}/projects/${projectId}`);
-        const project = res.data;
-        console.log(project)
-
-        setDeliveryAddress(project.deliveryAddress || '');
-        setDeliveryHours(project.deliveryHours || '');
-        setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(project.deliveryHours) ? '' : project.deliveryHours);
-      } catch (err) {
-        console.error("Error fetching project data:", err);
-      }
-    };
-
-    fetchProjectDetails();
-  }, [projectId]);
-
-
+  const [unreadNotification,setUnreadNotification]=useState()
   const handleLogout = async () => {
     localStorage.removeItem('customerToken');
     localStorage.removeItem('customerInfo');
@@ -90,23 +52,24 @@ function Header() {
       alert("Failed to update delivery details.");
     }
   };
-
-
   const handleOpenOffcanvas = () => {
     setOpenOffcanvas(true)
+    fetchNotification()
   }
   const handleCloseOffcanvas = () => { setOpenOffcanvas(false); }
-
-  const getNotificationsByUser = async (id) => {
-    const response = await axios.get(`${URL}/getNotificationsByClient/${id}`);
+  const getNotificationsByProjectId = async (id) => {
+    const response = await axios.get(`${URL}/getNotificationsByProjectId/${id}`);
     return response
   }
   const fetchNotification = async () => {
+    const updatedProjectId = localStorage.getItem('selectedProjectId')
     try {
-      const response = await getNotificationsByUser(info?.id)
+      // user_id
+      const response = await getNotificationsByProjectId(updatedProjectId)
       console.log(response)
-      setNotification(response.data.notifications
-      )
+      const filterNotificationWithRole = response.data.notifications.filter((item) => item.role == "customer")
+      setNotification(filterNotificationWithRole)
+      setUnreadNotification(filterNotificationWithRole.length)
     } catch (error) {
       console.log(error)
     }
@@ -141,11 +104,19 @@ function Header() {
       return `${month} ${day} at ${time}`;
     }
   }
-
   useEffect(() => {
-    fetchNotification()
-  }, [])
+    const fetchCustomer = async () => {
+      try {
+        const res = await axios.get(`${URL}/customer/${customerInfo?.id}`);
+        setData(res.data);
 
+      } catch (err) {
+        console.error('Failed to fetch customer data:', err);
+      }
+    };
+
+    fetchCustomer();
+  }, []);
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
@@ -153,7 +124,6 @@ function Header() {
 
         const res = await axios.get(`${URL}/projects/${projectId}`);
         const project = res.data;
-
         setDeliveryAddress(project.deliveryAddress || '');
         setDeliveryHours(project.deliveryHours || '');
         setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(project.deliveryHours) ? '' : project.deliveryHours);
@@ -161,9 +131,30 @@ function Header() {
         console.error("Error fetching project data:", err);
       }
     };
-
+   
     fetchProjectDetails();
   }, [projectId]);
+  useEffect(()=>{
+    const updatedProjectId = localStorage.getItem('selectedProjectId')
+    const updatedNotificationCount=async()=>{
+
+    
+    try {
+      // user_id
+      const response = await getNotificationsByProjectId(updatedProjectId)
+      console.log(response)
+      const filterNotificationWithRole = response.data.notifications.filter((item) => item.role == "customer")
+      setNotification(filterNotificationWithRole)
+   
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  updatedNotificationCount()
+  },[projectId])
+  useEffect(() => {
+    fetchNotification()
+  }, [])
   return (
     <div>
       <div className={styles.headerMain}>
@@ -173,6 +164,7 @@ function Header() {
 
         <div className={styles.headerSideIcon}>
           <img src='Svg/searchSvg.svg' alt='Search' className={styles.vector1} onClick={() => setShowModalSearch(true)} />
+         <h6 style={{color:"red"}}> {unreadNotification}</h6>
           <img onClick={handleOpenOffcanvas} src="/Svg/BellIcon.svg" alt="BellIcon" className={styles.vector1} />
           <img
             src="/Svg/UserIcon1.svg"
@@ -260,7 +252,7 @@ function Header() {
         onClose={() => setShowModalSearch(false)}
         height="50%">
       </ModalSearch>
-      {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="300px">
+      {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="450px">
         <h1 className={styles.notificationTitle}>Notification</h1>
         {notification.map((message) => {
           return (
