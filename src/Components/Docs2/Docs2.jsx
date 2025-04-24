@@ -5,139 +5,30 @@ import { url2 } from '../../config/url';
 import URL from '../../config/api';
 import axios from 'axios';
 import Loader from '../Loader/Loader'
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const Docs2 = () => {
     const [newComment, setNewComment] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDoc, setSelectedDoc] = useState(null);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(false)
+    const location = useLocation();
+
+    const message = location.state?.message;
+    const navigate = useNavigate()
     const [projectData, setProjectData] = useState({
         proposals: [],
         floorPlans: [],
         cad: [],
         salesAggrement: [],
         otherDocuments: [],
-        presentation: [] , 
-        acknowledgements : [] , 
-        receivingReports : []
+        presentation: [],
+        acknowledgements: [],
+        receivingReports: []
 
 
     });
-    const handleAddComment = async () => {
-        setLoading(true)
-        const commentText = newComment.trim();
-        if (!commentText || !selectedDoc?.fileUrl) return;
-
-        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
-        const clientInfo = JSON.parse(localStorage.getItem('customerInfo'));
-
-       
-        let windowsPath = selectedDoc.fileUrl;
-        if (windowsPath.startsWith("/")) {
-            windowsPath = windowsPath.substring(1);
-        }
-        // windowsPath = windowsPath.replace(/\//g, '\\');
-
-     
-        const titleToCategory = {
-            'Detailed Proposal': 'proposals',
-            'Options Presentation': 'presentation',
-            'Floor Plan': 'floorPlans',
-            'CAD File': 'cad',
-            'Sales Agreement': 'salesAggrement',
-            'Receiving Reports' : "receivingReports" , 
-            "Acknowledgements" : "acknowledgements"
-        };
-
-        const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
-
-        try {
-            await axios.post(`${URL}/projects/${projectId}/file-comments`, {
-                comment: commentText,
-                filePath: windowsPath,
-                clientId: clientInfo?.id, 
-                category,
-            });
-
-            setNewComment('');
-            fetchComments(selectedDoc.fileUrl); 
-            setLoading(false)
-        } catch (error) {
-            console.error('Error posting comment:', error);
-        }
-    };
-
-
-    const fetchProject = async () => {
-        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
-        try {
-            const res = await axios.get(`${URL}/projects/${projectId}`);
-            const project = res.data;
-
-            setProjectData({
-                proposals: JSON.parse(project.proposals || '[]'),
-                floorPlans: JSON.parse(project.floorPlans || '[]'),
-                cad: JSON.parse(project.cad || '[]'),
-                salesAggrement: JSON.parse(project.salesAggrement || '[]'),
-                presentation: JSON.parse(project.presentation || '[]'),
-
-
-
-                otherDocuments: JSON.parse(project.otherDocuments || '[]'),
-                receivingReports: JSON.parse(project.receivingReports || '[]'),
-
-                acknowledgements: JSON.parse(project.acknowledgements || '[]'),
-
-            });
-        } catch (err) {
-            console.error('Failed to fetch project:', err);
-        }
-    };
-
-    const fetchComments = async (fileUrl) => {
-        if (!fileUrl) return;
-        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
-
-    
-
-
-      
-        let filePath = fileUrl;
-        if (filePath.startsWith("/")) {
-            filePath = filePath.substring(1);
-        }
-
-
-        try {
-            const res = await axios.get(`${URL}/projects/${projectId}/file-comments`,
-                {
-                    params: { filePath }
-                }
-            );
-            setComments(res.data || []);
-        } catch (err) {
-            console.error('Failed to fetch comments:', err);
-        }
-    };
-
-    useEffect(() => {
-        fetchProject();
-    }, []);
-
-    const handleCommentClick = (docTitle, fileUrl) => {
-        const normalizedUrl = `/${fileUrl.replace(/\\/g, '/')}`;
-        setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
-        fetchComments(normalizedUrl);
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setSelectedDoc(null);
-        setComments([]);
-    };
-
-
 
     const docList = [
         {
@@ -176,12 +67,163 @@ const Docs2 = () => {
             fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
         },
     ];
+    const handleAddComment = async () => {
+        setLoading(true)
+        const commentText = newComment.trim();
+        if (!commentText || !selectedDoc?.fileUrl) return;
+
+        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+        const clientInfo = JSON.parse(localStorage.getItem('customerInfo'));
+
+
+        let windowsPath = selectedDoc.fileUrl;
+        if (windowsPath.startsWith("/")) {
+            windowsPath = windowsPath.substring(1);
+        }
+        // windowsPath = windowsPath.replace(/\//g, '\\');
+
+
+        const titleToCategory = {
+            'Detailed Proposal': 'proposals',
+            'Options Presentation': 'presentation',
+            'Floor Plan': 'floorPlans',
+            'CAD File': 'cad',
+            'Sales Agreement': 'salesAggrement',
+            'Receiving Reports': "receivingReports",
+            "Acknowledgements": "acknowledgements"
+        };
+
+        const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
+
+        try {
+            await axios.post(`${URL}/projects/${projectId}/file-comments`, {
+                comment: commentText,
+                filePath: windowsPath,
+                clientId: clientInfo?.id,
+                category,
+            });
+
+            setNewComment('');
+            fetchComments(selectedDoc.fileUrl);
+            setLoading(false)
+        } catch (error) {
+            console.error('Error posting comment:', error);
+        }
+    };
+
+
+    const fetchProject = async () => {
+        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+        try {
+            const res = await axios.get(`${URL}/projects/${projectId}`);
+            const project = res.data;
+
+            setProjectData({
+                proposals: JSON.parse(project.proposals || '[]'),
+                floorPlans: JSON.parse(project.floorPlans || '[]'),
+                cad: JSON.parse(project.cad || '[]'),
+                salesAggrement: JSON.parse(project.salesAggrement || '[]'),
+                presentation: JSON.parse(project.presentation || '[]'),
+
+
+
+                otherDocuments: JSON.parse(project.otherDocuments || '[]'),
+                receivingReports: JSON.parse(project.receivingReports || '[]'),
+
+                acknowledgements: JSON.parse(project.acknowledgements || '[]'),
+
+            });
+        } catch (err) {
+            console.error('Failed to fetch project:', err);
+        }
+    };
+
+    const fetchComments = async (fileUrl) => {
+        if (!fileUrl) return;
+        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+        let filePath = fileUrl;
+        if (filePath.startsWith("/")) {
+            filePath = filePath.substring(1);
+        }
+
+
+        try {
+            const res = await axios.get(`${URL}/projects/${projectId}/file-comments`,
+                {
+                    params: { filePath }
+                }
+            );
+            setComments(res.data || []);
+        } catch (err) {
+            console.error('Failed to fetch comments:', err);
+        }
+    };
+
+    useEffect(() => {
+        fetchProject();
+    }, []);
+
+    const handleCommentClick = (docTitle, fileUrl) => {
+        console.log(docTitle, fileUrl)
+        const normalizedUrl = `/${fileUrl?.replace(/\\/g, '/')}`;
+        setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
+        fetchComments(normalizedUrl);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedDoc(null);
+        setComments([]);
+    };
     const bottomRef = useRef(null);
     useEffect(() => {
         if (bottomRef.current) {
             bottomRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }, [comments]);
+
+    useEffect(() => {
+        if (message) {
+            const docList = [
+                {
+                    key: 'proposals',
+                    title: 'Detailed Proposal',
+                },
+                {
+                    key: 'presentation',
+                    title: 'Options Presentation',
+                },
+                {
+                    key: 'floorPlans',
+                    title: 'Floor Plan',
+                },
+                {
+                    key: 'cad',
+                    title: 'CAD File',
+                },
+                {
+                    key: 'salesAggrement',
+                    title: 'Sales Agreement',
+                },
+                {
+                    key: 'receivingReports',
+                    title: 'Receiving Reports',
+                },
+                {
+                    key: 'acknowledgements',
+                    title: 'Acknowledgements',
+                }
+            ];
+
+            const matchedDoc = docList.find(doc => doc.key === message.documentType);
+            const title = matchedDoc?.title || 'Document';
+
+            handleCommentClick(title, message.filePath);
+            navigate(location.pathname, { replace: true });
+        }
+    }, [message]);
+
     return (
         <div>
             <div className={styles.container}>
@@ -210,9 +252,9 @@ const Docs2 = () => {
                     </div>
                 ))}
 
-              <p className={styles.note}>
-                        If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
-                      </p>
+                <p className={styles.note}>
+                    If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
+                </p>
             </div>
 
             <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="92vh">
@@ -225,10 +267,10 @@ const Docs2 = () => {
                                 <>
                                     {/* <img src="Svg/pdf.svg" alt="PDF" /> */}
 
-                                    <iframe 
-                                    height="400px"
-                                    width="100%"
-                                    src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />
+                                    <iframe
+                                        height="400px"
+                                        width="100%"
+                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />
                                     {/* <div onClick={handleDoc}>View PDF</div> */}
 
                                 </>
