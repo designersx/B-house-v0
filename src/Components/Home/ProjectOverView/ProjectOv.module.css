@@ -45,10 +45,11 @@
     gap: 20px;
     justify-content: space-between;
     margin: 10px 0;
+  
   }
   
   .bigText {
-    font-size: 35px;
+    font-size: 28px;
     font-weight: 600;
     margin: 0;
     color: #26211F;
@@ -205,4 +206,9 @@ max-height: 50px;
 
 
      
-  
+    @media(max-width:375px){
+      .bigText {
+        font-size: 26px;
+      }
+
+    }

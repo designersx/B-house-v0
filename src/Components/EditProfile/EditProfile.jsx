@@ -194,7 +194,7 @@ console.log(formData)
       <div className={styles.formContainer}>
         <div className={styles.formGroup}>
           <label>
-            Full Name<span>*</span>
+            Full Name<span className={styles.required}>*</span>
           </label>
           <input
             type="text"
@@ -208,7 +208,7 @@ console.log(formData)
 
         <div className={styles.formGroup}>
           <label>
-            Email<span>*</span>
+            Email<span className={styles.required}>*</span>
           </label>
           <input
             type="email"
@@ -222,7 +222,7 @@ console.log(formData)
 
         <div className={styles.formGroup}>
           <label>
-            Phone Number<span>*</span>
+            Phone Number<span className={styles.required}>*</span>
           </label>
           <input
             type="tel"
@@ -236,7 +236,7 @@ console.log(formData)
 
         <div className={styles.formGroup}>
           <label>
-            Company Name<span>*</span>
+            Company Name<span className={styles.required}>*</span>
           </label>
           <input
             type="text"
@@ -250,7 +250,7 @@ console.log(formData)
 
         <div className={styles.formGroup}>
           <label>
-            Address<span>*</span>
+            Address<span className={styles.required}>*</span>
           </label>
           <textarea
             name="address"
