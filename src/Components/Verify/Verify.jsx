@@ -63,8 +63,10 @@ const Verify = () => {
   return (
     <div className={styles.VerifyMain}>
       <div className={styles.detailsDiv}>
-        <div className={styles.blackLogo}>
-          <img src='Svg/b-houseBlack.svg' alt='' />
+      <div className="HeaderTop">
+          <div className={styles.blackLogo}>
+            <img src="Svg/b-houseBlack.svg" alt="Bhouse Logo" />
+          </div>
         </div>
 
         <div className={styles.OtpMain}>

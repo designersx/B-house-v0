@@ -33,6 +33,7 @@
 .slideImg img {
     width: 100%;
     max-width: 75px;
+    min-height: 75px;
 }
 
 
