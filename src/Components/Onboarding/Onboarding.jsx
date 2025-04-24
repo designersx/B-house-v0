@@ -254,7 +254,10 @@ const Onboarding = () => {
       {openModalIndex !== null && (
         <Modal isOpen={true} onClose={() => setOpenModalIndex(null)}>
           <div className={styles.modalContent}>
+            <div className={styles.titleDiv}>
             <h2>{onboardingItems[openModalIndex].title}</h2>
+            </div>
+           
 
             {openModalIndex === 0 && (
               <>
@@ -262,7 +265,7 @@ const Onboarding = () => {
                   <label>Project Address*</label>
                   <input
                     type="text"
-                    placeholder="Write delivery address"
+                    placeholder="Write project address"
                     value={deliveryAddress}
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                   />
