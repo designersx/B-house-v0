@@ -32,6 +32,12 @@ function Header() {
     localStorage.removeItem('customerInfo');
     localStorage.removeItem('selectedProject');
     localStorage.removeItem('selectedProjectId');
+    localStorage.removeItem('remaining');
+    localStorage.removeItem('teamuser');
+    localStorage.removeItem('teamusers');
+    localStorage.removeItem('user');
+    localStorage.removeItem('visible');
+    localStorage.removeItem('allProjectIds');
     await deleteFcmToken(customerInfo.id)
     navigate('/');
   };
@@ -112,12 +118,12 @@ function Header() {
     }
   }
   const handleOpenModal = (message) => {
-    setShowModal(true)
+    navigate(`/${message.path}`, { state: { message } })
     handleNotificationClick(message.id)
     setMessage(message)
+
   }
   const handleNotificationClick = async (notification_id) => {
-    console.log(notification_id, "id")
     if (!notification.isRead) {
       try {
         await axios.put(`${URL}/notificationMarkedRead/${notification_id}`);
@@ -207,8 +213,8 @@ function Header() {
           <div className={styles.userInfo}>
             <img src={data?.profilePhoto ? `${url2}/${data?.profilePhoto}` : 'Images/profle.png'} alt="user" className={styles.avatar} />
             <div>
-              <p className={styles.userName}>{customerInfo?.full_name || "User"}</p>
-              <p className={styles.userEmail}>{customerInfo?.email || "email@example.com"}</p>
+              <p className={styles.userName}>{data?.full_name || "User"}</p>
+              <p className={styles.userEmail}>{data?.email || "email@example.com"}</p>
             </div>
           </div>
 
@@ -275,12 +281,14 @@ function Header() {
         height="50%">
       </ModalSearch>
       {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="100%">
+
         <div className='HeaderTops'>
           <h1 className={styles.notificationTitle}>Notification</h1>
         </div>
 
         {notification.map((message) => {
           const isUnread = message.isRead === false;
+
 
           const cardStyle = {
             backgroundColor: isUnread ? "#EEF7FF" : "#fff",
@@ -315,9 +323,9 @@ function Header() {
               </div>
             </>
           )
-        })}
+        }) : "NO data"}
       </OffCanvas>}
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
+      <Modal onClose={() => setShowModal(false)} height='70vh'>
         <NotificationView showModal={showModal}
           setShowModal={setShowModal} message={message} />
       </Modal>

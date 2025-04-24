@@ -88,6 +88,7 @@ const Onboarding = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true)
     try {
       const data = {
         deliveryAddress,
@@ -103,7 +104,11 @@ const Onboarding = () => {
       setOpenModalIndex(null);
     } catch (err) {
       console.error('Update failed', err);
-      alert('Failed to update project.');
+      // alert('Failed to update project.');
+    }
+    finally{
+
+      setLoading(false)
     }
   };
 
@@ -164,6 +169,7 @@ const Onboarding = () => {
   };
   const [file, setFile] = useState(null);
   const handleUploadDoc = async () => {
+  setLoading(true)
     if (!file) {
       // alert("Please select a file");
       return;
@@ -180,10 +186,16 @@ const Onboarding = () => {
       );
       // alert("File uploaded successfully!");
 
+      setCompletedSteps((prev) => [...prev, openModalIndex]);
+      setOpenModalIndex(null);
+    
+
     } catch (err) {
       console.error("Upload failed", err);
-      alert("Upload failed!");
+      // alert("Upload failed!");
     }
+    finally{
+    setLoading(false)}
   };
 
   return (
@@ -492,7 +504,9 @@ const Onboarding = () => {
             )}
           </div>
 
-          <button onClick={openModalIndex == 1 ? handleSubmit : handleUploadDoc} className={styles.submitButton}>{openModalIndex == 1 || (!docFile && openModalIndex == 2) ? "Update" : null}</button>
+
+          <button onClick={ openModalIndex ==1 ? handleSubmit:handleUploadDoc} className={openModalIndex ==1 || (!docFile && openModalIndex==2) ? styles.submitButton : null}>{openModalIndex ==1 || (!docFile && openModalIndex==2) ? laoding ? <Loader size={13}/>: "Update"  : null}</button>
+
         </Modal>
       )}
     </div>
