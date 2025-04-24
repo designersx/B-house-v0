@@ -7,7 +7,7 @@ import URL from '../../config/api';
 import { url2 } from '../../config/url';
 import Loader from '../Loader/Loader';
 const onboardingItems = [
-  { img: 'Svg/project-address.svg', title: 'Project Address' },
+  // { img: 'Svg/project-address.svg', title: 'Project Address' },
   { img: 'Svg/delivery-hour.svg', title: 'Building Delivery Hours' },
   { img: 'Svg/sample-icon.svg', title: 'Building Sample (COI)' }
 ];
@@ -25,43 +25,43 @@ const Onboarding = () => {
   const [customHours, setCustomHours] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [projects, setProjects] = useState([]);
-    const [docsData, setDocsData] = useState([]);
-const [docFile , setDocFile] = useState()
+  const [docsData, setDocsData] = useState([]);
+  const [docFile, setDocFile] = useState()
   // Fetch project data
   useEffect(() => {
     const fetchProject = async () => {
       try {
         const res = await axios.get(`${URL}/projects/client/${clientId}`);
         const allProjects = res.data;
-  
+
         if (!allProjects.length) return;
-  
+
         setProjects(allProjects); // Store all projects
         const firstProject = allProjects[0];
-  
+
         setProjectId(firstProject.id); // Default select first project
         fetchProjectDetails(firstProject.id);
       } catch (err) {
         console.error('Error fetching projects:', err);
       }
     };
-  
+
     if (clientId) fetchProject();
   }, [clientId]);
-  const [laoding , setLoading] = useState(false)
-    const fetchDocs = async () => {
-      setLoading(true)
+  const [laoding, setLoading] = useState(false)
+  const fetchDocs = async () => {
+    setLoading(true)
     const id = projectId;
     try {
       const res = await axios.get(`${URL}/customerDoc/document/${id}`);
       setDocsData(res.data || []);
       const sampleCOIDoc = res.data.find(doc => doc.documentType === "Sample COI");
       setDocFile(sampleCOIDoc?.filePath)
-      console.log(sampleCOIDoc , "sample")
+      console.log(sampleCOIDoc, "sample")
     } catch (err) {
       console.error('Failed to fetch documents:', err);
     }
-    finally{
+    finally {
       setLoading(false)
     }
   };
@@ -73,7 +73,7 @@ const [docFile , setDocFile] = useState()
     try {
       const full = await axios.get(`${URL}/projects/${id}`);
       const data = full.data;
-  
+
       setDeliveryAddress(data.deliveryAddress || '');
       setDeliveryHours(data.deliveryHours || '');
       setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(data.deliveryHours) ? '' : data.deliveryHours);
@@ -107,54 +107,53 @@ const [docFile , setDocFile] = useState()
     }
   };
 
-  const inputRef = useRef(null);
-  const [deliveryDate, setDeliveryDate] = useState("");
-  const [rangeValue, setRangeValue] = useState(0);
+  // const inputRef = useRef(null);
+  // const [deliveryDate, setDeliveryDate] = useState("");
+  // const [rangeValue, setRangeValue] = useState(0);
 
-  useEffect(() => {
-    const today = new Date();
-    const iso = today.toISOString().split("T")[0];
-    setDeliveryDate(iso);
-    setRangeValue(getDayDiffFromToday(iso));
-  }, []);
+  // useEffect(() => {
+  //   const today = new Date();
+  //   const iso = today.toISOString().split("T")[0];
+  //   setDeliveryDate(iso);
+  //   setRangeValue(getDayDiffFromToday(iso));
+  // }, []);
 
-  const openCalendar = () => {
-    try {
-      inputRef.current?.showPicker?.();
-    } catch {
-      inputRef.current?.click();
-    }
-  };
+  // const openCalendar = () => {
+  //   try {
+  //     inputRef.current?.showPicker?.();
+  //   } catch {
+  //     inputRef.current?.click();
+  //   }
+  // };
 
-  const handleDateChange = (e) => {
-    const newDate = e.target.value;
-    setDeliveryDate(newDate);
-    setRangeValue(getDayDiffFromToday(newDate));
-  };
+  // const handleDateChange = (e) => {
+  //   const newDate = e.target.value;
+  //   setDeliveryDate(newDate);
+  //   setRangeValue(getDayDiffFromToday(newDate));
+  // };
 
-  const handleRangeChange = (e) => {
-    const daysToAdd = parseInt(e.target.value, 10);
-    const today = new Date();
-    today.setDate(today.getDate() + daysToAdd);
-    const newDate = today.toISOString().split("T")[0];
-    setDeliveryDate(newDate);
-    setRangeValue(daysToAdd);
-  };
+  // const handleRangeChange = (e) => {
+  //   const daysToAdd = parseInt(e.target.value, 10);
+  //   const today = new Date();
+  //   today.setDate(today.getDate() + daysToAdd);
+  //   const newDate = today.toISOString().split("T")[0];
+  //   setDeliveryDate(newDate);
+  //   setRangeValue(daysToAdd);
+  // };
 
-  const formatDate2 = (dateStr) => {
-    const date = new Date(dateStr);
-    const formattedDate = date.toLocaleDateString("en-GB", { day: '2-digit', month: 'short' });
+  // const formatDate2 = (dateStr) => {
+  //   const date = new Date(dateStr);
+  //   const formattedDate = date.toLocaleDateString("en-GB", { day: '2-digit', month: 'short' });
 
-    // Split the formatted date into day and month
-    const [day, month] = formattedDate.split(' ');
+  //   const [day, month] = formattedDate.split(' ');
 
-    return (
-      <span>
-        <span className={styles.day}>{day} </span>
-        <span className={styles.month}>{month}</span>
-      </span>
-    );
-  };
+  //   return (
+  //     <span>
+  //       <span className={styles.day}>{day} </span>
+  //       <span className={styles.month}>{month}</span>
+  //     </span>
+  //   );
+  // };
 
 
 
@@ -166,21 +165,21 @@ const [docFile , setDocFile] = useState()
   const [file, setFile] = useState(null);
   const handleUploadDoc = async () => {
     if (!file) {
-      alert("Please select a file");
+      // alert("Please select a file");
       return;
     }
 
     const formData = new FormData();
     formData.append("document", file);
-    formData.append("projectId", projectId); 
+    formData.append("projectId", projectId);
     formData.append("documentType", "Sample COI");
 
     try {
-      const response = await axios.post(`${URL}/customerDoc/add`, 
-         formData
+      const response = await axios.post(`${URL}/customerDoc/add`,
+        formData
       );
-      alert("File uploaded successfully!");
-    
+      // alert("File uploaded successfully!");
+
     } catch (err) {
       console.error("Upload failed", err);
       alert("Upload failed!");
@@ -189,20 +188,23 @@ const [docFile , setDocFile] = useState()
 
   return (
     <div className={styles.OnboardingMain}>
-      <div className={styles.headerPart}>
-        <div className={styles.OnboardingTitle}>
-          <p>Welcome to Bhouse,</p>
-          <h1>New <b>Customer</b> Onboarding</h1>
-          <div className={styles.logo}>
-            <img src='Svg/b-houseBlack.svg' alt='Logo' />
+      <div className='HeaderTop '>
+        <div className={styles.headerPart}>
+          <div className={styles.OnboardingTitle}>
+            <p>Welcome to Bhouse,</p>
+            <h1>New <b>Customer</b> Onboarding</h1>
+            <div className={styles.logo}>
+              <img src='Svg/b-houseBlack.svg' alt='Logo' />
+            </div>
           </div>
+          <div><img src='Svg/lamp.svg' alt='lamp' /></div>
         </div>
-        <div><img src='Svg/lamp.svg' alt='lamp' /></div>
       </div>
 
-      <div className={styles.bodyMain}>
 
-        <div className={styles.dateDiv}>
+      <div className={styles.bodyMain}>
+        {/* Date Range Div Start */}
+        {/* <div className={styles.dateDiv}>
           <p className={styles.title}>Select Desired Delivery Date</p>
 
           <div className={styles.flexrange}>
@@ -253,22 +255,33 @@ const [docFile , setDocFile] = useState()
               />
             </div>
 
-            <select
-  value={projectId}
-  onChange={(e) => {
-    const selectedId = e.target.value;
-    setProjectId(selectedId);
-    fetchProjectDetails(selectedId);
-  }}
->
-  {projects.map((project) => (
-    <option key={project.id} value={project.id}>
-      {project.name}
-    </option>
-  ))}
-</select>
+
           </div>
+        </div> */}
+        {/* Date Range Div End */}
+
+        {/* Select Div  start*/}
+        <div className={styles.SectDivMain}>
+          <select
+            className={styles.fancySelect}
+            value={projectId}
+            onChange={(e) => {
+              const selectedId = e.target.value;
+              setProjectId(selectedId);
+              fetchProjectDetails(selectedId);
+            }}
+          >
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
         </div>
+
+
+
+        {/* Select Div  start*/}
 
 
         {onboardingItems.map((item, index) => {
@@ -326,9 +339,9 @@ const [docFile , setDocFile] = useState()
         <Modal isOpen={true} onClose={() => setOpenModalIndex(null)}>
           <div className={styles.modalContent}>
             <div className={styles.titleDiv}>
-            <h2>{onboardingItems[openModalIndex].title}</h2>
+              <h2>{onboardingItems[openModalIndex].title}</h2>
             </div>
-           
+
 
             {openModalIndex === 0 && (
               <>
@@ -372,44 +385,44 @@ const [docFile , setDocFile] = useState()
             )}
 
             {openModalIndex === 1 && (
-               <>
-               <div className={styles.formGroup}>
-                 <label>Delivery Address*</label>
-                 <input
-                   type="text"
-                   placeholder="Write delivery address"
-                   value={deliveryAddress}
-                   onChange={(e) => setDeliveryAddress(e.target.value)}
-                 />
-               </div>
+              <>
+                <div className={styles.formGroup}>
+                  <label>Delivery Address*</label>
+                  <input
+                    type="text"
+                    placeholder="Write delivery address"
+                    value={deliveryAddress}
+                    onChange={(e) => setDeliveryAddress(e.target.value)}
+                  />
+                </div>
 
-               <div className={styles.formGroup}>
-                 <label>Delivery Hours*</label>
-                 <select
-                   value={deliveryHours}
-                   onChange={(e) => {
-                     setDeliveryHours(e.target.value);
-                     if (e.target.value !== "Other") setCustomHours('');
-                   }}
-                 >
-                   <option>Regular Hours</option>
-                   <option>Before 9 AM</option>
-                   <option>After 6 PM</option>
-                   <option>Other</option>
-                 </select>
-               </div>
+                <div className={styles.formGroup}>
+                  <label>Delivery Hours*</label>
+                  <select
+                    value={deliveryHours}
+                    onChange={(e) => {
+                      setDeliveryHours(e.target.value);
+                      if (e.target.value !== "Other") setCustomHours('');
+                    }}
+                  >
+                    <option>Regular Hours</option>
+                    <option>Before 9 AM</option>
+                    <option>After 6 PM</option>
+                    <option>Other</option>
+                  </select>
+                </div>
 
-               {deliveryHours === "Other" && (
-                 <div className={styles.formGroup}>
-                   <label>Other</label>
-                   <textarea
-                     placeholder="Enter custom hours"
-                     value={customHours}
-                     onChange={(e) => setCustomHours(e.target.value)}
-                   />
-                 </div>
-               )}
-             </>
+                {deliveryHours === "Other" && (
+                  <div className={styles.formGroup}>
+                    <label>Other</label>
+                    <textarea
+                      placeholder="Enter custom hours"
+                      value={customHours}
+                      onChange={(e) => setCustomHours(e.target.value)}
+                    />
+                  </div>
+                )}
+              </>
             )}
 
             {openModalIndex === 2 && (
@@ -425,50 +438,50 @@ const [docFile , setDocFile] = useState()
                 </div> */}
 
                 <div className={styles.formGroup}>
-                {laoding ? <Loader /> : (
-  <>
-    {docFile ? (
-      (() => {
-        const fileExtension = docFile.split('.').pop().toLowerCase();
-        const fileUrl = `${url2}/${docFile}`;
+                  {laoding ? <Loader /> : (
+                    <>
+                      {docFile ? (
+                        (() => {
+                          const fileExtension = docFile.split('.').pop().toLowerCase();
+                          const fileUrl = `${url2}/${docFile}`;
 
-        if (fileExtension === 'pdf') {
-          return (
-            <iframe
-              height="300px"
-              width="100%"
-              src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true`}
-              title="PDF Preview"
-            />
-          );
-        } else if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
-          return (
-            <img
-              src={fileUrl}
-              alt="Document Preview"
-              style={{ maxWidth: '100%', height: '300px', objectFit: 'contain' }}
-            />
-          );
-        } else {
-          return <p>Unsupported file format.</p>;
-        }
-      })()
-    ) : (
-      <>
-        <label>Upload COI Document</label>
-        <input
-          type="file"
-          accept=".pdf,.doc,.docx,.jpg,.png"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
-      </>
-    )}
-  </>
-)}
+                          if (fileExtension === 'pdf') {
+                            return (
+                              <iframe
+                                height="300px"
+                                width="100%"
+                                src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true`}
+                                title="PDF Preview"
+                              />
+                            );
+                          } else if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
+                            return (
+                              <img
+                                src={fileUrl}
+                                alt="Document Preview"
+                                style={{ maxWidth: '100%', height: '300px', objectFit: 'contain' }}
+                              />
+                            );
+                          } else {
+                            return <p>Unsupported file format.</p>;
+                          }
+                        })()
+                      ) : (
+                        <>
+                          <label>Upload COI Document</label>
+                          <input
+                            type="file"
+                            accept=".pdf,.doc,.docx,.jpg,.png"
+                            onChange={(e) => setFile(e.target.files[0])}
+                          />
+                        </>
+                      )}
+                    </>
+                  )}
 
-                 
-                  
-      
+
+
+
                 </div>
 
                 {/* <div className={styles.formGroup}>
@@ -479,7 +492,7 @@ const [docFile , setDocFile] = useState()
             )}
           </div>
 
-          <button onClick={ openModalIndex ==1 ? handleSubmit:handleUploadDoc} className={styles.submitButton}>{openModalIndex ==1 || (!docFile && openModalIndex==2) ? "Update" : null}</button>
+          <button onClick={openModalIndex == 1 ? handleSubmit : handleUploadDoc} className={styles.submitButton}>{openModalIndex == 1 || (!docFile && openModalIndex == 2) ? "Update" : null}</button>
         </Modal>
       )}
     </div>

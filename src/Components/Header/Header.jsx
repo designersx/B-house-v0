@@ -181,10 +181,14 @@ function Header() {
         </div>
         <div className={styles.headerSideIcon}>
           <img src='Svg/searchSvg.svg' alt='Search' className={styles.vector1} onClick={() => setShowModalSearch(true)} />
-          {unreadNotification > 0 && (
-            <h6 style={{ color: "red" }}>{unreadNotification}</h6>
-          )}
-          <img onClick={handleOpenOffcanvas} src="/Svg/BellIcon.svg" alt="BellIcon" className={styles.vector1} />
+
+          <div className={styles.vector2} onClick={handleOpenOffcanvas}>
+            <img src="/Svg/BellIcon.svg" alt="BellIcon" />
+            {unreadNotification > 0 && (
+              <h6 className={styles.notificationDiv}>{unreadNotification}</h6>
+            )}
+          </div>
+
           <img
             src="/Svg/UserIcon1.svg"
             alt="UserIcon"
@@ -195,7 +199,7 @@ function Header() {
       </div>
 
 
-      <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="70%"   showCloseBtn={false}>
+      <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="70%" showCloseBtn={false}>
 
         <div className={styles.sidebarContainer}>
           <p className={styles.sectionTitle}>Profile</p>
@@ -271,18 +275,20 @@ function Header() {
         height="50%">
       </ModalSearch>
       {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="100%">
-        <h1 className={styles.notificationTitle}>Notification</h1>
+        <div className='HeaderTops'>
+          <h1 className={styles.notificationTitle}>Notification</h1>
+        </div>
+
         {notification.map((message) => {
+          const isUnread = message.isRead === false;
+
           const cardStyle = {
-            backgroundColor: message.isRead === false ? "#EEF7FF" : "#fff", // default color white
-            padding: "10px",
-            marginBottom: "10px",
-            borderRadius: "8px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+            backgroundColor: isUnread ? "#EEF7FF" : "#fff",
+
           };
           return (
             <>
-              <div className="notification-container">
+              {/* <div className="notification-container">
                 <div className="notification-card" style={cardStyle} onClick={() => handleOpenModal(message)}>
                   <div className="notification-header">
                     <span className="sender-name">{message.senderName}</span>
@@ -292,7 +298,22 @@ function Header() {
                     {message.message}
                   </div>
                 </div>
-              </div></>
+              </div> */}
+              <div className="notification-container" key={message.id}>
+                <div
+                  className="notification-card"
+                  style={cardStyle}
+                  onClick={() => handleOpenModal(message)}
+                >
+                  <div className="note-badge">{isUnread ? "UNREAD" : "READ"}</div>
+                  <div className="notification-header">
+                    <span className="sender-name">{message.senderName}</span>
+                    <span className="notification-time">{formatNotificationTime(message.createdAt)}</span>
+                  </div>
+                  <div className="notification-message">{message.message}</div>
+                </div>
+              </div>
+            </>
           )
         })}
       </OffCanvas>}

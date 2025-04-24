@@ -120,7 +120,8 @@
 
 .formGroup input,
 
-.formGroup select,textarea  , 
+.formGroup select,
+textarea,
 
 
 .formGroup textarea {
@@ -131,10 +132,12 @@
     color: #787C81;
     font-size: 16px;
 }
+
 .formGroup textarea {
     resize: none;
     height: 100px;
 }
+
 .formGroup input,
 .formGroup select {
     width: 100%;
@@ -168,8 +171,25 @@
 
 
 /* Notifictaion */
-.notificationTitle{
-    color: #26211F;
+.notificationTitle {
+    color: #000000;
     padding: 16px;
     font-size: 28px;
+    background-color: #ffffff;
+}
+.vector2{
+    position: relative;
+}
+.notificationDiv {
+    color: #ffffff;
+    position: absolute;
+    top: 0;
+    right: -5px;
+    background:#004680;
+    height: 25px;
+    width: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
