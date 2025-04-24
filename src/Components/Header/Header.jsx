@@ -118,12 +118,12 @@ function Header() {
     }
   }
   const handleOpenModal = (message) => {
-    setShowModal(true)
+    navigate(`/${message.path}`, { state: { message } })
     handleNotificationClick(message.id)
     setMessage(message)
+
   }
   const handleNotificationClick = async (notification_id) => {
-    console.log(notification_id, "id")
     if (!notification.isRead) {
       try {
         await axios.put(`${URL}/notificationMarkedRead/${notification_id}`);
@@ -201,7 +201,7 @@ function Header() {
       </div>
 
 
-      <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="70%"   showCloseBtn={false}>
+      <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="70%" showCloseBtn={false}>
 
         <div className={styles.sidebarContainer}>
           <p className={styles.sectionTitle}>Profile</p>
@@ -278,7 +278,7 @@ function Header() {
       </ModalSearch>
       {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="100%">
         <h1 className={styles.notificationTitle}>Notification</h1>
-        {notification.map((message) => {
+        {notification.length > 0 ? notification.map((message) => {
           const cardStyle = {
             backgroundColor: message.isRead === false ? "#EEF7FF" : "#fff", // default color white
             padding: "10px",
@@ -300,9 +300,9 @@ function Header() {
                 </div>
               </div></>
           )
-        })}
+        }) : "NO data"}
       </OffCanvas>}
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
+      <Modal onClose={() => setShowModal(false)} height='70vh'>
         <NotificationView showModal={showModal}
           setShowModal={setShowModal} message={message} />
       </Modal>

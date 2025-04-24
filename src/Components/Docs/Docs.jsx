@@ -6,7 +6,8 @@ import axios from 'axios';
 import PopUp from '../PopUp/PopUp';
 import Comments from '../CommentThread/Comments';
 import Modal from '../Modal/Modal';
-
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const docs = [
   "Sample COI",
   "COI (Certificate)",
@@ -14,7 +15,6 @@ const docs = [
   "Pro Forma Invoice",
   "Final Invoice",
 ];
-
 const iconMap = {
   "Sample COI": "Svg/Coi.svg",
   "COI (Certificate)": "Svg/certificate-coi-icon.svg",
@@ -22,7 +22,6 @@ const iconMap = {
   "Pro Forma Invoice": "Svg/proforma-invoice.svg",
   "Final Invoice": "Svg/final-invoice.svg",
 };
-
 function Docs() {
   const customer = JSON.parse(localStorage.getItem('customerInfo'));
   const customerName = customer?.full_name || "My Docs";
@@ -35,8 +34,9 @@ function Docs() {
   const [selectedDocId, setSelectedDocId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDocTitle, setSelectedDocTitle] = useState('');
- 
-
+  const location = useLocation();
+  const message = location.state?.message;
+ const navigate=useNavigate()
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));
     try {
@@ -46,11 +46,6 @@ function Docs() {
       console.error('Failed to fetch documents:', err);
     }
   };
-
-  useEffect(() => {
-    fetchDocs();
-  }, []);
-
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file || !currentDocType) return;
@@ -92,16 +87,31 @@ function Docs() {
     fileInputRef.current.click();
   };
 
-  const openCommentModal = (docId,docTitle) => {
+  const openCommentModal = (docId, docTitle) => {
     setSelectedDocId(docId);
     setSelectedDocTitle(docTitle);
     setIsModalOpen(true);
   };
-
   const closeCommentModal = () => {
     setSelectedDocId(null);
     setIsModalOpen(false);
   };
+  //function lock
+  useEffect(() => {
+    if (message) {
+      console.log(message);
+      // Automatically switch to B-HOUSE DOCS if message.documentType is 'proposals' (case-insensitive match)
+      if (message.documentType?.toLowerCase() === 'proposals') {
+        setActiveTab('B-HOUSE DOCS');
+      } else {
+        setActiveTab(customerName);
+        openCommentModal(message.documentId, message.documentType);
+        navigate(location.pathname, { replace: true });
+      }
+
+
+    }
+  }, [message]);
 
   useEffect(() => {
     if (showPopup) {
@@ -109,7 +119,9 @@ function Docs() {
       return () => clearTimeout(timer);
     }
   }, [showPopup]);
-
+  useEffect(() => {
+    fetchDocs();
+  }, []);
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>List of Docs</h2>
@@ -158,7 +170,7 @@ function Docs() {
                     <div className={styles.editFlex}>
                       <img src="Svg/edit-icon.svg" alt="edit-icon" />
                       <p
-                        onClick={() => openCommentModal(foundDoc.id,doc)}
+                        onClick={() => openCommentModal(foundDoc.id, doc)}
                         style={{ cursor: 'pointer' }}
                       >
                         Comment
@@ -170,10 +182,10 @@ function Docs() {
             );
           })}
           <p className={styles.note}>
-          If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
-        </p>
+            If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
+          </p>
         </div>
-        
+
       ) : (
         <div className={styles.bHouseContent}>
           <Docs2 data={docsData} />
@@ -196,7 +208,7 @@ function Docs() {
       {/* Comment Modal */}
       {selectedDocId && (
         <Modal isOpen={isModalOpen} onClose={closeCommentModal} height="80%">
-         <h2 className={styles.modalTitle}>{selectedDocTitle}</h2>
+          <h2 className={styles.modalTitle}>{selectedDocTitle}</h2>
           <Comments
             documentId={selectedDocId}
             customerId={JSON.parse(localStorage.getItem('customerId'))}

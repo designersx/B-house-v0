@@ -5,24 +5,68 @@ import { url2 } from '../../config/url';
 import URL from '../../config/api';
 import axios from 'axios';
 import Loader from '../Loader/Loader'
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const Docs2 = () => {
     const [newComment, setNewComment] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDoc, setSelectedDoc] = useState(null);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(false)
+    const location = useLocation();
+
+    const message = location.state?.message;
+    const navigate = useNavigate()
     const [projectData, setProjectData] = useState({
         proposals: [],
         floorPlans: [],
         cad: [],
         salesAggrement: [],
         otherDocuments: [],
-        presentation: [] , 
-        acknowledgements : [] , 
-        receivingReports : []
+        presentation: [],
+        acknowledgements: [],
+        receivingReports: []
 
 
     });
+
+    const docList = [
+        {
+            title: 'Detailed Proposal',
+            icon: 'Svg/detailed-proposal.svg',
+            fileUrl: projectData.proposals[0] || null,
+        },
+        {
+            title: 'Options Presentation',
+            icon: 'Svg/options-presentation.svg',
+            fileUrl: projectData?.presentation[0] || null, // Placeholder
+        },
+        {
+            title: 'Floor Plan',
+            icon: 'Svg/floor-plan.svg',
+            fileUrl: projectData.floorPlans[0] || null,
+        },
+        {
+            title: 'CAD File',
+            icon: 'Svg/cad-file.svg',
+            fileUrl: projectData?.cad[0] || null // Placeholder
+        },
+        {
+            title: 'Sales Agreement',
+            icon: 'Svg/sales-icon.svg',
+            fileUrl: projectData?.salesAggrement[0] || null, // Placeholder
+        },
+        {
+            title: 'Receiving Reports',
+            icon: 'Svg/Coi.svg',
+            fileUrl: projectData?.receivingReports[0] || null, // Placeholder
+        },
+        {
+            title: 'Acknowledgements',
+            icon: 'Svg/Coi.svg',
+            fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
+        },
+    ];
     const handleAddComment = async () => {
         setLoading(true)
         const commentText = newComment.trim();
@@ -31,21 +75,26 @@ const Docs2 = () => {
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
         const clientInfo = JSON.parse(localStorage.getItem('customerInfo'));
 
-       
+
         let windowsPath = selectedDoc.fileUrl;
         if (windowsPath.startsWith("/")) {
             windowsPath = windowsPath.substring(1);
         }
         // windowsPath = windowsPath.replace(/\//g, '\\');
 
-     
+
         const titleToCategory = {
             'Detailed Proposal': 'proposals',
             'Options Presentation': 'presentation',
             'Floor Plan': 'floorPlans',
             'CAD File': 'cad',
             'Sales Agreement': 'salesAggrement',
+
+            'Receiving Reports': "receivingReports",
+            "Acknowledgements": "acknowledgements"
+
             'Product Maintenance' : "otherDocuments" , 
+
         };
 
         const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
@@ -54,12 +103,12 @@ const Docs2 = () => {
             await axios.post(`${URL}/projects/${projectId}/file-comments`, {
                 comment: commentText,
                 filePath: windowsPath,
-                clientId: clientInfo?.id, 
+                clientId: clientInfo?.id,
                 category,
             });
 
             setNewComment('');
-            fetchComments(selectedDoc.fileUrl); 
+            fetchComments(selectedDoc.fileUrl);
             setLoading(false)
         } catch (error) {
             console.error('Error posting comment:', error);
@@ -95,11 +144,6 @@ const Docs2 = () => {
     const fetchComments = async (fileUrl) => {
         if (!fileUrl) return;
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
-
-    
-
-
-      
         let filePath = fileUrl;
         if (filePath.startsWith("/")) {
             filePath = filePath.substring(1);
@@ -123,7 +167,8 @@ const Docs2 = () => {
     }, []);
 
     const handleCommentClick = (docTitle, fileUrl) => {
-        const normalizedUrl = `/${fileUrl.replace(/\\/g, '/')}`;
+        console.log(docTitle, fileUrl)
+        const normalizedUrl = `/${fileUrl?.replace(/\\/g, '/')}`;
         setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
         fetchComments(normalizedUrl);
         setIsModalOpen(true);
@@ -134,6 +179,7 @@ const Docs2 = () => {
         setSelectedDoc(null);
         setComments([]);
     };
+
 
 
 
@@ -170,12 +216,55 @@ const Docs2 = () => {
         },
 
     ];
+
     const bottomRef = useRef(null);
     useEffect(() => {
         if (bottomRef.current) {
             bottomRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }, [comments]);
+
+    useEffect(() => {
+        if (message) {
+            const docList = [
+                {
+                    key: 'proposals',
+                    title: 'Detailed Proposal',
+                },
+                {
+                    key: 'presentation',
+                    title: 'Options Presentation',
+                },
+                {
+                    key: 'floorPlans',
+                    title: 'Floor Plan',
+                },
+                {
+                    key: 'cad',
+                    title: 'CAD File',
+                },
+                {
+                    key: 'salesAggrement',
+                    title: 'Sales Agreement',
+                },
+                {
+                    key: 'receivingReports',
+                    title: 'Receiving Reports',
+                },
+                {
+                    key: 'acknowledgements',
+                    title: 'Acknowledgements',
+                }
+            ];
+
+            const matchedDoc = docList.find(doc => doc.key === message.documentType);
+            const title = matchedDoc?.title || 'Document';
+
+            handleCommentClick(title, message.filePath);
+            navigate(location.pathname, { replace: true });
+        }
+    }, [message]);
+
     return (
         <div>
             <div className={styles.container}>
@@ -204,9 +293,9 @@ const Docs2 = () => {
                     </div>
                 ))}
 
-              <p className={styles.note}>
-                        If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
-                      </p>
+                <p className={styles.note}>
+                    If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
+                </p>
             </div>
 
             <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="92vh">
@@ -219,10 +308,10 @@ const Docs2 = () => {
                                 <>
                                     {/* <img src="Svg/pdf.svg" alt="PDF" /> */}
 
-                                    <iframe 
-                                    height="400px"
-                                    width="100%"
-                                    src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />
+                                    <iframe
+                                        height="400px"
+                                        width="100%"
+                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />
                                     {/* <div onClick={handleDoc}>View PDF</div> */}
 
                                 </>
