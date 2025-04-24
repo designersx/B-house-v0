@@ -141,8 +141,8 @@ function App() {
           <Route path="/punchlist" element={<ProtectedRoute><PunchPage /></ProtectedRoute>}></Route>
           <Route path="/order/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
 
-          <Route path="/orderInfo" element={<ProtectedRoute><OrderInfo /></ProtectedRoute>} />
-          <Route path="/punchlist-detail" element={<ProtectedRoute><PunchListDetail /></ProtectedRoute>} />
+          <Route path="/orderInfo/:id" element={<ProtectedRoute><OrderInfo /></ProtectedRoute>} />
+          <Route path="/punchlist-detail/:id" element={<ProtectedRoute><PunchListDetail /></ProtectedRoute>} />
 
         </Routes>
       </BrowserRouter>

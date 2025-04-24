@@ -74,7 +74,7 @@ function Punchlist() {
       ) : (
         issues?.map((issue, index) => (
 
-          <div key={index} className={styles.card} onClick={() => navigate('/punchlist-detail', {
+          <div key={index} className={styles.card} onClick={() => navigate(`/punchlist-detail/${issue?.id}`, {
             state: {
               punchId: issue?.id
             }

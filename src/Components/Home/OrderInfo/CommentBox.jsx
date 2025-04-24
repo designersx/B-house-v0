@@ -5,9 +5,11 @@ import axios from "axios";
 import URL from "../../../config/api";
 import { url2 } from "../../../config/url";
 
-function CommentBox() {
+function CommentBox({saman}) {
   const location = useLocation();
-  const { item } = location.state || {};
+  const itemFromLocation = location.state?.item;
+const item = itemFromLocation || saman;
+
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
