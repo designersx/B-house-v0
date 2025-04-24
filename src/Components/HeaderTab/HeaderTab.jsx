@@ -45,6 +45,7 @@ const HeaderTab = ({ title, subtitle }) => {
                 direction="right"
                 width="80%"
                 overlay={true}
+          
             >
                 <div className={styles.filterWrap}>
                     <h3 className={styles.heading}>Filter Data</h3>

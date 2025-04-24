@@ -215,7 +215,7 @@ const Docs2 = () => {
                       </p>
             </div>
 
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="95vh">
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="92vh">
                 <div className={styles.modalInner}>
                     <h2 className={styles.modalTitle}>{selectedDoc?.title}</h2>
 

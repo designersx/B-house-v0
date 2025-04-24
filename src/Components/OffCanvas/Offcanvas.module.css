@@ -53,4 +53,16 @@
     background: rgba(0, 0, 0, 0.3);
     z-index: 999;
   }
+  .closeBtn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 30px;
+    background: transparent;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    z-index: 9999;
+  }
+  
   

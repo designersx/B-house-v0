@@ -1,7 +1,16 @@
 import React, { useEffect } from 'react'
 import styles from '../OffCanvas/Offcanvas.module.css'
 
-const OffCanvas = ({ isOpen, onClose, children, direction = 'right', width = '100%', height = '100%', overlay = true }) => {
+const OffCanvas = ({
+    isOpen,
+    onClose,
+    children,
+    direction = 'right',
+    width = '100%',
+    height = '100%',
+    overlay = true,
+    showCloseBtn = true // new prop
+}) => {
     useEffect(() => {
         document.body.style.overflow = isOpen ? 'hidden' : 'auto';
         return () => {
@@ -19,7 +28,11 @@ const OffCanvas = ({ isOpen, onClose, children, direction = 'right', width = '10
                     height: direction === 'top' || direction === 'bottom' ? height : '100%',
                 }}
             >
-               
+                {showCloseBtn && (
+                    <button className={styles.closeBtn} onClick={onClose}>
+                        &times;
+                    </button>
+                )}
                 {children}
             </div>
         </div>
