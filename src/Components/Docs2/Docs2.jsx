@@ -45,8 +45,7 @@ const Docs2 = () => {
             'Floor Plan': 'floorPlans',
             'CAD File': 'cad',
             'Sales Agreement': 'salesAggrement',
-            'Receiving Reports' : "receivingReports" , 
-            "Acknowledgements" : "acknowledgements"
+            'Product Maintenance' : "otherDocuments" , 
         };
 
         const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
@@ -84,9 +83,8 @@ const Docs2 = () => {
 
 
                 otherDocuments: JSON.parse(project.otherDocuments || '[]'),
-                receivingReports: JSON.parse(project.receivingReports || '[]'),
+                otherDocuments: JSON.parse(project.otherDocuments || '[]'),
 
-                acknowledgements: JSON.parse(project.acknowledgements || '[]'),
 
             });
         } catch (err) {
@@ -166,15 +164,11 @@ const Docs2 = () => {
             fileUrl: projectData?.salesAggrement[0] || null, // Placeholder
         },
         {
-            title: 'Receiving Reports',
+            title: 'Product Maintenance',
             icon: 'Svg/Coi.svg',
-            fileUrl: projectData?.receivingReports[0] || null, // Placeholder
+            fileUrl: projectData?.otherDocuments[0] || null, // Placeholder
         },
-        {
-            title: 'Acknowledgements',
-            icon: 'Svg/Coi.svg',
-            fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
-        },
+
     ];
     const bottomRef = useRef(null);
     useEffect(() => {

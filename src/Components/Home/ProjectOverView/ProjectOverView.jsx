@@ -76,8 +76,7 @@ const [docData ,  setDocsData] = useState()
   const remaining = teamUsers.length - 4;
   JSON.stringify(localStorage.setItem("visible" , visible    ))
   JSON.stringify(localStorage.setItem("teamusers" , teamUsers    ))
-        // JSON.stringify(localStorage.setItem( "remaining"  , ""  ))
-        JSON.stringify(localStorage.setItem("remaining" , remaining   ))
+  JSON.stringify(localStorage.setItem("remaining" , remaining   ))
    
   return (
     <div>
