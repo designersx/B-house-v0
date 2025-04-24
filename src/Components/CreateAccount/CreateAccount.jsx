@@ -51,6 +51,7 @@ const validateField = (name, value) => {
     case "companyName":
       if (!value.trim()) message = "Company name is required.";
       else if (!companyRegex.test(value)) message = "Alphanumeric and spaces only.";
+      else if (emojiRegex.test(value)) message = "Emojis are not allowed in the company name.";
       break;
 
     case "description":
@@ -61,6 +62,7 @@ const validateField = (name, value) => {
 
     case "address":
       if (value.length > 100) message = "Max 100 characters allowed.";
+      else if (emojiRegex.test(value)) message = "Emojis are not allowed in the address.";
       break;
 
     default:
