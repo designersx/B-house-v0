@@ -89,8 +89,12 @@ const Docs2 = () => {
             'Floor Plan': 'floorPlans',
             'CAD File': 'cad',
             'Sales Agreement': 'salesAggrement',
+
             'Receiving Reports': "receivingReports",
             "Acknowledgements": "acknowledgements"
+
+            'Product Maintenance' : "otherDocuments" , 
+
         };
 
         const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
@@ -128,9 +132,8 @@ const Docs2 = () => {
 
 
                 otherDocuments: JSON.parse(project.otherDocuments || '[]'),
-                receivingReports: JSON.parse(project.receivingReports || '[]'),
+                otherDocuments: JSON.parse(project.otherDocuments || '[]'),
 
-                acknowledgements: JSON.parse(project.acknowledgements || '[]'),
 
             });
         } catch (err) {
@@ -176,6 +179,44 @@ const Docs2 = () => {
         setSelectedDoc(null);
         setComments([]);
     };
+
+
+
+
+    const docList = [
+        {
+            title: 'Detailed Proposal',
+            icon: 'Svg/detailed-proposal.svg',
+            fileUrl: projectData.proposals[0] || null,
+        },
+        {
+            title: 'Options Presentation',
+            icon: 'Svg/options-presentation.svg',
+            fileUrl: projectData?.presentation[0] || null, // Placeholder
+        },
+        {
+            title: 'Floor Plan',
+            icon: 'Svg/floor-plan.svg',
+            fileUrl: projectData.floorPlans[0] || null,
+        },
+        {
+            title: 'CAD File',
+            icon: 'Svg/cad-file.svg',
+            fileUrl: projectData?.cad[0] || null // Placeholder
+        },
+        {
+            title: 'Sales Agreement',
+            icon: 'Svg/sales-icon.svg',
+            fileUrl: projectData?.salesAggrement[0] || null, // Placeholder
+        },
+        {
+            title: 'Product Maintenance',
+            icon: 'Svg/Coi.svg',
+            fileUrl: projectData?.otherDocuments[0] || null, // Placeholder
+        },
+
+    ];
+
     const bottomRef = useRef(null);
     useEffect(() => {
         if (bottomRef.current) {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from '../Punchlist/Punchlistdetails.module.css';
 import Slider from "./PunchSlider";
 import HeaderTab from '../HeaderTab/HeaderTab';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import axios from 'axios';
 import URL from '../../config/api';
 import CommentThread from '../CommentThread/CommentThread';
@@ -10,8 +10,10 @@ import { url2 } from "../../config/url";
 
 
 function PunchListDetail() {
-  const location = useLocation();
-  const { punchId } = location.state || {};
+  // const location = useLocation();
+  const params = useParams()
+  const punchId = params?.id
+  console.log({punchId})
 
   const [punchItem, setPunchItem] = useState(null);
 
@@ -20,7 +22,7 @@ function PunchListDetail() {
       try {
         const res = await axios.get(`${URL}/punch-list/${punchId}`);
         const data = res.data;
-
+console.log({data})
         // Make sure productImages is an array
         data.productImages = Array.isArray(data.productImages)
           ? data.productImages

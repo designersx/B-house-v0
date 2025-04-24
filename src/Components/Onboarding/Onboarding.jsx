@@ -88,6 +88,7 @@ const [docFile , setDocFile] = useState()
   };
 
   const handleSubmit = async () => {
+    setLoading(true)
     try {
       const data = {
         deliveryAddress,
@@ -103,7 +104,11 @@ const [docFile , setDocFile] = useState()
       setOpenModalIndex(null);
     } catch (err) {
       console.error('Update failed', err);
-      alert('Failed to update project.');
+      // alert('Failed to update project.');
+    }
+    finally{
+
+      setLoading(false)
     }
   };
 
@@ -165,6 +170,7 @@ const [docFile , setDocFile] = useState()
   };
   const [file, setFile] = useState(null);
   const handleUploadDoc = async () => {
+  setLoading(true)
     if (!file) {
       alert("Please select a file");
       return;
@@ -179,12 +185,16 @@ const [docFile , setDocFile] = useState()
       const response = await axios.post(`${URL}/customerDoc/add`, 
          formData
       );
-      alert("File uploaded successfully!");
+      // alert("File uploaded successfully!");
+      setCompletedSteps((prev) => [...prev, openModalIndex]);
+      setOpenModalIndex(null);
     
     } catch (err) {
       console.error("Upload failed", err);
-      alert("Upload failed!");
+      // alert("Upload failed!");
     }
+    finally{
+    setLoading(false)}
   };
 
   return (
@@ -425,23 +435,47 @@ const [docFile , setDocFile] = useState()
                 </div> */}
 
                 <div className={styles.formGroup}>
-                  {laoding ? <Loader/>: <>
-                    {docFile ? 
-                 <iframe 
-                                                     height="300px"
-                                                     width="100%"
-                                                     src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${docFile}`)}&embedded=true`} /> :
-                  <>
-                    <label>Upload COI Document</label>
-                  <input
-        type="file"
-        accept=".pdf,.doc,.docx,.jpg,.png"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
-                  </>
-                
-                }
-                  </>}
+                {laoding ? <Loader /> : (
+  <>
+    {docFile ? (
+      (() => {
+        const fileExtension = docFile.split('.').pop().toLowerCase();
+        const fileUrl = `${url2}/${docFile}`;
+
+        if (fileExtension === 'pdf') {
+          return (
+            <iframe
+              height="300px"
+              width="100%"
+              src={`https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true`}
+              title="PDF Preview"
+            />
+          );
+        } else if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
+          return (
+            <img
+              src={fileUrl}
+              alt="Document Preview"
+              style={{ maxWidth: '100%', height: '300px', objectFit: 'contain' }}
+            />
+          );
+        } else {
+          return <p>Unsupported file format.</p>;
+        }
+      })()
+    ) : (
+      <>
+        <label>Upload COI Document</label>
+        <input
+          type="file"
+          accept=".pdf,.doc,.docx,.jpg,.png"
+          onChange={(e) => setFile(e.target.files[0])}
+        />
+      </>
+    )}
+  </>
+)}
+
                  
                   
       
@@ -455,7 +489,7 @@ const [docFile , setDocFile] = useState()
             )}
           </div>
 
-          <button onClick={ openModalIndex ==1 ? handleSubmit:handleUploadDoc} className={styles.submitButton}>{openModalIndex ==1 || (!docFile && openModalIndex==2) ? "Update" : null}</button>
+          <button onClick={ openModalIndex ==1 ? handleSubmit:handleUploadDoc} className={openModalIndex ==1 || (!docFile && openModalIndex==2) ? styles.submitButton : null}>{openModalIndex ==1 || (!docFile && openModalIndex==2) ? laoding ? <Loader size={13}/>: "Update"  : null}</button>
         </Modal>
       )}
     </div>
