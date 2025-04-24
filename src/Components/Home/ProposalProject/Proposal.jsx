@@ -5,33 +5,49 @@ import URL from "../../../config/api";
 import ProjectOverView from "../ProjectOverView/ProjectOverView";
 import ProjectDelivery from "../ProjectDelivery/ProjectDelivery";
 import { useNavigate } from "react-router-dom";
-import Loader from '../../Loader/Loader'
+import Loader from "../../Loader/Loader";
 function Proposal() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
-  const [docData, setDocsData] = useState()
+  const [docData, setDocsData] = useState();
+  const [invoiceData, setInvoiceData] = useState();
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const teamUsersFromStorage = localStorage.getItem("teamusers");
+
+  const parsedTeamUsers = teamUsersFromStorage
+    ? teamUsersFromStorage.split(",").map((id) => Number(id.trim()))
+    : [];
   const fetchDocs = async () => {
-    const id = JSON.parse(localStorage.getItem('selectedProjectId'));
+    const id = JSON.parse(localStorage.getItem("selectedProjectId"));
     try {
       const res = await axios.get(`${URL}/customerDoc/document/${id}`);
       setDocsData(res.data || []);
     } catch (err) {
-      console.error('Failed to fetch documents:', err);
+      console.error("Failed to fetch documents:", err);
     }
   };
-
+  const fetchInvoice = async () => {
+    const id = JSON.parse(localStorage.getItem("selectedProjectId"));
+    try {
+      const res = await axios.get(`${URL}/projects/${id}/invoice`);
+      setInvoiceData(res.data || []);
+    } catch (err) {
+      console.error("Failed to fetch documents:", err);
+    }
+  };
   useEffect(() => {
     fetchDocs();
   }, []);
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
-  const [selectedProject, setSelectedProject] = useState(null);
-
+  useEffect(() => {
+    fetchInvoice();
+  }, []);
   const steps = [
     {
       id: 1,
       img: "/Svg/docs.svg",
       label: "Docs",
-      count: `0${docData?.length}`,
+      count: `${docData?.length || 0}`,
       color: "#015369",
       colorSmall: "#015369",
     },
@@ -47,7 +63,7 @@ function Proposal() {
       id: 3,
       img: "/Svg/invoice.svg",
       label: "Invoice",
-      count: "02",
+      count: `${invoiceData?.length || 0}`,
       color: "#E1917A",
       colorSmall: "#E1917A",
     },
@@ -55,7 +71,7 @@ function Proposal() {
       id: 4,
       img: "/Svg/team.svg",
       label: "Team",
-      count: "01",
+      count: `${parsedTeamUsers?.length || 0}`,
       color: "#E7FAF6",
       colorSmall: "#E7FAF6",
     },
@@ -68,56 +84,67 @@ function Proposal() {
     //   colorSmall: "#FFEA81",
     // },
   ];
-
   useEffect(() => {
     const fetchProjects = async () => {
       const customer = JSON.parse(localStorage.getItem("customerInfo"));
       const storedProjectId = localStorage.getItem("selectedProjectId");
       if (!customer?.id) return;
+  
       try {
         const res = await axios.get(`${URL}/projects/client/${customer.id}`);
         const projectsData = res.data || [];
         setProjects(projectsData);
-        // Store all project IDs in localStorage
-        const allProjectIds = projectsData.map(project => project.id);
+  
+        const allProjectIds = projectsData.map((project) => project.id);
         localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
-        // Check if a previously selected project exists
-        if (storedProjectId) {
-          const matched = projectsData.find(p => p.id.toString() === storedProjectId);
-          console.log(matched.id, "MATCH DATA")
-          if (matched) {
-            setSelectedProjectId(matched.id);
-            setSelectedProject(matched);
-            return;
-          }
-        }
-        // Fallback to the first project if no match
-        if (projectsData.length > 0) {
-          setSelectedProjectId(projectsData[0].id);
-          setSelectedProject(projectsData[0]);
-          localStorage.setItem("selectedProjectId", projectsData[0].id);
-          localStorage.setItem("selectedProject", JSON.stringify(projectsData[0]));
+  
+        const matched = storedProjectId
+          ? projectsData.find((p) => p.id.toString() === storedProjectId)
+          : null;
+  
+        const fallbackProject = projectsData[0];
+  
+        const selected = matched || fallbackProject;
+  
+        if (selected) {
+          setSelectedProjectId(selected.id);
+          setSelectedProject(selected);
+          localStorage.setItem("selectedProjectId", selected.id);
+          localStorage.setItem("selectedProject", JSON.stringify(selected));
+  
+          // ✅ Store team users in localStorage
+          const allUserIds = selected.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
+          localStorage.setItem("teamusers", allUserIds.join(","));
         }
       } catch (err) {
         console.error("Error fetching projects:", err);
       }
     };
-
+  
     fetchProjects();
   }, []);
+  
+const handleProjectChange = (e) => {
+  const projectId = e.target.value;
+  const project = projects.find((p) => p.id.toString() === projectId);
 
-  const handleProjectChange = (e) => {
-    const projectId = e.target.value;
-    const project = projects.find((p) => p.id.toString() === projectId);
-    setSelectedProjectId(projectId);
-    setSelectedProject(project);
-    localStorage.setItem("selectedProjectId", projectId);
-    localStorage.setItem("selectedProject", JSON.stringify(project));
+  setSelectedProjectId(projectId);
+  setSelectedProject(project);
+  localStorage.setItem("selectedProjectId", projectId);
+  localStorage.setItem("selectedProject", JSON.stringify(project));
 
-  };
+  // ✅ Update teamusers when project changes
+  const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
+  localStorage.setItem("teamusers", allUserIds.join(","));
+};
+
   return (
     <>
-      {!selectedProject ? <div className={styles.ForLoder}><Loader /></div> :
+      {!selectedProject ? (
+        <div className={styles.ForLoder}>
+          <Loader />
+        </div>
+      ) : (
         <div className={styles.container}>
           {/* Header Section */}
           <div className={styles.header}>
@@ -165,9 +192,15 @@ function Proposal() {
                       className={styles.counttip}
                       style={{ borderColor: step.colorSmall }}
                     ></span>
-                    <span className={step.id === 1 ? styles.whiteCount : ""}>{step.count}</span>
+                    <span className={step.id === 1 ? styles.whiteCount : ""}>
+                      {step.count}
+                    </span>
                   </div>
-                  <img src={step.img} alt={step.label} className={styles.icon} />
+                  <img
+                    src={step.img}
+                    alt={step.label}
+                    className={styles.icon}
+                  />
                 </div>
                 <p className={styles.label}>{step.label}</p>
               </div>
@@ -186,10 +219,9 @@ function Proposal() {
           </div>
           <ProjectOverView selectedProject={selectedProject} />
           <ProjectDelivery selectedProject={selectedProject} />
-        </div>}
+        </div>
+      )}
     </>
-
-
   );
 }
 

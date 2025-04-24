@@ -32,6 +32,12 @@ function Header() {
     localStorage.removeItem('customerInfo');
     localStorage.removeItem('selectedProject');
     localStorage.removeItem('selectedProjectId');
+    localStorage.removeItem('remaining');
+    localStorage.removeItem('teamuser');
+    localStorage.removeItem('teamusers');
+    localStorage.removeItem('user');
+    localStorage.removeItem('visible');
+    localStorage.removeItem('allProjectIds');
     await deleteFcmToken(customerInfo.id)
     navigate('/');
   };
@@ -203,8 +209,8 @@ function Header() {
           <div className={styles.userInfo}>
             <img src={data?.profilePhoto ? `${url2}/${data?.profilePhoto}` : 'Images/profle.png'} alt="user" className={styles.avatar} />
             <div>
-              <p className={styles.userName}>{customerInfo?.full_name || "User"}</p>
-              <p className={styles.userEmail}>{customerInfo?.email || "email@example.com"}</p>
+              <p className={styles.userName}>{data?.full_name || "User"}</p>
+              <p className={styles.userEmail}>{data?.email || "email@example.com"}</p>
             </div>
           </div>
 
