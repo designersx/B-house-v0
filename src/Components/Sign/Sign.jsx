@@ -67,11 +67,14 @@ const Sign = () => {
 
   return (
     <div className={styles.signMain}>
+         <div className="HeaderTop">
       <div className={styles.ImgDiv}>
         <img src="Images/Home-img.png" alt="" />
       </div>
+    
       <div className={styles.logoContainer}>
         <img src="Svg/b-houseLogo.svg" alt="" />
+      </div>
       </div>
       <div className={styles.signPart}>
         <h2 className={styles.heading}>Sign In</h2>

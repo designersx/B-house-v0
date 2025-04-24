@@ -8,16 +8,16 @@ const Home = () => {
   return (
     <div>
       <div className="HeaderTop">
-      <Header />
+        <Header />
       </div>
-<div className={styles.homeMain}>
+      <div className={styles.homeMain}>
 
-      <Proposal />
-  
-      <Footer />
+        <Proposal />
+
+        <Footer />
+      </div>
     </div>
-    </div>
-    
+
   );
 };
 

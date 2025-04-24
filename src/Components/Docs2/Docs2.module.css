@@ -110,12 +110,12 @@
 
 
 .chatWrapper {
-    max-height: 200px;
+    max-height: 500px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-block: 1rem 4rem;
+    padding-block: 1rem 8rem;
     padding-right: 10px;
 }
 
@@ -228,7 +228,7 @@
 
 .inputBox::placeholder {
     font-size: 16px;
-    color: #26211F;
+    color: #bcc3d4;
 }
 
 .commentButton {

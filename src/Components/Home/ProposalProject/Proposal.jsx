@@ -9,13 +9,12 @@ import Loader from '../../Loader/Loader'
 function Proposal() {
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
-  const [docData ,  setDocsData] = useState()
+  const [docData, setDocsData] = useState()
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));
     try {
       const res = await axios.get(`${URL}/customerDoc/document/${id}`);
       setDocsData(res.data || []);
-      console.log(res.data  , "data" )
     } catch (err) {
       console.error('Failed to fetch documents:', err);
     }
@@ -74,25 +73,24 @@ function Proposal() {
     const fetchProjects = async () => {
       const customer = JSON.parse(localStorage.getItem("customerInfo"));
       const storedProjectId = localStorage.getItem("selectedProjectId");
-  
       if (!customer?.id) return;
-  
       try {
         const res = await axios.get(`${URL}/projects/client/${customer.id}`);
         const projectsData = res.data || [];
         setProjects(projectsData);
-        
-  
+        // Store all project IDs in localStorage
+        const allProjectIds = projectsData.map(project => project.id);
+        localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
         // Check if a previously selected project exists
         if (storedProjectId) {
           const matched = projectsData.find(p => p.id.toString() === storedProjectId);
+          console.log(matched.id, "MATCH DATA")
           if (matched) {
             setSelectedProjectId(matched.id);
             setSelectedProject(matched);
             return;
           }
         }
-  
         // Fallback to the first project if no match
         if (projectsData.length > 0) {
           setSelectedProjectId(projectsData[0].id);
@@ -104,94 +102,94 @@ function Proposal() {
         console.error("Error fetching projects:", err);
       }
     };
-  
+
     fetchProjects();
   }, []);
-  
+
   const handleProjectChange = (e) => {
     const projectId = e.target.value;
     const project = projects.find((p) => p.id.toString() === projectId);
     setSelectedProjectId(projectId);
     setSelectedProject(project);
     localStorage.setItem("selectedProjectId", projectId);
+    localStorage.setItem("selectedProject", JSON.stringify(project));
 
   };
-
   return (
     <>
-      {!selectedProject ? <Loader/> :   
-      <div className={styles.container}>
-    {/* Header Section */}
-    <div className={styles.header}>
-      <h4 className={styles.statusBadge}>
-        {selectedProject ? selectedProject.status : "Loading..."}
-      </h4>
+      {!selectedProject ? <div className={styles.ForLoder}><Loader /></div> :
+        <div className={styles.container}>
+          {/* Header Section */}
+          <div className={styles.header}>
+            <h4 className={styles.statusBadge}>
+              {selectedProject ? selectedProject.status : "Loading..."}
+            </h4>
 
-      <div className={styles.projectSelector}>
-        <span className={styles.projectTitle}>Project: </span>
-        <select
-          value={selectedProjectId || ""}
-          onChange={handleProjectChange}
-        >
-        {projects
-  .filter((proj) => proj.status !== "Archived")
-  .map((proj) => (
-    <option key={proj.id} value={proj.id}>
-      {proj.name}
-    </option>
-))}
-        </select>
-      </div>
+            <div className={styles.projectSelector}>
+              <span className={styles.projectTitle}>Project: </span>
+              <select
+                value={selectedProjectId || ""}
+                onChange={handleProjectChange}
+              >
+                {projects
+                  .filter((proj) => proj.status !== "Archived")
+                  .map((proj) => (
+                    <option key={proj.id} value={proj.id}>
+                      {proj.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
 
-      <p className={styles.subText}>
-        Here's what's happening with your projects
-      </p>
-    </div>
+            <p className={styles.subText}>
+              Here's what's happening with your projects
+            </p>
+          </div>
 
-    {/* Progress Tracker Section */}
-   
-<div className={styles.progressTracker}>
-{steps.map((step) => (
-  <div
-    key={step.id}
-    className={styles.step}
-    onClick={() => navigate(`/${step.label.toLowerCase()}`)} 
-    style={{ cursor: "pointer" }}
-  >
-    <div className={styles.circle}>
-      <div
-        className={styles.count}
-        style={{ backgroundColor: step.colorSmall }}
-      >
-        <span
-          className={styles.counttip}
-          style={{ borderColor: step.colorSmall }}
-        ></span>
-        <span className={step.id === 1 ? styles.whiteCount : ""}>{step.count}</span>
-      </div>
-      <img src={step.img} alt={step.label} className={styles.icon} />
-    </div>
-    <p className={styles.label}>{step.label}</p>
-  </div>
-))}
-</div>
+          {/* Progress Tracker Section */}
 
-    {/* Progress Bar */}
-    <div className={styles.progressBar}>
-      {steps.map((step) => (
-        <div
-          key={step.id}
-          className={styles.barSegment}
-          style={{ backgroundColor: step.color }}
-        ></div>
-      ))}
-    </div>
-    <ProjectOverView  selectedProject={selectedProject}/>
-    <ProjectDelivery selectedProject={selectedProject}/>
-  </div> }
+          <div className={styles.progressTracker}>
+            {steps.map((step) => (
+              <div
+                key={step.id}
+                className={styles.step}
+                onClick={() => navigate(`/${step.label.toLowerCase()}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className={styles.circle}>
+                  <div
+                    className={styles.count}
+                    style={{ backgroundColor: step.colorSmall }}
+                  >
+                    <span
+                      className={styles.counttip}
+                      style={{ borderColor: step.colorSmall }}
+                    ></span>
+                    <span className={step.id === 1 ? styles.whiteCount : ""}>{step.count}</span>
+                  </div>
+                  <img src={step.img} alt={step.label} className={styles.icon} />
+                </div>
+                <p className={styles.label}>{step.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Progress Bar */}
+          <div className={styles.progressBar}>
+            {steps.map((step) => (
+              <div
+                key={step.id}
+                className={styles.barSegment}
+                style={{ backgroundColor: step.color }}
+              ></div>
+            ))}
+          </div>
+          <ProjectOverView selectedProject={selectedProject} />
+          <ProjectDelivery selectedProject={selectedProject} />
+        </div>}
     </>
-  
-  
+
+
   );
 }
 
