@@ -11,7 +11,7 @@ const List = () => {
   const [selectedOption, setSelectedOption] = useState("Recent");
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
-  
+
   const projectId = localStorage.getItem("selectedProjectId");
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -80,41 +80,22 @@ const List = () => {
       setPopupMessage("No file has been uploaded for this invoice.");
       setShowPopup(true);
       return;
-    }    
+    }
     window.open(`${url2}/${filePath}`, "_blank");
   };
 
   return (
     <div className={styles.ListMian}>
-    {showPopup && (
-  <PopUp
-    type="failed"
-    message={popupMessage}
-    onClose={() => setShowPopup(false)}
-  />
-)}
+      {showPopup && (
+        <PopUp
+          type="failed"
+          message={popupMessage}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
 
 
-      
-
-      <div className={styles.transactionList}>
-        {filteredInvoices.length === 0 ? (
-          <div className={styles.noData}>
-            <div>
-              <img src="Svg/notfound.svg" alt="" />
-              <div className={styles.NoDataTittle}>
-                <p>No items found yet</p>
-                <img src="Svg/EYE1.svg" alt="" />
-              </div>
-            </div>
-          </div>
-        ) : (
-          filteredInvoices.map((invoice, index) => (
-
-            // 
-
-            <>
-            <div className={styles.Part1}>
+      <div className={styles.Part1}>
         <div className={styles.title}>
           <p>All Invoice List</p>
         </div>
@@ -135,7 +116,21 @@ const List = () => {
           )}
         </div>
       </div>
-      <div key={invoice.id} className={styles.transactionItem}>
+
+      <div className={styles.transactionList}>
+        {filteredInvoices.length === 0 ? (
+          <div className={styles.noData}>
+            <div>
+              <img src="Svg/notfound.svg" alt="" />
+              <div className={styles.NoDataTittle}>
+                <p>No items found yet</p>
+                <img src="Svg/EYE1.svg" alt="" />
+              </div>
+            </div>
+          </div>
+        ) : (
+          filteredInvoices.map((invoice, index) => (
+            <div key={invoice.id} className={styles.transactionItem}>
               <img
                 src="Svg/pdf-icon.svg"
                 alt="pdf-icon"
@@ -157,19 +152,16 @@ const List = () => {
                 </div>
               </div>
               <span
-                className={`${styles.status} ${
-                  invoice.status === "Partly Paid"
+                className={`${styles.status} ${invoice.status === "Partly Paid"
                     ? styles.PartlyPaid
                     : invoice.status === "Paid"
-                    ? styles.Paid
-                    : styles.Pending
-                }`}
+                      ? styles.Paid
+                      : styles.Pending
+                  }`}
               >
                 {invoice.status}
               </span>
             </div>
-            </>
-           
           ))
         )}
       </div>

@@ -40,6 +40,7 @@ const Sign = () => {
         localStorage.setItem("savedPassword", password);
         //save Fcm
         const FCM_Token = await getFcmToken();
+        
         await sendFcmToken(FCM_Token,customer.id)
         setLoading(false)
       } else {
@@ -57,6 +58,7 @@ const Sign = () => {
       } else {
         setLoading(false)
         navigate("/home");
+        
       }
     } catch (err) {
       setLoading(false)
