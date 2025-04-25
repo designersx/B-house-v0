@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import URL from "../../../config/api";
 import axios from "axios";
 import { url2 } from "../../../config/url";
-
+// vf
 const progressColor = {
   Installed: {
     progressWidth: "100%",

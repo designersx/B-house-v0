@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./OrderDetail.module.css";
 
 function OrderDetail() {
+  // heel
   const location = useLocation();
   const navigate = useNavigate();
   const order = location.state;
