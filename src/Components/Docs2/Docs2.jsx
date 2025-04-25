@@ -5,6 +5,7 @@ import { url2 } from '../../config/url';
 import URL from '../../config/api';
 import axios from 'axios';
 import Loader from '../Loader/Loader'
+import {useLocation , useNavigate} from 'react-router-dom' 
 const Docs2 = () => {
     const [newComment, setNewComment] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
