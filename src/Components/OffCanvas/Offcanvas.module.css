@@ -54,7 +54,7 @@
     z-index: 999;
   }
   .closeBtn {
-    position: fixed;
+    position: sticky;
     top: 20px;
     right: 20px;
     background: none;
@@ -72,6 +72,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    float: right;
   }
   
  

@@ -280,8 +280,8 @@ function Header() {
       </ModalSearch>
       {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="100%">
 
-        <div className='HeaderTops'>
-          <h1 className={styles.notificationTitle}>Notification</h1>
+        <div className='HeaderTop'>
+          <h1 className={styles.notificationTitle}  >Notification</h1>
         </div>
 
         {notification.map((message) => {
@@ -301,10 +301,19 @@ function Header() {
                   style={cardStyle}
                   onClick={() => handleOpenModal(message)}
                 >
-                  <div className="note-badge">{isUnread ? "UNREAD" : "READ"}</div>
+                  <div className="note-badge">
+                    <img src={isUnread ? 'Svg/shape-icon2.svg' : 'Svg/shape-icon.svg'} alt='' />
+                    <div className={`note-badge-text ${isUnread ? 'unread' : 'read'}`}>
+                      {isUnread ? "UNREAD" : "READ"}
+                    </div>
+                  </div>
                   <div className="notification-header">
                     <span className="sender-name">{message.senderName}</span>
-                    <span className="notification-time">{formatNotificationTime(message.createdAt)}</span>
+                    <span className="notification-time">
+                      {formatNotificationTime(message.createdAt) > 99
+                        ? '99+'
+                        : formatNotificationTime(message.createdAt)}
+                    </span>
                   </div>
                   <div className="notification-message">{message.message}</div>
                 </div>

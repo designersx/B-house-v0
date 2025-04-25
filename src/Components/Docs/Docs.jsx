@@ -135,6 +135,7 @@ function Docs() {
   useEffect(() => {
     fetchDocs();
   }, []);
+  const tabRefs = useRef([]);
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>List of Docs</h2>
@@ -143,17 +144,20 @@ function Docs() {
         <PopUp type="success" message="File has been uploaded" />
       )}
 
-      <div className={styles.tabs}>
-        {[customerName, 'B-HOUSE DOCS'].map(tab => (
-          <button
-            key={tab}
-            className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+<div className={styles.tabs}>
+  {[customerName, 'B-HOUSE DOCS'].map((tab, index) => (
+    <button
+      key={tab}
+      ref={el => tabRefs.current[index] = el}
+      className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
+      onClick={() => setActiveTab(tab)}
+    >
+      {tab}
+    </button>
+  ))}
+  <div className={styles.tabIndicator} style={{ left: activeTab === customerName ? '0%' : '50%' }} />
+</div>
+
 
       {activeTab === customerName ? (
         <div className={styles.docList}>
