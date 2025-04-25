@@ -2,19 +2,57 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './OrderInfo.module.css';
 import CommentBox from './CommentBox';
-import HeaderTab from '../../HeaderTab/HeaderTab';
-import { useLocation } from 'react-router-dom';
+
+import { useLocation, useParams } from 'react-router-dom';
 import URL from '../../../config/api';
 import { url2 } from '../../../config/url';
+import HeaderTab from '../../HeaderTab/HeaderTab';
 function OrderInfo() {
   const location = useLocation();
-  const { item } = location.state || {};
+  // const { item } = location.state || {};
+ 
   const [project, setProject] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const [accountManager, setAccountManager] = useState(null);
   const [latestUserComment, setLatestUserComment] = useState(null);
+  const selectedProject = JSON.parse(localStorage.getItem("selectedProject"))
+  let a = selectedProject?.assignedTeamRoles
+  
+    const [itemsData, setItemsData] = useState();
+    const params = useParams();
+    const id = params.id;
+    
+    const fetchManufacturers = async () => {
+      const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
+    
+      try {
+        const res = await axios.get(`${URL}/items/${projectId}`);
+        if (res?.data?.length > 0) {
+          const filteredItem = res.data.find(item => item.id.toString() === id.toString());
+          setItemsData(filteredItem);
+          console.log({filteredItem})
+        }
+      } catch (error) {
+        console.log("Error fetching items:", error);
+      }
+    };
+  const accountManagers = a.find(item => item.role === "Account Manager");
+ const firstAccountManagerId = accountManagers?.users[0];
+ const fetchAccountManger = async()=>{
+  try{
+    const { data: allUsers } = await axios.get(`${URL}/auth/getAllUsers`);
+    const user = allUsers.find(user => user.id === firstAccountManagerId);
+    setAccountManager(user);
+  }
+  catch(error){
+    console.error("Failed to fetch account manager data:", error);
+  }
+  
+ }
+ useEffect(() => {
 
-
+  fetchAccountManger();
+}, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,7 +86,7 @@ function OrderInfo() {
           }
         }
 
-        setAccountManager(foundAccountManager);
+       
         const commentsRes = await axios.get(`${URL}/items/${item.id}/comments`);
         const allComments = commentsRes.data;
 
@@ -86,16 +124,24 @@ function OrderInfo() {
       return "just now";
     }
   };
+  
+  useEffect(() => {
+    fetchManufacturers();
+  }, []);
+
+
+  const itemFromLocation = location.state?.item;
+const item = itemFromLocation || itemsData;
 
   return (
     <div>
       <div className='HeaderTop'>
-        <HeaderTab title={"Davis Chairs"} />
+        <HeaderTab title={item?.itemName} />
       </div>
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.etdEta}>
-            {item.expectedDeliveryDate ? (
+            {item?.expectedDeliveryDate ? (
               <>
                 <div className={styles.topFlex}>
                   <div className={styles.etd}>
@@ -228,7 +274,7 @@ function OrderInfo() {
       </div>
       <div className={styles.commentSection}>
 
-        <CommentBox />
+        <CommentBox  saman ={itemsData}/>
 
       </div>
     </div>

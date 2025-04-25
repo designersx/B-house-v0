@@ -32,6 +32,12 @@ function Header() {
     localStorage.removeItem('customerInfo');
     localStorage.removeItem('selectedProject');
     localStorage.removeItem('selectedProjectId');
+    localStorage.removeItem('remaining');
+    localStorage.removeItem('teamuser');
+    localStorage.removeItem('teamusers');
+    localStorage.removeItem('user');
+    localStorage.removeItem('visible');
+    localStorage.removeItem('allProjectIds');
     await deleteFcmToken(customerInfo.id)
     navigate('/');
   };
@@ -69,10 +75,8 @@ function Header() {
   }
   const fetchNotification = async () => {
     const allProjectIds = JSON.parse(localStorage.getItem('allProjectIds'))
-    console.log(allProjectIds, "HELLO")
     try {
       const response = await getNotificationsByProjectId(allProjectIds)
-      console.log(response)
       const filterNotificationWithRole = response.data.notifications.filter((item) => item.role == "customer")
       setNotification(filterNotificationWithRole.reverse())
       const unread = filterNotificationWithRole.filter(n => !n.isRead);
@@ -112,12 +116,12 @@ function Header() {
     }
   }
   const handleOpenModal = (message) => {
-    setShowModal(true)
+    navigate(`/${message.path}`, { state: { message } })
     handleNotificationClick(message.id)
     setMessage(message)
+
   }
   const handleNotificationClick = async (notification_id) => {
-    console.log(notification_id, "id")
     if (!notification.isRead) {
       try {
         await axios.put(`${URL}/notificationMarkedRead/${notification_id}`);
@@ -181,10 +185,14 @@ function Header() {
         </div>
         <div className={styles.headerSideIcon}>
           <img src='Svg/searchSvg.svg' alt='Search' className={styles.vector1} onClick={() => setShowModalSearch(true)} />
-          {unreadNotification > 0 && (
-            <h6 style={{ color: "red" }}>{unreadNotification}</h6>
-          )}
-          <img onClick={handleOpenOffcanvas} src="/Svg/BellIcon.svg" alt="BellIcon" className={styles.vector1} />
+
+          <div className={styles.vector2} onClick={handleOpenOffcanvas}>
+            <img src="/Svg/BellIcon.svg" alt="BellIcon" />
+            {unreadNotification > 0 && (
+              <h6 className={styles.notificationDiv}>{unreadNotification}</h6>
+            )}
+          </div>
+
           <img
             src="/Svg/UserIcon1.svg"
             alt="UserIcon"
@@ -195,7 +203,7 @@ function Header() {
       </div>
 
 
-      <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="70%"   showCloseBtn={false}>
+      <OffCanvas isOpen={showCanvas} onClose={() => setShowCanvas(false)} direction="right" width="70%" showCloseBtn={false}>
 
         <div className={styles.sidebarContainer}>
           <p className={styles.sectionTitle}>Profile</p>
@@ -203,8 +211,8 @@ function Header() {
           <div className={styles.userInfo}>
             <img src={data?.profilePhoto ? `${url2}/${data?.profilePhoto}` : 'Images/profle.png'} alt="user" className={styles.avatar} />
             <div>
-              <p className={styles.userName}>{customerInfo?.full_name || "User"}</p>
-              <p className={styles.userEmail}>{customerInfo?.email || "email@example.com"}</p>
+              <p className={styles.userName}>{data?.full_name || "User"}</p>
+              <p className={styles.userEmail}>{data?.email || "email@example.com"}</p>
             </div>
           </div>
 
@@ -271,32 +279,43 @@ function Header() {
         height="50%">
       </ModalSearch>
       {openOffcanvas && <OffCanvas onClose={handleCloseOffcanvas} isOpen={openOffcanvas} direction="right" width="100%">
-        <h1 className={styles.notificationTitle}>Notification</h1>
+
+        <div className='HeaderTops'>
+          <h1 className={styles.notificationTitle}>Notification</h1>
+        </div>
+
         {notification.map((message) => {
+          const isUnread = message.isRead === false;
+
+
           const cardStyle = {
-            backgroundColor: message.isRead === false ? "#EEF7FF" : "#fff", // default color white
-            padding: "10px",
-            marginBottom: "10px",
-            borderRadius: "8px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
+            backgroundColor: isUnread ? "#EEF7FF" : "#fff",
+
           };
           return (
             <>
-              <div className="notification-container">
-                <div className="notification-card" style={cardStyle} onClick={() => handleOpenModal(message)}>
+
+              <div className="notification-container" key={message.id}>
+                <div
+                  className="notification-card"
+                  style={cardStyle}
+                  onClick={() => handleOpenModal(message)}
+                >
+                  <div className="note-badge">{isUnread ? "UNREAD" : "READ"}</div>
                   <div className="notification-header">
                     <span className="sender-name">{message.senderName}</span>
                     <span className="notification-time">{formatNotificationTime(message.createdAt)}</span>
                   </div>
-                  <div className="notification-message">
-                    {message.message}
-                  </div>
+                  <div className="notification-message">{message.message}</div>
                 </div>
-              </div></>
+              </div>
+            </>
           )
+
         })}
+
       </OffCanvas>}
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
+      <Modal onClose={() => setShowModal(false)} height='70vh'>
         <NotificationView showModal={showModal}
           setShowModal={setShowModal} message={message} />
       </Modal>
