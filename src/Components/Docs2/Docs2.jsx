@@ -16,6 +16,7 @@ const Docs2 = () => {
     const location = useLocation();
 
     const message = location.state?.message;
+    console.log(message,"message")
     const navigate = useNavigate()
     const [projectData, setProjectData] = useState({
         proposals: [],
@@ -30,43 +31,45 @@ const Docs2 = () => {
 
     });
 
-    // const docList = [
-    //     {
-    //         title: 'Detailed Proposal',
-    //         icon: 'Svg/detailed-proposal.svg',
-    //         fileUrl: projectData.proposals[0] || null,
-    //     },
-    //     {
-    //         title: 'Options Presentation',
-    //         icon: 'Svg/options-presentation.svg',
-    //         fileUrl: projectData?.presentation[0] || null, // Placeholder
-    //     },
-    //     {
-    //         title: 'Floor Plan',
-    //         icon: 'Svg/floor-plan.svg',
-    //         fileUrl: projectData.floorPlans[0] || null,
-    //     },
-    //     {
-    //         title: 'CAD File',
-    //         icon: 'Svg/cad-file.svg',
-    //         fileUrl: projectData?.cad[0] || null // Placeholder
-    //     },
-    //     {
-    //         title: 'Sales Agreement',
-    //         icon: 'Svg/sales-icon.svg',
-    //         fileUrl: projectData?.salesAggrement[0] || null, // Placeholder
-    //     },
-    //     {
-    //         title: 'Receiving Reports',
-    //         icon: 'Svg/Coi.svg',
-    //         fileUrl: projectData?.receivingReports[0] || null, // Placeholder
-    //     },
-    //     {
-    //         title: 'Acknowledgements',
-    //         icon: 'Svg/Coi.svg',
-    //         fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
-    //     },
-    // ];
+
+    const docList = [
+        {
+            title: 'Detailed Proposal',
+            icon: 'Svg/detailed-proposal.svg',
+            fileUrl: projectData?.proposals[0] || null,
+        },
+        {
+            title: 'Options Presentation',
+            icon: 'Svg/options-presentation.svg',
+            fileUrl: projectData?.presentation[0] || null, // Placeholder
+        },
+        {
+            title: 'Floor Plan',
+            icon: 'Svg/floor-plan.svg',
+            fileUrl: projectData?.floorPlans[0] || null,
+        },
+        {
+            title: 'CAD File',
+            icon: 'Svg/cad-file.svg',
+            fileUrl: projectData?.cad[0] || null // Placeholder
+        },
+        {
+            title: 'Sales Agreement',
+            icon: 'Svg/sales-icon.svg',
+            fileUrl: projectData?.salesAggrement[0] || null, // Placeholder
+        },
+        {
+            title: 'Receiving Reports',
+            icon: 'Svg/Coi.svg',
+            fileUrl: projectData?.receivingReports[0] || null, // Placeholder
+        },
+        {
+            title: 'Acknowledgements',
+            icon: 'Svg/Coi.svg',
+            fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
+        },
+    ];
+
     const handleAddComment = async () => {
         setLoading(true)
         const commentText = newComment.trim();
@@ -91,9 +94,11 @@ const Docs2 = () => {
             'Sales Agreement': 'salesAggrement',
 
             'Receiving Reports': "receivingReports",
+
             "Acknowledgements": "acknowledgements" ,
 
             'Product Maintenance' : "otherDocuments" , 
+
 
         };
 
@@ -123,17 +128,14 @@ const Docs2 = () => {
             const project = res.data;
 
             setProjectData({
-                proposals: JSON.parse(project.proposals || '[]'),
-                floorPlans: JSON.parse(project.floorPlans || '[]'),
-                cad: JSON.parse(project.cad || '[]'),
-                salesAggrement: JSON.parse(project.salesAggrement || '[]'),
-                presentation: JSON.parse(project.presentation || '[]'),
-
-
-
-                otherDocuments: JSON.parse(project.otherDocuments || '[]'),
-                otherDocuments: JSON.parse(project.otherDocuments || '[]'),
-
+                proposals: JSON.parse(project?.proposals || '[]'),
+                floorPlans: JSON.parse(project?.floorPlans || '[]'),
+                cad: JSON.parse(project?.cad || '[]'),
+                salesAggrement: JSON.parse(project?.salesAggrement || '[]'),
+                presentation: JSON.parse(project?.presentation || '[]'),
+                receivingReports: JSON.parse(project?.receivingReports || '[]'),
+                otherDocuments: JSON.parse(project?.otherDocuments || '[]'),
+                acknowledgements: JSON.parse(project?.acknowledgements || '[]')
 
             });
         } catch (err) {
@@ -179,44 +181,6 @@ const Docs2 = () => {
         setSelectedDoc(null);
         setComments([]);
     };
-
-
-
-
-    const docList = [
-        {
-            title: 'Detailed Proposal',
-            icon: 'Svg/detailed-proposal.svg',
-            fileUrl: projectData.proposals[0] || null,
-        },
-        {
-            title: 'Options Presentation',
-            icon: 'Svg/options-presentation.svg',
-            fileUrl: projectData?.presentation[0] || null, // Placeholder
-        },
-        {
-            title: 'Floor Plan',
-            icon: 'Svg/floor-plan.svg',
-            fileUrl: projectData.floorPlans[0] || null,
-        },
-        {
-            title: 'CAD File',
-            icon: 'Svg/cad-file.svg',
-            fileUrl: projectData?.cad[0] || null // Placeholder
-        },
-        {
-            title: 'Sales Agreement',
-            icon: 'Svg/sales-icon.svg',
-            fileUrl: projectData?.salesAggrement[0] || null, // Placeholder
-        },
-        {
-            title: 'Product Maintenance',
-            icon: 'Svg/Coi.svg',
-            fileUrl: projectData?.otherDocuments[0] || null, // Placeholder
-        },
-
-    ];
-
     const bottomRef = useRef(null);
     useEffect(() => {
         if (bottomRef.current) {
@@ -226,6 +190,7 @@ const Docs2 = () => {
 
     useEffect(() => {
         if (message) {
+            console.log(message.documentType,"message.documentType======>")
             const docList = [
                 {
                     key: 'proposals',
@@ -259,7 +224,6 @@ const Docs2 = () => {
 
             const matchedDoc = docList.find(doc => doc.key === message.documentType);
             const title = matchedDoc?.title || 'Document';
-
             handleCommentClick(title, message.filePath);
             navigate(location.pathname, { replace: true });
         }

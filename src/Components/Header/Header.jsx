@@ -75,10 +75,8 @@ function Header() {
   }
   const fetchNotification = async () => {
     const allProjectIds = JSON.parse(localStorage.getItem('allProjectIds'))
-    console.log(allProjectIds, "HELLO")
     try {
       const response = await getNotificationsByProjectId(allProjectIds)
-      console.log(response)
       const filterNotificationWithRole = response.data.notifications.filter((item) => item.role == "customer")
       setNotification(filterNotificationWithRole.reverse())
       const unread = filterNotificationWithRole.filter(n => !n.isRead);
@@ -296,17 +294,7 @@ function Header() {
           };
           return (
             <>
-              {/* <div className="notification-container">
-                <div className="notification-card" style={cardStyle} onClick={() => handleOpenModal(message)}>
-                  <div className="notification-header">
-                    <span className="sender-name">{message.senderName}</span>
-                    <span className="notification-time">{formatNotificationTime(message.createdAt)}</span>
-                  </div>
-                  <div className="notification-message">
-                    {message.message}
-                  </div>
-                </div>
-              </div> */}
+
               <div className="notification-container" key={message.id}>
                 <div
                   className="notification-card"
@@ -323,7 +311,9 @@ function Header() {
               </div>
             </>
           )
-        }) }
+
+        })}
+
       </OffCanvas>}
       <Modal onClose={() => setShowModal(false)} height='70vh'>
         <NotificationView showModal={showModal}
