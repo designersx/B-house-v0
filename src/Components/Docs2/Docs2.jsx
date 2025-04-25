@@ -224,7 +224,7 @@ const Docs2 = () => {
         <div>
             <div className={styles.container}>
                 {docList.map((doc, index) => (
-                    <div key={index} className={styles.card}>
+                    <div onClick={doc.fileUrl ? () => handleCommentClick(doc.title, doc.fileUrl) : null} key={index} className={styles.card}>
                         <div className={styles.left}>
                             <div className={styles.icon}>
                                 <img src={doc.icon} alt={doc.title} />
