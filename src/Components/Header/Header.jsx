@@ -27,6 +27,8 @@ function Header() {
   const [unreadNotification, setUnreadNotification] = useState()
   const [message, setMessage] = useState("")
   const handleCloseOffcanvas = () => { setOpenOffcanvas(false); }
+  const [expandedMessages, setExpandedMessages] = useState({});
+
   const handleLogout = async () => {
     localStorage.removeItem('customerToken');
     localStorage.removeItem('customerInfo');
@@ -121,6 +123,13 @@ function Header() {
     setMessage(message)
 
   }
+  const toggleMessage = (id) => {
+    setExpandedMessages((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   const handleNotificationClick = async (notification_id) => {
     if (!notification.isRead) {
       try {
@@ -315,7 +324,21 @@ function Header() {
                         : formatNotificationTime(message.createdAt)}
                     </span>
                   </div>
-                  <div className="notification-message">{message.message}</div>
+                  <div className="notification-message"> {message.message.length > 100 ? (
+                    <>
+                      {expandedMessages[message.id]
+                        ? message.message
+                        : `${message.message.slice(0, 100)}...`}
+                      <span
+                        style={{ color: "blue", cursor: "pointer", marginLeft: "5px" }}
+                        onClick={(e) => { e.stopPropagation(); toggleMessage(message.id) }}
+                      >
+                        {expandedMessages[message.id] ? "View Less" : "View More"}
+                      </span>
+                    </>
+                  ) : (
+                    message.message
+                  )}</div>
                 </div>
               </div>
             </>
