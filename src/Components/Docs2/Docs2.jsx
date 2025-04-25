@@ -31,6 +31,7 @@ const Docs2 = () => {
 
     });
 
+
     const docList = [
         {
             title: 'Detailed Proposal',
@@ -68,6 +69,7 @@ const Docs2 = () => {
             fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
         },
     ];
+
     const handleAddComment = async () => {
         setLoading(true)
         const commentText = newComment.trim();
@@ -92,8 +94,11 @@ const Docs2 = () => {
             'Sales Agreement': 'salesAggrement',
 
             'Receiving Reports': "receivingReports",
-            "Acknowledgements": "acknowledgements",
-            'Product Maintenance': "otherDocuments",
+
+            "Acknowledgements": "acknowledgements" ,
+
+            'Product Maintenance' : "otherDocuments" , 
+
 
         };
 

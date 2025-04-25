@@ -43,14 +43,14 @@ export default function SimpleSlider({ images = [] }) {
             className={`${styles.arrow} ${styles.left}`}
             onClick={prevSlide}
           >
-            <img src="Svg/leftArrow.svg" alt="Previous Slide" />
+            <img src="/Svg/leftArrow.svg" alt="Previous Slide" />
           </button>
 
           <button
             className={`${styles.arrow} ${styles.right}`}
             onClick={nextSlide}
           >
-            <img src="Svg/rightArrow.svg" alt="Next Slide" />
+            <img src="/Svg/rightArrow.svg" alt="Next Slide" />
           </button>
 
           <Slider ref={sliderRef} {...settings}>
