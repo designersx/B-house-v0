@@ -23,8 +23,13 @@ const TeamMembers = () => {
   const customerInfo = JSON.parse(localStorage.getItem("customerInfo"));
   const selectedProject = JSON.parse(localStorage.getItem("selectedProject"));
   const messagesEndRef = React.useRef(null);
+
+  const [commentLoading, setCommentLoading] = useState(false);
+
+
   const message = location.state?.message;
   const navigate = useNavigate()
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -41,21 +46,26 @@ const TeamMembers = () => {
 
   const handleSubmitComment = async () => {
     if (!commentText.trim()) return;
-
+  
+    setCommentLoading(true); // start loading
+  
     try {
       const payload = {
         fromCustomerId: customerInfo.id,
         toUserId: selectedContact.id,
         comment: commentText
       };
-
+  
       await axios.post(`${URL}/projects/${selectedProject.id}/user-comments`, payload);
       setCommentText("");
-      fetchCommentsForUser(selectedContact.id);
+      await fetchCommentsForUser(selectedContact.id);
     } catch (err) {
       console.error("Error sending comment", err);
+    } finally {
+      setCommentLoading(false); // stop loading
     }
   };
+  
   const handleSendMessage = (contact) => {
     setSelectedContact(contact);
     setModalOpen(true);
@@ -207,7 +217,14 @@ const TeamMembers = () => {
                 placeholder="Comment or (Leave your thought here)"
                 className={styles.inputField}
               />
-              <button className={styles.commentButton} onClick={handleSubmitComment}>COMMENT</button>
+              <button
+  className={styles.commentButton}
+  onClick={handleSubmitComment}
+  disabled={commentLoading}
+>
+  {commentLoading ? <Loader size="30px" /> : "Add Comment"}
+</button>
+
             </div>
 
           </div>

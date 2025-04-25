@@ -4,11 +4,12 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import URL from "../../../config/api";
 import { url2 } from "../../../config/url";
-
+import Loader from "../../Loader/Loader";
 function CommentBox({saman}) {
   const location = useLocation();
   const itemFromLocation = location.state?.item;
 const item = itemFromLocation || saman;
+const [loading, setLoading] = useState(false); 
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -26,10 +27,11 @@ const item = itemFromLocation || saman;
       console.error("Error fetching comments:", err);
     }
   };
-
   const handleSubmit = async () => {
     if (!newComment.trim()) return;
-
+  
+    setLoading(true);
+  
     try {
       await axios.post(`${URL}/items/${item.id}/comments`, {
         projectId,
@@ -37,14 +39,16 @@ const item = itemFromLocation || saman;
         createdById: customerId,
         createdByType: "customer"
       });
-
+  
       setNewComment("");
-      fetchComments();
+      await fetchComments(); 
     } catch (err) {
       console.error("Error submitting comment:", err);
+    } finally {
+      setLoading(false); 
     }
   };
-
+  
   const formatTime = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString("en-US", {
@@ -119,9 +123,10 @@ const item = itemFromLocation || saman;
           onChange={(e) => setNewComment(e.target.value)}
         ></textarea>
 
-        <button className={styles.CommenrButton} onClick={handleSubmit}>
-          Comment Submit
-        </button>
+<button className={styles.CommenrButton} onClick={handleSubmit} disabled={loading}>
+  {loading ? <Loader size="30px" /> : "Comment Submit"}
+</button>
+
       </div>
     </div>
   );

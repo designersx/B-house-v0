@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from '../CommentThread/CommentThread.module.css';
 import URL from '../../config/api';
 import { url2 } from '../../config/url';
+import Loader from '../Loader/Loader';
 
 const CommentThread = ({ issue }) => {
 
@@ -13,6 +14,7 @@ const CommentThread = ({ issue }) => {
   const isCustomer = !!customerInfo;
   const customerId = customerInfo?.id;
   const messagesEndRef = useRef(null); // Ref to bottom
+  const [loading, setLoading] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -29,7 +31,9 @@ const CommentThread = ({ issue }) => {
 
   const handleAddComment = async () => {
     if (!commentInput.trim()) return;
-
+  
+    setLoading(true); // Start loader
+  
     try {
       await axios.post(
         `${URL}/projects/${issue.projectId}/punchlist/${issue.id}/comments`,
@@ -42,8 +46,11 @@ const CommentThread = ({ issue }) => {
       await fetchComments();
     } catch (err) {
       console.error('Error posting comment:', err);
+    } finally {
+      setLoading(false); // Stop loader
     }
   };
+  
 
   useEffect(() => {
     fetchComments();
@@ -111,9 +118,14 @@ const CommentThread = ({ issue }) => {
             value={commentInput}
             onChange={(e) => setCommentInput(e.target.value)}
           />
-          <button className={styles.commentButton} onClick={handleAddComment}>
-            COMMENT
-          </button>
+         <button
+  className={styles.commentButton}
+  onClick={handleAddComment}
+  disabled={loading}
+>
+  {loading ? <Loader size="30px" /> : "Add Comment"}
+</button>
+
         </div>
       )}
     </div>
