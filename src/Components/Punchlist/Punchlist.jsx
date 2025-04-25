@@ -5,17 +5,18 @@ import Modal from "../Modal/Modal";
 import CommentThread from "../CommentThread/CommentThread";
 import URL from "../../config/api";
 import { url2 } from "../../config/url";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Loader from "../Loader/Loader";
 
 function Punchlist() {
   const navigate = useNavigate();
+  const location = useLocation()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIssue, setActiveIssue] = useState(null);
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(false)
   const projectId = localStorage.getItem("selectedProjectId");
-
+  const message = location.state?.message;
   const handleCommentClick = (issue) => {
     setActiveIssue(issue);
     setIsModalOpen(true);
@@ -63,10 +64,25 @@ function Punchlist() {
   const handleImageClick = (imagePath) => {
     window.open(`${url2}/${imagePath}`, "_blank");
   };
+  const handlePunchListView = (issue) => {
+    navigate(`/punchlist-detail/${issue?.id}`, {
+      state: {
+        punchId: issue?.id,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (message) {
+      handlePunchListView(JSON.parse(message.userDetails))
+    
+
+    }
+  }, [message]);
 
   return (
     <div className={styles.container}>
-      {loading ? <div className="ForLoder"><Loader /></div>  : issues.length <= 0 ? (
+      {loading ? <div className="ForLoder"><Loader /></div> : issues.length <= 0 ? (
         <div className={styles.noData}>
           <div><img src="Svg/notfound.svg" alt="" />
             <div className={styles.NoDataTittle}><p>No items found yet</p><img src="Svg/EYE1.svg" alt="" /></div></div>
@@ -74,11 +90,7 @@ function Punchlist() {
       ) : (
         issues?.map((issue, index) => (
 
-          <div key={index} className={styles.card} onClick={() => navigate(`/punchlist-detail/${issue?.id}`, {
-            state: {
-              punchId: issue?.id
-            }
-          })}>
+          <div key={index} className={styles.card} onClick={() => handlePunchListView(issue)}>
 
             <div className={styles.topRow}>
               <span

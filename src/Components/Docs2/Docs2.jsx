@@ -11,6 +11,12 @@ const Docs2 = () => {
     const [selectedDoc, setSelectedDoc] = useState(null);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(false)
+
+    const location = useLocation();
+
+    const message = location.state?.message;
+    const navigate = useNavigate()
+
     const [projectData, setProjectData] = useState({
         proposals: [],
         floorPlans: [],
@@ -114,7 +120,9 @@ const Docs2 = () => {
     }, []);
 
     const handleCommentClick = (docTitle, fileUrl) => {
-        const normalizedUrl = `/${fileUrl.replace(/\\/g, '/')}`;
+
+        const normalizedUrl = `/${fileUrl?.replace(/\\/g, '/')}`;
+
         setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
         fetchComments(normalizedUrl);
         setIsModalOpen(true);
@@ -167,6 +175,49 @@ const Docs2 = () => {
             bottomRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }, [comments]);
+
+
+    useEffect(() => {
+        if (message) {
+            const docList = [
+                {
+                    key: 'proposals',
+                    title: 'Detailed Proposal',
+                },
+                {
+                    key: 'presentation',
+                    title: 'Options Presentation',
+                },
+                {
+                    key: 'floorPlans',
+                    title: 'Floor Plan',
+                },
+                {
+                    key: 'cad',
+                    title: 'CAD File',
+                },
+                {
+                    key: 'salesAggrement',
+                    title: 'Sales Agreement',
+                },
+                {
+                    key: 'receivingReports',
+                    title: 'Receiving Reports',
+                },
+                {
+                    key: 'acknowledgements',
+                    title: 'Acknowledgements',
+                }
+            ];
+
+            const matchedDoc = docList.find(doc => doc.key === message.documentType);
+            const title = matchedDoc?.title || 'Document';
+            handleCommentClick(title, message.filePath);
+            navigate(location.pathname, { replace: true });
+        }
+    }, [message]);
+
+
     return (
         <div>
             <div className={styles.container}>

@@ -100,7 +100,10 @@ function Docs() {
   //function lock
   useEffect(() => {
     if (message) {
-      if (message.documentType) {
+
+      // Automatically switch to B-HOUSE DOCS if message.documentType is 'proposals' (case-insensitive match)
+      if (message.filePath) {
+
         const documentKey = message.documentType.toLowerCase();
         const validDocKeys = [
           'proposals',
@@ -119,7 +122,10 @@ function Docs() {
       } else {
         setActiveTab(customerName);
         openCommentModal(message.documentId, message.documentType);
-        navigate(location.pathname, { replace: true });
+        setTimeout(() => {
+          navigate(location.pathname, { replace: true });
+        }, 1000);
+      
       }
 
 
