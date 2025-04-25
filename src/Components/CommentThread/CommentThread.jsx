@@ -28,9 +28,9 @@ const CommentThread = ({ issue }) => {
 
   const handleAddComment = async () => {
     if (!commentInput.trim()) return;
-  
+
     setLoading(true); // Start loader
-  
+
     try {
       await axios.post(
         `${URL}/projects/${issue.projectId}/punchlist/${issue.id}/comments`,
@@ -47,7 +47,7 @@ const CommentThread = ({ issue }) => {
       setLoading(false); // Stop loader
     }
   };
-  
+
 
   useEffect(() => {
     fetchComments();
@@ -106,7 +106,7 @@ const CommentThread = ({ issue }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {isCustomer && (
+      {/* {isCustomer && (
         <div className={styles.commentBox}>
           <input
             type="text"
@@ -115,16 +115,51 @@ const CommentThread = ({ issue }) => {
             value={commentInput}
             onChange={(e) => setCommentInput(e.target.value)}
           />
-         <button
-  className={styles.commentButton}
-  onClick={handleAddComment}
-  disabled={loading}
->
-  {loading ? <Loader size="30px" /> : "Add Comment"}
-</button>
+          <button
+            className={styles.commentButton}
+            onClick={handleAddComment}
+            disabled={loading}
+          >
+            {loading ? <Loader size="30px" /> : "Add Comment"}
+          </button>
 
         </div>
+      )} */}
+
+
+      {/* Ankush Code Start */}
+      {isCustomer && (
+        <div className={styles.commentBox}>
+          <div className={styles.inputWrapper}>
+            <input
+              type="text"
+              placeholder="Comment or (Leave your thought here)"
+              className={styles.inputField}
+              value={commentInput}
+              onChange={(e) => setCommentInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleAddComment();
+              }}
+            />
+            {commentInput.trim() && (
+              <div
+                className={styles.sendButton}
+                onClick={handleAddComment}
+                disabled={loading}
+              >
+                {loading ? (
+                  <Loader size="20px" />
+                ) : (
+                  <img src="/Svg/send-icon.svg" alt="Send" className={styles.sendIcon} />
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       )}
+
+
+      {/* Ankush Code End */}
     </div>
   );
 };

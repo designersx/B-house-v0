@@ -407,6 +407,7 @@
     max-width: 70%;
     font-size: 14px;
     display: inline-block;
+    text-align: left;
   }
   .Userpara{
     font-size: 14px;
@@ -450,7 +451,7 @@
     font-size: 16px;
     color: #26211F;
     margin-top: 20px;
-    min-height: 70px;
+    min-height: 55px;
 
   }
   
@@ -458,9 +459,10 @@
     color: #26211F;
     font-size: 16px;
     font-weight: 300;
+    width: 90%;
   }
 
-  .CommenrButton{
+  /* .CommenrButton{
     background-color: #EEF7FF;
     color: #004680;
     font-size: 18px;
@@ -472,4 +474,35 @@
     width: 100%;
         margin-top: 20px;
     margin-left: auto;
+  } */
+
+  .commentBox {
+    position: relative;
+    width: 100%;
+  }
+  
+  .Commenrtextarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+    font-size: 14px;
+  }
+  
+  .CommenrButton {
+    position: absolute;
+    bottom: 20px;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+  }
+  
+  .sendIcon {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease;
   }

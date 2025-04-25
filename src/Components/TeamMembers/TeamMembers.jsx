@@ -74,7 +74,7 @@ const TeamMembers = () => {
 
   useEffect(() => {
     if (message) {
-      handleSendMessage(message.userDetails)
+      handleSendMessage((message.userDetails))
       navigate(location.pathname, { replace: true });
     }
   }, [message]);
