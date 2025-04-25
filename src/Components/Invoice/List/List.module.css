@@ -224,3 +224,24 @@
     transform: translateY(-10px);
   }
 }
+.noFileBtn {
+  background-color: #004a99;
+  color: #fefdfe;
+  border: 1px solid   #004a99;
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.noFileBtn:hover {
+  background-color: #f1b0b7;
+  color: #5a131e;
+}
+

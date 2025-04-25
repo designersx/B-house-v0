@@ -4,10 +4,7 @@ import styles from '../CommentThread/CommentThread.module.css';
 import URL from '../../config/api';
 import { url2 } from '../../config/url';
 import Loader from '../Loader/Loader';
-
 const CommentThread = ({ issue }) => {
-
-  console.log({issue})
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState('');
   const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
