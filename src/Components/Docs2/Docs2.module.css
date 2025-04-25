@@ -115,7 +115,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-block: 1rem 8rem;
+    padding-block: 1rem 2rem;
     padding-right: 10px;
 }
 
@@ -231,7 +231,7 @@
     color: #bcc3d4;
 }
 
-.commentButton {
+/* .commentButton {
     background-color: #EEF7FF;
     color: #004680;
     padding: 10px;
@@ -242,4 +242,40 @@
     font-size: 18px;
     min-height: 50px;
 
-}
+} */
+
+
+  
+  .inputBox {
+    width: 100%;
+    padding: 10px 40px 10px 12px; 
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    min-height: 55px;
+  }
+  
+  .commentButton {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .sendIcon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+  }
+  
+  .commentButton:hover .sendIcon {
+    transform: translateX(3px);
+  }
+  

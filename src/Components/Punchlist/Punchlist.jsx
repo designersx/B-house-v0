@@ -74,7 +74,7 @@ function Punchlist() {
 
   useEffect(() => {
     if (message) {
-      handlePunchListView(JSON.parse(message.userDetails))
+      handlePunchListView((message.userDetails))
     
 
     }

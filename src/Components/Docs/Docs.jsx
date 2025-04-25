@@ -220,12 +220,12 @@ function Docs() {
         </div>
       )}
 
-      <input
+      {/* <input
         type="file"
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={handleFileChange}
-      />
+      /> */}
 
       {activeTab === 'JENNY WILSON' && (
         <p className={styles.note}>

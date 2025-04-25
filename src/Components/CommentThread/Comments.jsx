@@ -8,8 +8,8 @@ const Comments = ({ documentId }) => {
   const [commentInput, setCommentInput] = useState('');
   const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-  
-  const [loading , setLoading] = useState(false)
+
+  const [loading, setLoading] = useState(false)
   const isCustomer = !!customerInfo;
   const messagesEndRef = useRef(null);
 
@@ -40,7 +40,7 @@ const Comments = ({ documentId }) => {
     try {
       await axios.post(`${URL}/customerDoc/comments/`, payload);
       setCommentInput('');
-      fetchComments(); 
+      fetchComments();
       setLoading(false)
     } catch (err) {
       console.error('Error posting comment:', err);
@@ -62,7 +62,7 @@ const Comments = ({ documentId }) => {
   return (
     <div className={styles.threadContainer}>
       <div className={styles.header}>
-    
+
       </div>
 
       <div className={styles.messages}>
@@ -98,7 +98,7 @@ const Comments = ({ documentId }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className={styles.commentBox}>
+      {/* <div className={styles.commentBox}>
         <input
           type="text"
           placeholder="Comment or leave your thought here..."
@@ -111,7 +111,32 @@ const Comments = ({ documentId }) => {
           {loading? <Loader size={20}/>: "COMMENT"}
 
         </button>
+      </div> */}
+
+
+      {/* Ankush Code Start */}
+
+      <div className={styles.commentBox}>
+        <input
+          type="text"
+          placeholder="Comment or leave your thought here..."
+          className={styles.inputField}
+          value={commentInput}
+          onChange={(e) => setCommentInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && postComment()}
+        />
+
+        {commentInput.trim() && (
+          <div
+            disabled={loading}
+            className={styles.commentButton}
+            onClick={!loading ? postComment : null}
+          >
+            {loading ? <Loader size={20} /> : <img src="/Svg/send-icon.svg" alt="Send" className={styles.sendIcon} />}
+          </div>
+        )}
       </div>
+      {/* Ankush Code End */}
     </div>
   );
 };
