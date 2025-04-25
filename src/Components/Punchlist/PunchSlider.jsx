@@ -20,11 +20,11 @@ export default function SimpleSlider({ images = [] }) {
     autoplay: true,
     responsive: [
       {
-        breakpoint: 376,
-        settings: { centerPadding: "20px" },
+        breakpoint: 400,
+        settings: { slidesToShow: 3, centerPadding: "15px" },
       },
       {
-        breakpoint: 320,
+        breakpoint: 350,
         settings: { slidesToShow: 2, centerPadding: "35px" },
       },
     ],

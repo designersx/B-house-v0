@@ -46,16 +46,16 @@ const TeamMembers = () => {
 
   const handleSubmitComment = async () => {
     if (!commentText.trim()) return;
-  
+
     setCommentLoading(true); // start loading
-  
+
     try {
       const payload = {
         fromCustomerId: customerInfo.id,
         toUserId: selectedContact.id,
         comment: commentText
       };
-  
+
       await axios.post(`${URL}/projects/${selectedProject.id}/user-comments`, payload);
       setCommentText("");
       await fetchCommentsForUser(selectedContact.id);
@@ -65,7 +65,7 @@ const TeamMembers = () => {
       setCommentLoading(false); // stop loading
     }
   };
-  
+
   const handleSendMessage = (contact) => {
     setSelectedContact(contact);
     setModalOpen(true);
@@ -74,7 +74,7 @@ const TeamMembers = () => {
 
   useEffect(() => {
     if (message) {
-      handleSendMessage(JSON.parse(message.userDetails))
+      handleSendMessage((message.userDetails))
       navigate(location.pathname, { replace: true });
     }
   }, [message]);
@@ -218,12 +218,12 @@ const TeamMembers = () => {
                 className={styles.inputField}
               />
               <button
-  className={styles.commentButton}
-  onClick={handleSubmitComment}
-  disabled={commentLoading}
->
-  {commentLoading ? <Loader size="30px" /> : "Add Comment"}
-</button>
+                className={styles.commentButton}
+                onClick={handleSubmitComment}
+                disabled={commentLoading}
+              >
+                {commentLoading ? <Loader size="30px" /> : "Add Comment"}
+              </button>
 
             </div>
 

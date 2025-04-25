@@ -5,11 +5,11 @@ import axios from "axios";
 import URL from "../../../config/api";
 import { url2 } from "../../../config/url";
 import Loader from "../../Loader/Loader";
-function CommentBox({saman}) {
+function CommentBox({ saman }) {
   const location = useLocation();
   const itemFromLocation = location.state?.item;
-const item = itemFromLocation || saman;
-const [loading, setLoading] = useState(false); 
+  const item = itemFromLocation || saman;
+  const [loading, setLoading] = useState(false);
 
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -29,9 +29,9 @@ const [loading, setLoading] = useState(false);
   };
   const handleSubmit = async () => {
     if (!newComment.trim()) return;
-  
+
     setLoading(true);
-  
+
     try {
       await axios.post(`${URL}/items/${item.id}/comments`, {
         projectId,
@@ -39,16 +39,16 @@ const [loading, setLoading] = useState(false);
         createdById: customerId,
         createdByType: "customer"
       });
-  
+
       setNewComment("");
-      await fetchComments(); 
+      await fetchComments();
     } catch (err) {
       console.error("Error submitting comment:", err);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
-  
+
   const formatTime = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString("en-US", {
@@ -115,7 +115,7 @@ const [loading, setLoading] = useState(false);
       </div>
 
       {/* Comment input */}
-      <div>
+      {/* <div>
         <textarea
           className={styles.Commenrtextarea}
           placeholder="Comment or (Leave your thought here)"
@@ -123,11 +123,36 @@ const [loading, setLoading] = useState(false);
           onChange={(e) => setNewComment(e.target.value)}
         ></textarea>
 
-<button className={styles.CommenrButton} onClick={handleSubmit} disabled={loading}>
-  {loading ? <Loader size="30px" /> : "Comment Submit"}
-</button>
+        <button className={styles.CommenrButton} onClick={handleSubmit} disabled={loading}>
+          {loading ? <Loader size="30px" /> : "Comment Submit"}
+        </button>
 
+      </div> */}
+
+      <div className={styles.commentBox}>
+        <textarea
+          className={styles.Commenrtextarea}
+          placeholder="Comment or (Leave your thought here)"
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+        ></textarea>
+
+        {newComment.trim() && (
+          <div
+            className={styles.CommenrButton}
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader size="30px" />
+            ) : (
+              <img src="/Svg/send-icon.svg" alt="Send" className={styles.sendIcon} />
+            )}
+          </div>
+        )}
       </div>
+
+
     </div>
   );
 }

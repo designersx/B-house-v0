@@ -178,11 +178,11 @@ function Docs() {
 
             return (
               <div key={idx} className={styles.docItem}>
-                <div className={styles.leftSection}>
+                <div onClick={foundDoc ? () => openCommentModal(foundDoc.id, doc) : null} className={styles.leftSection}>
                   <div className={styles.icon}>
                     <img src={iconSrc} alt="icon" />
                   </div>
-                  <span className={styles.docTitle}>{doc}</span>
+                  <span  className={styles.docTitle}>{doc}</span>
                 </div>
 
                 <div className={styles.rightSection}>
@@ -220,12 +220,12 @@ function Docs() {
         </div>
       )}
 
-      <input
+      {/* <input
         type="file"
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={handleFileChange}
-      />
+      /> */}
 
       {activeTab === 'JENNY WILSON' && (
         <p className={styles.note}>
@@ -235,7 +235,7 @@ function Docs() {
 
       {/* Comment Modal */}
       {selectedDocId && (
-        <Modal isOpen={isModalOpen} onClose={closeCommentModal} height="80%">
+        <Modal isOpen={isModalOpen} onClose={closeCommentModal} height="90%">
           <h2 className={styles.modalTitle}>{selectedDocTitle}</h2>
           <Comments
             documentId={selectedDocId}

@@ -4,7 +4,7 @@ import Modal from '../Modal/Modal';
 import { url2 } from '../../config/url';
 import URL from '../../config/api';
 import axios from 'axios';
-import Loader from '../Loader/Loader'
+import Loader from '../Loader/Loader';
 import { useLocation, useNavigate } from 'react-router-dom';
 const Docs2 = () => {
     
@@ -25,7 +25,7 @@ const Docs2 = () => {
         cad: [],
         salesAggrement: [],
         otherDocuments: [],
-        presentation: [] , 
+        presentation: [],
     });
     const handleAddComment = async () => {
         setLoading(true)
@@ -35,21 +35,21 @@ const Docs2 = () => {
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
         const clientInfo = JSON.parse(localStorage.getItem('customerInfo'));
 
-       
+
         let windowsPath = selectedDoc.fileUrl;
         if (windowsPath.startsWith("/")) {
             windowsPath = windowsPath.substring(1);
         }
         // windowsPath = windowsPath.replace(/\//g, '\\');
 
-     
+
         const titleToCategory = {
             'Detailed Proposal': 'proposals',
             'Options Presentation': 'presentation',
             'Floor Plan': 'floorPlans',
             'CAD File': 'cad',
             'Sales Agreement': 'salesAggrement',
-            'Product Maintenance' : "otherDocuments" , 
+            'Product Maintenance': "otherDocuments",
         };
 
         const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
@@ -58,12 +58,12 @@ const Docs2 = () => {
             await axios.post(`${URL}/projects/${projectId}/file-comments`, {
                 comment: commentText,
                 filePath: windowsPath,
-                clientId: clientInfo?.id, 
+                clientId: clientInfo?.id,
                 category,
             });
 
             setNewComment('');
-            fetchComments(selectedDoc.fileUrl); 
+            fetchComments(selectedDoc.fileUrl);
             setLoading(false)
         } catch (error) {
             console.error('Error posting comment:', error);
@@ -95,10 +95,10 @@ const Docs2 = () => {
         if (!fileUrl) return;
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
 
-    
 
 
-      
+
+
         let filePath = fileUrl;
         if (filePath.startsWith("/")) {
             filePath = filePath.substring(1);
@@ -224,7 +224,7 @@ const Docs2 = () => {
         <div>
             <div className={styles.container}>
                 {docList.map((doc, index) => (
-                    <div key={index} className={styles.card}>
+                    <div onClick={doc.fileUrl ? () => handleCommentClick(doc.title, doc.fileUrl) : null} key={index} className={styles.card}>
                         <div className={styles.left}>
                             <div className={styles.icon}>
                                 <img src={doc.icon} alt={doc.title} />
@@ -248,9 +248,9 @@ const Docs2 = () => {
                     </div>
                 ))}
 
-              <p className={styles.note}>
-                        If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
-                      </p>
+                <p className={styles.note}>
+                    If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
+                </p>
             </div>
 
             <Modal isOpen={isModalOpen} onClose={handleCloseModal} height="92vh">
@@ -263,10 +263,10 @@ const Docs2 = () => {
                                 <>
                                     {/* <img src="Svg/pdf.svg" alt="PDF" /> */}
 
-                                    <iframe 
-                                    height="400px"
-                                    width="100%"
-                                    src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />
+                                    <iframe
+                                        height="400px"
+                                        width="100%"
+                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />
                                     {/* <div onClick={handleDoc}>View PDF</div> */}
 
                                 </>
@@ -344,7 +344,7 @@ const Docs2 = () => {
 
 
 
-                    <div className={styles.commentInput}>
+                    {/* <div className={styles.commentInput}>
                         <input
                             type="text"
                             placeholder="Comment or (Leave your thought here)"
@@ -355,7 +355,35 @@ const Docs2 = () => {
                         <button disabled={newComment === "" ? true : false} className={styles.commentButton} onClick={!loading ? handleAddComment : null}>
                             {!loading ? "COMMENT" : <Loader size={20} />}
                         </button>
+                    </div> */}
+
+
+                    {/* Ankush Code Start */}
+                    <div className={styles.commentInput}>
+                        <input
+                            type="text"
+                            placeholder="Comment or (Leave your thought here)"
+                            className={styles.inputBox}
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                        />
+
+                        {newComment.trim() && (
+                            <div
+                                disabled={loading}
+                                className={styles.commentButton}
+                                onClick={!loading ? handleAddComment : null}
+                            >
+                                {!loading ? (
+                                    <img src="/Svg/send-icon.svg" alt="Send" className={styles.sendIcon} />
+                                ) : (
+                                    <Loader size={20} />
+                                )}
+                            </div>
+                        )}
                     </div>
+
+                    {/* Ankush Code End */}
 
                 </div>
             </Modal>
