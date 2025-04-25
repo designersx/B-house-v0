@@ -16,7 +16,6 @@ const Docs2 = () => {
     const location = useLocation();
 
     const message = location.state?.message;
-    console.log(message,"message")
     const navigate = useNavigate()
     const [projectData, setProjectData] = useState({
         proposals: [],
@@ -169,7 +168,6 @@ const Docs2 = () => {
     }, []);
 
     const handleCommentClick = (docTitle, fileUrl) => {
-        console.log(docTitle, fileUrl)
         const normalizedUrl = `/${fileUrl?.replace(/\\/g, '/')}`;
         setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
         fetchComments(normalizedUrl);
@@ -190,7 +188,6 @@ const Docs2 = () => {
 
     useEffect(() => {
         if (message) {
-            console.log(message.documentType,"message.documentType======>")
             const docList = [
                 {
                     key: 'proposals',
