@@ -26,6 +26,8 @@ const Docs2 = () => {
         salesAggrement: [],
         otherDocuments: [],
         presentation: [],
+        acknowledgements: [],
+        receivingReports: [],
     });
     const handleAddComment = async () => {
         setLoading(true)
@@ -84,6 +86,8 @@ const Docs2 = () => {
                 salesAggrement: JSON.parse(project.salesAggrement || '[]'),
                 presentation: JSON.parse(project.presentation || '[]'),
                 otherDocuments: JSON.parse(project.otherDocuments || '[]'),
+                acknowledgements: JSON.parse(project.acknowledgements || '[]'),
+                receivingReports: JSON.parse(project.receivingReports || '[]'),
 
             });
         } catch (err) {
@@ -169,6 +173,16 @@ const Docs2 = () => {
             icon: 'Svg/Coi.svg',
             fileUrl: projectData?.otherDocuments[0] || null, // Placeholder
         },
+        {
+            title: 'Acknowledgements',
+            icon: 'Svg/sample-icon.svg',
+            fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
+        },
+        {
+            title: 'Receiving Reports',
+            icon: 'Svg/final-invoice.svg',
+            fileUrl: projectData?.receivingReports[0] || null, // Placeholder
+        }
 
     ];
     const bottomRef = useRef(null);
