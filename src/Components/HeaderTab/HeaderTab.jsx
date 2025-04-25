@@ -1,15 +1,51 @@
-import React, { useState } from "react";
-import styles from "../HeaderTab/HeaderTab.module.css";
-import { useNavigate, useLocation } from "react-router-dom";
-import ModalSearch from "../ModalSearch/ModalSearch";
-import OffCanvas from "../OffCanvas/OffCanvas";
+import React, { useState } from 'react';
+import styles from '../HeaderTab/HeaderTab.module.css';
+import { useNavigate,useLocation } from 'react-router-dom';
+import ModalSearch from '../ModalSearch/ModalSearch';
+import OffCanvas from '../OffCanvas/OffCanvas';
 
 const HeaderTab = ({ title, subtitle }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [showModalSearch, setShowModalSearch] = useState(false);
-  const [showCanvas, setShowCanvas] = useState(false);
+    const navigate = useNavigate();
+    const [showModalSearch, setShowModalSearch] = useState(false);
+    const [showCanvas, setShowCanvas] = useState(false);
+    const location=useLocation()
+    const handleBackClick = () => {
+       
+        if (location.pathname.includes('punchlist-detail')) {
+            navigate('/home', { replace: true }); 
+        } else {
+            navigate(-1); 
+        }
+        
+    };
 
+    return (
+        <>
+            <div className={styles.headerMain}>
+                <div className={styles.titleDiv}>
+                    <div onClick={handleBackClick} style={{ cursor: "pointer" }}>
+                        <img src='/Svg/back-arrow.svg' alt='Back' />
+                    </div>
+                    <div>
+                        <h2>{title}</h2>
+                        <p>{subtitle}</p>
+                    </div>
+                </div>
+
+                <div className={styles.IconBoth}>
+                    <div className={styles.iconSearch} onClick={() => setShowModalSearch(true)}>
+                        <img src='/Svg/searchSvg.svg' alt='Search' />
+                    </div>
+                    <div className={styles.iconFillter} onClick={() => setShowCanvas(true)}>
+                        <img src='/Svg/filterSvg.svg' alt='Filter' />
+                    </div>
+                </div>
+
+                <ModalSearch
+                    isOpen={showModalSearch}
+                    onClose={() => setShowModalSearch(false)}
+                    minHeight="30%"
+                />
   return (
     <>
       <div className={styles.headerMain}>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import URL from "../../../config/api";
 import axios from "axios";
 import { url2 } from "../../../config/url";
-
+// vf
 const progressColor = {
   Installed: {
     progressWidth: "100%",
@@ -91,7 +91,7 @@ function ProjectDelivery({ selectedProject }) {
   function formatTime(dateString) {
     const date = new Date(dateString);
     const now = new Date();
-    const diff = now - date; 
+    const diff = now - date;
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
