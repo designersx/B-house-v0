@@ -14,7 +14,7 @@ function Proposal() {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const teamUsersFromStorage = localStorage.getItem("teamusers");
-
+  const id = JSON.parse(localStorage.getItem("selectedProjectId"));
   const parsedTeamUsers = teamUsersFromStorage
     ? teamUsersFromStorage.split(",").map((id) => Number(id.trim()))
     : [];
@@ -38,10 +38,10 @@ function Proposal() {
   };
   useEffect(() => {
     fetchDocs();
-  }, []);
+  }, [id]);
   useEffect(() => {
     fetchInvoice();
-  }, []);
+  }, [id,teamUsersFromStorage]);
   const steps = [
     {
       id: 1,
