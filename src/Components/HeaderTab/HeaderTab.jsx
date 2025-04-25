@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../HeaderTab/HeaderTab.module.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import ModalSearch from '../ModalSearch/ModalSearch';
 import OffCanvas from '../OffCanvas/OffCanvas';
 
@@ -8,12 +8,22 @@ const HeaderTab = ({ title, subtitle }) => {
     const navigate = useNavigate();
     const [showModalSearch, setShowModalSearch] = useState(false);
     const [showCanvas, setShowCanvas] = useState(false);
+    const location=useLocation()
+    const handleBackClick = () => {
+       
+        if (location.pathname.includes('punchlist-detail')) {
+            navigate('/home', { replace: true }); 
+        } else {
+            navigate(-1); 
+        }
+        
+    };
 
     return (
         <>
             <div className={styles.headerMain}>
                 <div className={styles.titleDiv}>
-                    <div onClick={() => navigate(-1)} style={{ cursor: "pointer" }}>
+                    <div onClick={handleBackClick} style={{ cursor: "pointer" }}>
                         <img src='/Svg/back-arrow.svg' alt='Back' />
                     </div>
                     <div>
