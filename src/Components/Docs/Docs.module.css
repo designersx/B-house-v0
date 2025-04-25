@@ -32,10 +32,27 @@
     width: 50%;
 }
 
+.tabs {
+  position: relative;
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+}
+
+
 .activeTab {
-    color: #26211F;
-    border-bottom: 2px solid #26211F;
-    width: 50%;
+  color: #26211F;
+}
+
+.tabIndicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 2px;
+  background-color: #26211F;
+  transition: left 0.3s ease;
+  z-index: 0;
 }
 
 .docList {
