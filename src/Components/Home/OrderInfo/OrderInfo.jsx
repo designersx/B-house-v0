@@ -10,99 +10,97 @@ import HeaderTab from '../../HeaderTab/HeaderTab';
 function OrderInfo() {
   const location = useLocation();
   // const { item } = location.state || {};
- 
   const [project, setProject] = useState(null);
   const [allUsers, setAllUsers] = useState([]);
   const [accountManager, setAccountManager] = useState(null);
   const [latestUserComment, setLatestUserComment] = useState(null);
   const selectedProject = JSON.parse(localStorage.getItem("selectedProject"))
   let a = selectedProject?.assignedTeamRoles
-  
-    const [itemsData, setItemsData] = useState();
-    const params = useParams();
-    const id = params.id;
-    
-    const fetchManufacturers = async () => {
-      const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
-    
-      try {
-        const res = await axios.get(`${URL}/items/${projectId}`);
-        if (res?.data?.length > 0) {
-          const filteredItem = res.data.find(item => item.id.toString() === id.toString());
-          setItemsData(filteredItem);
-          console.log({filteredItem})
-        }
-      } catch (error) {
-        console.log("Error fetching items:", error);
+  const [itemsData, setItemsData] = useState();
+  const params = useParams();
+  const id = params.id;
+  const message = location.state?.message;
+  const fetchManufacturers = async () => {
+    const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
+
+    try {
+      const res = await axios.get(`${URL}/items/${projectId}`);
+      if (res?.data?.length > 0) {
+        const filteredItem = res.data.find(item => item.id.toString() === id.toString());
+        setItemsData(filteredItem);
       }
-    };
+    } catch (error) {
+      console.log("Error fetching items:", error);
+    }
+  };
   const accountManagers = a.find(item => item.role === "Account Manager");
- const firstAccountManagerId = accountManagers?.users[0];
- const fetchAccountManger = async()=>{
-  try{
-    const { data: allUsers } = await axios.get(`${URL}/auth/getAllUsers`);
-    const user = allUsers.find(user => user.id === firstAccountManagerId);
-    setAccountManager(user);
-  }
-  catch(error){
-    console.error("Failed to fetch account manager data:", error);
-  }
-  
- }
- useEffect(() => {
+  const firstAccountManagerId = accountManagers?.users[0];
+  const fetchAccountManger = async () => {
+    try {
+      const { data: allUsers } = await axios.get(`${URL}/auth/getAllUsers`);
+      const user = allUsers.find(user => user.id === firstAccountManagerId);
+      setAccountManager(user);
+    }
+    catch (error) {
+      console.error("Failed to fetch account manager data:", error);
+    }
 
-  fetchAccountManger();
-}, []);
+  }
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
-        if (!projectId) return;
 
-        const [projectRes, usersRes] = await Promise.all([
-          axios.get(`${URL}/projects/${projectId}`),
-          axios.get(`${URL}/auth/getAllUsers`)
-        ]);
+    fetchAccountManger();
+  }, []);
 
-        const fetchedProject = projectRes.data;
-        const fetchedUsers = usersRes.data;
+  const fetchData = async () => {
+    try {
+      const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
+      if (!projectId) return;
 
-        // Parse assignedTeamRoles (same as in your other page)
-        fetchedProject.assignedTeamRoles = Array.isArray(fetchedProject.assignedTeamRoles)
-          ? fetchedProject.assignedTeamRoles
-          : JSON.parse(fetchedProject.assignedTeamRoles || '[]');
+      const [projectRes, usersRes] = await Promise.all([
+        axios.get(`${URL}/projects/${projectId}`),
+        axios.get(`${URL}/auth/getAllUsers`)
+      ]);
 
-        setProject(fetchedProject);
-        setAllUsers(fetchedUsers);
+      const fetchedProject = projectRes.data;
+      const fetchedUsers = usersRes.data;
 
-        // Find account manager from assigned users
-        let foundAccountManager = null;
+      // Parse assignedTeamRoles (same as in your other page)
+      fetchedProject.assignedTeamRoles = Array.isArray(fetchedProject.assignedTeamRoles)
+        ? fetchedProject.assignedTeamRoles
+        : JSON.parse(fetchedProject.assignedTeamRoles || '[]');
 
-        for (const roleGroup of fetchedProject.assignedTeamRoles) {
-          if (roleGroup.role === "accountmanager") {
-            const userId = roleGroup.users[0]; // assuming only one account manager
-            foundAccountManager = fetchedUsers.find(u => u.id.toString() === userId.toString());
-            break;
-          }
+      setProject(fetchedProject);
+      setAllUsers(fetchedUsers);
+
+      // Find account manager from assigned users
+      let foundAccountManager = null;
+
+      for (const roleGroup of fetchedProject.assignedTeamRoles) {
+        if (roleGroup.role === "accountmanager") {
+          const userId = roleGroup.users[0]; // assuming only one account manager
+          foundAccountManager = fetchedUsers.find(u => u.id.toString() === userId.toString());
+          break;
         }
-
-       
-        const commentsRes = await axios.get(`${URL}/items/${item.id}/comments`);
-        const allComments = commentsRes.data;
-
-        const userComments = allComments.filter(cmt => cmt.createdByType === "user");
-
-        // Get the latest one
-        if (userComments.length > 0) {
-          setLatestUserComment(userComments[0]);
-        }
-
-      } catch (error) {
-        console.error("Error fetching project or users:", error);
       }
-    };
 
+
+      const commentsRes = await axios.get(`${URL}/items/${item.id}/comments`);
+      const allComments = commentsRes.data;
+
+      const userComments = allComments.filter(cmt => cmt.createdByType === "user");
+
+      // Get the latest one
+      if (userComments.length > 0) {
+        setLatestUserComment(userComments[0]);
+      }
+
+    } catch (error) {
+      console.error("Error fetching project or users:", error);
+    }
+  };
+  useEffect(() => {
     fetchData();
+
   }, []);
 
   const formatTimeAgo = (dateString) => {
@@ -124,14 +122,23 @@ function OrderInfo() {
       return "just now";
     }
   };
-  
+
   useEffect(() => {
     fetchManufacturers();
   }, []);
 
-
+  //function lock
+  useEffect(() => {
+    if (message) {
+      const userDetails = message.userDetails
+      const userComment = message.message;
+      userDetails.createdByName = `${userDetails.firstName ?? ""}    ${userDetails.lastName ?? ""}`;
+      userDetails.comment = userComment;
+      setLatestUserComment(userDetails);
+    }
+  }, [message]);
   const itemFromLocation = location.state?.item;
-const item = itemFromLocation || itemsData;
+  const item = itemFromLocation || itemsData
 
   return (
     <div>
@@ -274,7 +281,7 @@ const item = itemFromLocation || itemsData;
       </div>
       <div className={styles.commentSection}>
 
-        <CommentBox  saman ={itemsData}/>
+        <CommentBox saman={itemsData} />
 
       </div>
     </div>

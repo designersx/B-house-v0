@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../ModalSearch/ModalSearch.module.css";
 import URL from "../../config/api";
-
+// gfd
 const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [history, setHistory] = useState([]);
