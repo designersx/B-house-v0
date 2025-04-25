@@ -67,7 +67,6 @@ const InvoicePage = () => {
             fetchFinanceData();
         }
     }, [projectId]);
-    console.log(totalCost, "total cost")
     return (
         <div>
             <div className="HeaderTop">
