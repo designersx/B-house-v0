@@ -36,7 +36,7 @@ function Docs() {
   const [selectedDocTitle, setSelectedDocTitle] = useState('');
   const location = useLocation();
   const message = location.state?.message;
- const navigate=useNavigate()
+  const navigate = useNavigate()
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));
     try {
@@ -99,10 +99,23 @@ function Docs() {
   //function lock
   useEffect(() => {
     if (message) {
-      console.log(message);
       // Automatically switch to B-HOUSE DOCS if message.documentType is 'proposals' (case-insensitive match)
-      if (message.documentType?.toLowerCase() === 'proposals') {
-        setActiveTab('B-HOUSE DOCS');
+      if (message.documentType) {
+        const documentKey = message.documentType.toLowerCase();
+        const validDocKeys = [
+          'proposals',
+          'floorplans',
+          'cad',
+          'salesaggrement',
+          'presentation',
+          'acknowledgements',
+          'receivingreports',
+          'otherdocuments'
+        ];
+
+        if (validDocKeys.includes(documentKey)) {
+          setActiveTab('B-HOUSE DOCS');
+        }
       } else {
         setActiveTab(customerName);
         openCommentModal(message.documentId, message.documentType);
