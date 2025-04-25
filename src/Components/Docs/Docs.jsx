@@ -8,6 +8,7 @@ import Comments from '../CommentThread/Comments';
 import Modal from '../Modal/Modal';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../Loader/Loader';
 const docs = [
   "Sample COI",
   "COI (Certificate)",
@@ -99,8 +100,10 @@ function Docs() {
   //function lock
   useEffect(() => {
     if (message) {
+
       // Automatically switch to B-HOUSE DOCS if message.documentType is 'proposals' (case-insensitive match)
-      if (message.documentType) {
+      if (message.filePath) {
+
         const documentKey = message.documentType.toLowerCase();
         const validDocKeys = [
           'proposals',
@@ -119,7 +122,10 @@ function Docs() {
       } else {
         setActiveTab(customerName);
         openCommentModal(message.documentId, message.documentType);
-        navigate(location.pathname, { replace: true });
+        setTimeout(() => {
+          navigate(location.pathname, { replace: true });
+        }, 1000);
+      
       }
 
 
@@ -137,6 +143,11 @@ function Docs() {
   }, []);
   return (
     <div className={styles.container}>
+         {isLoading && (
+      <div className={styles.loaderOverlay}>
+        <Loader />
+      </div>
+    )}
       <h2 className={styles.heading}>List of Docs</h2>
 
       {showPopup && !isLoading && (
