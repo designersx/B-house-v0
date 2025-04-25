@@ -4,16 +4,15 @@ import styles from '../TeamMembers/TeamMembers.module.css';
 import Modal from '../Modal/Modal';
 import axios from 'axios';
 import URL from '../../config/api';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import { url2 } from '../../config/url';
-
+// getDashboardStats
 const TeamMembers = () => {
   const [loading, setIsloading] = useState(false)
   const location = useLocation();
   let a = localStorage.getItem("visible")
   let b = localStorage.getItem("remaining")
-
   const visibleIds = location.state?.visible || a;
   const remainingIds = location.state?.remaining || b;
   const [modalOpen, setModalOpen] = useState(false);
@@ -24,7 +23,8 @@ const TeamMembers = () => {
   const customerInfo = JSON.parse(localStorage.getItem("customerInfo"));
   const selectedProject = JSON.parse(localStorage.getItem("selectedProject"));
   const messagesEndRef = React.useRef(null);
-
+  const message = location.state?.message;
+  const navigate = useNavigate()
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -62,7 +62,12 @@ const TeamMembers = () => {
     fetchCommentsForUser(contact.id);
   };
 
-
+  useEffect(() => {
+    if (message) {
+      handleSendMessage(JSON.parse(message.userDetails))
+      navigate(location.pathname, { replace: true });
+    }
+  }, [message]);
 
   const fetchTeamMembers = async () => {
     setIsloading(true)
@@ -80,6 +85,7 @@ const TeamMembers = () => {
   useEffect(() => {
     fetchTeamMembers();
   }, []);
+
 
   const visibleUsers = allUsers.filter(
     user => visibleIds.includes(user.id) && user.id !== 1
@@ -177,12 +183,12 @@ const TeamMembers = () => {
                     <div>
                       <div className={styles.messageBubbleSupport}>
                         <p>   {msg.comment}</p>
-                   
-                     
+
+
                       </div>
-                      <br/>
+                      <br />
                       <div className={styles.superadmin}>   <b>{msg.name}</b> ({msg.userRole})</div>
-                   
+
                       <div className={styles.timestamp}>{new Date(msg.createdAt).toLocaleString()}</div>
                     </div>
                   </div>
