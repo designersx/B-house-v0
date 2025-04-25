@@ -323,7 +323,7 @@ function Header() {
               </div>
             </>
           )
-        }) : "NO data"}
+        }) }
       </OffCanvas>}
       <Modal onClose={() => setShowModal(false)} height='70vh'>
         <NotificationView showModal={showModal}

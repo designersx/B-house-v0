@@ -14,7 +14,7 @@ const HeaderTab = ({ title, subtitle }) => {
             <div className={styles.headerMain}>
                 <div className={styles.titleDiv}>
                     <div onClick={() => navigate(-1)} style={{ cursor: "pointer" }}>
-                        <img src='Svg/back-arrow.svg' alt='Back' />
+                        <img src='/Svg/back-arrow.svg' alt='Back' />
                     </div>
                     <div>
                         <h2>{title}</h2>
@@ -24,10 +24,10 @@ const HeaderTab = ({ title, subtitle }) => {
 
                 <div className={styles.IconBoth}>
                     <div className={styles.iconSearch} onClick={() => setShowModalSearch(true)}>
-                        <img src='Svg/searchSvg.svg' alt='Search' />
+                        <img src='/Svg/searchSvg.svg' alt='Search' />
                     </div>
                     <div className={styles.iconFillter} onClick={() => setShowCanvas(true)}>
-                        <img src='Svg/filterSvg.svg' alt='Filter' />
+                        <img src='/Svg/filterSvg.svg' alt='Filter' />
                     </div>
                 </div>
 

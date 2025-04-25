@@ -30,43 +30,43 @@ const Docs2 = () => {
 
     });
 
-    const docList = [
-        {
-            title: 'Detailed Proposal',
-            icon: 'Svg/detailed-proposal.svg',
-            fileUrl: projectData.proposals[0] || null,
-        },
-        {
-            title: 'Options Presentation',
-            icon: 'Svg/options-presentation.svg',
-            fileUrl: projectData?.presentation[0] || null, // Placeholder
-        },
-        {
-            title: 'Floor Plan',
-            icon: 'Svg/floor-plan.svg',
-            fileUrl: projectData.floorPlans[0] || null,
-        },
-        {
-            title: 'CAD File',
-            icon: 'Svg/cad-file.svg',
-            fileUrl: projectData?.cad[0] || null // Placeholder
-        },
-        {
-            title: 'Sales Agreement',
-            icon: 'Svg/sales-icon.svg',
-            fileUrl: projectData?.salesAggrement[0] || null, // Placeholder
-        },
-        {
-            title: 'Receiving Reports',
-            icon: 'Svg/Coi.svg',
-            fileUrl: projectData?.receivingReports[0] || null, // Placeholder
-        },
-        {
-            title: 'Acknowledgements',
-            icon: 'Svg/Coi.svg',
-            fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
-        },
-    ];
+    // const docList = [
+    //     {
+    //         title: 'Detailed Proposal',
+    //         icon: 'Svg/detailed-proposal.svg',
+    //         fileUrl: projectData.proposals[0] || null,
+    //     },
+    //     {
+    //         title: 'Options Presentation',
+    //         icon: 'Svg/options-presentation.svg',
+    //         fileUrl: projectData?.presentation[0] || null, // Placeholder
+    //     },
+    //     {
+    //         title: 'Floor Plan',
+    //         icon: 'Svg/floor-plan.svg',
+    //         fileUrl: projectData.floorPlans[0] || null,
+    //     },
+    //     {
+    //         title: 'CAD File',
+    //         icon: 'Svg/cad-file.svg',
+    //         fileUrl: projectData?.cad[0] || null // Placeholder
+    //     },
+    //     {
+    //         title: 'Sales Agreement',
+    //         icon: 'Svg/sales-icon.svg',
+    //         fileUrl: projectData?.salesAggrement[0] || null, // Placeholder
+    //     },
+    //     {
+    //         title: 'Receiving Reports',
+    //         icon: 'Svg/Coi.svg',
+    //         fileUrl: projectData?.receivingReports[0] || null, // Placeholder
+    //     },
+    //     {
+    //         title: 'Acknowledgements',
+    //         icon: 'Svg/Coi.svg',
+    //         fileUrl: projectData?.acknowledgements[0] || null, // Placeholder
+    //     },
+    // ];
     const handleAddComment = async () => {
         setLoading(true)
         const commentText = newComment.trim();
@@ -91,7 +91,7 @@ const Docs2 = () => {
             'Sales Agreement': 'salesAggrement',
 
             'Receiving Reports': "receivingReports",
-            "Acknowledgements": "acknowledgements"
+            "Acknowledgements": "acknowledgements" ,
 
             'Product Maintenance' : "otherDocuments" , 
 
