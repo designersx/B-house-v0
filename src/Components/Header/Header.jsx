@@ -69,7 +69,7 @@ function Header() {
   const getNotificationsByProjectId = async (ids) => {
     const response = await axios.get(`${URL}/getNotificationWithMultipleProjectId`, {
       params: {
-        projectIds: ids // this should be an array
+        projectIds: ids
       }
     });
 
@@ -203,7 +203,7 @@ function Header() {
           </div>
 
           <img
-            src="/Svg/UserIcon1.svg"
+            src={data?.profilePhoto ? `${url2}/${data?.profilePhoto}` : 'Images/profile-picture.webp'}
             alt="UserIcon"
             className={styles.vector1}
             onClick={() => setShowCanvas(true)}

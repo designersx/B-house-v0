@@ -1,19 +1,25 @@
-import React from 'react'
-import HeaderTab from '../../Components/HeaderTab/HeaderTab'
-import Footer from '../../Components/Footer/Footer'
-import Punchlist from '../../Components/Punchlist/Punchlist'
-import Loader from '../../Components/Loader/Loader'
+import React, { useState } from 'react';
+import HeaderTab from '../../Components/HeaderTab/HeaderTab';
+import Footer from '../../Components/Footer/Footer';
+import Punchlist from '../../Components/Punchlist/Punchlist';
+
 const PunchPage = () => {
-  return (
-    <div>
-      <div className="HeaderTop">
-        <HeaderTab title='Punchlist' />
-      </div>
-      <Punchlist />
-      <Footer />
+    const [statusFilters, setStatusFilters] = useState({});
 
-    </div>
-  )
-}
+    return (
+        <div>
+            <div className="HeaderTop">
+            <HeaderTab
+  title="Punchlist"
+  onStatusFilterChange={setStatusFilters}
+  statusOptions={["Pending", "Resolved", "Rejected"]}
+/>
 
-export default PunchPage
+            </div>
+            <Punchlist statusFilters={statusFilters} />
+            <Footer />
+        </div>
+    );
+};
+
+export default PunchPage;
