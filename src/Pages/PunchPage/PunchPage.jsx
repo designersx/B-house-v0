@@ -3,16 +3,39 @@ import HeaderTab from '../../Components/HeaderTab/HeaderTab'
 import Footer from '../../Components/Footer/Footer'
 import Punchlist from '../../Components/Punchlist/Punchlist'
 import Loader from '../../Components/Loader/Loader'
+import SideBar from '../../Components/SideBar/SideBar.jsx'
+import Header from '../../Components/Header/Header.jsx';
+
 const PunchPage = () => {
   return (
     <div>
+      <div className="MobContent">
       <div className="HeaderTop">
         <HeaderTab title='Punchlist' />
       </div>
       <Punchlist />
       <Footer />
 
-    </div>
+      </div>
+
+      <div className="mainContent">
+                <div className="Web_Sidebar">
+                    <SideBar />
+                </div>
+
+                <div className="Web_container">
+                    
+
+                    <div className="HeaderTop">
+                    <Header />
+
+                    </div>
+
+                    <Punchlist />
+                </div>
+
+            </div>
+      </div>
   )
 }
 

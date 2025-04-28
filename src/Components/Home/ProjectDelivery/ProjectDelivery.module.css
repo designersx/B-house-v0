@@ -37,12 +37,20 @@
  }
 
 
+ .linkStyle{
+  background: #fff;
+  border: 1px solid#ECECEC;
+  border-radius: 10px;
+
+ }
+
+
 /* Card Container */
 .orderCard {
-    background: #fff;
     padding: 16px;
-    border: 1px solid#ECECEC;
-    border-radius: 10px;
+  background: #fff;
+  border-radius: 10px;
+
     margin-bottom: 16px;
     word-break: break-all;
 
@@ -218,5 +226,26 @@
     color: inherit;
   }
 
+
+  @media screen and (min-device-width: 1024px) and (max-device-width: 2500px) { 
+
+    .Container {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(3, auto);
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@media screen and (min-device-width: 767px) and (max-device-width: 1024px) { 
+    .Container {
+      gap: 20px;
+      height: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+     
+    }
+}
 
   

@@ -11,7 +11,7 @@ const List = () => {
   const [selectedOption, setSelectedOption] = useState("Recent");
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
-  
+
   const projectId = localStorage.getItem("selectedProjectId");
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -80,24 +80,32 @@ const List = () => {
       setPopupMessage("No file has been uploaded for this invoice.");
       setShowPopup(true);
       return;
-    }    
+    }
     window.open(`${url2}/${filePath}`, "_blank");
   };
 
   return (
     <div className={styles.ListMian}>
-    {showPopup && (
-  <PopUp
-    type="failed"
-    message={popupMessage}
-    onClose={() => setShowPopup(false)}
-  />
-)}
+      {showPopup && (
+        <PopUp
+          type="failed"
+          message={popupMessage}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
 
 
-      
+
 
       <div className={styles.transactionList}>
+      {isOpen && (
+                    <ul className={styles.dropdownMenu}>
+                      <li onClick={() => handleSelect("Recent")}>Recent</li>
+                      <li onClick={() => handleSelect("1 Month")}>1 Month</li>
+                      <li onClick={() => handleSelect("3 Months")}>3 Months</li>
+                      <li onClick={() => handleSelect("6 Months")}>6 Months</li>
+                    </ul>
+                  )}
         {filteredInvoices.length === 0 ? (
           <div className={styles.noData}>
             <div>
@@ -114,62 +122,54 @@ const List = () => {
             // 
 
             <>
-            <div className={styles.Part1}>
-        <div className={styles.title}>
-          <p>All Invoice List</p>
-        </div>
-        <div className={styles.dropdown}>
-          <button className={styles.dropdownBtn} onClick={toggleDropdown}>
-            {selectedOption}
-            <span className={`${styles.arrow} ${isOpen ? styles.rotate : ""}`}>
-              <img src="Svg/drop-Arrow.svg" alt="drop-Arrow" />
-            </span>
-          </button>
-          {isOpen && (
-            <ul className={styles.dropdownMenu}>
-              <li onClick={() => handleSelect("Recent")}>Recent</li>
-              <li onClick={() => handleSelect("1 Month")}>1 Month</li>
-              <li onClick={() => handleSelect("3 Months")}>3 Months</li>
-              <li onClick={() => handleSelect("6 Months")}>6 Months</li>
-            </ul>
-          )}
-        </div>
-      </div>
-      <div key={invoice.id} className={styles.transactionItem}>
-              <img
-                src="Svg/pdf-icon.svg"
-                alt="pdf-icon"
-                className={styles.image}
-                onClick={() => handleOpenFile(invoice.invoiceFilePath)}
-              />
-              <div className={styles.details}>
-                <p className={styles.title}>{`Invoice ${index + 1}`}</p>
-                <div className={styles.track}>
-                  <div className={styles.DFlex}>
-                    <img src="Svg/timer.svg" alt="" />
-                    <p className={styles.date}>{formatDate(invoice.createdAt)}</p>
-                  </div>
-                  <p className={styles.amount}>
-                    {invoice.advancePaid
-                      ? `${invoice.advancePaid.toLocaleString()} out of ${invoice.totalAmount.toLocaleString()}`
-                      : `${invoice.totalAmount.toLocaleString()}`}
-                  </p>
+              <div className={styles.Part1}>
+                <div className={styles.title}>
+                  <p>All Invoice List</p>
+                </div>
+                <div className={styles.dropdown}>
+                  <button className={styles.dropdownBtn} onClick={toggleDropdown}>
+                    {selectedOption}
+                    <span className={`${styles.arrow} ${isOpen ? styles.rotate : ""}`}>
+                      <img src="Svg/drop-Arrow.svg" alt="drop-Arrow" />
+                    </span>
+                  </button>
+              
                 </div>
               </div>
-              <span
-                className={`${styles.status} ${
-                  invoice.status === "Partly Paid"
-                    ? styles.PartlyPaid
-                    : invoice.status === "Paid"
-                    ? styles.Paid
-                    : styles.Pending
-                }`}
-              >
-                {invoice.status}
-              </span>
-            </div>
+              <div key={invoice.id} className={styles.transactionItem}>
+                <img
+                  src="Svg/pdf-icon.svg"
+                  alt="pdf-icon"
+                  className={styles.image}
+                  onClick={() => handleOpenFile(invoice.invoiceFilePath)}
+                />
+                <div className={styles.details}>
+                  <p className={styles.title}>{`Invoice ${index + 1}`}</p>
+                  <div className={styles.track}>
+                    <div className={styles.DFlex}>
+                      <img src="Svg/timer.svg" alt="" />
+                      <p className={styles.date}>{formatDate(invoice.createdAt)}</p>
+                    </div>
+                    <p className={styles.amount}>
+                      {invoice.advancePaid
+                        ? `${invoice.advancePaid.toLocaleString()} out of ${invoice.totalAmount.toLocaleString()}`
+                        : `${invoice.totalAmount.toLocaleString()}`}
+                    </p>
+                  </div>
+                </div>
+                <span
+                  className={`${styles.status} ${invoice.status === "Partly Paid"
+                      ? styles.PartlyPaid
+                      : invoice.status === "Paid"
+                        ? styles.Paid
+                        : styles.Pending
+                    }`}
+                >
+                  {invoice.status}
+                </span>
+              </div>
             </>
-           
+
           ))
         )}
       </div>

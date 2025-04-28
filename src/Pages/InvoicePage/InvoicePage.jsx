@@ -6,6 +6,9 @@ import List from '../../Components/Invoice/List/List.jsx'
 import axios from 'axios';
 import URL from '../../config/api.js';
 import Loader from '../../Components/Loader/Loader'
+import SideBar from '../../Components/SideBar/SideBar.jsx'
+import Header from '../../Components/Header/Header.jsx';
+
 const InvoicePage = () => {
     const [totalCost, setTotalCost] = useState();
     const [totalPaidAmount, setTotalPaidAmount] = useState(0);
@@ -70,14 +73,39 @@ const InvoicePage = () => {
     console.log(totalCost, "total cost")
     return (
         <div>
+            <div className="MobContent">
             <div className="HeaderTop">
                 <HeaderTab title='Invoice List' />
+
             </div>
             {!totalCost ? <div className='ForLoder'><Loader /></div> : <>  <Chart />
                 <List /></>}
 
 
             <Footer />
+
+            </div>
+
+            <div className="mainContent">
+                <div className="Web_Sidebar">
+                    <SideBar />
+                </div>
+
+                <div className="Web_container">
+                    
+
+                    <div className="HeaderTop">
+                    <Header />
+                    </div>
+                    <div className='webListGap'>
+                        {!totalCost ? <div className='ForLoder'><Loader /></div> : <>  <Chart />
+                            <List /></>}
+                    </div>
+                </div>
+
+            </div>
+
+
         </div>
     )
 }
