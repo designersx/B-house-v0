@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "../ModalSearch/ModalSearch.module.css";
 import URL from "../../config/api";
-// gfd
+
 const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [history, setHistory] = useState([]);
   const [projectItems, setProjectItems] = useState([]);
   const [punchlists, setPunchlists] = useState([]);
+  const [invoices, setInvoices] = useState([]);
+
   const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.pathname;  // 👈 capture current route
 
   const words = ["documents", "invoice", "projects", "home", "punchlist"];
   const [placeholder, setPlaceholder] = useState("");
@@ -16,19 +20,16 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Get search history
   useEffect(() => {
     const storedHistory = JSON.parse(localStorage.getItem("searchHistory")) || [];
     setHistory(storedHistory);
   }, []);
 
-  // Lock scroll
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
     return () => (document.body.style.overflow = "auto");
   }, [isOpen]);
 
-  // Save new search terms
   useEffect(() => {
     if (searchTerm.trim()) {
       const timer = setTimeout(() => {
@@ -42,9 +43,9 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
     }
   }, [searchTerm]);
 
-  // Placeholder animation
+  // Typing effect only on Home page
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || pathname !== "/home") return;
     const currentWord = words[wordIndex];
     const typingSpeed = isDeleting ? 60 : 100;
 
@@ -67,34 +68,56 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
     }, typingSpeed);
 
     return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, wordIndex, isOpen]);
+  }, [charIndex, isDeleting, wordIndex, isOpen, pathname]);
 
-  // Fetch project items and punchlists on search
+  // Handle search differently based on page
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      const fetchProjectItemsAndPunchlists = async () => {
+      const fetchData = async () => {
         try {
           const projectId = localStorage.getItem("selectedProjectId");
           if (!projectId || !searchTerm.trim()) {
             setProjectItems([]);
             setPunchlists([]);
+            setInvoices([]);
             return;
           }
 
-          const res = await fetch(`${URL}/search?query=${searchTerm}&projectId=${projectId}`);
-          const data = await res.json();
-          setProjectItems(data.items);
-          setPunchlists(data.punchlists);
+          if (pathname.includes("invoice")) {
+            // Fetch invoices
+            const res = await fetch(`${URL}/projects/${projectId}/invoice`);
+            const data = await res.json();
+            const invoicesArray = Array.isArray(data) ? data : [data];
+            const filtered = invoicesArray.filter(inv =>
+              inv.invoiceNumber?.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setInvoices(filtered);
+          } else if (pathname.includes("punchlist")) {
+            // Fetch punchlists
+            const res = await fetch(`${URL}/projects/${projectId}/punch-list`);
+            const data = await res.json();
+            const punchlistsArray = Array.isArray(data) ? data : [data];
+            const filtered = punchlistsArray.filter(p =>
+              p.category?.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setPunchlists(filtered);
+          } else {
+            // Home Page: fetch search suggestions
+            const res = await fetch(`${URL}/search?query=${searchTerm}&projectId=${projectId}`);
+            const data = await res.json();
+            setProjectItems(data.items || []);
+            setPunchlists(data.punchlists || []);
+          }
         } catch (error) {
-          console.error("Error fetching project items and punchlists:", error);
+          console.error("Error fetching search data:", error);
         }
       };
 
-      fetchProjectItemsAndPunchlists();
+      fetchData();
     }, 300);
 
     return () => clearTimeout(delayDebounce);
-  }, [searchTerm]);
+  }, [searchTerm, pathname]);
 
   const handleClearAll = () => {
     setHistory([]);
@@ -142,7 +165,13 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
             <input
               className={styles.searchInput}
               type="text"
-              placeholder={`Search for ${placeholder}`}
+              placeholder={
+                pathname.includes("invoice")
+                  ? "Search Invoice Number"
+                  : pathname.includes("punchlist")
+                  ? "Search by Category"
+                  : `Search for ${placeholder}`
+              }
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -159,30 +188,36 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
               )}
             </div>
 
-            {searchTerm ? (
-              filteredSuggestions.length > 0 ? (
-                <ul className={styles.historyList}>
-                  {filteredSuggestions.map((item, idx) => (
-                    <li key={idx} onClick={() => handleSelectSuggestion(item)} className={styles.historyItem}>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className={styles.emptyText}>No results</p>
-              )
-            ) : (
-              <ul className={styles.historyList}>
-                {history.map((item, idx) => (
-                  <li key={idx} onClick={() => handleSelectSuggestion(item)} className={styles.historyItem}>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+            {/* Suggestions List for Home */}
+            {pathname === "/home" && (
+              <>
+                {searchTerm ? (
+                  filteredSuggestions.length > 0 ? (
+                    <ul className={styles.historyList}>
+                      {filteredSuggestions.map((item, idx) => (
+                        <li key={idx} onClick={() => handleSelectSuggestion(item)} className={styles.historyItem}>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className={styles.emptyText}>No results</p>
+                  )
+                ) : (
+                  <ul className={styles.historyList}>
+                    {history.map((item, idx) => (
+                      <li key={idx} onClick={() => handleSelectSuggestion(item)} className={styles.historyItem}>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
             )}
           </div>
 
-          {projectItems.length > 0 && (
+          {/* Project Items */}
+          {pathname === "/home" && projectItems.length > 0 && (
             <div className={styles.resultsSection}>
               <h4>Project Items</h4>
               <ul className={styles.historyList}>
@@ -195,18 +230,34 @@ const ModalSearch = ({ isOpen, onClose, minHeight = "30%", maxHeight = "80%" }) 
             </div>
           )}
 
-          {punchlists.length > 0 && (
+          {/* Punchlists */}
+          {(pathname.includes("punchlist") || pathname === "/home") && punchlists.length > 0 && (
             <div className={styles.resultsSection}>
               <h4>Punchlists</h4>
               <ul className={styles.historyList}>
-                {punchlists.map((punchlist, idx) => (
-                  <li key={idx} className={styles.historyItem} onClick={() => handleSelectPunchlist(punchlist.id)}>
-                    {punchlist.title}
+                {punchlists.map((p, idx) => (
+                  <li key={idx} className={styles.historyItem} onClick={() => handleSelectPunchlist(p.id)}>
+                    {p.category || p.title}
                   </li>
                 ))}
               </ul>
             </div>
           )}
+
+          {/* Invoices */}
+          {pathname.includes("invoice") && invoices.length > 0 && (
+            <div className={styles.resultsSection}>
+              <h4>Invoices</h4>
+              <ul className={styles.historyList}>
+                {invoices.map((inv, idx) => (
+                  <li key={idx} className={styles.historyItem}>
+                    {inv.invoiceNumber}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
         </div>
       </div>
     </div>

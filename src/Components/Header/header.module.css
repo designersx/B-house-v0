@@ -193,3 +193,8 @@ textarea,
     justify-content: center;
     border-radius: 50%;
 }
+.vector1{
+    border-radius: 50%;
+    height: 55%;
+    width: 55%;
+}   

@@ -27,8 +27,8 @@ const progressColor = {
     progressWidth: "60%",
   },
 };
-
 function ProjectDelivery({ selectedProject }) {
+  const [showAll, setShowAll] = useState(false);
   const [data, setData] = useState([]);
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
   // const location = useLocation();
@@ -120,15 +120,20 @@ function ProjectDelivery({ selectedProject }) {
     <div>
       <div className={styles.DeliveryUpdate}>
         <h4>Project Delivery Update</h4>
-        <button className={styles.button}>View All</button>
+        <button
+          className={styles.button}
+          onClick={() => setShowAll((prev) => !prev)}
+        >
+          {showAll ? "Show Less" : "View All"}
+        </button>
       </div>
       <div className={styles.dlDate}>
         <p>2025-04-11</p>
       </div>
 
       <div className={styles.Container}>
-        {data
-          ?.filter((item) => item.itemName && item.itemName.trim() !== "") //
+        {(showAll ? data : data.slice(0, 2))
+          ?.filter((item) => item.itemName && item.itemName.trim() !== "")
           .map((item) => {
             const latestComment = latestCommentsByItem[item.id];
 
