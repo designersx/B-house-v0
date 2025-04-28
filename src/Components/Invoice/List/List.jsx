@@ -4,7 +4,8 @@ import styles from "../List/List.module.css";
 import URL from "../../../config/api";
 import { url2 } from "../../../config/url";
 import PopUp from "../../PopUp/PopUp";
-const List = () => {
+
+const List = ({ statusFilters, searchTerm = "" }) => {
   const [invoices, setInvoices] = useState([]);
   const [filteredInvoices, setFilteredInvoices] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +20,7 @@ const List = () => {
   const handleSelect = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
-    filterInvoices(invoices, option);
+    filterInvoices(invoices, option, statusFilters, searchTerm);
   };
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const List = () => {
         const response = await axios.get(`${URL}/projects/${projectId}/invoice`);
         const invoicesData = Array.isArray(response.data) ? response.data : [response.data];
         setInvoices(invoicesData);
-        filterInvoices(invoicesData, selectedOption);
+        filterInvoices(invoicesData, selectedOption, statusFilters, searchTerm); 
       } catch (err) {
         console.error("Error fetching invoices:", err);
       }
@@ -37,9 +38,13 @@ const List = () => {
     if (projectId) fetchInvoices();
   }, [projectId]);
 
-  const filterInvoices = (invoices, option) => {
+  useEffect(() => {
+    filterInvoices(invoices, selectedOption, statusFilters, searchTerm); // ✅ whenever search term or filter changes
+  }, [statusFilters, searchTerm, selectedOption, invoices]);
+
+  const filterInvoices = (invoicesList, option, statusFilters, searchTerm) => {
     const today = new Date();
-    let filtered = [];
+    let filtered = [...invoicesList];
 
     const getMonthsAgo = (n) => {
       const d = new Date();
@@ -49,18 +54,31 @@ const List = () => {
 
     switch (option) {
       case "1 Month":
-        filtered = invoices.filter((i) => new Date(i.createdAt) >= getMonthsAgo(1));
+        filtered = filtered.filter((i) => new Date(i.createdAt) >= getMonthsAgo(1));
         break;
       case "3 Months":
-        filtered = invoices.filter((i) => new Date(i.createdAt) >= getMonthsAgo(3));
+        filtered = filtered.filter((i) => new Date(i.createdAt) >= getMonthsAgo(3));
         break;
       case "6 Months":
-        filtered = invoices.filter((i) => new Date(i.createdAt) >= getMonthsAgo(6));
+        filtered = filtered.filter((i) => new Date(i.createdAt) >= getMonthsAgo(6));
         break;
       case "Recent":
       default:
-        filtered = invoices.filter((i) => new Date(i.createdAt).getFullYear() === today.getFullYear());
+        filtered = filtered.filter((i) => new Date(i.createdAt).getFullYear() === today.getFullYear());
         break;
+    }
+
+    // ✅ Filter by status
+    const activeStatuses = Object.keys(statusFilters).filter((status) => statusFilters[status]);
+    if (activeStatuses.length > 0) {
+      filtered = filtered.filter((invoice) => activeStatuses.includes(invoice.status));
+    }
+
+    // ✅ Filter by searchTerm (Invoice No.)
+    if (searchTerm.trim()) {
+      filtered = filtered.filter((invoice) =>
+        invoice.invoiceNumber?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
 
     setFilteredInvoices(filtered);
@@ -93,7 +111,6 @@ const List = () => {
           onClose={() => setShowPopup(false)}
         />
       )}
-
 
       <div className={styles.Part1}>
         <div className={styles.title}>
@@ -138,12 +155,13 @@ const List = () => {
                 onClick={() => handleOpenFile(invoice.invoiceFilePath)}
               />
               <div className={styles.details}>
-                <p className={styles.title}>{`Invoice ${index + 1}`}</p>
+                <p className={styles.title}>{invoice.invoiceNumber || `Invoice ${index + 1}`}</p>
                 <div className={styles.track}>
                   <div className={styles.DFlex}>
                     <img src="Svg/timer.svg" alt="" />
                     <p className={styles.date}>{formatDate(invoice.createdAt)}</p>
                   </div>
+                  <p>{invoice.description}</p>
                   <p className={styles.amount}>
                     {invoice.advancePaid
                       ? `${invoice.advancePaid.toLocaleString()} out of ${invoice.totalAmount.toLocaleString()}`
@@ -152,12 +170,13 @@ const List = () => {
                 </div>
               </div>
               <span
-                className={`${styles.status} ${invoice.status === "Partly Paid"
+                className={`${styles.status} ${
+                  invoice.status === "Partly Paid"
                     ? styles.PartlyPaid
                     : invoice.status === "Paid"
-                      ? styles.Paid
-                      : styles.Pending
-                  }`}
+                    ? styles.Paid
+                    : styles.Pending
+                }`}
               >
                 {invoice.status}
               </span>
