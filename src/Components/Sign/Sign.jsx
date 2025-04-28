@@ -4,7 +4,7 @@ import styles from "../Sign/Sign.module.css";
 import axios from "axios";
 import URL from "../../config/api";
 import { getFcmToken } from "../../../src/firebase/getFCMToken/getToken";
-import { sendFcmToken } from "../../../src/firebase/sendFcmTokenToDb/sendFcmToDb";
+// import { sendFcmToken } from "../../../src/firebase/sendFcmTokenToDb/sendFcmToDb";
 import Loader from "../Loader/Loader";
 const Sign = () => {
   const [email, setEmail] = useState("");
@@ -41,14 +41,14 @@ const Sign = () => {
         //save Fcm
         const FCM_Token = await getFcmToken();
         
-        await sendFcmToken(FCM_Token,customer.id)
+        // await sendFcmToken(FCM_Token,customer.id)
         setLoading(false)
       } else {
         localStorage.removeItem("savedEmail");
         localStorage.removeItem("savedPassword");
         //save Fcm
         const FCM_Token = await getFcmToken();
-        await sendFcmToken(FCM_Token,customer.id)
+        // await sendFcmToken(FCM_Token,customer.id)
         setLoading(false)
       }
       if (firstLogin) {
