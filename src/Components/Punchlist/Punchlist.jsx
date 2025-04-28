@@ -8,7 +8,7 @@ import { url2 } from "../../config/url";
 import { useNavigate, useLocation } from 'react-router-dom';
 import Loader from "../Loader/Loader";
 
-function Punchlist({ statusFilters }) {
+function Punchlist({ statusFilters, searchTerm = "" }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,15 +53,7 @@ function Punchlist({ statusFilters }) {
     filterIssues(issues, statusFilters);
   }, [issues, statusFilters]);
 
-  const filterIssues = (issuesList, statusFilters) => {
-    const activeStatuses = Object.keys(statusFilters).filter(status => statusFilters[status]);
-    if (activeStatuses.length === 0) {
-      setFilteredIssues(issuesList);
-    } else {
-      const filtered = issuesList.filter(issue => activeStatuses.includes(issue.status));
-      setFilteredIssues(filtered);
-    }
-  };
+
 
   const handlePunchListView = (issue) => {
     navigate(`/punchlist-detail/${issue?.id}`, {
@@ -89,7 +81,22 @@ function Punchlist({ statusFilters }) {
       return createdDate.toLocaleDateString();
     }
   };
+  const filterIssues = (issuesList, statusFilters) => {
+    const activeStatuses = Object.keys(statusFilters).filter(status => statusFilters[status]);
+    let filtered = issuesList;
 
+    if (activeStatuses.length > 0) {
+      filtered = filtered.filter(issue => activeStatuses.includes(issue.status));
+    }
+
+    if (searchTerm.trim()) { // ✅ Filter by category
+      filtered = filtered.filter(issue =>
+        issue.category?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredIssues(filtered);
+  };
   return (
     <div className={styles.container}>
       {loading ? (
