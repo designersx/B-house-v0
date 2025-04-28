@@ -31,8 +31,8 @@ const firebaseConfig = {
 };
 function App() {
   // Initialize App
-  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-  const messaging = getMessaging(app);
+  // const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  // const messaging = getMessaging(app);
   // // Check User has Permission
   // const requestPermission = async () => {
   //   if (!isNewNotificationSupported()) {
@@ -92,27 +92,27 @@ function App() {
   //       });
   //   }
   // }, [messaging]);
-  useEffect(() => {
-    if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-          console.log('Permission granted!HY DOSTO');
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+  //     Notification.requestPermission().then(permission => {
+  //       if (permission === 'granted') {
+  //         console.log('Permission granted!HY DOSTO');
+  //       }
+  //     });
+  //   }
+  // }, []);
 
 
-  onMessage(messaging, (payload) => {
-    const title = payload.data.title || 'New Notification';
-    const body = payload.data.body || 'You have a new message';
-    if (Notification.permission === 'granted') {
-      new Notification(title, {
-        body,
-        icon: '/Svg/b-houseLogo.svg',
-      });
-    }
-  });
+  // onMessage(messaging, (payload) => {
+  //   const title = payload.data.title || 'New Notification';
+  //   const body = payload.data.body || 'You have a new message';
+  //   if (Notification.permission === 'granted') {
+  //     new Notification(title, {
+  //       body,
+  //       icon: '/Svg/b-houseLogo.svg',
+  //     });
+  //   }
+  // });
 
   const ScrollToTop = () => {
     const { pathname } = useLocation();
