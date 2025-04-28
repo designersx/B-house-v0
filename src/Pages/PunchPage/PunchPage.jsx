@@ -4,22 +4,24 @@ import Footer from '../../Components/Footer/Footer';
 import Punchlist from '../../Components/Punchlist/Punchlist';
 
 const PunchPage = () => {
-    const [statusFilters, setStatusFilters] = useState({});
+  const [statusFilters, setStatusFilters] = useState({});
+  const [searchTerm, setSearchTerm] = useState(""); // ✅ Add searchTerm here
 
-    return (
-        <div>
-            <div className="HeaderTop">
-            <HeaderTab
-  title="Punchlist"
-  onStatusFilterChange={setStatusFilters}
-  statusOptions={["Pending", "Resolved", "Rejected"]}
-/>
+  return (
+    <div>
+      <div className="HeaderTop">
+        <HeaderTab
+          title="Punchlist"
+          onStatusFilterChange={setStatusFilters}
+          onSearchTermChange={setSearchTerm} // ✅ Pass to HeaderTab
+          statusOptions={["Pending", "Resolved", "Rejected"]}
+        />
+      </div>
 
-            </div>
-            <Punchlist statusFilters={statusFilters} />
-            <Footer />
-        </div>
-    );
+      <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} /> {/* ✅ Pass to Punchlist */}
+      <Footer />
+    </div>
+  );
 };
 
 export default PunchPage;
