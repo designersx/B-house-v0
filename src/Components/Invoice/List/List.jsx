@@ -45,13 +45,13 @@ const List = ({ statusFilters, searchTerm = "" }) => {
   const filterInvoices = (invoicesList, option, statusFilters, searchTerm) => {
     const today = new Date();
     let filtered = [...invoicesList];
-
+  
     const getMonthsAgo = (n) => {
       const d = new Date();
       d.setMonth(today.getMonth() - n);
       return d;
     };
-
+  
     switch (option) {
       case "1 Month":
         filtered = filtered.filter((i) => new Date(i.createdAt) >= getMonthsAgo(1));
@@ -67,22 +67,27 @@ const List = ({ statusFilters, searchTerm = "" }) => {
         filtered = filtered.filter((i) => new Date(i.createdAt).getFullYear() === today.getFullYear());
         break;
     }
-
-    // ✅ Filter by status
+  
+    // ✅ Filter by Status
     const activeStatuses = Object.keys(statusFilters).filter((status) => statusFilters[status]);
     if (activeStatuses.length > 0) {
       filtered = filtered.filter((invoice) => activeStatuses.includes(invoice.status));
     }
-
-    // ✅ Filter by searchTerm (Invoice No.)
+  
+    // ✅ Filter by searchTerm
     if (searchTerm.trim()) {
-      filtered = filtered.filter((invoice) =>
-        invoice.invoiceNumber?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      filtered = filtered.filter((invoice, index) => {
+        const displayInvoiceNumber = invoice.invoiceNumber
+          ? invoice.invoiceNumber.toLowerCase()
+          : `invoice ${index + 1}`.toLowerCase();  // 👉 Custom frontend name matching
+  
+        return displayInvoiceNumber.includes(searchTerm.toLowerCase());
+      });
     }
-
+  
     setFilteredInvoices(filtered);
   };
+  
 
   const formatDate = (date) => {
     const today = new Date();

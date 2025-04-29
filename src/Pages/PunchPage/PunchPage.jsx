@@ -5,7 +5,7 @@ import Punchlist from '../../Components/Punchlist/Punchlist';
 
 const PunchPage = () => {
   const [statusFilters, setStatusFilters] = useState({});
-  const [searchTerm, setSearchTerm] = useState(""); // ✅ Add searchTerm here
+  const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <div>
@@ -13,12 +13,12 @@ const PunchPage = () => {
         <HeaderTab
           title="Punchlist"
           onStatusFilterChange={setStatusFilters}
-          onSearchTermChange={setSearchTerm} // ✅ Pass to HeaderTab
+          onSearchTermChange={setSearchTerm}
           statusOptions={["Pending", "Resolved", "Rejected"]}
         />
       </div>
 
-      <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} /> {/* ✅ Pass to Punchlist */}
+      <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} /> 
       <Footer />
     </div>
   );

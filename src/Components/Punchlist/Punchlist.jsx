@@ -13,12 +13,11 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIssue, setActiveIssue] = useState(null);
-  const [issues, setIssues] = useState([]);
-  const [filteredIssues, setFilteredIssues] = useState([]);
+  const [issues, setIssues] = useState([]); // 🔵 Pure list
+  const [filteredIssues, setFilteredIssues] = useState([]); // 🟠 Filtered list
   const [loading, setLoading] = useState(false);
 
   const projectId = localStorage.getItem("selectedProjectId");
-  const message = location.state?.message;
 
   const handleCommentClick = (issue) => {
     setActiveIssue(issue);
@@ -36,6 +35,7 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
           productImages: JSON.parse(issue.productImages)
         }));
         setIssues(parsedIssues);
+        setFilteredIssues(parsedIssues); // 👈 Set full list initially
         setLoading(false);
       } catch (err) {
         console.error("Error fetching punch list:", err);
@@ -48,18 +48,31 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
     }
   }, [projectId]);
 
-  // Re-filter when issues or filters change
+  // 🔥 Important: Search ya filters change hone par filter lagana
   useEffect(() => {
-    filterIssues(issues, statusFilters);
-  }, [issues, statusFilters]);
+    filterIssues();
+  }, [issues, statusFilters, searchTerm]); 
 
+  const filterIssues = () => {
+    let filtered = [...issues];
 
+    const activeStatuses = Object.keys(statusFilters).filter(status => statusFilters[status]);
+    if (activeStatuses.length > 0) {
+      filtered = filtered.filter(issue => activeStatuses.includes(issue.status));
+    }
+
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(issue =>
+        issue.category?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredIssues(filtered);
+  };
 
   const handlePunchListView = (issue) => {
     navigate(`/punchlist-detail/${issue?.id}`, {
-      state: {
-        punchId: issue?.id,
-      },
+      state: { punchId: issue?.id },
     });
   };
 
@@ -70,41 +83,24 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
   const formatDate = (date) => {
     const today = new Date();
     const createdDate = new Date(date);
-    const timeDiff = today - createdDate;
-    const daysDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+    const daysDiff = Math.floor((today - createdDate) / (1000 * 3600 * 24));
 
-    if (daysDiff === 0) {
-      return "Today";
-    } else if (daysDiff === 1) {
-      return "Yesterday";
-    } else {
-      return createdDate.toLocaleDateString();
-    }
+    return daysDiff === 0 ? "Today" : daysDiff === 1 ? "Yesterday" : createdDate.toLocaleDateString();
   };
-  const filterIssues = (issuesList, statusFilters) => {
-    const activeStatuses = Object.keys(statusFilters).filter(status => statusFilters[status]);
-    let filtered = issuesList;
 
-    if (activeStatuses.length > 0) {
-      filtered = filtered.filter(issue => activeStatuses.includes(issue.status));
-    }
-
-    if (searchTerm.trim()) { // ✅ Filter by category
-      filtered = filtered.filter(issue =>
-        issue.category?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    setFilteredIssues(filtered);
-  };
   return (
     <div className={styles.container}>
       {loading ? (
         <div className="ForLoder"><Loader /></div>
-      ) : filteredIssues.length <= 0 ? (
+      ) : filteredIssues.length === 0 ? (
         <div className={styles.noData}>
-          <div><img src="Svg/notfound.svg" alt="" />
-            <div className={styles.NoDataTittle}><p>No items found yet</p><img src="Svg/EYE1.svg" alt="" /></div></div>
+          <div>
+            <img src="Svg/notfound.svg" alt="" />
+            <div className={styles.NoDataTittle}>
+              <p>No items found yet</p>
+              <img src="Svg/EYE1.svg" alt="" />
+            </div>
+          </div>
         </div>
       ) : (
         filteredIssues.map((issue, index) => (
@@ -122,11 +118,9 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
             </div>
 
             <div className={styles.title}>
-              <div className={styles.title} title={issue.issueDescription}>
-                <b>{issue.category}</b> – {issue.issueDescription.length > 20
-                  ? `${issue.issueDescription.slice(0, 20)}...`
-                  : issue.issueDescription}
-              </div>
+              <b>{issue.category}</b> – {issue.issueDescription.length > 20
+                ? `${issue.issueDescription.slice(0, 20)}...`
+                : issue.issueDescription}
             </div>
 
             <div className={styles.flexD}>
@@ -137,7 +131,10 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
                     src={`${url2}/${img}`}
                     alt={`Issue image ${i + 1}`}
                     className={styles.image}
-                    onClick={() => handleImageClick(img)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleImageClick(img);
+                    }}
                   />
                 ))}
                 {issue.productImages.length > 3 && (
@@ -145,7 +142,10 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
                 )}
               </div>
 
-              <div className={styles.commentLink} onClick={() => handleCommentClick(issue)}>
+              <div className={styles.commentLink} onClick={(e) => {
+                e.stopPropagation();
+                handleCommentClick(issue);
+              }}>
                 <img src="Svg/edit-icon.svg" alt="edit" />
                 <p>Add Comment</p>
               </div>
@@ -175,4 +175,3 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
 }
 
 export default Punchlist;
-
