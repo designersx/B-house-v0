@@ -27,7 +27,9 @@ const PunchPage = () => {
           </div>
           <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
 
+
           <Footer />
+
         </div>
 
         <div className="webContent">
@@ -39,10 +41,12 @@ const PunchPage = () => {
               <SideBar />
             </div>
 
+
             <div className="Web_container">
               <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
             </div>
             <Footer />
+
           </div>
         </div>
       </div>
