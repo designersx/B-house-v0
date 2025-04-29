@@ -40,7 +40,7 @@ const Sign = () => {
         localStorage.setItem("savedPassword", password);
         //save Fcm
         const FCM_Token = await getFcmToken();
-
+        console.log(FCM_Token, "FCM_Token")
         await sendFcmToken(FCM_Token, customer.id)
         setLoading(false)
       } else {
@@ -48,6 +48,7 @@ const Sign = () => {
         localStorage.removeItem("savedPassword");
         //save Fcm
         const FCM_Token = await getFcmToken();
+        console.log(FCM_Token, "FCM_Token")
         await sendFcmToken(FCM_Token, customer.id)
         setLoading(false)
       }
@@ -66,7 +67,6 @@ const Sign = () => {
       setError(err.response?.data?.message || "Login failed");
     }
   };
-
   return (
     <div className={styles.signMain}>
       <div className="HeaderTop">
