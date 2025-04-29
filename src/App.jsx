@@ -16,10 +16,20 @@ import EditProfile from "./Components/EditProfile/EditProfile";
 import OrderInfo from "./Components/Home/OrderInfo/OrderInfo";
 import TeamMembers from "./Components/TeamMembers/TeamMembers";
 import PunchListDetail from "./Components/Punchlist/Punchlistdestail";
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getMessaging, onMessage } from "firebase/messaging";
 import ProtectedRoute from "./Components/Private/ProtectedRoute";
 import ProjectDeliveryList from "./Components/Home/ProjectDelivery/ProjectDeliveryList";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import {
+  initializeApp,
+  getApps
+} from "firebase/app";
+import {
+  getMessaging,
+  onMessage,
+  isSupported
+} from "firebase/messaging";
 // Initialize Firebase App
 const firebaseConfig = {
   apiKey: "AIzaSyDblY3fqpz8K5KXDA3HacPUzHxBnZHT1o0",
@@ -30,80 +40,53 @@ const firebaseConfig = {
   appId: "1:577116029205:web:659adeb7405b59ad21691c",
   measurementId: "G-RFFMNTE7XQ"
 };
+// Initialize Firebase only once
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+
 function App() {
-  // Initialize App
-  const isIOS = () => {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-  };
-
-  // Initialize Firebase App
-  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-  const messaging = !isIOS() ? getMessaging(app) : null;
-
-  // Request Notification Permission
-  const requestPermission = async () => {
-    if (!isNewNotificationSupported()) {
-      console.warn('Notifications are not supported in this browser.');
-      return;
-    }
-
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-      } else {
-        console.warn('Notification permission denied.');
-      }
-    } catch (error) {
-      console.error('Error requesting permission:', error);
-    }
-  };
-
-  // Feature detection for Notification API
-  function isNewNotificationSupported() {
-    if (!window.Notification || !Notification.requestPermission) return false;
-    if (Notification.permission === 'granted') return false;
-
-    try {
-      new Notification('');
-    } catch (e) {
-      if (e.name === 'TypeError') return false;
-    }
-    return true;
-  }
-
+  // Notification setup
   useEffect(() => {
-    if (isIOS()) {
-      console.log("iOS device detected. Web push is not supported.");
-      return;
-    }
-
-    requestPermission();
-
-    if (messaging) {
-      const unsubscribe = onMessage(messaging, (payload) => {
-        const title = payload?.data?.title || 'B-House Notification';
-        const body = payload?.data?.body || 'You have a new message';
-        const icon = '/Svg/b-houseLogo.svg';
-
-        if (Notification.permission === 'granted') {
-          new Notification(title, { body, icon });
-        }
-      });
-
-      return () => {
-        unsubscribe && unsubscribe();
-      };
-    }
-
-    // Register Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/firebase-messaging-sw.js')
-        .then(reg => console.log('Service Worker registered:', reg.scope))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    }
-  }, [messaging]);
-
+    isSupported().then((supported) => {
+      if (supported) {
+        const messaging = getMessaging(app);
+        onMessage(messaging, (payload) => {
+          const { title, body } = payload?.data || {};
+          toast.info(
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img
+                src="https://b-house-v0-ten.vercel.app/Svg/Logo-Bhouse.svg"
+                alt="B-House"
+                style={{ width: 60, height: 60, marginRight: 10, borderRadius: 8 }}
+              />
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '1rem', color: '#333' }}>{title}</div>
+                <div style={{ fontSize: '0.9rem', color: '#666' }}>{body}</div>
+              </div>
+            </div>,
+            {
+              position: "bottom-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              style: {
+                backgroundColor: '#fff',
+                border: '1px solid #ddd',
+                borderRadius: '10px',
+                padding: '10px 15px',
+                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.05)',
+              }
+            }
+          );
+        });
+      } else {
+        console.warn("Firebase Messaging not supported on this device.");
+      }
+    }).catch((err) => {
+      console.error("Error checking messaging support:", err);
+    });
+  }, []);
   const ScrollToTop = () => {
     const { pathname } = useLocation();
     useEffect(() => {
@@ -139,6 +122,7 @@ function App() {
 
         </Routes>
       </BrowserRouter>
+      <ToastContainer position="bottom-right" autoClose={5000} />
     </>
   )
 }

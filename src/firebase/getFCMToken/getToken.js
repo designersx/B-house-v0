@@ -5,6 +5,7 @@ export const getFcmToken = async () => {
         const currentToken = await getToken(messaging, {
             vapidKey: "BOO5cI9iJjNrju0nVIA7fpRHZEf4nNFBtTsbscin59WZpSuPwbRH_mfqD3Wj7eYd-Fje4uio_DG81pJw9XaEU2I"
         });
+        console.log(currentToken,"HELLO")
         if (currentToken) {
             console.log("Token received:", currentToken);
         
