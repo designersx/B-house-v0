@@ -175,6 +175,10 @@
 
   }
 
+  .FlexControl hr{
+    display: none;
+  }
+
   .docStyle{
     display: flex;
     gap: 10px;
@@ -212,3 +216,47 @@ max-height: 50px;
       }
 
     }
+
+    @media screen and (min-device-width: 1024px) and (max-device-width: 2500px) { 
+      .FlexControl {
+   gap: 30px;
+      }
+
+      .grid {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+        margin: 10px 0;
+        width: 100%;
+    }
+
+    .FlexControl hr{
+      display: block;
+      border-left: 0.4px solid #d3d3d3;
+      width: 0.5px;
+      
+    }
+  }
+  
+  @media screen and (min-device-width: 767px) and (max-device-width: 1024px) { 
+    .FlexControl hr{
+      display: block;
+      border-left: 0.4px solid #d3d3d3;
+      width: 0.5px;
+      
+    }
+    .FlexControl{
+      align-items: center;
+    }
+  }
+
+  @media screen and (min-device-width: 1024px) and (max-device-width: 2500px) { 
+
+    .document {
+      width: 40%;
+    }
+    
+    .FlexControl{
+      align-items: center;
+    }
+   }

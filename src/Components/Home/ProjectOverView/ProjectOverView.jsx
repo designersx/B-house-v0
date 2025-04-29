@@ -149,6 +149,8 @@ useEffect(()=>{
 
             </div>
 
+            <hr></hr>
+
             <div className={styles.grid}>
               <div>
                 <p className={styles.bigText}>

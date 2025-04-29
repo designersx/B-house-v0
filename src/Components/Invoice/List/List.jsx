@@ -112,6 +112,7 @@ const List = ({ statusFilters, searchTerm = "" }) => {
         />
       )}
 
+
       <div className={styles.Part1}>
         <div className={styles.title}>
           <p>All Invoice List</p>
@@ -135,6 +136,7 @@ const List = ({ statusFilters, searchTerm = "" }) => {
       </div>
 
       <div className={styles.transactionList}>
+
         {filteredInvoices.length === 0 ? (
           <div className={styles.noData}>
             <div>
@@ -147,28 +149,62 @@ const List = ({ statusFilters, searchTerm = "" }) => {
           </div>
         ) : (
           filteredInvoices.map((invoice, index) => (
-            <div key={invoice.id} className={styles.transactionItem}>
-              <img
-                src="Svg/pdf-icon.svg"
-                alt="pdf-icon"
-                className={styles.image}
-                onClick={() => handleOpenFile(invoice.invoiceFilePath)}
-              />
-              <div className={styles.details}>
-                <p className={styles.title}>{invoice.invoiceNumber || `Invoice ${index + 1}`}</p>
-                <div className={styles.track}>
-                  <div className={styles.DFlex}>
-                    <img src="Svg/timer.svg" alt="" />
-                    <p className={styles.date}>{formatDate(invoice.createdAt)}</p>
-                  </div>
-                  <p>{invoice.description}</p>
-                  <p className={styles.amount}>
-                    {invoice.advancePaid
-                      ? `${invoice.advancePaid.toLocaleString()} out of ${invoice.totalAmount.toLocaleString()}`
-                      : `${invoice.totalAmount.toLocaleString()}`}
-                  </p>
+
+
+            // 
+
+            <>
+              <div className={styles.Part1}>
+                <div className={styles.title}>
+                  <p>All Invoice List</p>
+                </div>
+                <div className={styles.dropdown}>
+                  <button className={styles.dropdownBtn} onClick={toggleDropdown}>
+                    {selectedOption}
+                    <span className={`${styles.arrow} ${isOpen ? styles.rotate : ""}`}>
+                      <img src="Svg/drop-Arrow.svg" alt="drop-Arrow" />
+                    </span>
+                  </button>
+              
                 </div>
               </div>
+              <div key={invoice.id} className={styles.transactionItem}>
+                <img
+                  src="Svg/pdf-icon.svg"
+                  alt="pdf-icon"
+                  className={styles.image}
+                  onClick={() => handleOpenFile(invoice.invoiceFilePath)}
+                />
+                <div className={styles.details}>
+                  <p className={styles.title}>{`Invoice ${index + 1}`}</p>
+                  <div className={styles.track}>
+                    <div className={styles.DFlex}>
+                      <img src="Svg/timer.svg" alt="" />
+                      <p className={styles.date}>{formatDate(invoice.createdAt)}</p>
+                    </div>
+                    <p className={styles.amount}>
+                      {invoice.advancePaid
+                        ? `${invoice.advancePaid.toLocaleString()} out of ${invoice.totalAmount.toLocaleString()}`
+                        : `${invoice.totalAmount.toLocaleString()}`}
+                    </p>
+                  </div>
+
+                </div>
+                <span
+                  className={`${styles.status} ${invoice.status === "Partly Paid"
+                      ? styles.PartlyPaid
+                      : invoice.status === "Paid"
+                        ? styles.Paid
+                        : styles.Pending
+                    }`}
+                >
+                  {invoice.status}
+                </span>
+              </div>
+
+            </>
+
+
               <span
                 className={`${styles.status} ${
                   invoice.status === "Partly Paid"
@@ -181,6 +217,7 @@ const List = ({ statusFilters, searchTerm = "" }) => {
                 {invoice.status}
               </span>
             </div>
+
           ))
         )}
       </div>
