@@ -46,11 +46,29 @@ const [docData ,  setDocsData] = useState()
         // Lead time calculation
         if (project?.createdAt && project?.estimatedCompletion) {
           const created = new Date(project.createdAt);
-          const estimated = new Date(project.estimatedCompletion);
+        
+          const [amountStr, unit] = project.estimatedCompletion.toLowerCase().split("_");
+          const amount = parseInt(amountStr);
+        
+          let estimated = new Date(created);
+        
+          if (unit === "day" || unit === "days") {
+            estimated.setDate(created.getDate() + amount);
+          } else if (unit === "week" || unit === "weeks") {
+            estimated.setDate(created.getDate() + amount * 7);
+          } else if (unit === "month" || unit === "months") {
+            estimated.setMonth(created.getMonth() + amount);
+          } else {
+            console.warn("Unknown estimatedCompletion format:", project.estimatedCompletion);
+            // fallback: assume 0 days
+            estimated = new Date(created);
+          }
+        
           const diffTime = Math.abs(estimated - created);
           const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
           setLeadTimeDays(days);
         }
+        
       } catch (err) {
         console.error("Failed to fetch project or punch list", err);
       }
