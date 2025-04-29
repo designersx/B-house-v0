@@ -85,8 +85,11 @@ function Docs() {
 
   const handleUploadClick = (docType) => {
     setCurrentDocType(docType);
-    fileInputRef.current.click();
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
+  
 
   const openCommentModal = (docId, docTitle) => {
     setSelectedDocId(docId);
@@ -144,6 +147,13 @@ function Docs() {
   const tabRefs = useRef([]);
   return (
     <div className={styles.container}>
+      
+  <input
+    type="file"
+    ref={fileInputRef}
+    style={{ display: 'none' }}
+    onChange={handleFileChange}
+  />
          {isLoading && (
       <div className={styles.loaderOverlay}>
         <Loader />
@@ -220,12 +230,12 @@ function Docs() {
         </div>
       )}
 
-      {/* <input
+      <input
         type="file"
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={handleFileChange}
-      /> */}
+      />
 
       {activeTab === 'JENNY WILSON' && (
         <p className={styles.note}>
