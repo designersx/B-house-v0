@@ -39,7 +39,7 @@ const Sign = () => {
         localStorage.setItem("savedEmail", email);
         localStorage.setItem("savedPassword", password);
         //save Fcm
-        const FCM_Token = await getFcmToken();
+        // const FCM_Token = await getFcmToken();
         
         // await sendFcmToken(FCM_Token,customer.id)
         setLoading(false)
@@ -47,7 +47,7 @@ const Sign = () => {
         localStorage.removeItem("savedEmail");
         localStorage.removeItem("savedPassword");
         //save Fcm
-        const FCM_Token = await getFcmToken();
+        // const FCM_Token = await getFcmToken();
         // await sendFcmToken(FCM_Token,customer.id)
         setLoading(false)
       }

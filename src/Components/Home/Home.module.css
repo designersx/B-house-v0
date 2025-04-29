@@ -1,4 +1,54 @@
-.homeMain{
-    /* width: 100%; */
-    /* padding: 20px 20px 0 20px; */
-}
+.homeContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .mainContent {
+    flex: 1;
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+    flex-direction: row-reverse; 
+  }
+  
+  .proposalSection {
+    flex: 0 0 70%;
+    padding-right: 10px;
+  }
+  
+  .sidebar {
+    flex: 0 0 30%;
+    background-color: #f5f5f5;
+    padding: 20px;
+    position: sticky;
+    top: 80px; 
+
+  }
+  
+  /* Footer by default hide for desktop */
+  .footer {
+    display: none;
+  }
+  
+  /* Responsive changes for screen <= 767px */
+
+  @media (max-width: 767px) {
+    .mainContent {
+      flex-direction: column;
+    }
+  
+    .proposalSection {
+      flex: 1 1 100%;
+      padding-right: 0;
+    }
+  
+    .sidebar {
+      display: none; 
+    }
+  
+    .footer {
+      display: block; 
+    }
+  }
+  

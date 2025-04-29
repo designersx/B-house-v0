@@ -6,17 +6,20 @@ import List from '../../Components/Invoice/List/List.jsx'
 import axios from 'axios';
 import URL from '../../config/api.js';
 import Loader from '../../Components/Loader/Loader'
+import SideBar from '../../Components/SideBar/SideBar.jsx'
+import Header from '../../Components/Header/Header.jsx';
+
 const InvoicePage = () => {
     const [totalCost, setTotalCost] = useState();
     const [totalPaidAmount, setTotalPaidAmount] = useState(0);
     const [remaining, setRemaining] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");  // 🔥 New for search
     const projectId = localStorage.getItem('selectedProjectId');
-  
+
     const [statusFilters, setStatusFilters] = useState({
-      Paid: false,
-      Pending: false,
-      "Partly Paid": false
+        Paid: false,
+        Pending: false,
+        "Partly Paid": false
     });
     useEffect(() => {
         const fetchFinanceData = async () => {
@@ -74,26 +77,56 @@ const InvoicePage = () => {
             fetchFinanceData();
         }
     }, [projectId]);
-   
+
     return (
         <div>
-            <div className="HeaderTop">
-            <HeaderTab
-          title="Invoice List"
-          onStatusFilterChange={setStatusFilters}
-          statusOptions={["Paid", "Pending", "Partly Paid"]}
-          onSearchTermChange={setSearchTerm} // 🔥 Pass setter
-        />
-      </div>
-            {!totalCost ? (
-                <div className='ForLoder'><Loader /></div>
-            ) : (
-                <>
-                    <Chart />
-                    <List statusFilters={statusFilters} />
-                </>
-            )}
-            <Footer />
+            <div className="MobContent">
+                <div className="HeaderTop">
+
+                    <HeaderTab
+                        title="Invoice List"
+                        onStatusFilterChange={setStatusFilters}
+                        statusOptions={["Paid", "Pending", "Partly Paid"]}
+                        onSearchTermChange={setSearchTerm} // 🔥 Pass setter
+                    />
+                </div>
+                {!totalCost ? (
+                    <div className='ForLoder'><Loader /></div>
+                ) : (
+                    <>
+                        <Chart />
+                        <List statusFilters={statusFilters} />
+                    </>
+                )}
+
+                <Footer />
+
+            </div>
+
+            <div className="mainContent">
+                <div className="Web_Sidebar">
+                    <SideBar />
+                </div>
+
+                <div className="Web_container">
+
+
+                    <div className="HeaderTop">
+                        <Header />
+
+
+
+                    </div>
+
+                    <div className='webListGap'>
+                        {!totalCost ? <div className='ForLoder'><Loader /></div> : <>  <Chart />
+                            <List /></>}
+                    </div>
+                </div>
+
+            </div>
+
+
         </div>
     );
 };
