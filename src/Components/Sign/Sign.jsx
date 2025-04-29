@@ -39,9 +39,11 @@ const Sign = () => {
         localStorage.setItem("savedEmail", email);
         localStorage.setItem("savedPassword", password);
         //save Fcm
+
         const FCM_Token = await getFcmToken();
         console.log(FCM_Token, "FCM_Token")
         await sendFcmToken(FCM_Token, customer.id)
+
         setLoading(false)
       } else {
         localStorage.removeItem("savedEmail");
@@ -69,9 +71,13 @@ const Sign = () => {
   };
   return (
     <div className={styles.signMain}>
-      <div className="HeaderTop">
+
+      <div className={`HeaderTop ${styles.topBar}`}>
         <div className={styles.ImgDiv}>
           <img src="Images/Home-img.png" alt="" />
+        </div>
+        <div className={styles.ImgDiv2}>
+          <img src="Images/Desktop-home-img.png" alt="" />
         </div>
 
         <div className={styles.logoContainer}>

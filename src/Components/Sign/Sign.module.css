@@ -3,6 +3,10 @@
     position: relative;
 }
 
+.ImgDiv2 img {
+    display: none;
+}
+
 .logoContainer {
     position: absolute;
     top: 50%;
@@ -47,9 +51,11 @@
     margin-top: 10px;
     font-weight: bold;
 }
-.required{
-    color:#004680;
+
+.required {
+    color: #004680;
 }
+
 .input {
     padding: 10px;
     margin: 5px 0 15px;
@@ -109,6 +115,7 @@ input[type="checkbox"] {
     font-size: 14px;
     color: #004680;
     margin-bottom: 0px;
+    cursor: pointer;
 
 }
 
@@ -123,6 +130,7 @@ input[type="checkbox"] {
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .signInButton {
@@ -147,6 +155,7 @@ input[type="checkbox"] {
     font-weight: bold;
     color: #004680;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .footer {
@@ -158,7 +167,7 @@ input[type="checkbox"] {
     padding-inline: 20px;
 }
 
-.checkBoxDiv{
+.checkBoxDiv {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -170,9 +179,31 @@ input[type="checkbox"] {
     accent-color: #004680;
 }
 
-/* input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px rgb(255, 255, 255) inset !important;
-} */
+@media screen and (min-device-width: 769px) and (max-device-width: 2561px) {
+    .signMain {
+        display: flex;
+        
+        gap: 100px;
+       
+    }
+
+    .ImgDiv2 img {
+        display: block;
+        width: 100%;
+        height: 100dvh;
+    }
+
+    .ImgDiv img {
+        display: none;
+    }
+    .logoContainer{
+        display: none;
+    }
+    .signPart{
+        width: 30%;
+        margin: auto;
+    }
+    .topBar{
+        width: 50%;
+    }
+}

@@ -12,39 +12,30 @@ const Home = () => {
     <div>
 
       <div className="MobContent">
-      <div className="HeaderTop">
-        <Header />
-      </div>
-      <div className={styles.homeMain}>
-
-        <Proposal />
-
-        <Footer />
+        <div className="HeaderTop">
+          <Header />
         </div>
-
+        <div className={styles.homeMain}>
+          <Proposal />
+          <Footer />
+        </div>
       </div>
 
-
-      <div className="mainContent">
-      <div className="Web_Sidebar">
-                    <SideBar />
-                </div>
-
-                <div className="Web_container">
-                    
-                
-
-                    <div className="HeaderTop">
-                    <Header />
-                    </div>
-                    
-                    <Proposal />
-
-                </div>
-
-
+      <div className="webContent">
+        <div className="HeaderTop">
+          <Header />
+        </div>
+        <div className="mainContent">
+          <div className="Web_Sidebar">
+            <SideBar />
+          </div>
+          <div className="Web_container">
+            <Proposal />
+          </div>
+        </div>
       </div>
     </div>
+
 
   );
 };

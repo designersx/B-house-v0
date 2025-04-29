@@ -206,7 +206,7 @@ function Header() {
           <img
             src={data?.profilePhoto ? `${url2}/${data?.profilePhoto}` : 'Images/profile-picture.webp'}
             alt="UserIcon"
-            className={styles.vector1}
+            className={styles.vector3}
             onClick={() => setShowCanvas(true)}
           />
         </div>

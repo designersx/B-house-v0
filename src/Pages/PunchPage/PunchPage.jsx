@@ -17,7 +17,6 @@ const PunchPage = () => {
     <>
       <div>
         <div className="MobContent">
-
           <div className="HeaderTop">
             <HeaderTab
               title="Punchlist"
@@ -27,26 +26,28 @@ const PunchPage = () => {
             />
           </div>
           <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
+
+
           <Footer />
 
         </div>
-        <div className="mainContent">
-          <div className="Web_Sidebar">
-            <SideBar />
+
+        <div className="webContent">
+          <div className="HeaderTop">
+            <Header />
           </div>
-
-          <div className="Web_container">
-
-
-            <div className="HeaderTop">
-              <Header />
-
+          <div className="mainContent">
+            <div className="Web_Sidebar">
+              <SideBar />
             </div>
 
-            <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
+
+            <div className="Web_container">
+              <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
+            </div>
+            <Footer />
 
           </div>
-
         </div>
       </div>
     </>

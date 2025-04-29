@@ -3,8 +3,8 @@
     background-color: #ffffff;
     border-radius: 8px;
     padding: 20px;
-    max-width: 1000px;
-    margin: 0 auto;
+    /* max-width: 1000px;
+    margin: 0 auto; */
   }
   
   .header {
@@ -506,4 +506,25 @@
     width: 30px;
     height: 30px;
     transition: transform 0.3s ease;
+  }
+
+  @media screen and (min-device-width: 768px) and (max-device-width: 2500px) { 
+    .Forflex{
+      display: flex;
+      margin: auto;
+      align-items: baseline;
+      justify-content:space-between;
+      max-width: 1200px;
+      gap: 50px;
+    }
+    .container{
+      width: 60%;
+    }
+    .commentSection{
+      width: 40%;
+    }
+    .container2{
+      width: 100%;
+    }
+
   }

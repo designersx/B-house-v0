@@ -102,31 +102,26 @@ const InvoicePage = () => {
                 <Footer />
 
             </div>
-
-            <div className="mainContent">
-                <div className="Web_Sidebar">
-                    <SideBar />
+            <div className="webContent">
+                <div className="HeaderTop">
+                    <Header />
                 </div>
-
-                <div className="Web_container">
-
-
-                    <div className="HeaderTop">
-                        <Header />
-
-
-
+                <div className="mainContent">
+                    <div className="Web_Sidebar">
+                        <SideBar />
                     </div>
 
-                    <div className='webListGap'>
-                        {!totalCost ? <div className='ForLoder'><Loader /></div> : <>  <Chart />
-                            <List /></>}
+                    <div className="Web_container">
+                        <div className='webListGap'>
+                            {!totalCost ? <div className='ForLoder'><Loader /></div> : <>  <Chart />
+                                <List /></>}
+                        </div>
                     </div>
+
                 </div>
+
 
             </div>
-
-
         </div>
     );
 };
