@@ -15,11 +15,11 @@ const InvoicePage = () => {
     const [remaining, setRemaining] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");  // 🔥 New for search
     const projectId = localStorage.getItem('selectedProjectId');
-  
+
     const [statusFilters, setStatusFilters] = useState({
-      Paid: false,
-      Pending: false,
-      "Partly Paid": false
+        Paid: false,
+        Pending: false,
+        "Partly Paid": false
     });
     useEffect(() => {
         const fetchFinanceData = async () => {
@@ -77,29 +77,29 @@ const InvoicePage = () => {
             fetchFinanceData();
         }
     }, [projectId]);
-   
+
     return (
         <div>
             <div className="MobContent">
-            <div className="HeaderTop">
+                <div className="HeaderTop">
 
-            <HeaderTab
-          title="Invoice List"
-          onStatusFilterChange={setStatusFilters}
-          statusOptions={["Paid", "Pending", "Partly Paid"]}
-          onSearchTermChange={setSearchTerm} // 🔥 Pass setter
-        />
-      </div>
-            {!totalCost ? (
-                <div className='ForLoder'><Loader /></div>
-            ) : (
-                <>
-                    <Chart />
-                    <List statusFilters={statusFilters} />
-                </>
-            )}
+                    <HeaderTab
+                        title="Invoice List"
+                        onStatusFilterChange={setStatusFilters}
+                        statusOptions={["Paid", "Pending", "Partly Paid"]}
+                        onSearchTermChange={setSearchTerm} // 🔥 Pass setter
+                    />
+                </div>
+                {!totalCost ? (
+                    <div className='ForLoder'><Loader /></div>
+                ) : (
+                    <>
+                        <Chart />
+                        <List statusFilters={statusFilters} />
+                    </>
+                )}
 
-            <Footer />
+                <Footer />
 
             </div>
 
@@ -109,11 +109,15 @@ const InvoicePage = () => {
                 </div>
 
                 <div className="Web_container">
-                    
+
 
                     <div className="HeaderTop">
-                    <Header />
+                        <Header />
+
+
+
                     </div>
+
                     <div className='webListGap'>
                         {!totalCost ? <div className='ForLoder'><Loader /></div> : <>  <Chart />
                             <List /></>}

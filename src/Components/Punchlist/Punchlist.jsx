@@ -9,50 +9,20 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Loader from "../Loader/Loader";
 
 function Punchlist({ statusFilters, searchTerm = "" }) {
+  console.log(statusFilters,"pp")
   const navigate = useNavigate();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIssue, setActiveIssue] = useState(null);
   const [issues, setIssues] = useState([]); // 🔵 Pure list
   const [filteredIssues, setFilteredIssues] = useState([]); // 🟠 Filtered list
+  console.log(filteredIssues,"filteredIssues")
   const [loading, setLoading] = useState(false);
-
   const projectId = localStorage.getItem("selectedProjectId");
-
   const handleCommentClick = (issue) => {
     setActiveIssue(issue);
     setIsModalOpen(true);
   };
-
-  useEffect(() => {
-    const fetchPunchList = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${URL}/projects/${projectId}/punch-list`);
-        const punchListData = response.data;
-        const parsedIssues = punchListData.map(issue => ({
-          ...issue,
-          productImages: JSON.parse(issue.productImages)
-        }));
-        setIssues(parsedIssues);
-        setFilteredIssues(parsedIssues); // 👈 Set full list initially
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching punch list:", err);
-        setLoading(false);
-      }
-    };
-
-    if (projectId) {
-      fetchPunchList();
-    }
-  }, [projectId]);
-
-  // 🔥 Important: Search ya filters change hone par filter lagana
-  useEffect(() => {
-    filterIssues();
-  }, [issues, statusFilters, searchTerm]); 
-
   const filterIssues = () => {
     let filtered = [...issues];
 
@@ -87,12 +57,38 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
 
     return daysDiff === 0 ? "Today" : daysDiff === 1 ? "Yesterday" : createdDate.toLocaleDateString();
   };
+  //Function Lock
+  useEffect(() => {
+    filterIssues();
+  }, [issues, statusFilters, searchTerm]); 
+  useEffect(() => {
+    const fetchPunchList = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${URL}/projects/${projectId}/punch-list`);
+        const punchListData = response.data;
+        const parsedIssues = punchListData.map(issue => ({
+          ...issue,
+          productImages: JSON.parse(issue.productImages)
+        }));
+        setIssues(parsedIssues);
+        setFilteredIssues(parsedIssues); // 👈 Set full list initially
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching punch list:", err);
+        setLoading(false);
+      }
+    };
 
+    if (projectId) {
+      fetchPunchList();
+    }
+  }, [projectId]);
   return (
     <div className={styles.container}>
       {loading ? (
         <div className="ForLoder"><Loader /></div>
-      ) : filteredIssues.length === 0 ? (
+      ) : filteredIssues?.length <= 0 ? (
         <div className={styles.noData}>
           <div>
             <img src="Svg/notfound.svg" alt="" />
@@ -103,7 +99,7 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
           </div>
         </div>
       ) : (
-        filteredIssues.map((issue, index) => (
+        filteredIssues?.map((issue, index) => (
           <div key={index} className={styles.card} onClick={() => handlePunchListView(issue)}>
             <div className={styles.topRow}>
               <span
@@ -125,7 +121,7 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
 
             <div className={styles.flexD}>
               <div className={styles.imageRow}>
-                {issue.productImages.slice(0, 3).map((img, i) => (
+                {issue?.productImages.slice(0, 3).map((img, i) => (
                   <img
                     key={i}
                     src={`${url2}/${img}`}
@@ -175,3 +171,4 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
 }
 
 export default Punchlist;
+

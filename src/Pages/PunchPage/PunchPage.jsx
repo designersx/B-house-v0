@@ -15,41 +15,40 @@ const PunchPage = () => {
 
   return (
     <>
-    <div>
-      <div className="MobContent">
-
-        <div className="HeaderTop">
-          <HeaderTab
-            title="Punchlist"
-            onStatusFilterChange={setStatusFilters}
-            onSearchTermChange={setSearchTerm} // ✅ Pass to HeaderTab
-            statusOptions={["Pending", "Resolved", "Rejected"]}
-          />
-        </div>
-
-
-
-      </div>
-
-      <div className="mainContent">
-        <div className="Web_Sidebar">
-          <SideBar />
-        </div>
-
-        <div className="Web_container">
-
+      <div>
+        <div className="MobContent">
 
           <div className="HeaderTop">
-            <Header />
+            <HeaderTab
+              title="Punchlist"
+              onStatusFilterChange={setStatusFilters}
+              onSearchTermChange={setSearchTerm} // ✅ Pass to HeaderTab
+              statusOptions={["Pending", "Resolved", "Rejected"]}
+            />
+          </div>
+          <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
 
+
+        </div>
+        <div className="mainContent">
+          <div className="Web_Sidebar">
+            <SideBar />
           </div>
 
-          <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} /> {/* ✅ Pass to Punchlist */}
-          <Footer />
-        </div>
+          <div className="Web_container">
 
+
+            <div className="HeaderTop">
+              <Header />
+
+            </div>
+
+            <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
+          
+          </div>
+
+        </div>
       </div>
-    </div>
     </>
   )
 }
