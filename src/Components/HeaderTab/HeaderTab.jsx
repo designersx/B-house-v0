@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import styles from '../HeaderTab/HeaderTab.module.css';
-import { useNavigate, useLocation } from 'react-router-dom';
-import SearchModalInvoice from '../ModalSearch/SearchModalInvoice';   
-import SearchModalPunchlist from '../ModalSearch/SearchModalPunchlist'; 
-import OffCanvas from '../OffCanvas/OffCanvas';
+import React, { useState, useEffect } from "react";
+import styles from "../HeaderTab/HeaderTab.module.css";
+import { useNavigate, useLocation } from "react-router-dom";
+// import SearchModalInvoice from "../ModalSearch/SearchModalInvoice";
+import SearchModalPunchlist from "../ModalSearch/SearchModalPunchlist";
+import OffCanvas from "../OffCanvas/OffCanvas";
 
-const HeaderTab = ({ title, subtitle, onStatusFilterChange, onSearchTermChange, statusOptions = [] }) => {  const navigate = useNavigate();
+const HeaderTab = ({
+  title,
+  subtitle,
+  onStatusFilterChange,
+  onSearchTermChange,
+  statusOptions = [],
+}) => {
+  const navigate = useNavigate();
   const location = useLocation();
 
   const [showModalSearch, setShowModalSearch] = useState(false);
@@ -15,7 +22,7 @@ const HeaderTab = ({ title, subtitle, onStatusFilterChange, onSearchTermChange, 
   useEffect(() => {
     if (statusOptions.length > 0 && Object.keys(statusFilters).length === 0) {
       const initialFilters = {};
-      statusOptions.forEach(status => {
+      statusOptions.forEach((status) => {
         initialFilters[status] = false;
       });
       setStatusFilters(initialFilters);
@@ -23,8 +30,8 @@ const HeaderTab = ({ title, subtitle, onStatusFilterChange, onSearchTermChange, 
   }, [statusOptions, statusFilters]);
 
   const handleBackClick = () => {
-    if (location.pathname.includes('punchlist-detail')) {
-      navigate('/home', { replace: true });
+    if (location.pathname.includes("punchlist-detail")) {
+      navigate("/home", { replace: true });
     } else {
       navigate(-1);
     }
@@ -42,7 +49,7 @@ const HeaderTab = ({ title, subtitle, onStatusFilterChange, onSearchTermChange, 
       <div className={styles.headerMain}>
         <div className={styles.titleDiv}>
           <div onClick={handleBackClick} style={{ cursor: "pointer" }}>
-            <img src='/Svg/back-arrow.svg' alt='Back' />
+            <img src="/Svg/back-arrow.svg" alt="Back" />
           </div>
           <div>
             <h2>{title}</h2>
@@ -50,20 +57,38 @@ const HeaderTab = ({ title, subtitle, onStatusFilterChange, onSearchTermChange, 
           </div>
         </div>
 
-        {(location.pathname.includes("invoice") || location.pathname.includes("punchlist")) && (
+        {location.pathname.includes("invoice") && (
           <div className={styles.IconBoth}>
-            <div className={styles.iconSearch} onClick={() => setShowModalSearch(true)}>
-              <img src='/Svg/searchSvg.svg' alt='Search' />
+            {/* Show only Filter Icon for Invoice */}
+            <div
+              className={styles.iconFillter}
+              onClick={() => setShowCanvas(true)}
+            >
+              <img src="/Svg/filterSvg.svg" alt="Filter" />
             </div>
-            <div className={styles.iconFillter} onClick={() => setShowCanvas(true)}>
-              <img src='/Svg/filterSvg.svg' alt='Filter' />
+          </div>
+        )}
+
+        {location.pathname.includes("punchlist") && (
+          <div className={styles.IconBoth}>
+            <div
+              className={styles.iconSearch}
+              onClick={() => setShowModalSearch(true)}
+            >
+              <img src="/Svg/searchSvg.svg" alt="Search" />
+            </div>
+            <div
+              className={styles.iconFillter}
+              onClick={() => setShowCanvas(true)}
+            >
+              <img src="/Svg/filterSvg.svg" alt="Filter" />
             </div>
           </div>
         )}
       </div>
 
       {/* 🔥 Dynamic Search Modals */}
-      {location.pathname.includes("invoice") && (
+      {/* {location.pathname.includes("invoice") && (
         <SearchModalInvoice
           isOpen={showModalSearch}
           onClose={() => setShowModalSearch(false)}
@@ -74,21 +99,20 @@ const HeaderTab = ({ title, subtitle, onStatusFilterChange, onSearchTermChange, 
             }
           }}
         />
+      )} */}
+
+      {location.pathname.includes("punchlist") && (
+        <SearchModalPunchlist
+          isOpen={showModalSearch}
+          onClose={() => setShowModalSearch(false)}
+          onSearch={(category) => {
+            setShowModalSearch(false);
+            if (onSearchTermChange) {
+              onSearchTermChange(category);
+            }
+          }}
+        />
       )}
-
-{location.pathname.includes("punchlist") && (
-  <SearchModalPunchlist
-    isOpen={showModalSearch}
-    onClose={() => setShowModalSearch(false)}
-    onSearch={(category) => { 
-      setShowModalSearch(false);
-      if (onSearchTermChange) {
-        onSearchTermChange(category);
-      }
-    }}
-  />
-)}
-
 
       {/* Filter Sidebar */}
       <OffCanvas
@@ -113,9 +137,7 @@ const HeaderTab = ({ title, subtitle, onStatusFilterChange, onSearchTermChange, 
             </label>
           ))}
 
-          <div className={styles.subBtn}>
-            {/* Submit button if needed */}
-          </div>
+          <div className={styles.subBtn}>{/* Submit button if needed */}</div>
         </div>
       </OffCanvas>
     </>

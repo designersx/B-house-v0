@@ -127,9 +127,9 @@ function ProjectDelivery({ selectedProject }) {
           {showAll ? "Show Less" : "View All"}
         </button>
       </div>
-      <div className={styles.dlDate}>
+      {/* <div className={styles.dlDate}>
         <p>2025-04-11</p>
-      </div>
+      </div> */}
 
       <div className={styles.Container}>
         {(showAll ? data : data.slice(0, 2))

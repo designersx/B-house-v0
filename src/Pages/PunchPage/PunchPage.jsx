@@ -11,12 +11,13 @@ import { useState } from 'react'
 
 const PunchPage = () => {
   const [statusFilters, setStatusFilters] = useState({});
-  const [searchTerm, setSearchTerm] = useState(""); // ✅ Add searchTerm here
+  const [searchTerm, setSearchTerm] = useState("");
 
   return (
     <>
     <div>
       <div className="MobContent">
+
         <div className="HeaderTop">
           <HeaderTab
             title="Punchlist"
@@ -25,6 +26,8 @@ const PunchPage = () => {
             statusOptions={["Pending", "Resolved", "Rejected"]}
           />
         </div>
+
+
 
       </div>
 
@@ -50,6 +53,7 @@ const PunchPage = () => {
     </>
   )
 }
+
 
 
 export default PunchPage;
