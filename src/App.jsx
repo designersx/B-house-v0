@@ -32,88 +32,77 @@ const firebaseConfig = {
 };
 function App() {
   // Initialize App
-  // const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-  // const messaging = getMessaging(app);
-  // // Check User has Permission
-  // const requestPermission = async () => {
-  //   if (!isNewNotificationSupported()) {
-  //     console.warn('Notifications are not supported in this browser.');
-  //     return;
-  //   }
-  //   console.log('Requesting permission...');
-  //   try {
-  //     const permission = await Notification.requestPermission();
-  //     if (permission === 'granted') {
-  //       console.log('Notification permission granted.');
-  //     } else {
-  //       console.warn('Notification permission denied.');
-  //     }
-  //   } catch (error) {
-  //     console.error('An error occurred while requesting permission:', error);
-  //   }
-  // };
-  // function isNewNotificationSupported() {
-  //   if (!window.Notification || !Notification.requestPermission)
-  //     return false;
-  //   if (Notification.permission === 'granted')
-  //     throw new Error('You must only call this *before* calling Notification.requestPermission(), otherwise this feature detect would bug the user with an actual notification!');
-  //   try {
-  //     new Notification('');
-  //   } catch (e) {
-  //     if (e.name === 'TypeError') return false;
-  //   }
-  //   return true;
-  // }
-  // //function lock
-  // useEffect(() => {
-  //   requestPermission();
-  //   // Foreground notification listener
-  //   onMessage(messaging, (payload) => {
-  //     const notificationTitle = payload.data.title || 'B-House Notification';
-  //     const notificationBody = payload.data.body || 'You have a new message';
-  //     const clickActionURL = payload.data.click_action || 'https://your-default-url.com/';
+  const isIOS = () => {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  };
 
-  //     // Create a simple notification without actions
-  //     if (Notification.permission === 'granted') {
-  //       new Notification(notificationTitle, {
-  //         body: notificationBody,
-  //         icon: '/Svg/b-houseLogo.svg'
-  //       });
-  //     }
-  //   });
+  // Initialize Firebase App
+  const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+  const messaging = !isIOS() ? getMessaging(app) : null;
 
-  //   // Register the service worker
-  //   if ('serviceWorker' in navigator) {
-  //     navigator.serviceWorker.register('/firebase-messaging-sw.js')
-  //       .then((registration) => {
-  //         console.log('Service Worker registered with scope:', registration.scope);
-  //       })
-  //       .catch((error) => {
-  //         console.error('Service Worker registration failed:', error);
-  //       });
-  //   }
-  // }, [messaging]);
-  // useEffect(() => {
-  //   if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-  //     Notification.requestPermission().then(permission => {
-  //       if (permission === 'granted') {
-  //         console.log('Permission granted!HY DOSTO');
-  //       }
-  //     });
-  //   }
-  // }, []);
+  // Request Notification Permission
+  const requestPermission = async () => {
+    if (!isNewNotificationSupported()) {
+      console.warn('Notifications are not supported in this browser.');
+      return;
+    }
 
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+      } else {
+        console.warn('Notification permission denied.');
+      }
+    } catch (error) {
+      console.error('Error requesting permission:', error);
+    }
+  };
 
-  // onMessage(messaging, (payload) => {
-  //   const title = payload.data.title || 'New Notification';
-  //   const body = payload.data.body || 'You have a new message';
-  //   if (Notification.permission === 'granted') {
-  //     new Notification(title, {
-  //       body,
-  //       icon: '/Svg/b-houseLogo.svg',
-  //     });
-  //   }
-  // });
+  // Feature detection for Notification API
+  function isNewNotificationSupported() {
+    if (!window.Notification || !Notification.requestPermission) return false;
+    if (Notification.permission === 'granted') return false;
+
+    try {
+      new Notification('');
+    } catch (e) {
+      if (e.name === 'TypeError') return false;
+    }
+    return true;
+  }
+
+  useEffect(() => {
+    if (isIOS()) {
+      console.log("iOS device detected. Web push is not supported.");
+      return;
+    }
+
+    requestPermission();
+
+    if (messaging) {
+      const unsubscribe = onMessage(messaging, (payload) => {
+        const title = payload?.data?.title || 'B-House Notification';
+        const body = payload?.data?.body || 'You have a new message';
+        const icon = '/Svg/b-houseLogo.svg';
+
+        if (Notification.permission === 'granted') {
+          new Notification(title, { body, icon });
+        }
+      });
+
+      return () => {
+        unsubscribe && unsubscribe();
+      };
+    }
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then(reg => console.log('Service Worker registered:', reg.scope))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  }, [messaging]);
 
   const ScrollToTop = () => {
     const { pathname } = useLocation();
