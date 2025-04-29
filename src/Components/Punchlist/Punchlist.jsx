@@ -9,14 +9,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Loader from "../Loader/Loader";
 
 function Punchlist({ statusFilters, searchTerm = "" }) {
-  console.log(statusFilters,"pp")
   const navigate = useNavigate();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIssue, setActiveIssue] = useState(null);
-  const [issues, setIssues] = useState([]); // 🔵 Pure list
-  const [filteredIssues, setFilteredIssues] = useState([]); // 🟠 Filtered list
-  console.log(filteredIssues,"filteredIssues")
+  const [issues, setIssues] = useState([]);
+  const [filteredIssues, setFilteredIssues] = useState([]); 
   const [loading, setLoading] = useState(false);
   const projectId = localStorage.getItem("selectedProjectId");
   const handleCommentClick = (issue) => {
