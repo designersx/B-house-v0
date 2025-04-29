@@ -4,13 +4,29 @@ import styles from "./ProjectDeliveryList.module.css";
 import { url2 } from "../../../config/url";
 import URL from "../../../config/api";
 import axios from "axios";
-import HeaderTab from "../../HeaderTab/HeaderTab"; // ✅ Import HeaderTab
+import HeaderTab from "../../HeaderTab/HeaderTab";
 
 const progressColor = {
-  Installed: { progressWidth: "100%", progressColor: "Green", statusColor: "LinearGreen" },
-  Delivered: { progressWidth: "50%", progressColor: "#FEAD37", statusColor: "FEAD37" },
-  Pending: { progressWidth: "25%", progressColor: "#FF5E00", statusColor: "#FF5E00" },
-  In_Transit: { progressWidth: "60%", progressColor: "#6C35B1", statusColor: "LinearGreen" },
+  Installed: {
+    progressWidth: "100%",
+    progressColor: "Green",
+    statusColor: "LinearGreen",
+  },
+  Delivered: {
+    progressWidth: "50%",
+    progressColor: "#FEAD37",
+    statusColor: "FEAD37",
+  },
+  Pending: {
+    progressWidth: "25%",
+    progressColor: "#FF5E00",
+    statusColor: "#FF5E00",
+  },
+  "In Transit": {
+    progressWidth: "60%",
+    progressColor: "#6C35B1",
+    statusColor: "LinearGreen",
+  },
 };
 
 function ProjectDeliveryList() {
@@ -18,8 +34,8 @@ function ProjectDeliveryList() {
   const navigate = useNavigate();
   const [data, setData] = useState(location.state?.items || []);
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
-  const [statusFilters, setStatusFilters] = useState({}); // ✅ Status Filter
-  const [searchTerm, setSearchTerm] = useState(""); // ✅ Search Term
+  const [statusFilters, setStatusFilters] = useState({});
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchComments = async () => {
     try {
@@ -30,9 +46,13 @@ function ProjectDeliveryList() {
           const res = await axios.get(`${URL}/items/${item.id}/comments`);
           const itemComments = res?.data;
           if (itemComments && itemComments.length > 0) {
-            const userComments = itemComments.filter((cmt) => cmt.createdByType === "user");
+            const userComments = itemComments.filter(
+              (cmt) => cmt.createdByType === "user"
+            );
             if (userComments.length > 0) {
-              userComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+              userComments.sort(
+                (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+              );
               latestComments[item.id] = userComments[0];
             }
           }
@@ -68,20 +88,35 @@ function ProjectDeliveryList() {
       if (hours < 24) return `${hours} hours ago`;
       return `${days} days ago`;
     } else {
-      return date.toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
+      return date.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
     }
   }
 
   // ✅ Apply Filtering (Search + Status both)
   const filteredData = data
     .filter((item) => {
-      const activeStatuses = Object.keys(statusFilters).filter((status) => statusFilters[status]);
+      const activeStatuses = Object.keys(statusFilters).filter(
+        (status) => statusFilters[status]
+      );
       if (activeStatuses.length === 0) return true;
       return activeStatuses.includes(item.status);
     })
     .filter((item) =>
       item.itemName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+  const getProgressColor = (status) => {
+    return (
+      progressColor[status] || {
+        progressWidth: "0%",
+        progressColor: "#ccc",
+        statusColor: "#ccc",
+      }
+    );
+  };
 
   return (
     <div className={styles.Container}>
@@ -90,7 +125,7 @@ function ProjectDeliveryList() {
         title="Project Delivery List"
         onStatusFilterChange={setStatusFilters}
         onSearchTermChange={setSearchTerm}
-        statusOptions={["Installed", "Delivered", "Pending", "In_Transit"]}
+        statusOptions={["Installed", "Delivered", "Pending", "In Transit"]}
       />
 
       {filteredData.length === 0 ? (
@@ -101,23 +136,26 @@ function ProjectDeliveryList() {
           .map((item) => {
             const latestComment = latestCommentsByItem[item.id];
             return (
-              <div key={item.id} className={styles.orderCard} onClick={() => handleItemClick(item)}>
+              <div
+                key={item.id}
+                className={styles.orderCard}
+                onClick={() => handleItemClick(item)}
+              >
                 {/* Header */}
                 <div className={styles.orderHeader}>
                   <h2 className={styles.orderTitle}>{item.itemName}</h2>
                   <span
                     className={styles.orderStatus}
                     style={{
-                      color: progressColor[item.status]?.progressColor || progressColor["In_Transit"].progressColor,
+                      color: getProgressColor(item.status).progressColor,
                     }}
                   >
                     {item.status}
                     <span
                       className={styles.LineColor}
                       style={{
-                        backgroundColor:
-                          progressColor[item.status]?.progressColor ||
-                          progressColor["In_Transit"].progressColor,
+                        backgroundColor: getProgressColor(item.status)
+                          .progressColor,
                       }}
                     ></span>
                   </span>
@@ -126,8 +164,10 @@ function ProjectDeliveryList() {
                 {/* ETD & ETA */}
                 {item.expectedDeliveryDate ? (
                   <p className={styles.orderDetails}>
-                    <strong>ETD :</strong> {item.expectedDeliveryDate.slice(0, 10)} |{" "}
-                    <strong>ETA :</strong> {item.expectedArrivalDate?.slice(0, 10)}
+                    <strong>ETD :</strong>{" "}
+                    {item.expectedDeliveryDate.slice(0, 10)} |{" "}
+                    <strong>ETA :</strong>{" "}
+                    {item.expectedArrivalDate?.slice(0, 10)}
                   </p>
                 ) : (
                   "TBD"
@@ -138,12 +178,20 @@ function ProjectDeliveryList() {
                   <div className={styles.commentBox}>
                     <div className={styles.commentHeader}>
                       <p className={styles.commentUser}>
-                        <img src={`${url2}/${latestComment.profilePhoto}`} alt="Profile" className={styles.PicImg} />
+                        <img
+                          src={`${url2}/${latestComment.profilePhoto}`}
+                          alt="Profile"
+                          className={styles.PicImg}
+                        />
                         {latestComment.createdByName}
                       </p>
-                      <p className={styles.commentTime}>{formatTime(latestComment.createdAt)}</p>
+                      <p className={styles.commentTime}>
+                        {formatTime(latestComment.createdAt)}
+                      </p>
                     </div>
-                    <p className={styles.commentMessage}>{latestComment.comment}</p>
+                    <p className={styles.commentMessage}>
+                      {latestComment.comment}
+                    </p>
                   </div>
                 )}
 
@@ -160,9 +208,9 @@ function ProjectDeliveryList() {
                   <div
                     className={styles.progress}
                     style={{
-                      width: progressColor[item.status]?.progressWidth || progressColor["In_Transit"].progressWidth,
-                      backgroundColor:
-                        progressColor[item.status]?.progressColor || progressColor["In_Transit"].progressColor,
+                      width: getProgressColor(item.status).progressWidth,
+                      backgroundColor: getProgressColor(item.status)
+                        .progressColor,
                     }}
                   ></div>
                 </div>
