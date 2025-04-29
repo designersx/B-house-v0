@@ -291,9 +291,9 @@ function Proposal() {
     try {
       const res = await axios.get(`${URL}/projects/${projectId}/invoice`);
       if (res.data && res.data.error && res.data.error === 'No invoices found for this project') {
-        setInvoiceData([]); 
+        setInvoiceData([]);
       } else {
-        setInvoiceData(res.data || []); 
+        setInvoiceData(res.data || []);
       }
     } catch (err) {
       console.error("Failed to fetch invoices:", err);
@@ -325,7 +325,8 @@ function Proposal() {
           setSelectedProject(storedProject);
           localStorage.setItem("selectedProjectId", storedProject.id);
           localStorage.setItem("selectedProject", JSON.stringify(storedProject));
-
+          const allProjectIds = projectsData.map((project) => project.id);
+          localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
           fetchTeamUsers(storedProject);
           fetchDocs(storedProject.id);
           fetchInvoice(storedProject.id); // Ensure invoices are fetched

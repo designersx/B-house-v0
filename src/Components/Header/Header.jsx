@@ -185,6 +185,7 @@ function Header() {
   }, [projectId]);
   useEffect(() => {
     fetchNotification()
+
   }, [])
   return (
     <div>
