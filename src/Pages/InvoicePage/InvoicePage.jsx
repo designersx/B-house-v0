@@ -13,7 +13,14 @@ const InvoicePage = () => {
     const [totalCost, setTotalCost] = useState();
     const [totalPaidAmount, setTotalPaidAmount] = useState(0);
     const [remaining, setRemaining] = useState(0);
+    const [searchTerm, setSearchTerm] = useState("");  // 🔥 New for search
     const projectId = localStorage.getItem('selectedProjectId');
+  
+    const [statusFilters, setStatusFilters] = useState({
+      Paid: false,
+      Pending: false,
+      "Partly Paid": false
+    });
     useEffect(() => {
         const fetchFinanceData = async () => {
             try {
@@ -70,17 +77,27 @@ const InvoicePage = () => {
             fetchFinanceData();
         }
     }, [projectId]);
-    console.log(totalCost, "total cost")
+   
     return (
         <div>
             <div className="MobContent">
             <div className="HeaderTop">
-                <HeaderTab title='Invoice List' />
 
-            </div>
-            {!totalCost ? <div className='ForLoder'><Loader /></div> : <>  <Chart />
-                <List /></>}
-
+            <HeaderTab
+          title="Invoice List"
+          onStatusFilterChange={setStatusFilters}
+          statusOptions={["Paid", "Pending", "Partly Paid"]}
+          onSearchTermChange={setSearchTerm} // 🔥 Pass setter
+        />
+      </div>
+            {!totalCost ? (
+                <div className='ForLoder'><Loader /></div>
+            ) : (
+                <>
+                    <Chart />
+                    <List statusFilters={statusFilters} />
+                </>
+            )}
 
             <Footer />
 
@@ -107,7 +124,7 @@ const InvoicePage = () => {
 
 
         </div>
-    )
-}
+    );
+};
 
-export default InvoicePage
+export default InvoicePage;

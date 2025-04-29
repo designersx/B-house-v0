@@ -58,7 +58,7 @@ const Comments = ({ documentId }) => {
   useEffect(() => {
     scrollToBottom();
   }, [comments]);
-
+   console.log({comments})
   return (
     <div className={styles.threadContainer}>
       <div className={styles.header}>

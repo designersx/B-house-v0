@@ -1,3 +1,4 @@
+
 import React from 'react'
 import HeaderTab from '../../Components/HeaderTab/HeaderTab'
 import Footer from '../../Components/Footer/Footer'
@@ -6,15 +7,22 @@ import Loader from '../../Components/Loader/Loader'
 import SideBar from '../../Components/SideBar/SideBar.jsx'
 import Header from '../../Components/Header/Header.jsx';
 
+
 const PunchPage = () => {
+  const [statusFilters, setStatusFilters] = useState({});
+  const [searchTerm, setSearchTerm] = useState(""); // ✅ Add searchTerm here
+
   return (
     <div>
       <div className="MobContent">
       <div className="HeaderTop">
-        <HeaderTab title='Punchlist' />
+        <HeaderTab
+          title="Punchlist"
+          onStatusFilterChange={setStatusFilters}
+          onSearchTermChange={setSearchTerm} // ✅ Pass to HeaderTab
+          statusOptions={["Pending", "Resolved", "Rejected"]}
+        />
       </div>
-      <Punchlist />
-      <Footer />
 
       </div>
 
@@ -31,7 +39,8 @@ const PunchPage = () => {
 
                     </div>
 
-                    <Punchlist />
+         <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} /> {/* ✅ Pass to Punchlist */}
+ <Footer />
                 </div>
 
             </div>
@@ -39,4 +48,5 @@ const PunchPage = () => {
   )
 }
 
-export default PunchPage
+
+export default PunchPage;

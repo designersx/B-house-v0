@@ -4,7 +4,8 @@ import styles from "../List/List.module.css";
 import URL from "../../../config/api";
 import { url2 } from "../../../config/url";
 import PopUp from "../../PopUp/PopUp";
-const List = () => {
+
+const List = ({ statusFilters, searchTerm = "" }) => {
   const [invoices, setInvoices] = useState([]);
   const [filteredInvoices, setFilteredInvoices] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +20,7 @@ const List = () => {
   const handleSelect = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
-    filterInvoices(invoices, option);
+    filterInvoices(invoices, option, statusFilters, searchTerm);
   };
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const List = () => {
         const response = await axios.get(`${URL}/projects/${projectId}/invoice`);
         const invoicesData = Array.isArray(response.data) ? response.data : [response.data];
         setInvoices(invoicesData);
-        filterInvoices(invoicesData, selectedOption);
+        filterInvoices(invoicesData, selectedOption, statusFilters, searchTerm); 
       } catch (err) {
         console.error("Error fetching invoices:", err);
       }
@@ -37,9 +38,13 @@ const List = () => {
     if (projectId) fetchInvoices();
   }, [projectId]);
 
-  const filterInvoices = (invoices, option) => {
+  useEffect(() => {
+    filterInvoices(invoices, selectedOption, statusFilters, searchTerm); // ✅ whenever search term or filter changes
+  }, [statusFilters, searchTerm, selectedOption, invoices]);
+
+  const filterInvoices = (invoicesList, option, statusFilters, searchTerm) => {
     const today = new Date();
-    let filtered = [];
+    let filtered = [...invoicesList];
 
     const getMonthsAgo = (n) => {
       const d = new Date();
@@ -49,18 +54,31 @@ const List = () => {
 
     switch (option) {
       case "1 Month":
-        filtered = invoices.filter((i) => new Date(i.createdAt) >= getMonthsAgo(1));
+        filtered = filtered.filter((i) => new Date(i.createdAt) >= getMonthsAgo(1));
         break;
       case "3 Months":
-        filtered = invoices.filter((i) => new Date(i.createdAt) >= getMonthsAgo(3));
+        filtered = filtered.filter((i) => new Date(i.createdAt) >= getMonthsAgo(3));
         break;
       case "6 Months":
-        filtered = invoices.filter((i) => new Date(i.createdAt) >= getMonthsAgo(6));
+        filtered = filtered.filter((i) => new Date(i.createdAt) >= getMonthsAgo(6));
         break;
       case "Recent":
       default:
-        filtered = invoices.filter((i) => new Date(i.createdAt).getFullYear() === today.getFullYear());
+        filtered = filtered.filter((i) => new Date(i.createdAt).getFullYear() === today.getFullYear());
         break;
+    }
+
+    // ✅ Filter by status
+    const activeStatuses = Object.keys(statusFilters).filter((status) => statusFilters[status]);
+    if (activeStatuses.length > 0) {
+      filtered = filtered.filter((invoice) => activeStatuses.includes(invoice.status));
+    }
+
+    // ✅ Filter by searchTerm (Invoice No.)
+    if (searchTerm.trim()) {
+      filtered = filtered.filter((invoice) =>
+        invoice.invoiceNumber?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
 
     setFilteredInvoices(filtered);
@@ -95,17 +113,30 @@ const List = () => {
       )}
 
 
-
+      <div className={styles.Part1}>
+        <div className={styles.title}>
+          <p>All Invoice List</p>
+        </div>
+        <div className={styles.dropdown}>
+          <button className={styles.dropdownBtn} onClick={toggleDropdown}>
+            {selectedOption}
+            <span className={`${styles.arrow} ${isOpen ? styles.rotate : ""}`}>
+              <img src="Svg/drop-Arrow.svg" alt="drop-Arrow" />
+            </span>
+          </button>
+          {isOpen && (
+            <ul className={styles.dropdownMenu}>
+              <li onClick={() => handleSelect("Recent")}>Recent</li>
+              <li onClick={() => handleSelect("1 Month")}>1 Month</li>
+              <li onClick={() => handleSelect("3 Months")}>3 Months</li>
+              <li onClick={() => handleSelect("6 Months")}>6 Months</li>
+            </ul>
+          )}
+        </div>
+      </div>
 
       <div className={styles.transactionList}>
-      {isOpen && (
-                    <ul className={styles.dropdownMenu}>
-                      <li onClick={() => handleSelect("Recent")}>Recent</li>
-                      <li onClick={() => handleSelect("1 Month")}>1 Month</li>
-                      <li onClick={() => handleSelect("3 Months")}>3 Months</li>
-                      <li onClick={() => handleSelect("6 Months")}>6 Months</li>
-                    </ul>
-                  )}
+
         {filteredInvoices.length === 0 ? (
           <div className={styles.noData}>
             <div>
@@ -118,6 +149,7 @@ const List = () => {
           </div>
         ) : (
           filteredInvoices.map((invoice, index) => (
+
 
             // 
 
@@ -156,6 +188,7 @@ const List = () => {
                         : `${invoice.totalAmount.toLocaleString()}`}
                     </p>
                   </div>
+
                 </div>
                 <span
                   className={`${styles.status} ${invoice.status === "Partly Paid"
@@ -168,7 +201,22 @@ const List = () => {
                   {invoice.status}
                 </span>
               </div>
+
             </>
+
+
+              <span
+                className={`${styles.status} ${
+                  invoice.status === "Partly Paid"
+                    ? styles.PartlyPaid
+                    : invoice.status === "Paid"
+                    ? styles.Paid
+                    : styles.Pending
+                }`}
+              >
+                {invoice.status}
+              </span>
+            </div>
 
           ))
         )}

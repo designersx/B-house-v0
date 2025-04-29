@@ -8,15 +8,18 @@ import { url2 } from "../../config/url";
 import { useNavigate, useLocation } from 'react-router-dom';
 import Loader from "../Loader/Loader";
 
-function Punchlist() {
+function Punchlist({ statusFilters, searchTerm = "" }) {
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIssue, setActiveIssue] = useState(null);
   const [issues, setIssues] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [filteredIssues, setFilteredIssues] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const projectId = localStorage.getItem("selectedProjectId");
   const message = location.state?.message;
+
   const handleCommentClick = (issue) => {
     setActiveIssue(issue);
     setIsModalOpen(true);
@@ -25,7 +28,7 @@ function Punchlist() {
   useEffect(() => {
     const fetchPunchList = async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         const response = await axios.get(`${URL}/projects/${projectId}/punch-list`);
         const punchListData = response.data;
         const parsedIssues = punchListData.map(issue => ({
@@ -33,10 +36,10 @@ function Punchlist() {
           productImages: JSON.parse(issue.productImages)
         }));
         setIssues(parsedIssues);
-        setLoading(false)
+        setLoading(false);
       } catch (err) {
         console.error("Error fetching punch list:", err);
-        setLoading(false)
+        setLoading(false);
       }
     };
 
@@ -45,7 +48,25 @@ function Punchlist() {
     }
   }, [projectId]);
 
-  // Format the created date for display
+  // Re-filter when issues or filters change
+  useEffect(() => {
+    filterIssues(issues, statusFilters);
+  }, [issues, statusFilters]);
+
+
+
+  const handlePunchListView = (issue) => {
+    navigate(`/punchlist-detail/${issue?.id}`, {
+      state: {
+        punchId: issue?.id,
+      },
+    });
+  };
+
+  const handleImageClick = (imagePath) => {
+    window.open(`${url2}/${imagePath}`, "_blank");
+  };
+
   const formatDate = (date) => {
     const today = new Date();
     const createdDate = new Date(date);
@@ -60,38 +81,34 @@ function Punchlist() {
       return createdDate.toLocaleDateString();
     }
   };
+  const filterIssues = (issuesList, statusFilters) => {
+    const activeStatuses = Object.keys(statusFilters).filter(status => statusFilters[status]);
+    let filtered = issuesList;
 
-  const handleImageClick = (imagePath) => {
-    window.open(`${url2}/${imagePath}`, "_blank");
-  };
-  const handlePunchListView = (issue) => {
-    navigate(`/punchlist-detail/${issue?.id}`, {
-      state: {
-        punchId: issue?.id,
-      },
-    });
-  };
-
-  useEffect(() => {
-    if (message) {
-      handlePunchListView((message.userDetails))
-    
-
+    if (activeStatuses.length > 0) {
+      filtered = filtered.filter(issue => activeStatuses.includes(issue.status));
     }
-  }, [message]);
 
+    if (searchTerm.trim()) { // ✅ Filter by category
+      filtered = filtered.filter(issue =>
+        issue.category?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredIssues(filtered);
+  };
   return (
     <div className={styles.container}>
-      {loading ? <div className="ForLoder"><Loader /></div> : issues.length <= 0 ? (
+      {loading ? (
+        <div className="ForLoder"><Loader /></div>
+      ) : filteredIssues.length <= 0 ? (
         <div className={styles.noData}>
           <div><img src="Svg/notfound.svg" alt="" />
             <div className={styles.NoDataTittle}><p>No items found yet</p><img src="Svg/EYE1.svg" alt="" /></div></div>
         </div>
       ) : (
-        issues?.map((issue, index) => (
-
+        filteredIssues.map((issue, index) => (
           <div key={index} className={styles.card} onClick={() => handlePunchListView(issue)}>
-
             <div className={styles.topRow}>
               <span
                 className={`${styles.status} 
@@ -110,7 +127,6 @@ function Punchlist() {
                   ? `${issue.issueDescription.slice(0, 20)}...`
                   : issue.issueDescription}
               </div>
-
             </div>
 
             <div className={styles.flexD}>
@@ -156,7 +172,7 @@ function Punchlist() {
       </Modal>
     </div>
   );
-
 }
 
 export default Punchlist;
+

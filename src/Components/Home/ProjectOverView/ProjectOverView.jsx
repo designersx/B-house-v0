@@ -3,6 +3,7 @@ import styles from '../ProjectOverView/ProjectOv.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import URL from '../../../config/api';
+import { url2 } from '../../../config/url';
 
 function ProjectOverView({ selectedProject }) {
   const navigate = useNavigate()
@@ -68,6 +69,7 @@ const [docData ,  setDocsData] = useState()
       : JSON.parse(project?.assignedTeamRoles || "[]");
 
     teamUsers = roles.flatMap(role => role.users || []);
+    
   } catch (err) {
     console.error("Error parsing team data:", err);
   }
@@ -77,7 +79,26 @@ const [docData ,  setDocsData] = useState()
   JSON.stringify(localStorage.setItem("visible" , visible    ))
   JSON.stringify(localStorage.setItem("teamusers" , teamUsers    ))
   JSON.stringify(localStorage.setItem("remaining" , remaining   ))
+   const [users , setusers] = useState()
+   const getUserDetails = async () => {
+    try {
+      const res = await axios.get(`${URL}/auth/getAllUsers`);
+      const allUsers = res.data; // assuming API returns an array of users
+  
+    
+  
+      const filteredUsers = allUsers.filter(user => visible.includes(user.id));
+      setusers(filteredUsers)
    
+     
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+useEffect(()=>{
+  getUserDetails()
+}, [project])
+
   return (
     <div>
       <div className={styles.container}>
@@ -109,14 +130,14 @@ const [docData ,  setDocsData] = useState()
       onClick={() => navigate('/team', { state: { visible, remaining: teamUsers.slice(4) } })}
     >
       <div className={styles.avatars}>
-        {visible.map((user, idx) => (
-          <img
-            key={idx}
-            src={user?.profileImage || "/Images/profile-picture.webp"}
-            alt={`User ${user?.firstName || ""}`}
-            className={styles.avatar}
-          />
-        ))}
+       {users?.map((user, idx) => (
+  <img
+    key={idx}
+    src={user?.profileImage ? `${url2}/${user.profileImage}` : "/Images/profile-picture.webp"}
+    alt={`User ${user?.firstName || ""}`}
+    className={styles.avatar}
+  />
+))}
         {remaining > 0 && (
           <span className={styles.plus}>+{remaining}</span>
         )}

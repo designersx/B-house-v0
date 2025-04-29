@@ -4,7 +4,7 @@ import axios from "axios";
 import URL from "../../../config/api";
 import ProjectOverView from "../ProjectOverView/ProjectOverView";
 import ProjectDelivery from "../ProjectDelivery/ProjectDelivery";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 function Proposal() {
   const navigate = useNavigate();
@@ -14,7 +14,9 @@ function Proposal() {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const teamUsersFromStorage = localStorage.getItem("teamusers");
+  const id = JSON.parse(localStorage.getItem("selectedProjectId"));
 
+  const location = useLocation();
   const parsedTeamUsers = teamUsersFromStorage
     ? teamUsersFromStorage.split(",").map((id) => Number(id.trim()))
     : [];
@@ -38,10 +40,10 @@ function Proposal() {
   };
   useEffect(() => {
     fetchDocs();
-  }, []);
+  }, [id]);
   useEffect(() => {
     fetchInvoice();
-  }, []);
+  }, [id, teamUsersFromStorage]);
   const steps = [
     {
       id: 1,
@@ -89,29 +91,29 @@ function Proposal() {
       const customer = JSON.parse(localStorage.getItem("customerInfo"));
       const storedProjectId = localStorage.getItem("selectedProjectId");
       if (!customer?.id) return;
-  
+
       try {
         const res = await axios.get(`${URL}/projects/client/${customer.id}`);
         const projectsData = res.data || [];
         setProjects(projectsData);
-  
+
         const allProjectIds = projectsData.map((project) => project.id);
         localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
-  
+
         const matched = storedProjectId
           ? projectsData.find((p) => p.id.toString() === storedProjectId)
           : null;
-  
+
         const fallbackProject = projectsData[0];
-  
+
         const selected = matched || fallbackProject;
-  
+
         if (selected) {
           setSelectedProjectId(selected.id);
           setSelectedProject(selected);
           localStorage.setItem("selectedProjectId", selected.id);
           localStorage.setItem("selectedProject", JSON.stringify(selected));
-  
+
           // ✅ Store team users in localStorage
           const allUserIds = selected.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
           localStorage.setItem("teamusers", allUserIds.join(","));
@@ -120,24 +122,41 @@ function Proposal() {
         console.error("Error fetching projects:", err);
       }
     };
-  
+
     fetchProjects();
   }, []);
-  
-const handleProjectChange = (e) => {
-  const projectId = e.target.value;
-  const project = projects.find((p) => p.id.toString() === projectId);
 
-  setSelectedProjectId(projectId);
-  setSelectedProject(project);
-  localStorage.setItem("selectedProjectId", projectId);
-  localStorage.setItem("selectedProject", JSON.stringify(project));
+  const handleProjectChange = (e) => {
+    const projectId = e.target.value;
+    const project = projects.find((p) => p.id.toString() === projectId);
+    setSelectedProjectId(projectId);
+    setSelectedProject(project);
+    localStorage.setItem("selectedProjectId", projectId);
+    localStorage.setItem("selectedProject", JSON.stringify(project));
 
-  // ✅ Update teamusers when project changes
-  const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
-  localStorage.setItem("teamusers", allUserIds.join(","));
-};
+    // ✅ Update teamusers when project changes
+    const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
+    localStorage.setItem("teamusers", allUserIds.join(","));
+  };
+  //Email navigate Functionlaity
+  useEffect(() => {
+    // Check if the user came from the email link (using the query parameter)
+    const params = new URLSearchParams(location.search);
+    if (params.get('fromEmail') === 'true') {
+      const projectId = params.get('projectId');
+      console.log(projectId)
+      const project = projects.find((p) => p.id.toString() === projectId);
 
+      setSelectedProjectId(projectId);
+      setSelectedProject(project);
+      localStorage.setItem("selectedProjectId", projectId);
+      localStorage.setItem("selectedProject", JSON.stringify(project));
+
+      // ✅ Update teamusers when project changes
+      const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
+      localStorage.setItem("teamusers", allUserIds.join(","));
+    }
+  }, [location]);
   return (
     <>
       {!selectedProject ? (
