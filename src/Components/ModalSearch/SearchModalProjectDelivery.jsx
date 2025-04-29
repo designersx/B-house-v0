@@ -1,35 +1,45 @@
 import React, { useState, useEffect } from "react";
 import styles from "../ModalSearch/ModalSearch.module.css";
 import URL from "../../config/api";
-const SearchModalInvoice = ({ isOpen, onClose, onSearch }) => {
+
+const SearchModalProjectDelivery = ({ isOpen, onClose, onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [invoices, setInvoices] = useState([]);
+  const [items, setItems] = useState([]);
+  const [filteredItems, setFilteredItems] = useState([]);
 
   useEffect(() => {
     if (!isOpen) return;
-    const fetchInvoices = async () => {
+
+    const fetchItems = async () => {
       try {
         const projectId = localStorage.getItem("selectedProjectId");
         if (!projectId) return;
-        const res = await fetch(`${URL}/projects/${projectId}/invoice`);
+
+        const res = await fetch(`${URL}/items/${projectId}`);
         const data = await res.json();
-        const invoiceArray = Array.isArray(data) ? data : [data];
-        setInvoices(invoiceArray);
+        const itemsArray = Array.isArray(data) ? data : [data];
+        setItems(itemsArray);
       } catch (error) {
-        console.error("Error fetching invoices:", error);
+        console.error("Error fetching items:", error);
       }
     };
-    fetchInvoices();
+
+    fetchItems();
   }, [isOpen]);
 
-  const filteredInvoices = invoices.filter((invoice) =>
-    invoice.invoiceNumber?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleSelectInvoice = (invoiceNo) => {
-    if (onSearch) {
-      onSearch(invoiceNo);
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setFilteredItems([]);
+    } else {
+      const results = items.filter((item) =>
+        item.itemName?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredItems(results);
     }
+  }, [searchTerm, items]);
+
+  const handleSelect = (itemName) => {
+    if (onSearch) onSearch(itemName);
     onClose();
   };
 
@@ -41,12 +51,13 @@ const SearchModalInvoice = ({ isOpen, onClose, onSearch }) => {
         <button className={styles.outsideCloseBtn} onClick={onClose}>
           ✕
         </button>
-        <div className={styles.modal}>
+
+        <div className={styles.modal} style={{ minHeight: "30%", maxHeight: "80%" }}>
           <div className={styles.header}>
             <input
               className={styles.searchInput}
               type="text"
-              placeholder="Search Invoice Number"
+              placeholder="Search by Item Name"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -54,8 +65,8 @@ const SearchModalInvoice = ({ isOpen, onClose, onSearch }) => {
               <button
                 className={styles.clearBtn}
                 onClick={() => {
-                  setSearchTerm("");
-                  if (onSearch) onSearch("");
+                  setSearchTerm("");    
+                  if (onSearch) onSearch(""); // reset search
                 }}
               >
                 ✕
@@ -64,22 +75,22 @@ const SearchModalInvoice = ({ isOpen, onClose, onSearch }) => {
           </div>
 
           <div className={styles.historyWrapper}>
-            <h4>Invoices</h4>
-            {filteredInvoices.length > 0 ? (
+            <h4>Project Items</h4>
+            {searchTerm && filteredItems.length > 0 ? (
               <ul className={styles.historyList}>
-                {filteredInvoices.map((inv, idx) => (
+                {filteredItems.map((item, idx) => (
                   <li
                     key={idx}
                     className={styles.historyItem}
-                    onClick={() => handleSelectInvoice(inv.invoiceNumber)}
+                    onClick={() => handleSelect(item.itemName)}
                   >
-                    {inv.invoiceNumber}
+                    {item.itemName}
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p className={styles.emptyText}>No invoices found</p>
-            )}
+            ) : searchTerm ? (
+              <p className={styles.emptyText}>No items found</p>
+            ) : null}
           </div>
         </div>
       </div>
@@ -87,4 +98,4 @@ const SearchModalInvoice = ({ isOpen, onClose, onSearch }) => {
   );
 };
 
-export default SearchModalInvoice;
+export default SearchModalProjectDelivery;

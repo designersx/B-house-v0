@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styles from "../HeaderTab/HeaderTab.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
-// import SearchModalInvoice from "../ModalSearch/SearchModalInvoice";
-import SearchModalPunchlist from "../ModalSearch/SearchModalPunchlist";
+// import SearchModalInvoice from "../ModalSearch/SearchModalInvoice";   
+import SearchModalPunchlist from "../ModalSearch/SearchModalPunchlist"; 
+import SearchModalProjectDelivery from "../ModalSearch/SearchModalProjectDelivery";  // 🔥 (new - you may create it if needed)
 import OffCanvas from "../OffCanvas/OffCanvas";
 
 const HeaderTab = ({
@@ -44,6 +45,12 @@ const HeaderTab = ({
     onStatusFilterChange(newFilters);
   };
 
+  const currentPath = location.pathname;
+
+  const isInvoicePage = currentPath.includes("invoice");
+  const isPunchlistPage = currentPath.includes("punchlist");
+  const isProjectDeliveryPage = currentPath.includes("project-delivery-list");
+
   return (
     <>
       <div className={styles.headerMain}>
@@ -57,26 +64,18 @@ const HeaderTab = ({
           </div>
         </div>
 
-        {location.pathname.includes("invoice") && (
+        {(isInvoicePage || isPunchlistPage || isProjectDeliveryPage) && (
           <div className={styles.IconBoth}>
-            {/* Show only Filter Icon for Invoice */}
-            <div
-              className={styles.iconFillter}
-              onClick={() => setShowCanvas(true)}
-            >
-              <img src="/Svg/filterSvg.svg" alt="Filter" />
-            </div>
-          </div>
-        )}
-
-        {location.pathname.includes("punchlist") && (
-          <div className={styles.IconBoth}>
-            <div
-              className={styles.iconSearch}
-              onClick={() => setShowModalSearch(true)}
-            >
-              <img src="/Svg/searchSvg.svg" alt="Search" />
-            </div>
+            {/* Show Search button only for punchlist and project-delivery-list */}
+            {(isPunchlistPage || isProjectDeliveryPage) && (
+              <div
+                className={styles.iconSearch}
+                onClick={() => setShowModalSearch(true)}
+              >
+                <img src="/Svg/searchSvg.svg" alt="Search" />
+              </div>
+            )}
+            {/* Show filter always */}
             <div
               className={styles.iconFillter}
               onClick={() => setShowCanvas(true)}
@@ -88,20 +87,20 @@ const HeaderTab = ({
       </div>
 
       {/* 🔥 Dynamic Search Modals */}
-      {/* {location.pathname.includes("invoice") && (
+      {/* {isInvoicePage && (
         <SearchModalInvoice
           isOpen={showModalSearch}
           onClose={() => setShowModalSearch(false)}
           onSearch={(invoiceNo) => {
             setShowModalSearch(false);
             if (onSearchTermChange) {
-              onSearchTermChange(invoiceNo); 
+              onSearchTermChange(invoiceNo);
             }
           }}
         />
       )} */}
 
-      {location.pathname.includes("punchlist") && (
+      {isPunchlistPage && (
         <SearchModalPunchlist
           isOpen={showModalSearch}
           onClose={() => setShowModalSearch(false)}
@@ -109,6 +108,19 @@ const HeaderTab = ({
             setShowModalSearch(false);
             if (onSearchTermChange) {
               onSearchTermChange(category);
+            }
+          }}
+        />
+      )}
+
+      {isProjectDeliveryPage && (
+        <SearchModalProjectDelivery
+          isOpen={showModalSearch}
+          onClose={() => setShowModalSearch(false)}
+          onSearch={(itemName) => {
+            setShowModalSearch(false);
+            if (onSearchTermChange) {
+              onSearchTermChange(itemName);
             }
           }}
         />
@@ -136,8 +148,6 @@ const HeaderTab = ({
               <span>{status}</span>
             </label>
           ))}
-
-          <div className={styles.subBtn}>{/* Submit button if needed */}</div>
         </div>
       </OffCanvas>
     </>
