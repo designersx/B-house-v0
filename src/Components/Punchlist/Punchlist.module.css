@@ -197,3 +197,19 @@
     }
 }
 
+@media screen and (min-device-width: 1024px) and (max-device-width: 2500px) { 
+
+    .container {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        width: 100%;
+    }
+}
+
+@media screen and (min-device-width: 767px) and (max-device-width: 1024px) { 
+    .container {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+     
+    }
+}

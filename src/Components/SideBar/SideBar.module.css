@@ -1,0 +1,57 @@
+/* Sidebar styles */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 200px;
+  background-color: #fff;
+  padding-top: 20px;
+  border-right: 1px solid #e0e0e0;
+}
+
+/* Icon wrapper for sidebar links */
+.iconWrapper {
+  display: grid;
+
+  align-items: start;
+  padding: 0 20px;
+}
+
+/* Icon text styling */
+.iconText {
+  font-size: 20px;
+  color: #9c9c9c;
+  margin-top: 8px;
+  display: block;
+}
+
+/* Active link styling */
+.activeLink {
+  color: #3d70e3;
+}
+
+/* Link styling inside the icon wrapper */
+.iconWrapper a {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  text-align: center;
+  padding: 10px 0;
+  text-decoration: none;
+  outline: unset;
+}
+
+
+
+
+
+
+
+@media (max-width: 767px) {
+  .sidebar {
+    display: flex; 
+  }
+}

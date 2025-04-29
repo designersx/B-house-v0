@@ -92,3 +92,52 @@
 
 
 
+/* webpage Responsive */
+
+.mainContent{
+  display: block;
+}
+
+.mainContent{
+  display: flex;
+}
+.Web_container{
+  width:100%;
+  padding: 0 0px 0 0;
+}
+
+.Web_Sidebar{
+  max-width: 200px;
+  min-width: 200px;
+  width: 100%;
+}
+
+.MobContent{
+  display:none;
+}
+
+.webListGap{
+  padding: 20px 20px 0;
+}
+
+
+.activeLink span{
+  color: #004680;
+}
+
+.activeLink svg path{
+  fill: #004680;
+}
+
+
+
+@media(max-width:767px){
+  .mainContent{
+    display: none;
+  }
+
+  .MobContent{
+    display: block;
+  }
+}
+  

@@ -1,33 +1,25 @@
 .footerSideIcon {
     padding: 0 20px;
-    /* width: 100%; */
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-
 .footerIcon {
-
-
     display: flex;
     align-items: center;
     gap: 10px;
 }
-
-
 
 .footerFixed {
     position: fixed;
     bottom: 0;
     width: 100%;
     background-color: #fff;
-    /* height: 40px; */
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     padding: 15px 0 5px 0;
     border-radius: 10px 10px 0 0;
     z-index: 111;
-
 }
 
 .footerSideIcon a svg {
@@ -41,7 +33,6 @@
     gap: 3px;
     font-size: 14px;
     text-decoration: none;
-    /* color: #004680; */
     font-weight: 600;
 }
 
@@ -50,7 +41,6 @@
 }
 
 .footerSideIcon a span {
-    /* display: none; */
     visibility: hidden;
 }
 
@@ -61,14 +51,10 @@
 
 .footerSideIcon a.activeLink svg path {
     fill: #004680;
-
     color: #004680;
 }
 
-
-
 /* Animation CSS START */
-
 @keyframes bounceZoom {
     0% {
         transform: scale(0.95) translateY(0);
@@ -100,26 +86,22 @@
 
 .activeLink svg {
     animation: bounceZoom 0.4s ease;
-
 }
 
 .activeLink span {
     animation: fadeUp 0.4s ease forwards;
-
 }
-/* 
-@keyframes fadeUp {
-    0% {
-      transform: translateY(4px);
-      opacity: 0;
+
+
+@media (min-width: 768px) {
+    .footerFixed {
+        display: none; 
     }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
+}
+
+
+@media (max-width: 767px) {
+    .footerFixed {
+        display: block; /* Show footer on smaller screens */
     }
-  }
-  
-  .activeLink span {
-    animation: fadeUp 0.4s ease forwards;
-    color: #000;
-  } */
+}
