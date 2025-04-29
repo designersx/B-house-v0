@@ -1,3 +1,265 @@
+// import React, { useEffect, useState } from "react";
+// import styles from "./Proposal.module.css";
+// import axios from "axios";
+// import URL from "../../../config/api";
+// import ProjectOverView from "../ProjectOverView/ProjectOverView";
+// import ProjectDelivery from "../ProjectDelivery/ProjectDelivery";
+// import { useNavigate, useLocation } from "react-router-dom";
+// import Loader from "../../Loader/Loader";
+// function Proposal() {
+//   const navigate = useNavigate();
+//   const [projects, setProjects] = useState([]);
+//   const [docData, setDocsData] = useState();
+//   const [invoiceData, setInvoiceData] = useState();
+//   const [selectedProjectId, setSelectedProjectId] = useState(null);
+//   const [selectedProject, setSelectedProject] = useState(null);
+//   const teamUsersFromStorage = localStorage.getItem("teamusers");
+//   const id = JSON.parse(localStorage.getItem("selectedProjectId"));
+//   console.log(teamUsersFromStorage.length,"HELLO")
+//   const location = useLocation();
+//   const [parsedTeamUsers, setParsedTeamUsers] = useState([]);
+
+//   useEffect(() => {
+//     const teamUsersFromStorage = localStorage.getItem("teamusers");
+//     const parsedUsers = teamUsersFromStorage
+//       ? teamUsersFromStorage.split(",").map((id) => Number(id.trim()))
+//       : [];
+//     setParsedTeamUsers(parsedUsers);
+//   }, [selectedProjectId]);
+//   // useEffect(() => {
+//   //   const teamUsersFromStorage = localStorage.getItem("teamusers");
+//   //   const parsedUsers = teamUsersFromStorage
+//   //     ? teamUsersFromStorage.split(",").map((id) => Number(id.trim()))
+//   //     : [];
+//   //   setParsedTeamUsers(parsedUsers);
+//   // }, []);
+//     console.log(parsedTeamUsers,"parsedTeamUsers")
+//   const fetchDocs = async () => {
+//     const id = JSON.parse(localStorage.getItem("selectedProjectId"));
+//     try {
+//       const res = await axios.get(`${URL}/customerDoc/document/${id}`);
+//       setDocsData(res.data || []);
+//     } catch (err) {
+//       console.error("Failed to fetch documents:", err);
+//     }
+//   };
+//   const fetchInvoice = async () => {
+//     const id = JSON.parse(localStorage.getItem("selectedProjectId"));
+//     try {
+//       const res = await axios.get(`${URL}/projects/${id}/invoice`);
+//       setInvoiceData(res.data || []);
+//     } catch (err) {
+//       console.error("Failed to fetch documents:", err);
+//     }
+//   };
+//   useEffect(() => {
+//     fetchDocs();
+//   }, [id]);
+//   useEffect(() => {
+//     fetchInvoice();
+//   }, [id, teamUsersFromStorage]);
+//   const steps = [
+//     {
+//       id: 1,
+//       img: "/Svg/docs.svg",
+//       label: "Docs",
+//       count: `${docData?.length || 0}`,
+//       color: "#015369",
+//       colorSmall: "#015369",
+//     },
+//     // {
+//     //   id: 2,
+//     //   img: "/Svg/tracking.svg",
+//     //   label: "Tracking",
+//     //   count: "04",
+//     //   color: "#F9C74F",
+//     //   colorSmall: "#FFCD88",
+//     // },
+//     {
+//       id: 3,
+//       img: "/Svg/invoice.svg",
+//       label: "Invoice",
+//       count: `${invoiceData?.length || 0}`,
+//       color: "#E1917A",
+//       colorSmall: "#E1917A",
+//     },
+//     {
+//       id: 4,
+//       img: "/Svg/team.svg",
+//       label: "Team",
+//       count: `${parsedTeamUsers?.length || 0}`,
+//       color: "#E7FAF6",
+//       colorSmall: "#E7FAF6",
+//     },
+//     // {
+//     //   id: 5,
+//     //   img: "/Svg/EIN.svg",
+//     //   label: "EIN",
+//     //   count: "05",
+//     //   color: "#577590",
+//     //   colorSmall: "#FFEA81",
+//     // },
+//   ];
+//   useEffect(() => {
+//     const fetchProjects = async () => {
+//       const customer = JSON.parse(localStorage.getItem("customerInfo"));
+//       const storedProjectId = localStorage.getItem("selectedProjectId");
+//       if (!customer?.id) return;
+
+//       try {
+//         const res = await axios.get(`${URL}/projects/client/${customer.id}`);
+//         const projectsData = res.data || [];
+//         setProjects(projectsData);
+
+//         const allProjectIds = projectsData.map((project) => project.id);
+//         localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
+
+//         const matched = storedProjectId
+//           ? projectsData.find((p) => p.id.toString() === storedProjectId)
+//           : null;
+
+//         const fallbackProject = projectsData[0];
+
+//         const selected = matched || fallbackProject;
+
+//         if (selected) {
+//           setSelectedProjectId(selected.id);
+//           setSelectedProject(selected);
+//           localStorage.setItem("selectedProjectId", selected.id);
+//           localStorage.setItem("selectedProject", JSON.stringify(selected));
+
+//           // ✅ Store team users in localStorage
+//           const allUserIds = selected.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
+//           localStorage.setItem("teamusers", allUserIds.join(","));
+//         }
+//       } catch (err) {
+//         console.error("Error fetching projects:", err);
+//       }
+//     };
+
+//     fetchProjects();
+//   }, []);
+
+//   const handleProjectChange = (e) => {
+//     const projectId = e.target.value;
+//     const project = projects.find((p) => p.id.toString() === projectId);
+//     setSelectedProjectId(projectId);
+//     setSelectedProject(project);
+//     localStorage.setItem("selectedProjectId", projectId);
+//     localStorage.setItem("selectedProject", JSON.stringify(project));
+
+//     // ✅ Update teamusers when project changes
+//     const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
+//     localStorage.setItem("teamusers", allUserIds.join(","));
+//   };
+//   //Email navigate Functionlaity
+//   useEffect(() => {
+//     // Check if the user came from the email link (using the query parameter)
+//     const params = new URLSearchParams(location.search);
+//     if (params.get('fromEmail') === 'true') {
+//       const projectId = params.get('projectId');
+//       console.log(projectId)
+//       const project = projects.find((p) => p.id.toString() === projectId);
+
+//       setSelectedProjectId(projectId);
+//       setSelectedProject(project);
+//       localStorage.setItem("selectedProjectId", projectId);
+//       localStorage.setItem("selectedProject", JSON.stringify(project));
+
+//       // ✅ Update teamusers when project changes
+//       const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
+//       localStorage.setItem("teamusers", allUserIds.join(","));
+//     }
+//   }, [location]);
+//   return (
+//     <>
+//       {!selectedProject ? (
+//         <div className={styles.ForLoder}>
+//           <Loader />
+//         </div>
+//       ) : (
+//         <div className={styles.container}>
+//           {/* Header Section */}
+//           <div className={styles.header}>
+//             <h4 className={styles.statusBadge}>
+//               {selectedProject ? selectedProject.status : "Loading..."}
+//             </h4>
+
+//             <div className={styles.projectSelector}>
+//               <span className={styles.projectTitle}>Project: </span>
+//               <select
+//                 value={selectedProjectId || ""}
+//                 onChange={handleProjectChange}
+//               >
+//                 {projects
+//                   .filter((proj) => proj.status !== "Archived")
+//                   .map((proj) => (
+//                     <option key={proj.id} value={proj.id}>
+//                       {proj.name}
+//                     </option>
+//                   ))}
+//               </select>
+//             </div>
+
+//             <p className={styles.subText}>
+//               Here's what's happening with your projects
+//             </p>
+//           </div>
+
+//           {/* Progress Tracker Section */}
+
+//           <div className={styles.progressTracker}>
+//             {steps.map((step) => (
+//               <div
+//                 key={step.id}
+//                 className={styles.step}
+//                 onClick={() => navigate(`/${step.label.toLowerCase()}`)}
+//                 style={{ cursor: "pointer" }}
+//               >
+//                 <div className={styles.circle}>
+//                   <div
+//                     className={styles.count}
+//                     style={{ backgroundColor: step.colorSmall }}
+//                   >
+//                     <span
+//                       className={styles.counttip}
+//                       style={{ borderColor: step.colorSmall }}
+//                     ></span>
+//                     <span className={step.id === 1 ? styles.whiteCount : ""}>
+//                       {step.count}
+//                     </span>
+//                   </div>
+//                   <img
+//                     src={step.img}
+//                     alt={step.label}
+//                     className={styles.icon}
+//                   />
+//                 </div>
+//                 <p className={styles.label}>{step.label}</p>
+//               </div>
+//             ))}
+//           </div>
+
+//           {/* Progress Bar */}
+//           <div className={styles.progressBar}>
+//             {steps.map((step) => (
+//               <div
+//                 key={step.id}
+//                 className={styles.barSegment}
+//                 style={{ backgroundColor: step.color }}
+//               ></div>
+//             ))}
+//           </div>
+//           <ProjectOverView selectedProject={selectedProject} />
+//           <ProjectDelivery selectedProject={selectedProject} />
+//         </div>
+//       )}
+//     </>
+//   );
+// }
+
+// export default Proposal;
+
 import React, { useEffect, useState } from "react";
 import styles from "./Proposal.module.css";
 import axios from "axios";
@@ -6,117 +268,67 @@ import ProjectOverView from "../ProjectOverView/ProjectOverView";
 import ProjectDelivery from "../ProjectDelivery/ProjectDelivery";
 import { useNavigate, useLocation } from "react-router-dom";
 import Loader from "../../Loader/Loader";
+
 function Proposal() {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [projects, setProjects] = useState([]);
-  const [docData, setDocsData] = useState();
-  const [invoiceData, setInvoiceData] = useState();
+  const [docData, setDocsData] = useState([]);
+  const [invoiceData, setInvoiceData] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
-  const teamUsersFromStorage = localStorage.getItem("teamusers");
-  const id = JSON.parse(localStorage.getItem("selectedProjectId"));
-
-  const location = useLocation();
-  const parsedTeamUsers = teamUsersFromStorage
-    ? teamUsersFromStorage.split(",").map((id) => Number(id.trim()))
-    : [];
-  const fetchDocs = async () => {
-    const id = JSON.parse(localStorage.getItem("selectedProjectId"));
+  const [parsedTeamUsers, setParsedTeamUsers] = useState([]);
+  const fetchDocs = async (projectId) => {
     try {
-      const res = await axios.get(`${URL}/customerDoc/document/${id}`);
+      const res = await axios.get(`${URL}/customerDoc/document/${projectId}`);
       setDocsData(res.data || []);
     } catch (err) {
       console.error("Failed to fetch documents:", err);
     }
   };
-  const fetchInvoice = async () => {
-    const id = JSON.parse(localStorage.getItem("selectedProjectId"));
+  const fetchInvoice = async (projectId) => {
     try {
-      const res = await axios.get(`${URL}/projects/${id}/invoice`);
-      setInvoiceData(res.data || []);
+      const res = await axios.get(`${URL}/projects/${projectId}/invoice`);
+      if (res.data && res.data.error && res.data.error === 'No invoices found for this project') {
+        setInvoiceData([]); 
+      } else {
+        setInvoiceData(res.data || []); 
+      }
     } catch (err) {
-      console.error("Failed to fetch documents:", err);
+      console.error("Failed to fetch invoices:", err);
+      setInvoiceData([]);
     }
   };
-  useEffect(() => {
-    fetchDocs();
-  }, [id]);
-  useEffect(() => {
-    fetchInvoice();
-  }, [id, teamUsersFromStorage]);
-  const steps = [
-    {
-      id: 1,
-      img: "/Svg/docs.svg",
-      label: "Docs",
-      count: `${docData?.length || 0}`,
-      color: "#015369",
-      colorSmall: "#015369",
-    },
-    // {
-    //   id: 2,
-    //   img: "/Svg/tracking.svg",
-    //   label: "Tracking",
-    //   count: "04",
-    //   color: "#F9C74F",
-    //   colorSmall: "#FFCD88",
-    // },
-    {
-      id: 3,
-      img: "/Svg/invoice.svg",
-      label: "Invoice",
-      count: `${invoiceData?.length || 0}`,
-      color: "#E1917A",
-      colorSmall: "#E1917A",
-    },
-    {
-      id: 4,
-      img: "/Svg/team.svg",
-      label: "Team",
-      count: `${parsedTeamUsers?.length || 0}`,
-      color: "#E7FAF6",
-      colorSmall: "#E7FAF6",
-    },
-    // {
-    //   id: 5,
-    //   img: "/Svg/EIN.svg",
-    //   label: "EIN",
-    //   count: "05",
-    //   color: "#577590",
-    //   colorSmall: "#FFEA81",
-    // },
-  ];
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const customer = JSON.parse(localStorage.getItem("customerInfo"));
-      const storedProjectId = localStorage.getItem("selectedProjectId");
-      if (!customer?.id) return;
+  const fetchTeamUsers = (project) => {
+    const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
+    setParsedTeamUsers(allUserIds);
+    localStorage.setItem("teamusers", allUserIds.join(","));
+  };
 
+  useEffect(() => {
+    const customer = JSON.parse(localStorage.getItem("customerInfo"));
+    const storedProjectId = localStorage.getItem("selectedProjectId");
+
+    if (!customer?.id) return;
+
+    const fetchProjects = async () => {
       try {
         const res = await axios.get(`${URL}/projects/client/${customer.id}`);
         const projectsData = res.data || [];
         setProjects(projectsData);
 
-        const allProjectIds = projectsData.map((project) => project.id);
-        localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
+        const storedProject = projectsData.find((p) => p.id.toString() === storedProjectId) || projectsData[0];
 
-        const matched = storedProjectId
-          ? projectsData.find((p) => p.id.toString() === storedProjectId)
-          : null;
+        if (storedProject) {
+          setSelectedProjectId(storedProject.id);
+          setSelectedProject(storedProject);
+          localStorage.setItem("selectedProjectId", storedProject.id);
+          localStorage.setItem("selectedProject", JSON.stringify(storedProject));
 
-        const fallbackProject = projectsData[0];
-
-        const selected = matched || fallbackProject;
-
-        if (selected) {
-          setSelectedProjectId(selected.id);
-          setSelectedProject(selected);
-          localStorage.setItem("selectedProjectId", selected.id);
-          localStorage.setItem("selectedProject", JSON.stringify(selected));
-
-          // ✅ Store team users in localStorage
-          const allUserIds = selected.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
-          localStorage.setItem("teamusers", allUserIds.join(","));
+          fetchTeamUsers(storedProject);
+          fetchDocs(storedProject.id);
+          fetchInvoice(storedProject.id); // Ensure invoices are fetched
         }
       } catch (err) {
         console.error("Error fetching projects:", err);
@@ -126,6 +338,25 @@ function Proposal() {
     fetchProjects();
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('fromEmail') === 'true') {
+      const projectId = params.get('projectId');
+      const project = projects.find((p) => p.id.toString() === projectId);
+
+      if (project) {
+        setSelectedProjectId(projectId);
+        setSelectedProject(project);
+        localStorage.setItem("selectedProjectId", projectId);
+        localStorage.setItem("selectedProject", JSON.stringify(project));
+
+        fetchTeamUsers(project);
+        fetchDocs(projectId);
+        fetchInvoice(projectId); // Ensure invoices are fetched here as well
+      }
+    }
+  }, [location, projects]);
+
   const handleProjectChange = (e) => {
     const projectId = e.target.value;
     const project = projects.find((p) => p.id.toString() === projectId);
@@ -134,29 +365,38 @@ function Proposal() {
     localStorage.setItem("selectedProjectId", projectId);
     localStorage.setItem("selectedProject", JSON.stringify(project));
 
-    // ✅ Update teamusers when project changes
-    const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
-    localStorage.setItem("teamusers", allUserIds.join(","));
+    fetchTeamUsers(project);
+    fetchDocs(projectId);
+    fetchInvoice(projectId); // Fetch the invoices for the new project
   };
-  //Email navigate Functionlaity
-  useEffect(() => {
-    // Check if the user came from the email link (using the query parameter)
-    const params = new URLSearchParams(location.search);
-    if (params.get('fromEmail') === 'true') {
-      const projectId = params.get('projectId');
-      console.log(projectId)
-      const project = projects.find((p) => p.id.toString() === projectId);
 
-      setSelectedProjectId(projectId);
-      setSelectedProject(project);
-      localStorage.setItem("selectedProjectId", projectId);
-      localStorage.setItem("selectedProject", JSON.stringify(project));
+  const steps = [
+    {
+      id: 1,
+      img: "/Svg/docs.svg",
+      label: "Docs",
+      count: `${docData.length || 0}`,
+      color: "#015369",
+      colorSmall: "#015369",
+    },
+    {
+      id: 3,
+      img: "/Svg/invoice.svg",
+      label: "Invoice",
+      count: `${invoiceData.length || 0}`, // Correctly show the invoice count
+      color: "#E1917A",
+      colorSmall: "#E1917A",
+    },
+    {
+      id: 4,
+      img: "/Svg/team.svg",
+      label: "Team",
+      count: `${parsedTeamUsers.length || 0}`,
+      color: "#E7FAF6",
+      colorSmall: "#E7FAF6",
+    },
+  ];
 
-      // ✅ Update teamusers when project changes
-      const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
-      localStorage.setItem("teamusers", allUserIds.join(","));
-    }
-  }, [location]);
   return (
     <>
       {!selectedProject ? (
@@ -165,77 +405,46 @@ function Proposal() {
         </div>
       ) : (
         <div className={styles.container}>
-          {/* Header Section */}
           <div className={styles.header}>
             <h4 className={styles.statusBadge}>
               {selectedProject ? selectedProject.status : "Loading..."}
             </h4>
-
             <div className={styles.projectSelector}>
               <span className={styles.projectTitle}>Project: </span>
-              <select
-                value={selectedProjectId || ""}
-                onChange={handleProjectChange}
-              >
-                {projects
-                  .filter((proj) => proj.status !== "Archived")
-                  .map((proj) => (
-                    <option key={proj.id} value={proj.id}>
-                      {proj.name}
-                    </option>
-                  ))}
+              <select value={selectedProjectId || ""} onChange={handleProjectChange}>
+                {projects.filter((proj) => proj.status !== "Archived").map((proj) => (
+                  <option key={proj.id} value={proj.id}>
+                    {proj.name}
+                  </option>
+                ))}
               </select>
             </div>
-
-            <p className={styles.subText}>
-              Here's what's happening with your projects
-            </p>
+            <p className={styles.subText}>Here's what's happening with your projects</p>
           </div>
-
-          {/* Progress Tracker Section */}
 
           <div className={styles.progressTracker}>
             {steps.map((step) => (
-              <div
-                key={step.id}
-                className={styles.step}
-                onClick={() => navigate(`/${step.label.toLowerCase()}`)}
-                style={{ cursor: "pointer" }}
-              >
+              <div key={step.id} className={styles.step} onClick={() => navigate(`/${step.label.toLowerCase()}`)} style={{ cursor: "pointer" }}>
                 <div className={styles.circle}>
-                  <div
-                    className={styles.count}
-                    style={{ backgroundColor: step.colorSmall }}
-                  >
-                    <span
-                      className={styles.counttip}
-                      style={{ borderColor: step.colorSmall }}
-                    ></span>
+                  <div className={styles.count} style={{ backgroundColor: step.colorSmall }}>
+                    <span className={styles.counttip} style={{ borderColor: step.colorSmall }}></span>
                     <span className={step.id === 1 ? styles.whiteCount : ""}>
                       {step.count}
                     </span>
                   </div>
-                  <img
-                    src={step.img}
-                    alt={step.label}
-                    className={styles.icon}
-                  />
+                  <img src={step.img} alt={step.label} className={styles.icon} />
                 </div>
                 <p className={styles.label}>{step.label}</p>
               </div>
             ))}
           </div>
 
-          {/* Progress Bar */}
           <div className={styles.progressBar}>
             {steps.map((step) => (
-              <div
-                key={step.id}
-                className={styles.barSegment}
-                style={{ backgroundColor: step.color }}
-              ></div>
+              <div key={step.id} className={styles.barSegment} style={{ backgroundColor: step.color }}></div>
             ))}
           </div>
+
           <ProjectOverView selectedProject={selectedProject} />
           <ProjectDelivery selectedProject={selectedProject} />
         </div>

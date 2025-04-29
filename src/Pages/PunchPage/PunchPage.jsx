@@ -22,12 +22,12 @@ const PunchPage = () => {
             <HeaderTab
               title="Punchlist"
               onStatusFilterChange={setStatusFilters}
-              onSearchTermChange={setSearchTerm} 
+              onSearchTermChange={setSearchTerm}
               statusOptions={["Pending", "Resolved", "Rejected"]}
             />
           </div>
           <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
-
+          <Footer />
 
         </div>
         <div className="mainContent">
@@ -44,7 +44,7 @@ const PunchPage = () => {
             </div>
 
             <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
-          
+
           </div>
 
         </div>
