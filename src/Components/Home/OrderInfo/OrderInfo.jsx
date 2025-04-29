@@ -145,6 +145,7 @@ function OrderInfo() {
       <div className='HeaderTop'>
         <HeaderTab title={item?.itemName} />
       </div>
+      <div className={styles.Forflex}>
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.etdEta}>
@@ -264,26 +265,16 @@ function OrderInfo() {
                 )}
               </div>
             </div>
-
-
-
           </div>
-
-
         </div>
-
-
         <div>
-
         </div>
-
-
       </div>
       <div className={styles.commentSection}>
-
         <CommentBox saman={itemsData} />
-
       </div>
+      </div>
+    
     </div>
   )
 }

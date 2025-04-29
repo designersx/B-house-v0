@@ -100,15 +100,22 @@
 
 .mainContent{
   display: flex;
+  gap: 15px;
 }
+.mainContent2{
+width: 70%;
+right: 0;
+position: absolute;
+}
+
 .Web_container{
   width:100%;
   padding: 0 0px 0 0;
 }
 
 .Web_Sidebar{
-  max-width: 200px;
-  min-width: 200px;
+  max-width: 250px;
+  min-width: 250px;
   width: 100%;
 }
 
@@ -132,7 +139,7 @@
 
 
 @media(max-width:767px){
-  .mainContent{
+  .webContent{
     display: none;
   }
 

@@ -97,6 +97,7 @@
     background-color: #EEF7FF;
     color: #004680;
     width: 50%;
+    cursor: pointer;
 }
 
 .ContinueBtn {
@@ -106,5 +107,18 @@
     background-color: #004680;
     color: #ffffff;
     width: 50%;
+    cursor: pointer;
 
+}
+@media screen and (min-device-width: 769px) and (max-device-width: 2561px) {
+    .resetMain {
+        max-width: 500px;
+        margin: auto;
+    }
+    .resetLockDiv img{
+        width: 30%;
+    }
+    .detailsDiv {
+      margin-bottom: 1rem;
+    }
 }

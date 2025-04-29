@@ -526,3 +526,20 @@
 .PunchImageSlider {
     width: 100% !important;
 }
+
+@media screen and (min-device-width: 768px) and (max-device-width: 2600px) { 
+.PunchSlider{
+    position: relative;
+    display: flex;
+max-width: 1200px;
+margin: auto;
+}
+.container {
+    width: 50%;
+    max-width: unset;
+    margin: unset;
+}
+.commentSection{
+    width: 50%;
+}
+}
