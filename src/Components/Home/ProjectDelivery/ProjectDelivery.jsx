@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ProjectDelivery.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; 
+
 import URL from "../../../config/api";
 import axios from "axios";
 import { url2 } from "../../../config/url";
@@ -27,12 +28,17 @@ const progressColor = {
     progressWidth: "60%",
   },
 };
+
+
 function ProjectDelivery({ selectedProject }) {
   const [showAll, setShowAll] = useState(false);
   const [data, setData] = useState([]);
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
   // const location = useLocation();
-
+  const navigate = useNavigate(); 
+  const handleViewAll = () => {
+    navigate("/project-delivery-list", { state: { items: data } });
+  };
   const fetchManufacturers = async () => {
     const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
 
@@ -95,8 +101,6 @@ function ProjectDelivery({ selectedProject }) {
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
-
-    // If the time difference is less than 7 days, show relative time
     if (days < 7) {
       if (minutes < 1) {
         return "just now";
@@ -121,18 +125,19 @@ function ProjectDelivery({ selectedProject }) {
       <div className={styles.DeliveryUpdate}>
         <h4>Project Delivery Update</h4>
         <button
-          className={styles.button}
-          onClick={() => setShowAll((prev) => !prev)}
-        >
-          {showAll ? "Show Less" : "View All"}
-        </button>
+  className={styles.button}
+  onClick={handleViewAll}
+>
+  View All
+</button>
+
       </div>
       {/* <div className={styles.dlDate}>
         <p>2025-04-11</p>
       </div> */}
 
       <div className={styles.Container}>
-        {(showAll ? data : data.slice(0, 2))
+        {(showAll ? data : data.slice(0, 3))
           ?.filter((item) => item.itemName && item.itemName.trim() !== "")
           .map((item) => {
             const latestComment = latestCommentsByItem[item.id];

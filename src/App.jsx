@@ -19,6 +19,7 @@ import PunchListDetail from "./Components/Punchlist/Punchlistdestail";
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getMessaging, onMessage } from "firebase/messaging";
 import ProtectedRoute from "./Components/Private/ProtectedRoute";
+import ProjectDeliveryList from "./Components/Home/ProjectDelivery/ProjectDeliveryList";
 // Initialize Firebase App
 const firebaseConfig = {
   apiKey: "AIzaSyDblY3fqpz8K5KXDA3HacPUzHxBnZHT1o0",
@@ -143,6 +144,9 @@ function App() {
 
           <Route path="/orderInfo/:id" element={<ProtectedRoute><OrderInfo /></ProtectedRoute>} />
           <Route path="/punchlist-detail/:id" element={<ProtectedRoute><PunchListDetail /></ProtectedRoute>} />
+
+          <Route path="/project-delivery-list" element={<ProtectedRoute><ProjectDeliveryList /></ProtectedRoute>} />
+
 
         </Routes>
       </BrowserRouter>
