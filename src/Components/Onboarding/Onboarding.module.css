@@ -402,3 +402,11 @@
     padding: 12px;
     background: #fff;
 }
+
+
+@media screen and (min-device-width: 769px) and (max-device-width: 2561px) {
+    .OnboardingMain{
+      max-width: 600px;
+      margin: auto;
+    }
+  }

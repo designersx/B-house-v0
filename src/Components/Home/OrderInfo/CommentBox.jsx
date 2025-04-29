@@ -65,7 +65,7 @@ function CommentBox({ saman }) {
   }, [item]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container2}>
       <h4 className={styles.commentHistory}>Comments History</h4>
 
       <div className={styles.commentbox}>

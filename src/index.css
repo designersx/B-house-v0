@@ -69,12 +69,17 @@ body {
 } */
 
 .HeaderTop {
-  /* display: flex; */
   position: sticky;
   top: 0;
   z-index: 11;
   width: 100%;
 }
+/* .HeaderTop2 {
+  position: sticky;
+  top: 91px;
+  z-index: 11;
+  width: 100%;
+} */
 
 
 

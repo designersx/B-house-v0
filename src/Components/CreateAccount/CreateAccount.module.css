@@ -3,12 +3,18 @@
     position: relative;
 }
 
+.ImgDiv2 img {
+    display: none;
+
+}
+
+
 .logoContainer {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-   
+
 }
 
 /* Signin.module.css */
@@ -48,9 +54,11 @@
     margin-top: 10px;
     font-weight: bold;
 }
-.required{
+
+.required {
     color: #004680;
 }
+
 .input {
     padding: 10px;
     margin: 5px 0 15px;
@@ -70,19 +78,20 @@ input:focus {
     border: 1px solid #E0E5F2;
     border-radius: 20px;
     margin: 5px 0 15px;
- 
 
-  }
-  .textarea::placeholder {
+
+}
+
+.textarea::placeholder {
     font-family: "Montserrat", sans-serif;
-    color: #A3AED0; 
-  }
-  
-  .textarea:focus {
+    color: #A3AED0;
+}
+
+.textarea:focus {
     outline: none;
 
-  }
-  
+}
+
 
 
 .passwordContainer {
@@ -141,6 +150,7 @@ input:focus {
     margin-top: 1rem;
     min-height: 50px;
     font-family: "Montserrat", sans-serif;
+    font-size: 16px;
 }
 
 .footer {
@@ -158,10 +168,59 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px rgb(255, 255, 255) inset !important;
 }
+
 .error {
     color: red;
     font-size: 12px;
     margin-top: 4px;
     margin-bottom: 6px;
-  }
-  
+}
+.inputBoxDiv {
+ display: flex;
+ flex-direction: column;
+}
+
+@media screen and (min-device-width: 769px) and (max-device-width: 2561px) {
+    .signMain {
+        display: flex;
+        gap: 100px;
+
+    }
+
+    .ImgDiv2 img {
+        display: block;
+        width: 100%;
+        height: 100dvh;
+    }
+
+    .ImgDiv img {
+        display: none;
+    }
+
+    .logoContainer {
+        display: none;
+    }
+
+    .signPart {
+        width: 50%;
+        margin: auto;
+    }
+
+    .topBar {
+        width: 50%;
+    }
+
+    .FlexDiv {
+        display: flex;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .inputBoxDiv {
+        width: 50%;
+    }
+
+    .inputBoxDiv input {
+        width: 100%;
+    }
+}

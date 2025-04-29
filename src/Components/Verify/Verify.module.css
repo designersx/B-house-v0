@@ -91,14 +91,21 @@
 }
 
 .ContinueBtn {
-
   padding: 10px 30px;
   border-radius: 16px;
   background-color: #EEF7FF;
   width: 100%;
+  cursor: pointer;
 }
 
 .ContinueBtn p {
   color: #004680;
   font-weight: bold;
+}
+
+@media screen and (min-device-width: 769px) and (max-device-width: 2561px) {
+  .VerifyMain{
+    max-width: 600px;
+    margin: auto;
+  }
 }

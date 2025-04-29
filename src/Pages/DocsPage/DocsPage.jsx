@@ -10,31 +10,31 @@ const DocsPage = () => {
     return (
         <div>
 
-<div className="MobContent">
-             <div className="HeaderTop">
-             <HeaderTab title='Document' />
-             </div>
-            <Docs />
-            <Footer />
-        </div>
-
-        <div className="mainContent">
-                <div className="Web_Sidebar">
-                    <SideBar />
+            <div className="MobContent">
+                <div className="HeaderTop">
+                    <HeaderTab title='Document' />
                 </div>
+                <Docs />
+                <Footer />
+            </div>
 
-                <div className="Web_container">
-                    
 
-                    <div className="HeaderTop">
+            <div className="webContent">
+                <div className="HeaderTop">
                     <Header />
-
+                </div>
+                <div className="mainContent">
+                    <div className="Web_Sidebar">
+                        <SideBar />
                     </div>
-                   <Docs />
+
+                    <div className="Web_container">
+                        <Docs />
+                    </div>
+
                 </div>
 
             </div>
-
         </div>
     )
 }
