@@ -16,28 +16,29 @@
 // export const  app = initializeApp(firebaseConfig);
 // // Initialize Firebase Cloud Messaging and get a reference to the service
 // export const messaging = getMessaging(app);
-// firebase.js
-// import { initializeApp, getApps, getApp } from "firebase/app";
-// import { getMessaging, isSupported } from "firebase/messaging";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDblY3fqpz8K5KXDA3HacPUzHxBnZHT1o0",
-//   authDomain: "bhouse-dc970.firebaseapp.com",
-//   projectId: "bhouse-dc970",
-//   storageBucket: "bhouse-dc970.firebasestorage.app",
-//   messagingSenderId: "577116029205",
-//   appId: "1:577116029205:web:659adeb7405b59ad21691c",
-//   measurementId: "G-RFFMNTE7XQ"
-// };
 
-// const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getMessaging } from "firebase/messaging";
 
-// let messagingPromise = isSupported().then((supported) => {
-//   if (supported) {
-//     return getMessaging(app);
-//   } else {
-//     return null;
-//   }
-// });
+const firebaseConfig = {
+  apiKey: "AIzaSyDblY3fqpz8K5KXDA3HacPUzHxBnZHT1o0",
+  authDomain: "bhouse-dc970.firebaseapp.com",
+  projectId: "bhouse-dc970",
+  storageBucket: "bhouse-dc970.firebasestorage.app",
+  messagingSenderId: "577116029205",
+  appId: "1:577116029205:web:659adeb7405b59ad21691c",
+  measurementId: "G-RFFMNTE7XQ"
+};
 
-// export { app, messagingPromise };
+// Initialize Firebase
+export const app = initializeApp(firebaseConfig);
+
+// Function to check if the device is iOS
+const isIOS = () => {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+};
+
+// Conditionally initialize messaging
+export const messaging = !isIOS() ? getMessaging(app) : null;

@@ -4,7 +4,7 @@ import styles from "../Sign/Sign.module.css";
 import axios from "axios";
 import URL from "../../config/api";
 import { getFcmToken } from "../../../src/firebase/getFCMToken/getToken";
-// import { sendFcmToken } from "../../../src/firebase/sendFcmTokenToDb/sendFcmToDb";
+import { sendFcmToken } from "../../../src/firebase/sendFcmTokenToDb/sendFcmToDb";
 import Loader from "../Loader/Loader";
 const Sign = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ const Sign = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
@@ -32,33 +32,33 @@ const Sign = () => {
         email,
         password,
       });
-      const { token, firstLogin, customer} = response.data;
+      const { token, firstLogin, customer } = response.data;
       localStorage.setItem("customerToken", token);
       localStorage.setItem("customerInfo", JSON.stringify(customer));
       if (rememberMe) {
         localStorage.setItem("savedEmail", email);
         localStorage.setItem("savedPassword", password);
         //save Fcm
-        // const FCM_Token = await getFcmToken();
-        
-        // await sendFcmToken(FCM_Token,customer.id)
+        const FCM_Token = await getFcmToken();
+
+        await sendFcmToken(FCM_Token, customer.id)
         setLoading(false)
       } else {
         localStorage.removeItem("savedEmail");
         localStorage.removeItem("savedPassword");
         //save Fcm
-        // const FCM_Token = await getFcmToken();
-        // await sendFcmToken(FCM_Token,customer.id)
+        const FCM_Token = await getFcmToken();
+        await sendFcmToken(FCM_Token, customer.id)
         setLoading(false)
       }
       if (firstLogin) {
         setLoading(false)
         navigate("/reset");
-        
+
       } else {
         setLoading(false)
         navigate("/home");
-        
+
       }
     } catch (err) {
       setLoading(false)
@@ -69,14 +69,14 @@ const Sign = () => {
 
   return (
     <div className={styles.signMain}>
-         <div className="HeaderTop">
-      <div className={styles.ImgDiv}>
-        <img src="Images/Home-img.png" alt="" />
-      </div>
-    
-      <div className={styles.logoContainer}>
-        <img src="Svg/b-houseLogo.svg" alt="" />
-      </div>
+      <div className="HeaderTop">
+        <div className={styles.ImgDiv}>
+          <img src="Images/Home-img.png" alt="" />
+        </div>
+
+        <div className={styles.logoContainer}>
+          <img src="Svg/b-houseLogo.svg" alt="" />
+        </div>
       </div>
       <div className={styles.signPart}>
         <h2 className={styles.heading}>Sign In</h2>
@@ -137,8 +137,8 @@ const Sign = () => {
           </div>
 
           <button type="submit" className={styles.signInButton}>
-            {loading? <Loader size={20}/>: "Sign In"}
-            
+            {loading ? <Loader size={20} /> : "Sign In"}
+
           </button>
         </form>
         <p className={styles.registerText}>
