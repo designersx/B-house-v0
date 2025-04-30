@@ -35,6 +35,8 @@ function Docs() {
   const [selectedDocId, setSelectedDocId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDocTitle, setSelectedDocTitle] = useState('');
+  const [unreadCounts, setUnreadCounts] = useState({});
+  const [totalDocs, setTotalDocs] = useState(0);
   const location = useLocation();
   const message = location.state?.message;
   const navigate = useNavigate()
@@ -89,12 +91,17 @@ function Docs() {
       fileInputRef.current.click();
     }
   };
-  
-
-  const openCommentModal = (docId, docTitle) => {
-    setSelectedDocId(docId);
-    setSelectedDocTitle(docTitle);
-    setIsModalOpen(true);
+  const openCommentModal = async (docId, docTitle) => {
+    try {
+      const documentId = docId
+      setSelectedDocId(docId);
+      setSelectedDocTitle(docTitle);
+      setIsModalOpen(true);
+      await axios.put(`${URL}/customerDoc/updateCommentsIsReadByDocumentId/${documentId}`);
+      fetchUnreadCountsForAllDocs()
+    } catch (err) {
+      console.error('Failed to mark comments as read:', err);
+    }
   };
   const closeCommentModal = () => {
     setSelectedDocId(null);
@@ -128,7 +135,7 @@ function Docs() {
         setTimeout(() => {
           navigate(location.pathname, { replace: true });
         }, 1000);
-      
+
       }
 
 
@@ -145,39 +152,86 @@ function Docs() {
     fetchDocs();
   }, []);
   const tabRefs = useRef([]);
+  const fetchUnreadCountsForAllDocs = async () => {
+    const customer = JSON.parse(localStorage.getItem('customerInfo'));
+    const customerId = customer?.id;
+
+    if (!customerId || !docsData.length) return;
+
+    const counts = {};
+
+    await Promise.all(
+      docsData.map(async (doc) => {
+        try {
+          const res = await axios.get(`${URL}/customerDoc/comments/${doc.id}?customerId=${customerId}`);
+          const unreadComments = res.data.filter(comment => comment.isRead === false);
+          counts[doc.id] = unreadComments.length || 0;
+        } catch (err) {
+          console.error(`Error fetching comments for doc ID ${doc.id}`, err);
+        }
+      })
+    );
+
+    setUnreadCounts(counts);
+  };
+  useEffect(() => {
+    fetchUnreadCountsForAllDocs();
+  }, [docsData]);
+
+  // Decrease count when a comment is viewed
+  const handleCommentViewed = (docId) => {
+    setUnreadCounts(prev => ({
+      ...prev,
+      [docId]: prev[docId] > 0 ? prev[docId] - 1 : 0
+    }));
+  };
+
   return (
     <div className={styles.container}>
-      
-  <input
-    type="file"
-    ref={fileInputRef}
-    style={{ display: 'none' }}
-    onChange={handleFileChange}
-  />
-         {isLoading && (
-      <div className={styles.loaderOverlay}>
-        <Loader />
-      </div>
-    )}
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
+      {isLoading && (
+        <div className={styles.loaderOverlay}>
+          <Loader />
+        </div>
+      )}
       <h2 className={styles.heading}>List of Docs</h2>
 
       {showPopup && !isLoading && (
         <PopUp type="success" message="File has been uploaded" />
       )}
 
-<div className={styles.tabs}>
-  {[customerName, 'B-HOUSE DOCS'].map((tab, index) => (
-    <button
-      key={tab}
-      ref={el => tabRefs.current[index] = el}
-      className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
-      onClick={() => setActiveTab(tab)}
-    >
-      {tab}
-    </button>
-  ))}
-  <div className={styles.tabIndicator} style={{ left: activeTab === customerName ? '0%' : '50%' }} />
-</div>
+      <div className={styles.tabs}>
+
+
+
+        {[customerName, 'B-HOUSE DOCS'].map((tab, index) => {
+          const isCustomerTab = tab === customerName
+          const unreadCount = Object.values(unreadCounts).reduce((acc, count) => acc + count, 0);
+          return (
+            <>  <button
+              key={tab}
+              ref={el => tabRefs.current[index] = el}
+              className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+              {/* {isCustomerTab && unreadCount > 0 && (
+                <span style={{ marginLeft: '6px', color: 'red', fontWeight: 'bold' }}>
+                  ({unreadCount})
+                </span>
+              )} */}
+            </button>    </>
+          )
+
+        })}
+        <div className={styles.tabIndicator} style={{ left: activeTab === customerName ? '0%' : '50%' }} />
+      </div>
 
 
       {activeTab === customerName ? (
@@ -192,7 +246,7 @@ function Docs() {
                   <div className={styles.icon}>
                     <img src={iconSrc} alt="icon" />
                   </div>
-                  <span  className={styles.docTitle}>{doc}</span>
+                  <span className={styles.docTitle}>{doc}</span>
                 </div>
 
                 <div className={styles.rightSection}>
@@ -213,8 +267,14 @@ function Docs() {
                       >
                         Comment
                       </p>
+                      {unreadCounts[foundDoc.id] > 0 && (
+                        <span style={{ marginLeft: '6px', color: 'red', fontWeight: 'bold' }}>
+                          ({unreadCounts[foundDoc.id]})
+                        </span>
+                      )}
                     </div>
                   )}
+
                 </div>
               </div>
             );
@@ -226,7 +286,7 @@ function Docs() {
 
       ) : (
         <div className={styles.bHouseContent}>
-          <Docs2 data={docsData} />
+          <Docs2 onTotalDocsChange={setTotalDocs} data={docsData} />
         </div>
       )}
 
@@ -251,6 +311,8 @@ function Docs() {
             documentId={selectedDocId}
             customerId={JSON.parse(localStorage.getItem('customerId'))}
             onClose={closeCommentModal}
+            onView={handleCommentViewed}
+
           />
         </Modal>
       )}
