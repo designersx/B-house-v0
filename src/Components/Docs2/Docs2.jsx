@@ -6,16 +6,15 @@ import URL from '../../config/api';
 import axios from 'axios';
 import Loader from '../Loader/Loader';
 import { useLocation, useNavigate } from 'react-router-dom';
-const Docs2 = () => {
-    
+const Docs2 = ({ onTotalDocsChange }) => {
     const [newComment, setNewComment] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDoc, setSelectedDoc] = useState(null);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(false)
-
+    const [commentCounts, setCommentCounts] = useState({});
     const location = useLocation();
-
+    const bottomRef = useRef(null);
     const message = location.state?.message;
     const navigate = useNavigate()
 
@@ -42,9 +41,6 @@ const Docs2 = () => {
         if (windowsPath.startsWith("/")) {
             windowsPath = windowsPath.substring(1);
         }
-        // windowsPath = windowsPath.replace(/\//g, '\\');
-
-
         const titleToCategory = {
             'Detailed Proposal': 'proposals',
             'Options Presentation': 'presentation',
@@ -90,6 +86,7 @@ const Docs2 = () => {
                 receivingReports: JSON.parse(project.receivingReports || '[]'),
 
             });
+            fetchAllComments(project)
         } catch (err) {
             console.error('Failed to fetch project:', err);
         }
@@ -98,17 +95,10 @@ const Docs2 = () => {
     const fetchComments = async (fileUrl) => {
         if (!fileUrl) return;
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
-
-
-
-
-
         let filePath = fileUrl;
         if (filePath.startsWith("/")) {
             filePath = filePath.substring(1);
         }
-
-
         try {
             const res = await axios.get(`${URL}/projects/${projectId}/file-comments`,
                 {
@@ -120,7 +110,52 @@ const Docs2 = () => {
             console.error('Failed to fetch comments:', err);
         }
     };
+    const fetchAllComments = async (project) => {
+        const allFileFields = [
+            'proposals',
+            'floorPlans',
+            'cad',
+            'salesAggrement',
+            'presentation',
+            'otherDocuments',
+            'acknowledgements',
+            'receivingReports'
+        ];
 
+        const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
+        const newCommentCounts = {};
+
+        for (const field of allFileFields) {
+            const files = JSON.parse(project[field] || '[]');
+
+            for (const file of files) {
+                let filePath = file.url || file.filePath || file; // adjust based on your file object structure
+
+                if (filePath.startsWith("/")) {
+                    filePath = filePath.substring(1);
+                }
+
+                try {
+                    const res = await axios.get(`${URL}/projects/${projectId}/file-comments`, {
+                        params: { filePath }
+                    });
+
+                    // Filter comments where isRead is false
+                    const unreadComments = res.data.filter(comment => comment.isRead === false);
+
+
+
+                    newCommentCounts[filePath] = res.data.length || 0;
+                } catch (err) {
+                    console.error(`Failed to fetch comments for ${filePath}:`, err);
+                    newCommentCounts[filePath] = 0;
+                }
+            }
+        }
+
+        setCommentCounts(newCommentCounts);
+
+    };
     useEffect(() => {
         fetchProject();
     }, []);
@@ -139,9 +174,6 @@ const Docs2 = () => {
         setSelectedDoc(null);
         setComments([]);
     };
-
-
-
     const docList = [
         {
             title: 'Detailed Proposal',
@@ -185,7 +217,6 @@ const Docs2 = () => {
         }
 
     ];
-    const bottomRef = useRef(null);
     useEffect(() => {
         if (bottomRef.current) {
             bottomRef.current.scrollIntoView({ behavior: "smooth" });
@@ -233,6 +264,49 @@ const Docs2 = () => {
         }
     }, [message]);
 
+    const handleDownload = async () => {
+        if (!selectedDoc || !selectedDoc.fileUrl) {
+            console.error('No file URL available for download.');
+            return;
+        }
+
+        try {
+            const fileUrl = `${url2}${selectedDoc.fileUrl}`;
+            const response = await fetch(fileUrl);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob); // ✅ use window.URL
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'CadFile.pdf'); // or a dynamic name
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url); // ✅ Clean up
+
+        } catch (error) {
+            console.error('Failed to download PDF:', error);
+        }
+    };
+    const totalComments = docList.reduce((total, doc) => {
+        const comments = doc.comments || []; // Fallback to an empty array if comments is undefined
+        return total + comments.length;
+    }, 0);
+
+    useEffect(() => {
+        if (onTotalDocsChange) {
+            onTotalDocsChange(totalComments);
+        }
+    }, [totalComments, onTotalDocsChange]);
+
+
+
+
 
     return (
         <div>
@@ -253,6 +327,9 @@ const Docs2 = () => {
                             >
                                 <img src="Svg/edit-icon.svg" alt="comment" />
                                 <p>Comment</p>
+                                {commentCounts[doc.fileUrl?.replace(/^\//, '')] > 0 && (
+                                    <span className={styles.commentCount} style={{ marginLeft: '6px', color: 'red', fontWeight: 'bold' }}> ({commentCounts[doc.fileUrl.replace(/^\//, '')]})</span>
+                                )}
                             </div>
                         ) : (
                             <div className={styles.noFile}>
@@ -277,11 +354,12 @@ const Docs2 = () => {
                                 <>
                                     {/* <img src="Svg/pdf.svg" alt="PDF" /> */}
 
-                                    <iframe
+                                    {selectedDoc?.title == "CAD File" ? "No Preview" : <iframe
                                         height="400px"
                                         width="100%"
-                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />
-                                    {/* <div onClick={handleDoc}>View PDF</div> */}
+                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />}
+
+                                    &nbsp;   &nbsp;   {selectedDoc?.title == "CAD File" && <button onClick={handleDownload} className={styles.noPreviewDownloadButton} >Download</button>}
 
                                 </>
                             ) : (
