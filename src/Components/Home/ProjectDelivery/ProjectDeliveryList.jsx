@@ -126,7 +126,7 @@ function ProjectDeliveryList() {
         title="Lead Time Matrix"
         onStatusFilterChange={setStatusFilters}
         onSearchTermChange={setSearchTerm}
-        statusOptions={["Installed", "Delivered", "Pending", "In Transit"]}
+        statusOptions={["Installed", "Delivered", "Pending", "In Transit","Arrived"]}
       />
      
 
