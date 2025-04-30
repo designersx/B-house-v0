@@ -30,35 +30,52 @@ const Verify = () => {
       const finalOtp = otp.join('');
       if (finalOtp.length !== 6 || !newPassword) {
         setError('Please enter a valid OTP and password');
+        setResendMsg('');
+        setSuccessMsg('');
         return;
       }
-
+  
+      setError('');
+      setResendMsg('');
       const response = await axios.post(`${URL}/customer/reset-password-otp`, {
         email,
         otp: finalOtp,
         newPassword,
       });
-      
+  
       setSuccessMsg(response.data.message || "Password reset successful!");
       setTimeout(() => {
         navigate('/');
       }, 1500);
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong.');
+      setSuccessMsg('');
+      setResendMsg('');
     }
   };
+  
 
   const handleResendOTP = async () => {
     try {
-      if (!email) return setError("Email not found in session");
-
+      if (!email) {
+        setError("Email not found in session");
+        setResendMsg('');
+        setSuccessMsg('');
+        return;
+      }
+  
       await axios.post(`${URL}/customer/forgot-password`, { email });
       setResendMsg("OTP resent to your email.");
+      setError('');
+      setSuccessMsg('');
       setTimeout(() => setResendMsg(''), 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to resend OTP.");
+      setResendMsg('');
+      setSuccessMsg('');
     }
   };
+  
 
   return (
     <div className={styles.VerifyMain}>
