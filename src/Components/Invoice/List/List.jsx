@@ -82,7 +82,7 @@ const List = ({ statusFilters, searchTerm = "" }) => {
       filtered = filtered.filter((invoice, index) => {
         const displayInvoiceNumber = invoice.invoiceNumber
           ? invoice.invoiceNumber.toLowerCase()
-          : `invoice ${index + 1}`.toLowerCase();  // 👉 Custom frontend name matching
+          : `invoice ${index + 1}`.toLowerCase(); 
   
         return displayInvoiceNumber.includes(searchTerm.toLowerCase());
       });
@@ -156,12 +156,24 @@ const List = ({ statusFilters, searchTerm = "" }) => {
         ) : (
           filteredInvoices.map((invoice, index) => (
             <div key={invoice.id} className={styles.transactionItem}>
-              <img
-                src="Svg/pdf-icon.svg"
-                alt="pdf-icon"
-                className={styles.image}
-                onClick={() => handleOpenFile(invoice.invoiceFilePath)}
-              />
+              {invoice.invoiceFilePath ? (
+  <img
+    src="Svg/pdf-icon.svg"
+    alt="PDF Icon"
+    className={styles.image}
+    onClick={() => handleOpenFile(invoice.invoiceFilePath)}
+  />
+) : (
+  <div className={styles.noFileBox}>
+    <img
+      src="Svg/remove-file-svgrepo-com.svg"
+      alt="No File"
+      className={styles.noFileImage}
+    />
+    <p className={styles.noFileText}>No File</p>
+  </div>
+)}
+
               <div className={styles.details}>
                 <p className={styles.title}>{`Invoice ${index + 1}`}</p>
                 <div className={styles.track}>

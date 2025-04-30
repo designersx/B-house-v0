@@ -3,7 +3,7 @@ import styles from "../HeaderTab/HeaderTab.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
 // import SearchModalInvoice from "../ModalSearch/SearchModalInvoice";   
 import SearchModalPunchlist from "../ModalSearch/SearchModalPunchlist"; 
-import SearchModalProjectDelivery from "../ModalSearch/SearchModalProjectDelivery";  // 🔥 (new - you may create it if needed)
+import SearchModalProjectDelivery from "../ModalSearch/SearchModalProjectDelivery";  
 import OffCanvas from "../OffCanvas/OffCanvas";
 
 const HeaderTab = ({
@@ -34,7 +34,7 @@ const HeaderTab = ({
     if (location.pathname.includes("punchlist-detail")) {
       navigate("/home", { replace: true });
     } else {
-      navigate(-1);
+      navigate("/home",)
     }
   };
 
