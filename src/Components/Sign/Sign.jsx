@@ -6,14 +6,17 @@ import URL from "../../config/api";
 import { getFcmToken } from "../../../src/firebase/getFCMToken/getToken";
 import { sendFcmToken } from "../../../src/firebase/sendFcmTokenToDb/sendFcmToDb";
 import Loader from "../Loader/Loader";
+
 const Sign = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+
   const navigate = useNavigate();
+
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
     const savedPassword = localStorage.getItem("savedPassword");
@@ -24,54 +27,65 @@ const Sign = () => {
     }
   }, []);
 
+  const validate = () => {
+    const errors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email.trim()) {
+      errors.email = "Email is required.";
+    } else if (!emailRegex.test(email)) {
+      errors.email = "Please enter a valid email.";
+    }
+
+    if (!password) {
+      errors.password = "Password is required.";
+    } else if (password.length < 6) {
+      errors.password = "Password must be at least 6 characters.";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSignIn = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
+
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.post(`${URL}/customer/login`, {
         email,
         password,
       });
+
       const { token, firstLogin, customer } = response.data;
       localStorage.setItem("customerToken", token);
       localStorage.setItem("customerInfo", JSON.stringify(customer));
+
       if (rememberMe) {
         localStorage.setItem("savedEmail", email);
         localStorage.setItem("savedPassword", password);
-        //save Fcm
-
-        const FCM_Token = await getFcmToken();
-        console.log(FCM_Token, "FCM_Token")
-        await sendFcmToken(FCM_Token, customer.id)
-
-        setLoading(false)
       } else {
         localStorage.removeItem("savedEmail");
         localStorage.removeItem("savedPassword");
-        //save Fcm
-        const FCM_Token = await getFcmToken();
-        console.log(FCM_Token, "FCM_Token")
-        await sendFcmToken(FCM_Token, customer.id)
-        setLoading(false)
       }
-      if (firstLogin) {
-        setLoading(false)
-        navigate("/reset");
 
-      } else {
-        setLoading(false)
-        navigate("/home");
+      const FCM_Token = await getFcmToken();
+      await sendFcmToken(FCM_Token, customer.id);
 
-      }
+      setLoading(false);
+
+      navigate(firstLogin ? "/reset" : "/home");
     } catch (err) {
-      setLoading(false)
-      console.error("Login error:", err);
-      setError(err.response?.data?.message || "Login failed");
+      setLoading(false);
+      setFormErrors({
+        general: err.response?.data?.message || "Login failed. Try again.",
+      });
     }
   };
+
   return (
     <div className={styles.signMain}>
-
       <div className={`HeaderTop ${styles.topBar}`}>
         <div className={styles.ImgDiv}>
           <img src="Images/Home-img.png" alt="" />
@@ -79,16 +93,17 @@ const Sign = () => {
         <div className={styles.ImgDiv2}>
           <img src="Images/Desktop-home-img.png" alt="" />
         </div>
-
         <div className={styles.logoContainer}>
           <img src="Svg/b-houseLogo.svg" alt="" />
         </div>
       </div>
+
       <div className={styles.signPart}>
         <h2 className={styles.heading}>Sign In</h2>
         <p className={styles.subtext}>
           Enter your email and password to sign in!
         </p>
+
         <form className={styles.form} onSubmit={handleSignIn}>
           <label>Email<span className={styles.required}>*</span></label>
           <input
@@ -97,7 +112,11 @@ const Sign = () => {
             className={styles.input}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onBlur={validate}
           />
+          {formErrors.email && (
+            <p className={styles.errorMessage}>{formErrors.email}</p>
+          )}
 
           <label>Password<span className={styles.required}>*</span></label>
           <div className={styles.passwordContainer}>
@@ -107,6 +126,7 @@ const Sign = () => {
               className={styles.inputPassword}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onBlur={validate}
             />
             <p
               className={styles.eyeIcon}
@@ -115,12 +135,17 @@ const Sign = () => {
             >
               <img
                 src={showPassword ? "Svg/eye.svg" : "Svg/eye-close.svg"}
-                alt=""
+                alt="Toggle visibility"
               />
             </p>
           </div>
+          {formErrors.password && (
+            <p className={styles.errorMessage}>{formErrors.password}</p>
+          )}
 
-          {error && <p className={styles.errorMessage}>{error}</p>}
+          {formErrors.general && (
+            <p className={styles.errorMessage}>{formErrors.general}</p>
+          )}
 
           <div className={styles.options}>
             <div className={styles.checkBoxDiv}>
@@ -144,9 +169,9 @@ const Sign = () => {
 
           <button type="submit" className={styles.signInButton}>
             {loading ? <Loader size={20} /> : "Sign In"}
-
           </button>
         </form>
+
         <p className={styles.registerText}>
           Not registered yet?{" "}
           <a
@@ -156,8 +181,9 @@ const Sign = () => {
             Request to Create an Account
           </a>
         </p>
+
         <footer className={styles.footer}>
-          &copy; 2025 Bhouse. All rights reserved for the use of terms related to Bhouse.
+          &copy; 2025 Bhouse. All rights reserved.
         </footer>
       </div>
     </div>

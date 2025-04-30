@@ -13,7 +13,7 @@ const InvoicePage = () => {
     const [totalCost, setTotalCost] = useState();
     const [totalPaidAmount, setTotalPaidAmount] = useState(0);
     const [remaining, setRemaining] = useState(0);
-    const [searchTerm, setSearchTerm] = useState("");  // 🔥 New for search
+    const [searchTerm, setSearchTerm] = useState("");  
     const projectId = localStorage.getItem('selectedProjectId');
 
     const [statusFilters, setStatusFilters] = useState({
@@ -87,7 +87,7 @@ const InvoicePage = () => {
                         title="Invoice List"
                         onStatusFilterChange={setStatusFilters}
                         statusOptions={["Paid", "Pending", "Partly Paid"]}
-                        onSearchTermChange={setSearchTerm} // 🔥 Pass setter
+                        onSearchTermChange={setSearchTerm}  
                     />
                 </div>
                 {!totalCost ? (

@@ -3,8 +3,9 @@ import styles from '../CommentThread/CommentThread.module.css';
 import axios from 'axios';
 import URL from '../../config/api';
 import Loader from '../Loader/Loader'
-const Comments = ({ documentId }) => {
+const Comments = ({ documentId ,onView  }) => {
   const [comments, setComments] = useState([]);
+  const [viewed, setViewed] = useState(false);
   const [commentInput, setCommentInput] = useState('');
   const customerInfo = JSON.parse(localStorage.getItem('customerInfo'));
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -58,7 +59,13 @@ const Comments = ({ documentId }) => {
   useEffect(() => {
     scrollToBottom();
   }, [comments]);
-   console.log({comments})
+  useEffect(() => {
+    if (comments.length > 0 && !viewed) {
+      onView(documentId);  // Pass the ID
+      setViewed(true);
+    }
+  }, [comments, viewed, onView, documentId]);
+  
   return (
     <div className={styles.threadContainer}>
       <div className={styles.header}>

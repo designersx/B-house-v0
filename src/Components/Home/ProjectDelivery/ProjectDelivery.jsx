@@ -1,41 +1,33 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ProjectDelivery.module.css";
-import { Link, useNavigate } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom";
 
 import URL from "../../../config/api";
 import axios from "axios";
 import { url2 } from "../../../config/url";
-// vf
-const progressColor = {
-  Installed: {
-    progressWidth: "100%",
-    progressColor: "Green",
-    statusColor: "LinearGreen",
-  },
-  Delivered: {
-    progressColor: "#FEAD37",
-    statusColor: "FEAD37",
-    progressWidth: "50%",
-  },
-  Pending: {
-    statusColor: "#FF5E00",
-    progressColor: "#FF5E00",
-    progressWidth: "25%",
-  },
-  In_Transit: {
-    progressColor: "#6C35B1",
-    statusColor: "LinearGreen",
-    progressWidth: "60%",
-  },
-};
-
 
 function ProjectDelivery({ selectedProject }) {
   const [showAll, setShowAll] = useState(false);
   const [data, setData] = useState([]);
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
+  const [lastNotificationTime, setLastNotificationTime] = useState(null);
+  useEffect(() => {
+    const fetchLastNotificationTime = async () => {
+      const projectId = localStorage.getItem("selectedProjectId");
+      if (!projectId) return;
+  
+      try {
+        const res = await axios.get(`${URL}/projects/${projectId}`);
+        setLastNotificationTime(res.data?.lastNotificationSentAt || null);
+      } catch (err) {
+        console.error("Failed to fetch project info:", err);
+      }
+    };
+  
+    fetchLastNotificationTime();
+  }, []);
   // const location = useLocation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const handleViewAll = () => {
     navigate("/project-delivery-list", { state: { items: data } });
   };
@@ -50,6 +42,37 @@ function ProjectDelivery({ selectedProject }) {
     } catch (error) {
       console.log("Error fetching items:", error);
     }
+  };
+  const calculateDateProgress = (etd, eta, status, tbd) => {
+    if (status === "Installed") {
+      return { width: "100%", color: "green" };
+    }
+
+    if (tbd || !etd || !eta) return null;
+
+    const etdDate = new Date(etd);
+    const etaDate = new Date(eta);
+    const today = new Date();
+
+    const isSameDay = etdDate.toDateString() === etaDate.toDateString();
+    if (isSameDay) {
+      return { width: "100%", color: "green" };
+    }
+
+    const totalDuration = etaDate - etdDate;
+    const elapsed = today - etdDate;
+
+    if (totalDuration <= 0) return { width: "0%", color: "#4a90e2" };
+
+    let percent = (elapsed / totalDuration) * 100;
+    percent = Math.max(1, Math.min(100, percent));
+
+    const color = percent >= 100 ? "green" : "#4a90e2";
+
+    return {
+      width: `${percent.toFixed(2)}%`,
+      color,
+    };
   };
 
   const fetchComments = async () => {
@@ -120,27 +143,51 @@ function ProjectDelivery({ selectedProject }) {
     }
   }
 
+  const formatDate = (date) => {
+    const options = {
+      weekday: 'long', // "Monday"
+      day: 'numeric',  // "25"
+      month: 'long',   // "April"
+      year: 'numeric', // "2025"
+    };
+  
+    return new Date(date).toLocaleDateString('en-GB', options); 
+  };
+  
   return (
     <div>
       <div className={styles.DeliveryUpdate}>
-        <h4>Project Delivery Update</h4>
-        <button
-  className={styles.button}
-  onClick={handleViewAll}
->
-  View All
-</button>
+        <h4>Lead Time Matrix</h4>
+        <button className={styles.button} onClick={handleViewAll}>
+          View All
+        </button>
+      </div>
+      <div className={styles.dlDate}>
+      {lastNotificationTime && (
+  <p className={styles.lastUpdatedTime}>
+  Last Updated:{" "}
+  {lastNotificationTime && !isNaN(new Date(lastNotificationTime))
+    ? formatDate(lastNotificationTime)
+    : "Not Updated"}
+</p>
+
+)}
 
       </div>
-      {/* <div className={styles.dlDate}>
-        <p>2025-04-11</p>
-      </div> */}
 
       <div className={styles.Container}>
         {(showAll ? data : data.slice(0, 3))
           ?.filter((item) => item.itemName && item.itemName.trim() !== "")
           .map((item) => {
             const latestComment = latestCommentsByItem[item.id];
+
+            // ✅ Calculate progress at the top
+            const progress = calculateDateProgress(
+              item.expectedDeliveryDate,
+              item.expectedArrivalDate,
+              item.status,
+              item.tbd
+            );
 
             return (
               <Link
@@ -156,18 +203,14 @@ function ProjectDelivery({ selectedProject }) {
                     <span
                       className={styles.orderStatus}
                       style={{
-                        color:
-                          progressColor[item.status]?.progressColor ||
-                          progressColor["In_Transit"].progressColor,
+                        color: progress?.color || "#6C35B1",
                       }}
                     >
                       {item.status}
                       <span
                         className={styles.LineColor}
                         style={{
-                          backgroundColor:
-                            progressColor[item.status]?.progressColor ||
-                            progressColor["In_Transit"].progressColor,
+                          backgroundColor: progress?.color || "#6C35B1",
                         }}
                       ></span>
                     </span>
@@ -175,14 +218,12 @@ function ProjectDelivery({ selectedProject }) {
 
                   {/* ETD & ETA */}
                   {item.expectedDeliveryDate ? (
-                    <>
-                      <p className={styles.orderDetails}>
-                        <strong>ETD :</strong>{" "}
-                        {item.expectedDeliveryDate?.slice(0, 10)} |{" "}
-                        <strong>ETA :</strong>{" "}
-                        {item.expectedArrivalDate?.slice(0, 10)}
-                      </p>
-                    </>
+                    <p className={styles.orderDetails}>
+                      <strong>ETD :</strong>{" "}
+                      {item.expectedDeliveryDate?.slice(0, 10)} |{" "}
+                      <strong>ETA :</strong>{" "}
+                      {item.expectedArrivalDate?.slice(0, 10)}
+                    </p>
                   ) : (
                     "TBD"
                   )}
@@ -211,10 +252,6 @@ function ProjectDelivery({ selectedProject }) {
 
                   {/* Footer */}
                   <div className={styles.orderFooter}>
-                    <span className={styles.TimeFlex}>
-                      {/* <img src="/Svg/TimeIcon.svg" alt="Time" />
-                      {formatTime(item?.createdAt)} */}
-                    </span>
                     <button className={styles.addComment}>
                       <img src="/Svg/CommentIcon.svg" alt="Comment" />
                       Add Comment
@@ -222,19 +259,26 @@ function ProjectDelivery({ selectedProject }) {
                   </div>
 
                   {/* Progress Bar */}
-                  <div className={styles.progressBar}>
-                    <div
-                      className={styles.progress}
-                      style={{
-                        width:
-                          progressColor[item.status]?.progressWidth ||
-                          progressColor["In_Transit"].progressWidth,
-                        backgroundColor:
-                          progressColor[item.status]?.progressColor ||
-                          progressColor["In_Transit"].progressColor,
-                      }}
-                    ></div>
-                  </div>
+                  {item.tbd ? (
+                    <p className={styles.tbdText}>Delivery dates TBD</p>
+                  ) : (
+                    progress && (
+                      <div className={styles.progressBarContainer}>
+                        <div className={styles.progressBar}>
+                          <div
+                            className={styles.progress}
+                            style={{
+                              width: progress.width,
+                              backgroundColor: progress.color,
+                            }}
+                          ></div>
+                        </div>
+                        {/* <span className={styles.progressLabel}>
+                  {parseFloat(progress.width).toFixed(0)}%
+                </span> */}
+                      </div>
+                    )
+                  )}
                 </div>
               </Link>
             );

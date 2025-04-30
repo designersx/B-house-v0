@@ -6,29 +6,6 @@ import URL from "../../../config/api";
 import axios from "axios";
 import HeaderTab from "../../HeaderTab/HeaderTab";
 
-const progressColor = {
-  Installed: {
-    progressWidth: "100%",
-    progressColor: "Green",
-    statusColor: "LinearGreen",
-  },
-  Delivered: {
-    progressWidth: "50%",
-    progressColor: "#FEAD37",
-    statusColor: "FEAD37",
-  },
-  Pending: {
-    progressWidth: "25%",
-    progressColor: "#FF5E00",
-    statusColor: "#FF5E00",
-  },
-  "In Transit": {
-    progressWidth: "60%",
-    progressColor: "#6C35B1",
-    statusColor: "LinearGreen",
-  },
-};
-
 function ProjectDeliveryList() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,7 +13,8 @@ function ProjectDeliveryList() {
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
   const [statusFilters, setStatusFilters] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
-
+ 
+  
   const fetchComments = async () => {
     try {
       const latestComments = {};
@@ -71,11 +49,45 @@ function ProjectDeliveryList() {
     }
   }, [data]);
 
+  const calculateDateProgress = (etd, eta, status, tbd) => {
+    if (status === "Installed") {
+      return { width: "100%", color: "green" };
+    }
+
+    if (tbd || !etd || !eta) return null;
+
+    const etdDate = new Date(etd);
+    const etaDate = new Date(eta);
+    const today = new Date();
+
+    // If ETD and ETA are same day
+    const isSameDay = etdDate.toDateString() === etaDate.toDateString();
+    if (isSameDay) {
+      return { width: "100%", color: "green" };
+    }
+
+    const totalDuration = etaDate - etdDate;
+    const elapsed = today - etdDate;
+
+    if (totalDuration <= 0) return { width: "0%", color: "#4a90e2" };
+
+    let percent = (elapsed / totalDuration) * 100;
+    percent = Math.max(1, Math.min(100, percent));
+
+    // Make fully completed progress bar green
+    const color = percent >= 100 ? "green" : "#4a90e2";
+
+    return {
+      width: `${percent.toFixed(2)}%`,
+      color,
+    };
+  };
+
   const handleItemClick = (item) => {
     navigate(`/orderInfo/${item.id}`, { state: { item } });
   };
 
-  function formatTime(dateString) {
+  const formatTime = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
     const diff = now - date;
@@ -94,9 +106,8 @@ function ProjectDeliveryList() {
         year: "numeric",
       });
     }
-  }
+  };
 
-  // ✅ Apply Filtering (Search + Status both)
   const filteredData = data
     .filter((item) => {
       const activeStatuses = Object.keys(statusFilters).filter(
@@ -108,25 +119,17 @@ function ProjectDeliveryList() {
     .filter((item) =>
       item.itemName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  const getProgressColor = (status) => {
-    return (
-      progressColor[status] || {
-        progressWidth: "0%",
-        progressColor: "#ccc",
-        statusColor: "#ccc",
-      }
-    );
-  };
 
   return (
     <div className={styles.Container}>
-      {/* ✅ HeaderTab added here */}
       <HeaderTab
-        title="Project Delivery List"
+        title="Lead Time Matrix"
         onStatusFilterChange={setStatusFilters}
         onSearchTermChange={setSearchTerm}
         statusOptions={["Installed", "Delivered", "Pending", "In Transit"]}
       />
+     
+
 
       {filteredData.length === 0 ? (
         <p>No items found.</p>
@@ -135,45 +138,38 @@ function ProjectDeliveryList() {
           .filter((item) => item.itemName && item.itemName.trim() !== "")
           .map((item) => {
             const latestComment = latestCommentsByItem[item.id];
+            const progress = calculateDateProgress(
+              item.expectedDeliveryDate,
+              item.expectedArrivalDate,
+              item.status,
+              item.tbd
+            );
+
             return (
               <div
                 key={item.id}
                 className={styles.orderCard}
                 onClick={() => handleItemClick(item)}
               >
-                {/* Header */}
                 <div className={styles.orderHeader}>
                   <h2 className={styles.orderTitle}>{item.itemName}</h2>
-                  <span
-                    className={styles.orderStatus}
-                    style={{
-                      color: getProgressColor(item.status).progressColor,
-                    }}
-                  >
+                  <span className={styles.orderStatus}>
                     {item.status}
-                    <span
-                      className={styles.LineColor}
-                      style={{
-                        backgroundColor: getProgressColor(item.status)
-                          .progressColor,
-                      }}
-                    ></span>
+                    <span className={styles.LineColor}></span>
                   </span>
                 </div>
 
-                {/* ETD & ETA */}
                 {item.expectedDeliveryDate ? (
                   <p className={styles.orderDetails}>
-                    <strong>ETD :</strong>{" "}
+                    <strong>ETD:</strong>{" "}
                     {item.expectedDeliveryDate.slice(0, 10)} |{" "}
-                    <strong>ETA :</strong>{" "}
+                    <strong>ETA:</strong>{" "}
                     {item.expectedArrivalDate?.slice(0, 10)}
                   </p>
                 ) : (
                   "TBD"
                 )}
 
-                {/* Comment Box */}
                 {latestComment && (
                   <div className={styles.commentBox}>
                     <div className={styles.commentHeader}>
@@ -195,7 +191,6 @@ function ProjectDeliveryList() {
                   </div>
                 )}
 
-                {/* Footer */}
                 <div className={styles.orderFooter}>
                   <button className={styles.addComment}>
                     <img src="/Svg/CommentIcon.svg" alt="Comment" />
@@ -203,17 +198,21 @@ function ProjectDeliveryList() {
                   </button>
                 </div>
 
-                {/* Progress Bar */}
-                <div className={styles.progressBar}>
-                  <div
-                    className={styles.progress}
-                    style={{
-                      width: getProgressColor(item.status).progressWidth,
-                      backgroundColor: getProgressColor(item.status)
-                        .progressColor,
-                    }}
-                  ></div>
-                </div>
+                {item.tbd ? (
+                  <p className={styles.tbdText}>Delivery dates TBD</p>
+                ) : (
+                  progress && (
+                    <div className={styles.progressBar}>
+                      <div
+                        className={styles.progress}
+                        style={{
+                          width: progress.width,
+                          backgroundColor: progress.color,
+                        }}
+                      ></div>
+                    </div>
+                  )
+                )}
               </div>
             );
           })
