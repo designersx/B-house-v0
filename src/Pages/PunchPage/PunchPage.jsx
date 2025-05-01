@@ -43,7 +43,7 @@ const PunchPage = () => {
 
 
             <div className="Web_container">
-            <div className="HeaderTop">
+            <div className="HeaderTop2">
             <HeaderTab
               title="Punchlist"
               onStatusFilterChange={setStatusFilters}

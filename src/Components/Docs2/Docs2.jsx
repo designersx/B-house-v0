@@ -340,7 +340,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
                                 <img src="Svg/edit-icon.svg" alt="comment" />
                                 <p>Comment</p>
                                 {commentCounts[doc.fileUrl?.replace(/^\//, '')] > 0 && (
-                                    <span className={styles.commentCount} style={{ marginLeft: '6px', color: 'red', fontWeight: 'bold' }}> ({commentCounts[doc.fileUrl.replace(/^\//, '')]})</span>
+                                    <span className={styles.commentCount} style={{color: 'red', fontWeight: 'bold' }}> ({commentCounts[doc.fileUrl.replace(/^\//, '')]})</span>
                                 )}
                             </div>
                         ) : (
