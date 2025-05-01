@@ -11,7 +11,7 @@ import URL from '../../config/api';
 import { url2 } from '../../config/url';
 import { deleteFcmToken } from '../../utils/deleteFcmToken';
 import NotificationView from '../NotificationModal/NotificationView';
-function Header() {
+function Header({ showSearchIcon = true }) {
   const navigate = useNavigate();
   const [showCanvas, setShowCanvas] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -194,8 +194,9 @@ function Header() {
           <img src="/Svg/Logo-Bhouse.svg" alt="logo" className={styles.logo} />
         </div>
         <div className={styles.headerSideIcon}>
+        {showSearchIcon && (
           <img src='Svg/searchSvg.svg' alt='Search' className={styles.vector1} onClick={() => setShowModalSearch(true)} />
-
+        )}
           <div className={styles.vector2} onClick={handleOpenOffcanvas}>
             <img src="/Svg/BellIcon.svg" alt="BellIcon" />
             {unreadNotification > 0 && (

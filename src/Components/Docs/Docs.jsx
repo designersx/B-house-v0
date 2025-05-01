@@ -268,7 +268,7 @@ function Docs() {
                         Comment
                       </p>
                       {unreadCounts[foundDoc.id] > 0 && (
-                        <span style={{ marginLeft: '6px', color: 'red', fontWeight: 'bold' }}>
+                        <span style={{color: 'red', fontWeight: 'bold' }}>
                           ({unreadCounts[foundDoc.id]})
                         </span>
                       )}
