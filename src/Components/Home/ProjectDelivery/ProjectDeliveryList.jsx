@@ -13,8 +13,9 @@ function ProjectDeliveryList() {
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
   const [statusFilters, setStatusFilters] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
- 
-  
+  const [itemsByManufacturerId, setItemsByManufacturerId] = useState({});
+  const [commentCountsByManufacturerId, setCommentCountsByManufacturerId] = useState({});
+
   const fetchComments = async () => {
     try {
       const latestComments = {};
@@ -85,6 +86,7 @@ function ProjectDeliveryList() {
 
   const handleItemClick = (item) => {
     navigate(`/orderInfo/${item.id}`, { state: { item } });
+    itemMarkItemCommentsAsRead(item?.id)
   };
 
   const formatTime = (dateString) => {
@@ -120,109 +122,173 @@ function ProjectDeliveryList() {
       item.itemName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+
+
+
+
+
+  //Commnet Count Functionlaity 
+  const fetchManufacturers = async () => {
+    const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
+    try {
+      const res = await axios.get(`${URL}/items/${projectId}`);
+      if (res?.data) {
+        const grouped = res.data.reduce((acc, item) => {
+          const manufacturer = item.id || "Unknown";
+          if (!acc[manufacturer]) acc[manufacturer] = [];
+          acc[manufacturer].push(item);
+          return acc;
+        }, {});
+        setItemsByManufacturerId(grouped);
+        setData(res.data); // keep existing data too
+      }
+    } catch (error) {
+      console.log("Error fetching items:", error);
+    }
+  };
+  const fetchCommentsByManufacturerId = async () => {
+    const commentCounts = {};
+
+    for (const manuId in itemsByManufacturerId) {
+      const itemIds = itemsByManufacturerId[manuId].map(item => item.id);
+
+      const commentPromises = itemIds.map(id =>
+        axios.get(`${URL}/items/${id}/comments`).catch(() => ({ data: [] }))
+      );
+
+      const results = await Promise.all(commentPromises);
+      const allComments = results.flatMap(res => res.data || []);
+      const userComments = allComments.filter(cmt => cmt.createdByType === "user");
+      const isReadFalse = userComments.filter((item) => item.isRead == false)
+      commentCounts[manuId] = isReadFalse.length;
+    }
+
+    setCommentCountsByManufacturerId(commentCounts);
+  };
+  const itemMarkItemCommentsAsRead = async (itemId) => {
+    try {
+      const response = await axios.put(`${URL}/projects/itemMarkItemCommentsAsRead/${itemId}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  useEffect(() => {
+    fetchManufacturers();
+  }, []);
+  useEffect(() => {
+    if (Object.keys(itemsByManufacturerId).length > 0) {
+      fetchCommentsByManufacturerId();
+    }
+  }, [itemsByManufacturerId]);
   return (
 
     <>
-    <HeaderTab
+      <HeaderTab
         title="Lead Time Matrix"
         onStatusFilterChange={setStatusFilters}
         onSearchTermChange={setSearchTerm}
-        statusOptions={["Installed", "Delivered", "Pending", "In Transit","Arrived"]}
+        statusOptions={["Installed", "Delivered", "Pending", "In Transit", "Arrived"]}
       />
       <div className={styles.Container}>
-      
-     
 
 
-      {filteredData.length === 0 ? (
-        <p>No items found.</p>
-      ) : (
-        filteredData
-          .filter((item) => item.itemName && item.itemName.trim() !== "")
-          .map((item) => {
-            const latestComment = latestCommentsByItem[item.id];
-            const progress = calculateDateProgress(
-              item.expectedDeliveryDate,
-              item.expectedArrivalDate,
-              item.status,
-              item.tbd
-            );
 
-            return (
-              <div
-                key={item.id}
-                className={styles.orderCard}
-                onClick={() => handleItemClick(item)}
-              >
-                <div className={styles.orderHeader}>
-                  <h2 className={styles.orderTitle}>{item.itemName}</h2>
-                  <span className={styles.orderStatus}>
-                    {item.status}
-                    <span className={styles.LineColor}></span>
-                  </span>
-                </div>
 
-                {item.expectedDeliveryDate ? (
-                  <p className={styles.orderDetails}>
-                    <strong>ETD:</strong>{" "}
-                    {item.expectedDeliveryDate.slice(0, 10)} |{" "}
-                    <strong>ETA:</strong>{" "}
-                    {item.expectedArrivalDate?.slice(0, 10)}
-                  </p>
-                ) : (
-                  "TBD"
-                )}
+        {filteredData.length === 0 ? (
+          <p>No items found.</p>
+        ) : (
+          filteredData
+            .filter((item) => item.itemName && item.itemName.trim() !== "")
+            .map((item) => {
+              const latestComment = latestCommentsByItem[item.id];
+              const progress = calculateDateProgress(
+                item.expectedDeliveryDate,
+                item.expectedArrivalDate,
+                item.status,
+                item.tbd
+              );
 
-                {latestComment && (
-                  <div className={styles.commentBox}>
-                    <div className={styles.commentHeader}>
-                      <p className={styles.commentUser}>
-                        <img
-                          src={`${url2}/${latestComment.profilePhoto}`}
-                          alt="Profile"
-                          className={styles.PicImg}
-                        />
-                        {latestComment.createdByName}
-                      </p>
-                      <p className={styles.commentTime}>
-                        {formatTime(latestComment.createdAt)}
-                      </p>
-                    </div>
-                    <p className={styles.commentMessage}>
-                      {latestComment.comment}
-                    </p>
+              return (
+                <div
+                  key={item.id}
+                  className={styles.orderCard}
+                  onClick={() => handleItemClick(item)}
+                >
+                  <div className={styles.orderHeader}>
+                    <h2 className={styles.orderTitle}>{item.itemName}</h2>
+                    <span className={styles.orderStatus}>
+                      {item.status}
+                      <span className={styles.LineColor}></span>
+                    </span>
                   </div>
-                )}
 
-                <div className={styles.orderFooter}>
-                  <button className={styles.addComment}>
-                    <img src="/Svg/CommentIcon.svg" alt="Comment" />
-                    Add Comment
-                  </button>
-                </div>
+                  {item.expectedDeliveryDate ? (
+                    <p className={styles.orderDetails}>
+                      <strong>ETD:</strong>{" "}
+                      {item.expectedDeliveryDate.slice(0, 10)} |{" "}
+                      <strong>ETA:</strong>{" "}
+                      {item.expectedArrivalDate?.slice(0, 10)}
+                    </p>
+                  ) : (
+                    "TBD"
+                  )}
 
-                {item.tbd ? (
-                  <p className={styles.tbdText}>Delivery dates TBD</p>
-                ) : (
-                  progress && (
-                    <div className={styles.progressBar}>
-                      <div
-                        className={styles.progress}
-                        style={{
-                          width: progress.width,
-                          backgroundColor: progress.color,
-                        }}
-                      ></div>
+                  {latestComment && (
+                    <div className={styles.commentBox}>
+                      <div className={styles.commentHeader}>
+                        <p className={styles.commentUser}>
+                          <img
+                            src={`${url2}/${latestComment.profilePhoto}`}
+                            alt="Profile"
+                            className={styles.PicImg}
+                          />
+                          {latestComment.createdByName}
+                        </p>
+                        <p className={styles.commentTime}>
+                          {formatTime(latestComment.createdAt)}
+                        </p>
+                      </div>
+                      <p className={styles.commentMessage}>
+                        {latestComment.comment}
+                      </p>
                     </div>
-                  )
-                )}
-              </div>
-            );
-          })
-      )}
-    </div>
+                  )}
+
+                  <div className={styles.orderFooter}>
+                    <button className={styles.addComment}>
+                      <img src="/Svg/CommentIcon.svg" alt="Comment" />
+                      Add Comment   {commentCountsByManufacturerId[item.id] > 0 && (
+                        <span className={styles.commentCount} style={{ color: 'red', fontWeight: 'bold' }}>
+                          ({commentCountsByManufacturerId[item.id]})
+                        </span>
+                      )}
+                    </button>
+                  </div>
+
+                  {item.tbd ? (
+                    <p className={styles.tbdText}>Delivery dates TBD</p>
+                  ) : (
+                    progress && (
+                      <div className={styles.progressBar}>
+                        <div
+                          className={styles.progress}
+                          style={{
+                            width: progress.width,
+                            backgroundColor: progress.color,
+                          }}
+                        ></div>
+                      </div>
+                    )
+                  )}
+                </div>
+              );
+            })
+        )}
+      </div>
     </>
-    
+
   );
 }
 

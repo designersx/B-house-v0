@@ -50,5 +50,15 @@
     .footer {
       display: block; 
     }
+    .ForLoder{
+      left: 60%;
+    }
   }
+  .blurred {
+    filter: blur(4px);
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.6;
+  }
+  
   

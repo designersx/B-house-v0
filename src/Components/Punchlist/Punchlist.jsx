@@ -7,19 +7,22 @@ import URL from "../../config/api";
 import { url2 } from "../../config/url";
 import { useNavigate, useLocation } from 'react-router-dom';
 import Loader from "../Loader/Loader";
-
 function Punchlist({ statusFilters, searchTerm = "" }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIssue, setActiveIssue] = useState(null);
   const [issues, setIssues] = useState([]);
-  const [filteredIssues, setFilteredIssues] = useState([]); 
+  const [filteredIssues, setFilteredIssues] = useState([]);
   const [loading, setLoading] = useState(false);
   const projectId = localStorage.getItem("selectedProjectId");
-  const handleCommentClick = (issue) => {
+  const [commentCountsByIssueId, setCommentCountsByIssueId] = useState({});
+  console.log(commentCountsByIssueId)
+  const handleCommentClick = async (issue) => {
     setActiveIssue(issue);
     setIsModalOpen(true);
+    await markPunchListItemCommentsAsRead(issue.id)
+    await fetchCommentsForIssues(issues)
   };
   const filterIssues = () => {
     let filtered = [...issues];
@@ -36,6 +39,7 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
     }
 
     setFilteredIssues(filtered);
+    fetchCommentsForIssues(issues);
   };
 
   const handlePunchListView = (issue) => {
@@ -58,7 +62,7 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
   //Function Lock
   useEffect(() => {
     filterIssues();
-  }, [issues, statusFilters, searchTerm]); 
+  }, [issues, statusFilters, searchTerm]);
   useEffect(() => {
     const fetchPunchList = async () => {
       try {
@@ -70,7 +74,7 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
           productImages: JSON.parse(issue.productImages)
         }));
         setIssues(parsedIssues);
-        setFilteredIssues(parsedIssues); // 👈 Set full list initially
+        setFilteredIssues(parsedIssues);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching punch list:", err);
@@ -82,6 +86,35 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
       fetchPunchList();
     }
   }, [projectId]);
+  // Comment count fucntionality
+  const fetchCommentsForIssues = async (issues) => {
+    const counts = {};
+
+    await Promise.all(
+      issues.map(async (issue) => {
+        try {
+          const res = await axios.get(`${URL}/punchlist/${issue.id}/comments`);
+          const unreadUserComments = res.data.filter(
+            (comment) => comment.isRead === false
+          );
+          counts[issue.id] = unreadUserComments.length;
+        } catch (err) {
+          console.error(`Error fetching comments for issue ${issue.id}:`, err);
+          counts[issue.id] = 0;
+        }
+      })
+    );
+
+    setCommentCountsByIssueId(counts);
+  };
+  const markPunchListItemCommentsAsRead = async (punchListItemId) => {
+    try {
+      const response = await axios.put(`${URL}/projects/markPunchListItemCommentsAsRead/${punchListItemId}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className={styles.container}>
       {loading ? (
@@ -142,6 +175,11 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
               }}>
                 <img src="Svg/edit-icon.svg" alt="edit" />
                 <p>Add Comment</p>
+                {commentCountsByIssueId[issue.id] > 0 && (
+                  <span className={styles.commentCount} style={{ color: 'red', fontWeight: 'bold' }}>
+                    ({commentCountsByIssueId[issue.id]})
+                  </span>
+                )}
               </div>
             </div>
 

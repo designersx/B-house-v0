@@ -23,7 +23,7 @@ const TeamMembers = () => {
   const customerInfo = JSON.parse(localStorage.getItem("customerInfo"));
   const selectedProject = JSON.parse(localStorage.getItem("selectedProject"));
   const messagesEndRef = React.useRef(null);
-
+  const [visibleUserComments, setVisibleUserComments] = useState([]);
   const [commentLoading, setCommentLoading] = useState(false);
 
   const message = location.state?.message;
@@ -47,7 +47,7 @@ const TeamMembers = () => {
 
   const handleSubmitComment = async () => {
     if (!commentText.trim()) return;
-  
+
     const tempComment = {
       comment: commentText,
       createdByType: "customer",
@@ -55,14 +55,14 @@ const TeamMembers = () => {
     };
     setUserComments((prev) => [tempComment, ...prev]);
     setCommentText("");
-  
+
     try {
       const payload = {
         fromCustomerId: customerInfo.id,
         toUserId: selectedContact.id,
         comment: commentText,
       };
-  
+
       await axios.post(
         `${URL}/projects/${selectedProject.id}/user-comments`,
         payload
@@ -72,27 +72,37 @@ const TeamMembers = () => {
       console.error("Error sending comment", err);
     }
   };
-  
+  const markCommentsAsRead = async (toUserId) => {
+    try {
+      const response = await axios.put(`${URL}/projects/${selectedProject.id}/teamMarkCommentsAsRead/${toUserId}`);
+      fetchTeamMembers()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleSendMessage = async (contact) => {
 
-  const handleSendMessage = (contact) => {
     setSelectedContact(contact);
     setModalOpen(true);
     fetchCommentsForUser(contact.id);
+    await markCommentsAsRead(contact.id)
   };
-
   useEffect(() => {
     if (message) {
       handleSendMessage(message.userDetails);
       navigate(location.pathname, { replace: true });
     }
   }, [message]);
-
   const fetchTeamMembers = async () => {
     setIsloading(true);
     try {
       const { data } = await axios.get(`${URL}/auth/getAllUsers`);
       if (data) {
         setIsloading(false);
+        const visibleUsers = data.filter(
+          (user) => visibleIds.includes(user.id) && user.id !== 1
+        );
+        fetchVisibleUserComments(visibleUsers)
       }
       setAllUsers(data);
     } catch (err) {
@@ -104,6 +114,8 @@ const TeamMembers = () => {
     fetchTeamMembers();
   }, []);
 
+
+
   const visibleUsers = allUsers.filter(
     (user) => visibleIds.includes(user.id) && user.id !== 1
   );
@@ -111,11 +123,30 @@ const TeamMembers = () => {
   const remainingUsers = allUsers?.filter(
     (user) => remainingIds?.includes(user.id) && user.id !== 1
   );
+  //Comment Count Funcitonlaity 
+  const fetchVisibleUserComments = async (users) => {
+    try {
+      const commentCounts = await Promise.all(
+        users.map(async (user) => {
+          const { data } = await axios.get(
+            `${URL}/projects/${selectedProject.id}/user-comments/${user.id}`
+          );
+          const unreadComments = data.filter(comment => comment.isRead == false);
+          return { id: user.id, commentCount: unreadComments.length };
+        })
+      );
+      setVisibleUserComments(commentCounts);
+    } catch (err) {
+      console.error("Error fetching visible user comment counts", err);
+    }
+  };
+
 
   return (
     <div>
       {loading ? (
-        <Loader />
+        <div className="ForLoder"> <Loader /></div>
+
       ) : (
         <>
           <HeaderTab title="Team Members" />
@@ -148,13 +179,21 @@ const TeamMembers = () => {
                         onClick={() => handleSendMessage(user)}
                       >
                         Send Message
+
                       </button>
+                      {(visibleUserComments.find((item) => item.id === user.id)?.commentCount || 0) > 0 && (
+                        <span
+                          className={styles.commentCount}
+                          style={{ color: 'red', fontWeight: 'bold' }}
+                        >
+                          ({visibleUserComments.find((item) => item.id === user.id)?.commentCount})
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}
               </>
             )}
-
             {remainingUsers.length > 0 && (
               <>
                 {remainingUsers.map((user) => (
