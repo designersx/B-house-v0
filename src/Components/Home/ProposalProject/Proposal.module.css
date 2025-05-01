@@ -132,12 +132,16 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
-@media screen and (min-device-width: 769px) and (max-device-width: 2561px) {
+@media screen and (min-device-width: 769px) and (max-device-width: 1500px) {
+  .ForLoder{
+    left: 60%;
+  }
+}
+@media screen and (min-device-width: 1501px) and (max-device-width: 2561px) {
   .container{
     padding-inline: 20px;
   }
   .ForLoder{
-    left: 60%;
+    /* left: 60%; */
   }
 }
