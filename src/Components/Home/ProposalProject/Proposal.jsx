@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import styles from "./Proposal.module.css";
 import axios from "axios";
@@ -8,7 +7,7 @@ import ProjectDelivery from "../ProjectDelivery/ProjectDelivery";
 import { useNavigate, useLocation } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 
-function Proposal() {
+function Proposal({ onArchivedStatus }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,6 +17,8 @@ function Proposal() {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [parsedTeamUsers, setParsedTeamUsers] = useState([]);
+  const [prevProjectId, setPrevProjectId] = useState(null); // store last valid project
+
   const fetchDocs = async (projectId) => {
     try {
       const res = await axios.get(`${URL}/customerDoc/document/${projectId}`);
@@ -26,10 +27,11 @@ function Proposal() {
       console.error("Failed to fetch documents:", err);
     }
   };
+
   const fetchInvoice = async (projectId) => {
     try {
       const res = await axios.get(`${URL}/projects/${projectId}/invoice`);
-      if (res.data && res.data.error && res.data.error === 'No invoices found for this project') {
+      if (res.data?.error === "No invoices found for this project") {
         setInvoiceData([]);
       } else {
         setInvoiceData(res.data || []);
@@ -39,6 +41,7 @@ function Proposal() {
       setInvoiceData([]);
     }
   };
+
   const fetchTeamUsers = (project) => {
     const allUserIds = project?.assignedTeamRoles?.flatMap((role) => role.users || []) || [];
     setParsedTeamUsers(allUserIds);
@@ -61,14 +64,17 @@ function Proposal() {
 
         if (storedProject) {
           setSelectedProjectId(storedProject.id);
+          setPrevProjectId(storedProject.id); // set as previous valid
           setSelectedProject(storedProject);
           localStorage.setItem("selectedProjectId", storedProject.id);
           localStorage.setItem("selectedProject", JSON.stringify(storedProject));
+
           const allProjectIds = projectsData.map((project) => project.id);
           localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
+
           fetchTeamUsers(storedProject);
           fetchDocs(storedProject.id);
-          fetchInvoice(storedProject.id); // Ensure invoices are fetched
+          fetchInvoice(storedProject.id);
         }
       } catch (err) {
         console.error("Error fetching projects:", err);
@@ -80,19 +86,20 @@ function Proposal() {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    if (params.get('fromEmail') === 'true') {
-      const projectId = params.get('projectId');
+    if (params.get("fromEmail") === "true") {
+      const projectId = params.get("projectId");
       const project = projects.find((p) => p.id.toString() === projectId);
 
       if (project) {
         setSelectedProjectId(projectId);
+        setPrevProjectId(projectId);
         setSelectedProject(project);
         localStorage.setItem("selectedProjectId", projectId);
         localStorage.setItem("selectedProject", JSON.stringify(project));
 
         fetchTeamUsers(project);
         fetchDocs(projectId);
-        fetchInvoice(projectId); // Ensure invoices are fetched here as well
+        fetchInvoice(projectId);
       }
     }
   }, [location, projects]);
@@ -100,14 +107,22 @@ function Proposal() {
   const handleProjectChange = (e) => {
     const projectId = e.target.value;
     const project = projects.find((p) => p.id.toString() === projectId);
-    setSelectedProjectId(projectId);
-    setSelectedProject(project);
-    localStorage.setItem("selectedProjectId", projectId);
-    localStorage.setItem("selectedProject", JSON.stringify(project));
 
-    fetchTeamUsers(project);
-    fetchDocs(projectId);
-    fetchInvoice(projectId); // Fetch the invoices for the new project
+    if (project?.status === "Archived") {
+      onArchivedStatus?.(); // Show popup
+      // Revert dropdown to previous valid project
+      setSelectedProjectId(prevProjectId);
+    } else {
+      setSelectedProjectId(projectId);
+      setSelectedProject(project);
+      setPrevProjectId(projectId); // update prev only if valid
+      localStorage.setItem("selectedProjectId", projectId);
+      localStorage.setItem("selectedProject", JSON.stringify(project));
+
+      fetchTeamUsers(project);
+      fetchDocs(projectId);
+      fetchInvoice(projectId);
+    }
   };
 
   const steps = [
@@ -123,7 +138,7 @@ function Proposal() {
       id: 3,
       img: "/Svg/invoice.svg",
       label: "Invoice",
-      count: `${invoiceData.length || 0}`, // Correctly show the invoice count
+      count: `${invoiceData.length || 0}`,
       color: "#E1917A",
       colorSmall: "#E1917A",
     },
@@ -146,15 +161,14 @@ function Proposal() {
       ) : (
         <div className={styles.container}>
           <div className={styles.header}>
-            <h4 className={styles.statusBadge}>
-              {selectedProject ? selectedProject.status : "Loading..."}
-            </h4>
+            <h4 className={styles.statusBadge}>{selectedProject.status}</h4>
             <div className={styles.projectSelector}>
               <span className={styles.projectTitle}>Project: </span>
               <select value={selectedProjectId || ""} onChange={handleProjectChange}>
-                {projects.filter((proj) => proj.status !== "Archived").map((proj) => (
+                {projects.map((proj) => (
                   <option key={proj.id} value={proj.id}>
                     {proj.name.length > 10 ? proj.name.slice(0, 10) + "..." : proj.name}
+                    {proj.status === "Archived" ? " (Archived)" : ""}
                   </option>
                 ))}
               </select>
@@ -164,13 +178,16 @@ function Proposal() {
 
           <div className={styles.progressTracker}>
             {steps.map((step) => (
-              <div key={step.id} className={styles.step} onClick={() => navigate(`/${step.label.toLowerCase()}`)} style={{ cursor: "pointer" }}>
+              <div
+                key={step.id}
+                className={styles.step}
+                onClick={() => navigate(`/${step.label.toLowerCase()}`)}
+                style={{ cursor: "pointer" }}
+              >
                 <div className={styles.circle}>
                   <div className={styles.count} style={{ backgroundColor: step.colorSmall }}>
                     <span className={styles.counttip} style={{ borderColor: step.colorSmall }}></span>
-                    <span className={step.id === 1 ? styles.whiteCount : ""}>
-                      {step.count}
-                    </span>
+                    <span className={step.id === 1 ? styles.whiteCount : ""}>{step.count}</span>
                   </div>
                   <img src={step.img} alt={step.label} className={styles.icon} />
                 </div>
