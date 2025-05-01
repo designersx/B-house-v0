@@ -3,7 +3,7 @@
     flex-direction: column;
     gap: 16px;
     padding: 20px;
-    margin-bottom: 4rem;
+    /* margin-bottom: 4rem; */
     word-break: break-all;
 }
 
@@ -13,7 +13,9 @@
     padding: 16px;
     border: 1px solid #EDEDED;
 }
-
+.card:last-child {
+    margin-bottom: 2rem;
+  }
 .topRow {
     display: flex;
     justify-content: space-between;
@@ -160,7 +162,7 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
 }
@@ -204,6 +206,11 @@
         grid-template-columns: repeat(3, auto);
         width: 100%;
     }
+    .card:last-child {
+        margin-bottom: unset;
+      }
+ 
+
 }
 
 @media screen and (min-device-width: 767px) and (max-device-width: 1024px) { 
@@ -212,4 +219,8 @@
         grid-template-columns: repeat(2, auto);
      
     }
+    .card:last-child {
+        margin-bottom: unset;
+      }
+ 
 }

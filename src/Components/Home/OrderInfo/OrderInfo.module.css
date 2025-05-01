@@ -334,6 +334,7 @@
     color: #26211F;
     font-weight: 600;
     margin-bottom: 20px;
+    padding-inline: 20px;
   }
 
   .commentbox{
@@ -479,6 +480,7 @@
   .commentBox {
     position: relative;
     width: 100%;
+    padding-inline: 10px;
   }
   
   .Commenrtextarea {

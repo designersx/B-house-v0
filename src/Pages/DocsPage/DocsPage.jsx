@@ -21,7 +21,7 @@ const DocsPage = () => {
 
             <div className="webContent">
                 <div className="HeaderTop">
-                    <Header />
+                    <Header showSearchIcon={false}/>
                 </div>
                 <div className="mainContent">
                     <div className="Web_Sidebar">

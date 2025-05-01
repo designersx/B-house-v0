@@ -13,7 +13,7 @@ const InvoicePage = () => {
     const [totalCost, setTotalCost] = useState();
     const [totalPaidAmount, setTotalPaidAmount] = useState(0);
     const [remaining, setRemaining] = useState(0);
-    const [searchTerm, setSearchTerm] = useState("");  
+    const [searchTerm, setSearchTerm] = useState("");
     const projectId = localStorage.getItem('selectedProjectId');
 
     const [statusFilters, setStatusFilters] = useState({
@@ -87,7 +87,7 @@ const InvoicePage = () => {
                         title="Invoice List"
                         onStatusFilterChange={setStatusFilters}
                         statusOptions={["Paid", "Pending", "Partly Paid"]}
-                        onSearchTermChange={setSearchTerm}  
+                        onSearchTermChange={setSearchTerm}
                     />
                 </div>
                 {!totalCost ? (
@@ -104,7 +104,7 @@ const InvoicePage = () => {
             </div>
             <div className="webContent">
                 <div className="HeaderTop">
-                    <Header />
+                    <Header showSearchIcon={false} />
                 </div>
                 <div className="mainContent">
                     <div className="Web_Sidebar">
@@ -112,15 +112,20 @@ const InvoicePage = () => {
                     </div>
 
                     <div className="Web_container">
+                        <div className="HeaderTop2">
+                            <HeaderTab
+                                title="Invoice List"
+                                onStatusFilterChange={setStatusFilters}
+                                statusOptions={["Paid", "Pending", "Partly Paid"]}
+                                onSearchTermChange={setSearchTerm}
+                            />
+                        </div>
                         <div className='webListGap'>
                             {!totalCost ? <div className='ForLoder'><Loader /></div> : <>  <Chart />
                                 <List /></>}
                         </div>
                     </div>
-
                 </div>
-
-
             </div>
         </div>
     );

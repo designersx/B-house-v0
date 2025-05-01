@@ -131,7 +131,7 @@ const HeaderTab = ({
         isOpen={showCanvas}
         onClose={() => setShowCanvas(false)}
         direction="right"
-        width="80%"
+        width="70%"
         overlay={true}
       >
         <div className={styles.filterWrap}>

@@ -202,7 +202,7 @@ if (project?.createdAt && project?.estimatedCompletion) {
 
               </div>
 
-              <div onClick={() => navigate("/punchlist")}>
+              <div onClick={() => navigate("/punchlist")} className={styles.DATA}>
                 <p className={styles.bigText}>
                   {resolvedPunchItems}
                   <span className={styles.subText}>
@@ -245,7 +245,7 @@ if (project?.createdAt && project?.estimatedCompletion) {
             <hr></hr>
 
             <div className={styles.grid}>
-              <div>
+              <div className={styles.DATA}>
                 <p className={styles.bigText}>
                   {project?.totalValue?.toLocaleString() || 0}
                   <span className={styles.subText}> $</span>
@@ -258,7 +258,7 @@ if (project?.createdAt && project?.estimatedCompletion) {
                 </p>
               </div>
 
-              <div>
+              <div className={styles.DATA}>
                 <p className={styles.bigText}>
                   {balanceDue.toLocaleString()}
                   <span className={styles.subText}> $</span>

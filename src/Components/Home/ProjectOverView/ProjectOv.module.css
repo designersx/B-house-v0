@@ -25,7 +25,7 @@
     /* padding: 20px; */
     background: white;
     border-radius: 12px;
-    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
+
   }
   
   .title {
@@ -39,7 +39,9 @@
     display: flex;
     justify-content: space-between;
   }
-  
+  .DATA{
+    cursor: pointer;
+  }
   .grid {
     display: grid;
     gap: 20px;
@@ -94,6 +96,7 @@
     align-items: center;
     gap: 10px;
     margin: 15px 0;
+    cursor: pointer;
   }
   
   .avatars {

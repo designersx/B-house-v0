@@ -74,12 +74,12 @@ body {
   z-index: 11;
   width: 100%;
 }
-/* .HeaderTop2 {
-  position: sticky;
+.HeaderTop2 {
+  /* position: sticky; */
   top: 91px;
   z-index: 11;
   width: 100%;
-} */
+}
 
 
 

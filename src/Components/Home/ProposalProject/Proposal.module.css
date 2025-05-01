@@ -132,3 +132,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@media screen and (min-device-width: 769px) and (max-device-width: 2561px) {
+  .container{
+    padding-inline: 20px;
+  }
+  .ForLoder{
+    left: 60%;
+  }
+}

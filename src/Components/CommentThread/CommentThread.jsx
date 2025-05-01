@@ -25,12 +25,20 @@ const CommentThread = ({ issue }) => {
       console.error('Error fetching comments:', err);
     }
   };
-
   const handleAddComment = async () => {
     if (!commentInput.trim()) return;
+  
+    const tempComment = {
+      comment: commentInput,
+      createdByType: 'customer',
+      createdAt: new Date().toISOString(),
+    };
+  
 
-    setLoading(true); // Start loader
-
+    setComments((prev) => [...prev, tempComment]);
+    setCommentInput('');
+    scrollToBottom(); 
+  
     try {
       await axios.post(
         `${URL}/projects/${issue.projectId}/punchlist/${issue.id}/comments`,
@@ -39,21 +47,20 @@ const CommentThread = ({ issue }) => {
           clientId: customerId,
         }
       );
-      setCommentInput('');
-      await fetchComments();
+
+      fetchComments();
     } catch (err) {
       console.error('Error posting comment:', err);
-    } finally {
-      setLoading(false); // Stop loader
     }
   };
+  
 
 
   useEffect(() => {
     fetchComments();
   }, [issue.id]);
 
-  // Scroll to bottom every time comments change
+
   useEffect(() => {
     scrollToBottom();
   }, [comments]);
