@@ -17,8 +17,8 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
   const [loading, setLoading] = useState(false);
   const projectId = localStorage.getItem("selectedProjectId");
   const [commentCountsByIssueId, setCommentCountsByIssueId] = useState({});
+  console.log(commentCountsByIssueId)
   const handleCommentClick = async (issue) => {
-
     setActiveIssue(issue);
     setIsModalOpen(true);
     await markPunchListItemCommentsAsRead(issue.id)
@@ -94,7 +94,6 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
       issues.map(async (issue) => {
         try {
           const res = await axios.get(`${URL}/punchlist/${issue.id}/comments`);
-
           const unreadUserComments = res.data.filter(
             (comment) => comment.isRead === false
           );
