@@ -6,11 +6,9 @@ import ProjectOverView from "../ProjectOverView/ProjectOverView";
 import ProjectDelivery from "../ProjectDelivery/ProjectDelivery";
 import { useNavigate, useLocation } from "react-router-dom";
 import Loader from "../../Loader/Loader";
-
-function Proposal({ onArchivedStatus }) {
+function Proposal({ onArchivedStatus, onAllArchived }) {
   const navigate = useNavigate();
   const location = useLocation();
-
   const [projects, setProjects] = useState([]);
   const [docData, setDocsData] = useState([]);
   const [invoiceData, setInvoiceData] = useState([]);
@@ -47,42 +45,51 @@ function Proposal({ onArchivedStatus }) {
     setParsedTeamUsers(allUserIds);
     localStorage.setItem("teamusers", allUserIds.join(","));
   };
-
   useEffect(() => {
     const customer = JSON.parse(localStorage.getItem("customerInfo"));
     const storedProjectId = localStorage.getItem("selectedProjectId");
-
+  
     if (!customer?.id) return;
-
+  
     const fetchProjects = async () => {
       try {
         const res = await axios.get(`${URL}/projects/client/${customer.id}`);
         const projectsData = res.data || [];
         setProjects(projectsData);
-
-        const storedProject = projectsData.find((p) => p.id.toString() === storedProjectId) || projectsData[0];
-
-        if (storedProject) {
-          setSelectedProjectId(storedProject.id);
-          setPrevProjectId(storedProject.id); // set as previous valid
-          setSelectedProject(storedProject);
-          localStorage.setItem("selectedProjectId", storedProject.id);
-          localStorage.setItem("selectedProject", JSON.stringify(storedProject));
-
-          const allProjectIds = projectsData.map((project) => project.id);
+  
+        const allArchived = projectsData.length > 0 && projectsData.every((p) => p.status === "Archived");
+        if (allArchived) {
+          onAllArchived?.(); // Inform parent to lock the screen
+          return;
+        }
+  
+        const validProject =
+          projectsData.find((p) => p.id.toString() === storedProjectId && p.status !== "Archived") ||
+          projectsData.find((p) => p.status !== "Archived");
+  
+        if (validProject) {
+          setSelectedProjectId(validProject.id);
+          setPrevProjectId(validProject.id);
+          setSelectedProject(validProject);
+          localStorage.setItem("selectedProjectId", validProject.id);
+          localStorage.setItem("selectedProject", JSON.stringify(validProject));
+  
+          const allProjectIds = projectsData.map((p) => p.id);
           localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
-
-          fetchTeamUsers(storedProject);
-          fetchDocs(storedProject.id);
-          fetchInvoice(storedProject.id);
+  
+          fetchTeamUsers(validProject);
+          fetchDocs(validProject.id);
+          fetchInvoice(validProject.id);
         }
       } catch (err) {
         console.error("Error fetching projects:", err);
       }
     };
-
+  
     fetchProjects();
   }, []);
+  
+  
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -107,23 +114,25 @@ function Proposal({ onArchivedStatus }) {
   const handleProjectChange = (e) => {
     const projectId = e.target.value;
     const project = projects.find((p) => p.id.toString() === projectId);
-
-    if (project?.status === "Archived") {
-      onArchivedStatus?.(); // Show popup
-      // Revert dropdown to previous valid project
-      setSelectedProjectId(prevProjectId);
+  
+    if (!project) return;
+  
+    if (project.status === "Archived") {
+      onArchivedStatus?.(); 
+      setSelectedProjectId(prevProjectId); 
     } else {
       setSelectedProjectId(projectId);
       setSelectedProject(project);
-      setPrevProjectId(projectId); // update prev only if valid
+      setPrevProjectId(projectId);
       localStorage.setItem("selectedProjectId", projectId);
       localStorage.setItem("selectedProject", JSON.stringify(project));
-
+  
       fetchTeamUsers(project);
       fetchDocs(projectId);
       fetchInvoice(projectId);
     }
   };
+  
 
   const steps = [
     {
