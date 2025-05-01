@@ -3,6 +3,7 @@ import styles from "../Home/Home.module.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Proposal from "./ProposalProject/Proposal";
+
 import SideBar from "../../Components/SideBar/SideBar.jsx";
 import PopUp2 from "../PopUp2/PopUp2.jsx";
 
@@ -13,6 +14,7 @@ const Home = () => {
   const handleClosePopup = () => {
     setShowArchivedPopup(false);
   };
+
 
   return (
     <div>

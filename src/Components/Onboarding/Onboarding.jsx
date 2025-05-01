@@ -39,7 +39,7 @@ const Onboarding = () => {
 
         if (!allProjects.length) return;
 
-        setProjects(allProjects); 
+        setProjects(allProjects);
         const firstProject = allProjects[0];
 
         setProjectId(firstProject.id); // Default select first project
@@ -62,7 +62,6 @@ const Onboarding = () => {
         (doc) => doc.documentType === "Sample COI"
       );
       setDocFile(sampleCOIDoc?.filePath);
-      console.log(sampleCOIDoc, "sample");
     } catch (err) {
       console.error("Failed to fetch documents:", err);
     } finally {
@@ -77,7 +76,7 @@ const Onboarding = () => {
     try {
       const full = await axios.get(`${URL}/projects/${id}`);
       const data = full.data;
-  
+
       setDeliveryAddress(data.deliveryAddress || "");
       setDeliveryHours(data.deliveryHours || "");
       setCustomHours(
@@ -85,22 +84,21 @@ const Onboarding = () => {
           ? ""
           : data.deliveryHours
       );
-  
+
       // ✅ Convert weeks into a real date using createdAt
       const baseDate = data.createdAt ? new Date(data.createdAt) : new Date();
       const weeks = parseInt(data.estimatedCompletion, 10);
-if (!isNaN(weeks)) {
-  setEstimatedWeeks(weeks); // Store just the number
-}
+      if (!isNaN(weeks)) {
+        setEstimatedWeeks(weeks); // Store just the number
+      }
 
 
-  
-      console.log(data, "project data");
+
     } catch (err) {
       console.error("Error fetching project details:", err);
     }
   };
-  
+
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
     return new Date(dateStr).toLocaleDateString("en-GB", {
@@ -116,7 +114,7 @@ if (!isNaN(weeks)) {
       const data = {
         deliveryAddress,
         deliveryHours: deliveryHours === "Other" ? customHours : deliveryHours,
-        estimatedCompletion: selectedDate,
+        // estimatedCompletion: selectedDate,
       };
 
       const formData = new FormData();
@@ -333,9 +331,8 @@ if (!isNaN(weeks)) {
             >
               <div className={styles.FlexDiv}>
                 <div
-                  className={`${styles.iconLogo} ${
-                    isCompleted ? styles.completedStep : ""
-                  }`}
+                  className={`${styles.iconLogo} ${isCompleted ? styles.completedStep : ""
+                    }`}
                 >
                   <img src={item.img} alt="" />
                 </div>
