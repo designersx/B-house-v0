@@ -4,9 +4,6 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Proposal from "./ProposalProject/Proposal";
 import SideBar from '../../Components/SideBar/SideBar.jsx'
-
-
-
 const Home = () => {
   return (
     <div>

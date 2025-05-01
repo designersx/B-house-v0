@@ -132,8 +132,6 @@ const TeamMembers = () => {
             `${URL}/projects/${selectedProject.id}/user-comments/${user.id}`
           );
           const unreadComments = data.filter(comment => comment.isRead == false);
-          console.log(unreadComments)
-          console.log(data, "data")
           return { id: user.id, commentCount: unreadComments.length };
         })
       );
@@ -148,7 +146,7 @@ const TeamMembers = () => {
     <div>
       {loading ? (
         <div className="ForLoder"> <Loader /></div>
-       
+
       ) : (
         <>
           <HeaderTab title="Team Members" />
