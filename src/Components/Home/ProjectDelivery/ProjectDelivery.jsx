@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styles from "./ProjectDelivery.module.css";
 import { Link, useNavigate } from "react-router-dom";
-
 import URL from "../../../config/api";
 import axios from "axios";
 import { url2 } from "../../../config/url";
 
+
 function ProjectDelivery({ selectedProject }) {
+
   const [showAll, setShowAll] = useState(false);
   const [data, setData] = useState([]);
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
@@ -198,7 +199,11 @@ function ProjectDelivery({ selectedProject }) {
   return (
     <div>
       <div className={styles.DeliveryUpdate}>
-        <h4>Lead Time Matrix</h4>
+      <h4 >
+        Lead Time Matrix
+      </h4>
+
+    
         <button className={styles.button} onClick={handleViewAll}>
           View All
         </button>
