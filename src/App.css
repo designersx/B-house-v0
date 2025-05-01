@@ -1,10 +1,11 @@
 /* LoderCentr CSS Start */
-.ForLoder{
+.ForLoder {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 /* LoderCentr CSS END */
 .notification-container:last-child {
   margin-bottom: 5rem;
@@ -40,10 +41,12 @@
   letter-spacing: 0.5px;
   display: inline-block;
 }
-.note-badge img{
+
+.note-badge img {
   width: 30%;
   display: block;
 }
+
 .note-badge-text {
   position: absolute;
   top: 40%;
@@ -54,11 +57,13 @@
   font-size: 14px;
   pointer-events: none;
 }
+
 .read {
   color: #004680;
 }
-.abc{
-  color:black;
+
+.abc {
+  color: black;
 }
 
 
@@ -94,68 +99,73 @@
 
 /* webpage Responsive */
 
-.mainContent{
+.mainContent {
   display: block;
 }
 
-.mainContent{
+.mainContent {
   display: flex;
   /* gap: 15px; */
 }
-.mainContent2{
-width: 70%;
-right: 0;
-position: absolute;
+
+.mainContent2 {
+  width: 70%;
+  right: 0;
+  position: absolute;
 }
 
-.Web_container{
-  width:100%;
+.Web_container {
+  width: 100%;
   /* padding: 0px 20px 0 20px; */
 }
 
-.Web_Sidebar{
+.Web_Sidebar {
   max-width: 250px;
   min-width: 250px;
   width: 100%;
 }
 
-.MobContent{
-  display:none;
+.MobContent {
+  display: none;
 }
 
-.webListGap{
+.webListGap {
   padding: 20px 20px 0;
 }
 
 
-.activeLink span{
+.activeLink span {
   color: #004680;
 }
 
-.activeLink svg path{
+.activeLink svg path {
   fill: #004680;
 }
 
 
 
-@media(max-width:767px){
-  .webContent{
+@media(max-width:767px) {
+  .webContent {
     display: none;
   }
 
-  .MobContent{
+  .MobContent {
     display: block;
   }
 }
-  
+
 .loaderWrapper {
-  position: fixed; 
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
 }
-@media screen and (min-device-width: 769px) and (max-device-width: 2561px) {
+
+.ForLoder {
+  /* left: 60%; */
+}
+
+@media screen and (min-device-width: 769px) and (max-device-width: 1500px) {
   .ForLoder {
     left: 60%;
   }
