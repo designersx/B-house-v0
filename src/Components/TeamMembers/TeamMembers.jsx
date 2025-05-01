@@ -147,7 +147,8 @@ const TeamMembers = () => {
   return (
     <div>
       {loading ? (
-        <Loader />
+        <div className="ForLoder"> <Loader /></div>
+       
       ) : (
         <>
           <HeaderTab title="Team Members" />

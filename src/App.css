@@ -161,9 +161,7 @@
   transform: translate(-50%, -50%);
 }
 
-.ForLoder {
-  /* left: 60%; */
-}
+
 
 @media screen and (min-device-width: 769px) and (max-device-width: 1500px) {
   .ForLoder {
