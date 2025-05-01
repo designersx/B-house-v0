@@ -1,4 +1,7 @@
-.resetMain {}
+.resetMain {
+    max-width: 500px;
+    margin: auto;
+}
 
 .detailsDiv {
     text-align: center;

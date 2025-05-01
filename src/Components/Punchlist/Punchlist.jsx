@@ -161,7 +161,7 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
         ))
       )}
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} height="auto">
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} height="80vh">
         {activeIssue && <CommentThread issue={activeIssue} />}
       </Modal>
     </div>

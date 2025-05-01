@@ -34,7 +34,7 @@ const PunchPage = () => {
 
         <div className="webContent">
           <div className="HeaderTop">
-            <Header />
+            <Header showSearchIcon={false}/>
           </div>
           <div className="mainContent">
             <div className="Web_Sidebar">
@@ -43,6 +43,15 @@ const PunchPage = () => {
 
 
             <div className="Web_container">
+            <div className="HeaderTop">
+            <HeaderTab
+              title="Punchlist"
+              onStatusFilterChange={setStatusFilters}
+              onSearchTermChange={setSearchTerm}
+              statusOptions={["Pending", "Resolved", "Rejected"]}
+              
+            />
+          </div>
               <Punchlist statusFilters={statusFilters} searchTerm={searchTerm} />
             </div>
             <Footer />

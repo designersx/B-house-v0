@@ -121,13 +121,16 @@ function ProjectDeliveryList() {
     );
 
   return (
-    <div className={styles.Container}>
-      <HeaderTab
+
+    <>
+    <HeaderTab
         title="Lead Time Matrix"
         onStatusFilterChange={setStatusFilters}
         onSearchTermChange={setSearchTerm}
-        statusOptions={["Installed", "Delivered", "Pending", "In Transit"]}
+        statusOptions={["Installed", "Delivered", "Pending", "In Transit","Arrived"]}
       />
+      <div className={styles.Container}>
+      
      
 
 
@@ -218,6 +221,8 @@ function ProjectDeliveryList() {
           })
       )}
     </div>
+    </>
+    
   );
 }
 

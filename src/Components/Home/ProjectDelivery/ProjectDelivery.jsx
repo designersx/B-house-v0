@@ -15,7 +15,7 @@ function ProjectDelivery({ selectedProject }) {
     const fetchLastNotificationTime = async () => {
       const projectId = localStorage.getItem("selectedProjectId");
       if (!projectId) return;
-  
+
       try {
         const res = await axios.get(`${URL}/projects/${projectId}`);
         setLastNotificationTime(res.data?.lastNotificationSentAt || null);
@@ -23,7 +23,7 @@ function ProjectDelivery({ selectedProject }) {
         console.error("Failed to fetch project info:", err);
       }
     };
-  
+
     fetchLastNotificationTime();
   }, []);
   // const location = useLocation();
@@ -150,10 +150,10 @@ function ProjectDelivery({ selectedProject }) {
       month: 'long',   // "April"
       year: 'numeric', // "2025"
     };
-  
-    return new Date(date).toLocaleDateString('en-GB', options); 
+
+    return new Date(date).toLocaleDateString('en-GB', options);
   };
-  
+
   return (
     <div>
       <div className={styles.DeliveryUpdate}>
@@ -163,15 +163,15 @@ function ProjectDelivery({ selectedProject }) {
         </button>
       </div>
       <div className={styles.dlDate}>
-      {lastNotificationTime && (
-  <p className={styles.lastUpdatedTime}>
-  Last Updated:{" "}
-  {lastNotificationTime && !isNaN(new Date(lastNotificationTime))
-    ? formatDate(lastNotificationTime)
-    : "Not Updated"}
-</p>
+        {lastNotificationTime && (
+          <p className={styles.lastUpdatedTime}>
+            Last Updated:{" "}
+            {lastNotificationTime && !isNaN(new Date(lastNotificationTime))
+              ? formatDate(lastNotificationTime)
+              : "Not Updated"}
+          </p>
 
-)}
+        )}
 
       </div>
 

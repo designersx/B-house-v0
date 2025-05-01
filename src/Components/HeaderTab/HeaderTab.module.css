@@ -70,3 +70,11 @@
   justify-content: center;
 }
 
+@media screen and (min-width: 768px) and (max-width: 2700px) {
+  .titleDiv{
+    align-items: center;
+  }
+  .titleDiv h2{
+    margin-top: -5px;
+  }
+}

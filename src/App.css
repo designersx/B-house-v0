@@ -100,7 +100,7 @@
 
 .mainContent{
   display: flex;
-  gap: 15px;
+  /* gap: 15px; */
 }
 .mainContent2{
 width: 70%;
@@ -110,7 +110,7 @@ position: absolute;
 
 .Web_container{
   width:100%;
-  padding: 0 0px 0 0;
+  /* padding: 0px 20px 0 20px; */
 }
 
 .Web_Sidebar{
@@ -148,3 +148,15 @@ position: absolute;
   }
 }
   
+.loaderWrapper {
+  position: fixed; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+@media screen and (min-device-width: 769px) and (max-device-width: 2561px) {
+  .ForLoder {
+    left: 60%;
+  }
+}
