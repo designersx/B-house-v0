@@ -11,6 +11,9 @@ function ProjectDelivery({ selectedProject }) {
   const [data, setData] = useState([]);
   const [latestCommentsByItem, setLatestCommentsByItem] = useState({});
   const [lastNotificationTime, setLastNotificationTime] = useState(null);
+  const [itemsByManufacturerId, setItemsByManufacturerId] = useState({});
+  const [commentCountsByManufacturerId, setCommentCountsByManufacturerId] = useState({});
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchLastNotificationTime = async () => {
       const projectId = localStorage.getItem("selectedProjectId");
@@ -26,23 +29,28 @@ function ProjectDelivery({ selectedProject }) {
 
     fetchLastNotificationTime();
   }, []);
-  // const location = useLocation();
-  const navigate = useNavigate();
   const handleViewAll = () => {
     navigate("/project-delivery-list", { state: { items: data } });
   };
   const fetchManufacturers = async () => {
     const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
-
     try {
       const res = await axios.get(`${URL}/items/${projectId}`);
       if (res?.data) {
-        setData(res.data);
+        const grouped = res.data.reduce((acc, item) => {
+          const manufacturer = item.id || "Unknown";
+          if (!acc[manufacturer]) acc[manufacturer] = [];
+          acc[manufacturer].push(item);
+          return acc;
+        }, {});
+        setItemsByManufacturerId(grouped);
+        setData(res.data); // keep existing data too
       }
     } catch (error) {
       console.log("Error fetching items:", error);
     }
   };
+
   const calculateDateProgress = (etd, eta, status, tbd) => {
     if (status === "Installed") {
       return { width: "100%", color: "green" };
@@ -78,13 +86,11 @@ function ProjectDelivery({ selectedProject }) {
   const fetchComments = async () => {
     try {
       const latestComments = {};
-
       // Loop through each item to fetch comments
       await Promise.all(
         data.map(async (item) => {
           const res = await axios.get(`${URL}/items/${item.id}/comments`);
           const itemComments = res?.data;
-
           if (itemComments && itemComments.length > 0) {
             const userComments = itemComments.filter(
               (cmt) => cmt.createdByType === "user"
@@ -142,7 +148,6 @@ function ProjectDelivery({ selectedProject }) {
       });
     }
   }
-
   const formatDate = (date) => {
     const options = {
       weekday: 'long', // "Monday"
@@ -153,7 +158,43 @@ function ProjectDelivery({ selectedProject }) {
 
     return new Date(date).toLocaleDateString('en-GB', options);
   };
+  //Commnet Count Functionlaity 
+  const fetchCommentsByManufacturerId = async () => {
+    const commentCounts = {};
 
+    for (const manuId in itemsByManufacturerId) {
+      const itemIds = itemsByManufacturerId[manuId].map(item => item.id);
+
+      const commentPromises = itemIds.map(id =>
+        axios.get(`${URL}/items/${id}/comments`).catch(() => ({ data: [] }))
+      );
+
+      const results = await Promise.all(commentPromises);
+      const allComments = results.flatMap(res => res.data || []);
+      const userComments = allComments.filter(cmt => cmt.createdByType === "user");
+      const isReadFalse = userComments.filter((item) => item.isRead == false)
+      commentCounts[manuId] = isReadFalse.length;
+    }
+
+    setCommentCountsByManufacturerId(commentCounts);
+    console.log(" Comment counts per manufacturerId:", commentCounts);
+  };
+  const itemMarkItemCommentsAsRead = async (itemId) => {
+    console.log(itemId, "itemId")
+    try {
+      const response = await axios.put(`${URL}/projects/itemMarkItemCommentsAsRead/${itemId}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    fetchManufacturers();
+  }, []);
+  useEffect(() => {
+    if (Object.keys(itemsByManufacturerId).length > 0) {
+      fetchCommentsByManufacturerId();
+    }
+  }, [itemsByManufacturerId]);
   return (
     <div>
       <div className={styles.DeliveryUpdate}>
@@ -192,6 +233,7 @@ function ProjectDelivery({ selectedProject }) {
             return (
               <Link
                 to={`/orderInfo/${item?.id}`}
+                onClick={() => itemMarkItemCommentsAsRead(item?.id)}
                 key={item.id}
                 state={{ item }}
                 className={styles.linkStyle}
@@ -255,7 +297,13 @@ function ProjectDelivery({ selectedProject }) {
                     <button className={styles.addComment}>
                       <img src="/Svg/CommentIcon.svg" alt="Comment" />
                       Add Comment
+                      {commentCountsByManufacturerId[item.id] > 0 && (
+                        <span className={styles.commentCount} style={{ color: 'red', fontWeight: 'bold' }}>
+                          ({commentCountsByManufacturerId[item.id]})
+                        </span>
+                      )}
                     </button>
+
                   </div>
 
                   {/* Progress Bar */}
