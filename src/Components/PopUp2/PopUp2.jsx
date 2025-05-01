@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import styles from "../PopUp2/PopUp2.module.css";
 
-const PopUp2 = ({ isOpen, onClose, title, children }) => {
+const PopUp2 = ({ isOpen, onClose, title, children, isClosable = true }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -16,12 +16,22 @@ const PopUp2 = ({ isOpen, onClose, title, children }) => {
 
   if (!isOpen) return null;
 
+  const handleOverlayClick = () => {
+    if (isClosable && onClose) onClose();
+  };
+
+  const handleModalClick = (e) => {
+    e.stopPropagation(); 
+  };
+
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeBtn} onClick={onClose}>
-          &times;
-        </button>
+    <div className={styles.overlay} onClick={handleOverlayClick}>
+      <div className={styles.modal} onClick={handleModalClick}>
+        {isClosable && (
+          <button className={styles.closeBtn} onClick={onClose}>
+            &times;
+          </button>
+        )}
         {title && <h2>{title}</h2>}
         {children}
       </div>
