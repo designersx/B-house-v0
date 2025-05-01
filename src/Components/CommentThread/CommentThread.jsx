@@ -71,7 +71,8 @@ const CommentThread = ({ issue }) => {
         <p><b>Comments History</b></p>
       </div>
       <div className={styles.messages}>
-        {[...comments].reverse().map((msg, index) => (
+      {comments.map((msg, index) => (
+
           msg.createdByType === 'user' ? (
             <div key={index} className={styles.supportMessageRow}>
 
