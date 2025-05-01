@@ -22,32 +22,36 @@ function CommentBox({ saman }) {
   const fetchComments = async () => {
     try {
       const res = await axios.get(`${URL}/items/${item.id}/comments`);
-      setComments(res.data.reverse()); // newest comment at bottom
+      setComments(res.data.reverse());
     } catch (err) {
       console.error("Error fetching comments:", err);
     }
   };
   const handleSubmit = async () => {
     if (!newComment.trim()) return;
-
-    setLoading(true);
-
+  
+    const tempComment = {
+      comment: newComment,
+      createdById: customerId,
+      createdAt: new Date().toISOString(),
+    };
+  
+    setComments((prev) => [tempComment, ...prev]);
+    setNewComment('');
+  
     try {
       await axios.post(`${URL}/items/${item.id}/comments`, {
         projectId,
-        comment: newComment,
+        comment: tempComment.comment,
         createdById: customerId,
-        createdByType: "customer"
+        createdByType: "customer",
       });
-
-      setNewComment("");
-      await fetchComments();
+      fetchComments();
     } catch (err) {
       console.error("Error submitting comment:", err);
-    } finally {
-      setLoading(false);
     }
   };
+  
 
   const formatTime = (dateString) => {
     const date = new Date(dateString);

@@ -24,29 +24,47 @@ const Comments = ({ documentId ,onView  }) => {
   };
 
   const postComment = async () => {
-    setLoading(true)
     if (!commentInput.trim()) return;
-
+  
+    const message = commentInput.trim();
+  
     const payload = {
       documentId,
-      message: commentInput.trim(),
+      message,
     };
-
+  
+    const now = new Date().toISOString();
+  
+    const tempComment = isCustomer
+      ? {
+          message,
+          createdAt: now,
+          Customer: { name: customerInfo?.name || 'Customer' },
+        }
+      : {
+          message,
+          createdAt: now,
+          User: { firstName: userInfo?.firstName || 'Admin' },
+        };
+  
+    setComments((prev) => [...prev, tempComment]);
+    setCommentInput('');
+    scrollToBottom();
+  
     if (isCustomer) {
       payload.customerId = customerInfo.id;
     } else {
       payload.userId = userInfo.id;
     }
-
+  
     try {
       await axios.post(`${URL}/customerDoc/comments/`, payload);
-      setCommentInput('');
       fetchComments();
-      setLoading(false)
     } catch (err) {
       console.error('Error posting comment:', err);
     }
   };
+  
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
