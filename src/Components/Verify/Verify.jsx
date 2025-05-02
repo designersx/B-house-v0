@@ -54,7 +54,6 @@ const Verify = () => {
     }
   };
   
-
   const handleResendOTP = async () => {
     try {
       if (!email) {
@@ -65,6 +64,10 @@ const Verify = () => {
       }
   
       await axios.post(`${URL}/customer/forgot-password`, { email });
+      
+      // ✅ Clear previous OTP inputs
+      setOtp(['', '', '', '', '', '']);
+  
       setResendMsg("OTP resent to your email.");
       setError('');
       setSuccessMsg('');
@@ -75,6 +78,7 @@ const Verify = () => {
       setSuccessMsg('');
     }
   };
+  
   
 
   return (
