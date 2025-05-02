@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import URL from "../../../config/api";
 import { url2 } from "../../../config/url";
-
+import Loader from "../../Loader/Loader";
 function ProjectOverView({ selectedProject }) {
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
@@ -12,7 +12,8 @@ function ProjectOverView({ selectedProject }) {
   const [balanceDue, setBalanceDue] = useState(0);
   const [docData, setDocsData] = useState();
   const [leadTimeValue, setLeadTimeValue] = useState(0);
-const [leadTimeUnit, setLeadTimeUnit] = useState("Days");
+  const [leadTimeUnit, setLeadTimeUnit] = useState("Days");
+  const [isPunchListLoading, setIsPunchListLoading] = useState(true);
 
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem("selectedProjectId"));
@@ -34,6 +35,8 @@ const [leadTimeUnit, setLeadTimeUnit] = useState("Days");
       if (!projectId) return;
 
       try {
+        setIsPunchListLoading(true); // Start loader
+
         const [projectRes, punchListRes] = await Promise.all([
           axios.get(`${URL}/projects/${projectId}`),
           axios.get(`${URL}/projects/${projectId}/punch-list`),
@@ -45,56 +48,68 @@ const [leadTimeUnit, setLeadTimeUnit] = useState("Days");
         setProject(project);
         setPunchList(punchList);
 
+        // Lead time calculation
+        if (project?.createdAt && project?.estimatedCompletion) {
+          const created = new Date(project.createdAt);
+          const [amountStr, unit] = project.estimatedCompletion
+            .toLowerCase()
+            .split("_");
+          const amount = parseInt(amountStr);
+          let estimated = new Date(created);
 
-      // Lead time calculation
-if (project?.createdAt && project?.estimatedCompletion) {
-  const created = new Date(project.createdAt);
-  const [amountStr, unit] = project.estimatedCompletion.toLowerCase().split("_");
-  const amount = parseInt(amountStr);
-  let estimated = new Date(created);
+          switch (unit) {
+            case "day":
+            case "days":
+              estimated.setDate(created.getDate() + amount);
+              break;
+            case "week":
+            case "weeks":
+              estimated.setDate(created.getDate() + amount * 7);
+              break;
+            case "month":
+            case "months":
+              estimated.setMonth(created.getMonth() + amount);
+              break;
+            default:
+              console.warn(
+                "Unknown estimatedCompletion format:",
+                project.estimatedCompletion
+              );
+              estimated = new Date(created); // fallback
+          }
 
-  if (unit === "day" || unit === "days") {
-    estimated.setDate(created.getDate() + amount);
-  } else if (unit === "week" || unit === "weeks") {
-    estimated.setDate(created.getDate() + amount * 7);
-  } else if (unit === "month" || unit === "months") {
-    estimated.setMonth(created.getMonth() + amount);
-  } else {
-    console.warn("Unknown estimatedCompletion format:", project.estimatedCompletion);
-    estimated = new Date(created); // fallback
-  }
+          const today = new Date();
+          const diffTime = estimated - today;
+          const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-  const today = new Date();
-  const diffTime = estimated - today;
-  const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-  if (daysRemaining <= 0) {
-    setLeadTimeValue(0);
-    setLeadTimeUnit("Completed");
-  } else if (daysRemaining < 7) {
-    setLeadTimeValue(daysRemaining);
-    setLeadTimeUnit(daysRemaining === 1 ? "Day" : "Days");
-  } else {
-    const weeks = Math.floor(daysRemaining / 7);
-    const leftoverDays = daysRemaining % 7;
-    if (leftoverDays === 0) {
-      setLeadTimeValue(weeks);
-      setLeadTimeUnit(weeks === 1 ? "Week" : "Weeks");
-    } else {
-      setLeadTimeValue(`${weeks}w ${leftoverDays}d`);
-      setLeadTimeUnit("Left");
-    }
-  }
-}
-
-        
+          if (daysRemaining <= 0) {
+            setLeadTimeValue(0);
+            setLeadTimeUnit("Completed");
+          } else if (daysRemaining < 7) {
+            setLeadTimeValue(daysRemaining);
+            setLeadTimeUnit(daysRemaining === 1 ? "Day" : "Days");
+          } else {
+            const weeks = Math.floor(daysRemaining / 7);
+            const leftoverDays = daysRemaining % 7;
+            if (leftoverDays === 0) {
+              setLeadTimeValue(weeks);
+              setLeadTimeUnit(weeks === 1 ? "Week" : "Weeks");
+            } else {
+              setLeadTimeValue(`${weeks}w ${leftoverDays}d`);
+              setLeadTimeUnit("Left");
+            }
+          }
+        }
       } catch (err) {
         console.error("Failed to fetch project or punch list", err);
+      } finally {
+        setIsPunchListLoading(false); // ✅ Ensure this always runs
       }
     };
 
     fetchProject();
   }, [selectedProject]);
+
   const totalPunchItems = punchList.length;
   const resolvedPunchItems = punchList.filter(
     (item) => item.status === "Resolved"
@@ -191,25 +206,36 @@ if (project?.createdAt && project?.estimatedCompletion) {
           <div className={styles.FlexControl}>
             <div className={styles.grid}>
               <div>
-              <p className={styles.bigText}>
-  {leadTimeValue}
-  <span className={styles.subText}> {leadTimeUnit}</span>
-</p>
-<p className={styles.label}>Lead Time</p>
-
-
-
-
+                {leadTimeValue === 0 && leadTimeUnit === "Completed" ? (
+                  <p className={styles.bigText}>
+                    0<span className={styles.subText}> Completed</span>
+                  </p>
+                ) : leadTimeValue ? (
+                  <p className={styles.bigText}>
+                    {leadTimeValue}
+                    <span className={styles.subText}> {leadTimeUnit}</span>
+                  </p>
+                ) : (
+                  <Loader />
+                )}
+                <p className={styles.label}>Lead Time</p>
               </div>
 
-              <div onClick={() => navigate("/punchlist")} className={styles.DATA}>
-                <p className={styles.bigText}>
-                  {resolvedPunchItems}
-                  <span className={styles.subText}>
-                    {" "}
-                    out of {totalPunchItems}
-                  </span>
-                </p>
+              <div
+                onClick={() => navigate("/punchlist")}
+                className={styles.DATA}
+              >
+                {isPunchListLoading ? (
+                  <Loader />
+                ) : (
+                  <p className={styles.bigText}>
+                    {resolvedPunchItems}
+                    <span className={styles.subText}>
+                      {" "}
+                      out of {totalPunchItems}
+                    </span>
+                  </p>
+                )}
                 <p className={styles.label}>Punchlist</p>
               </div>
 
@@ -222,18 +248,22 @@ if (project?.createdAt && project?.estimatedCompletion) {
                 }
               >
                 <div className={styles.avatars}>
-                  {users?.map((user, idx) => (
-                    <img
-                      key={idx}
-                      src={
-                        user?.profileImage
-                          ? `${url2}/${user.profileImage}`
-                          : "/Images/profile-picture.webp"
-                      }
-                      alt={`User ${user?.firstName || ""}`}
-                      className={styles.avatar}
-                    />
-                  ))}
+                  {users ? (
+                    users.map((user, idx) => (
+                      <img
+                        key={idx}
+                        src={
+                          user?.profileImage
+                            ? `${url2}/${user.profileImage}`
+                            : "/Images/profile-picture.webp"
+                        }
+                        alt={`User ${user?.firstName || ""}`}
+                        className={styles.avatar}
+                      />
+                    ))
+                  ) : (
+                    <Loader />
+                  )}
                   {remaining > 0 && (
                     <span className={styles.plus}>+{remaining}</span>
                   )}
@@ -246,10 +276,14 @@ if (project?.createdAt && project?.estimatedCompletion) {
 
             <div className={styles.grid}>
               <div className={styles.DATA}>
-                <p className={styles.bigText}>
-                  {project?.totalValue?.toLocaleString() || 0}
-                  <span className={styles.subText}> $</span>
-                </p>
+                {project?.totalValue ? (
+                  <p className={styles.bigText}>
+                    {project?.totalValue?.toLocaleString()}
+                    <span className={styles.subText}> $</span>
+                  </p>
+                ) : (
+                  <Loader />
+                )}
                 <p
                   onClick={() => navigate("/invoice")}
                   className={styles.label}
@@ -259,11 +293,14 @@ if (project?.createdAt && project?.estimatedCompletion) {
               </div>
 
               <div className={styles.DATA}>
-                <p className={styles.bigText}>
-                  {balanceDue.toLocaleString()}
-                  <span className={styles.subText}> $</span>
-                </p>
-
+                {balanceDue ? (
+                  <p className={styles.bigText}>
+                    {balanceDue.toLocaleString()}
+                    <span className={styles.subText}> $</span>
+                  </p>
+                ) : (
+                  <Loader />
+                )}
                 <p
                   onClick={() => navigate("/invoice")}
                   className={styles.label}

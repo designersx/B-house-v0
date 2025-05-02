@@ -13,6 +13,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(false)
     const [commentCounts, setCommentCounts] = useState({});
+    const [isFileLoading, setIsFileLoading] = useState(true);
 
     const location = useLocation();
     const bottomRef = useRef(null);
@@ -171,6 +172,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
     const handleCommentClick = (docTitle, fileUrl) => {
 
         const normalizedUrl = `/${fileUrl?.replace(/\\/g, '/')}`;
+        setIsFileLoading(true); 
 
         setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
         fetchComments(normalizedUrl);
@@ -365,28 +367,49 @@ const Docs2 = ({ onTotalDocsChange }) => {
                     <h2 className={styles.modalTitle}>{selectedDoc?.title}</h2>
 
                     {selectedDoc?.fileUrl && (
-                        <div className={styles.previewBox}>
-                            {selectedDoc.fileUrl.endsWith('.pdf') ? (
-                                <>
-                                    {/* <img src="Svg/pdf.svg" alt="PDF" /> */}
+  <div className={styles.previewBox}>
+    {isFileLoading && (
+      <div className={styles.loaderOverlay}>
+        <Loader size={30} />
+      </div>
+    )}
 
-                                    {selectedDoc?.title == "CAD File" ? "No Preview" : <iframe
-                                        height="400px"
-                                        width="100%"
-                                        src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`} />}
+    {selectedDoc.fileUrl.endsWith('.pdf') ? (
+      <>
+        {selectedDoc?.title === "CAD File" ? (
+          "No Preview"
+        ) : (
+          <iframe
+            height="400px"
+            width="100%"
+            src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`}
+            onLoad={() => setIsFileLoading(false)}
+          />
+        )}
+        {selectedDoc?.title === "CAD File" && (
+          <button onClick={handleDownload} className={styles.noPreviewDownloadButton}>
+            Download
+          </button>
+        )}
+      </>
+    ) : (
+      <img
+        src={`${url2}${selectedDoc?.fileUrl}`}
+        alt={selectedDoc?.title}
+        onLoad={() => setIsFileLoading(false)}
+        style={{
+          maxWidth: '100%',
+          maxHeight: '400px',
+          objectFit: 'contain',
+          display: 'block',
+          margin: '0 auto',
+          borderRadius: '8px'
+        }}
+      />
+    )}
+  </div>
+)}
 
-                                    &nbsp;   &nbsp;   {selectedDoc?.title == "CAD File" && <button onClick={handleDownload} className={styles.noPreviewDownloadButton} >Download</button>}
-
-                                </>
-                            ) : (
-                                <img
-                                    src={`${url2}${selectedDoc?.fileUrl}`}
-                                    alt={selectedDoc?.title}
-
-                                />
-                            )}
-                        </div>
-                    )}
 
                     <div className={styles.chatWrapper}>
                         {comments.map((item, index) => {
