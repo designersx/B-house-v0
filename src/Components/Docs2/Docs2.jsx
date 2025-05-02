@@ -13,6 +13,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(false)
     const [commentCounts, setCommentCounts] = useState({});
+
     const location = useLocation();
     const bottomRef = useRef(null);
     const message = location.state?.message;
@@ -32,15 +33,15 @@ const Docs2 = ({ onTotalDocsChange }) => {
         setLoading(true);
         const commentText = newComment.trim();
         if (!commentText || !selectedDoc?.fileUrl) return;
-    
+
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
         const clientInfo = JSON.parse(localStorage.getItem('customerInfo'));
-    
+
         let windowsPath = selectedDoc.fileUrl;
         if (windowsPath.startsWith("/")) {
             windowsPath = windowsPath.substring(1);
         }
-    
+
         const titleToCategory = {
             'Detailed Proposal': 'proposals',
             'Options Presentation': 'presentation',
@@ -49,18 +50,18 @@ const Docs2 = ({ onTotalDocsChange }) => {
             'Sales Agreement': 'salesAggrement',
             'Product Maintenance': "otherDocuments",
         };
-    
+
         const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
         const tempComment = {
             comment: commentText,
             createdAt: new Date().toISOString(),
-            customer: true, 
+            customer: true,
         };
-    
+
         // Update UI immediately
         setComments((prev) => [...prev, tempComment]);
         setNewComment('');
-    
+
         try {
             await axios.post(`${URL}/projects/${projectId}/file-comments`, {
                 comment: commentText,
@@ -68,25 +69,22 @@ const Docs2 = ({ onTotalDocsChange }) => {
                 clientId: clientInfo?.id,
                 category,
             });
-    
-           
+
+
             fetchComments(selectedDoc.fileUrl);
         } catch (error) {
             console.error('Error posting comment:', error);
-            
+
         } finally {
             setLoading(false);
         }
     };
-    
-
-
     const fetchProject = async () => {
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
         try {
             const res = await axios.get(`${URL}/projects/${projectId}`);
             const project = res.data;
-
+           
             setProjectData({
                 proposals: JSON.parse(project.proposals || '[]'),
                 floorPlans: JSON.parse(project.floorPlans || '[]'),
@@ -153,11 +151,9 @@ const Docs2 = ({ onTotalDocsChange }) => {
                     });
 
                     // Filter comments where isRead is false
-                    const unreadComments = res.data.filter(comment => comment.isRead === false);
-
-
-
-                    newCommentCounts[filePath] = res.data.length || 0;
+                    const unreadComments = res.data.filter(comment => comment.isRead === false && comment.user
+                        !== null);
+                    newCommentCounts[filePath] = unreadComments.length || 0;
                 } catch (err) {
                     console.error(`Failed to fetch comments for ${filePath}:`, err);
                     newCommentCounts[filePath] = 0;
@@ -179,6 +175,8 @@ const Docs2 = ({ onTotalDocsChange }) => {
         setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
         fetchComments(normalizedUrl);
         setIsModalOpen(true);
+        // const normalizedUrl = `/${fileUrl?.replace(/\\/g, '/')}`;
+        documentMarkCommentsAsRead(fileUrl)
     };
 
     const handleCloseModal = () => {
@@ -315,11 +313,17 @@ const Docs2 = ({ onTotalDocsChange }) => {
             onTotalDocsChange(totalComments);
         }
     }, [totalComments, onTotalDocsChange]);
-
-
-
-
-
+    const documentMarkCommentsAsRead = async (filePath) => {
+        try {
+            const res = await axios.put(`${URL}/documentMarkCommentsAsRead`, {}, {
+                params: { filePath }
+            });
+      
+            fetchProject()
+        } catch (error) {
+            console.log("Error updating comments:", error);
+        }
+    };
     return (
         <div>
             <div className={styles.container}>
@@ -340,7 +344,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
                                 <img src="Svg/edit-icon.svg" alt="comment" />
                                 <p>Comment</p>
                                 {commentCounts[doc.fileUrl?.replace(/^\//, '')] > 0 && (
-                                    <span className={styles.commentCount} style={{color: 'red', fontWeight: 'bold' }}> ({commentCounts[doc.fileUrl.replace(/^\//, '')]})</span>
+                                    <span className={styles.commentCount} style={{ color: 'red', fontWeight: 'bold' }}> ({commentCounts[doc.fileUrl.replace(/^\//, '')]})</span>
                                 )}
                             </div>
                         ) : (
