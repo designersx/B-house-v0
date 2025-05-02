@@ -12,7 +12,8 @@
     background-color: #ffff;
     top: 0;
     margin: 0px 0px 0 0;
-    z-index: 1;
+    position: relative;
+    z-index: 1000;
     height: 91px;
 
 }

@@ -10,12 +10,12 @@ const Home = () => {
   const [showArchivedPopup, setShowArchivedPopup] = useState(false);
   const [allArchived, setAllArchived] = useState(false);
 
-  if (allArchived) {
-    return (
-      <>
-        <div className="HeaderTop">
-          <Header />
-        </div>
+  return (
+    <div>
+      <div className="HeaderTop">
+        <Header />
+      </div>
+      {allArchived ? (
         <PopUp2
           isOpen={true}
           isClosable={false}
@@ -23,49 +23,44 @@ const Home = () => {
         >
           <p>All of your projects are archived. Please contact support for further access.</p>
         </PopUp2>
-      </>
-    );
-  }
-
-  return (
-    <div>
-      <div className="MobContent">
-        <div className="HeaderTop"><Header /></div>
-        <div className={`${styles.homeMain} ${showArchivedPopup ? styles.blurred : ""}`}>
-          <Proposal
-            onArchivedStatus={() => setShowArchivedPopup(true)}
-            onAllArchived={() => setAllArchived(true)}
-          />
-          <Footer />
-        </div>
-      </div>
-
-      <div className="webContent">
-        <div className="HeaderTop"><Header /></div>
-        <div className="mainContent">
-          <div className="Web_Sidebar"><SideBar /></div>
-          <div className={`Web_container ${showArchivedPopup ? styles.blurred : ""}`}>
-            <Proposal
-              onArchivedStatus={() => setShowArchivedPopup(true)}
-              onAllArchived={() => setAllArchived(true)}
-            />
+      ) : (
+        <>
+          <div className="MobContent">
+            <div className={`${styles.homeMain} ${showArchivedPopup ? styles.blurred : ""}`}>
+              <Proposal
+                onArchivedStatus={() => setShowArchivedPopup(true)}
+                onAllArchived={() => setAllArchived(true)}
+              />
+              <Footer />
+            </div>
           </div>
-        </div>
-      </div>
-
-      {showArchivedPopup && (
-        <PopUp2
-          isOpen={true}
-          isClosable={true}
-          onClose={() => setShowArchivedPopup(false)}
-          title="Archived Project"
-        >
-          <p>The selected project is archived and cannot be accessed.</p>
-        </PopUp2>
+          <div className="webContent">
+            <div className="mainContent">
+              <div className="Web_Sidebar">
+                <SideBar />
+              </div>
+              <div className={`Web_container ${showArchivedPopup ? styles.blurred : ""}`}>
+                <Proposal
+                  onArchivedStatus={() => setShowArchivedPopup(true)}
+                  onAllArchived={() => setAllArchived(true)}
+                />
+              </div>
+            </div>
+          </div>
+          {showArchivedPopup && (
+            <PopUp2
+              isOpen={true}
+              isClosable={true}
+              onClose={() => setShowArchivedPopup(false)}
+              title="Archived Project"
+            >
+              <p>The selected project is archived and cannot be accessed.</p>
+            </PopUp2>
+          )}
+        </>
       )}
     </div>
   );
 };
-
 
 export default Home;

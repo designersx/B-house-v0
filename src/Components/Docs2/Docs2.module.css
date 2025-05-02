@@ -16,6 +16,16 @@
     position: relative;
     gap: 5px;
 }
+.loaderOverlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  width: 100%;
+  background: #f9f9f9;
+  position: absolute;
+  z-index: 10;
+}
 
 .card::before {
     content: "";
