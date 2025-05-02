@@ -164,8 +164,10 @@ function Docs() {
       docsData.map(async (doc) => {
         try {
           const res = await axios.get(`${URL}/customerDoc/comments/${doc.id}?customerId=${customerId}`);
-          const unreadComments = res.data.filter(comment => comment.isRead === false);
-          counts[doc.id] = unreadComments.length || 0;
+          const unreadComments = res.data.filter(comment => comment.User
+            !== null);
+          const isReadFalse = unreadComments.filter(comment => comment.isRead === false)
+          counts[doc.id] = isReadFalse.length || 0;
         } catch (err) {
           console.error(`Error fetching comments for doc ID ${doc.id}`, err);
         }
@@ -268,7 +270,7 @@ function Docs() {
                         Comment
                       </p>
                       {unreadCounts[foundDoc.id] > 0 && (
-                        <span style={{color: 'red', fontWeight: 'bold' }}>
+                        <span style={{ color: 'red', fontWeight: 'bold' }}>
                           ({unreadCounts[foundDoc.id]})
                         </span>
                       )}

@@ -61,6 +61,7 @@ const TeamMembers = () => {
         fromCustomerId: customerInfo.id,
         toUserId: selectedContact.id,
         comment: commentText,
+        commentType: "user"
       };
 
       await axios.post(
@@ -81,11 +82,10 @@ const TeamMembers = () => {
     }
   }
   const handleSendMessage = async (contact) => {
-
     setSelectedContact(contact);
     setModalOpen(true);
     fetchCommentsForUser(contact.id);
-    await markCommentsAsRead(contact.id)
+    markCommentsAsRead(contact.id)
   };
   useEffect(() => {
     if (message) {
@@ -131,8 +131,11 @@ const TeamMembers = () => {
           const { data } = await axios.get(
             `${URL}/projects/${selectedProject.id}/user-comments/${user.id}`
           );
-          const unreadComments = data.filter(comment => comment.isRead == false);
-          return { id: user.id, commentCount: unreadComments.length };
+
+          const unreadComments = data.filter(comment => comment.createdByType == "user");
+          const filterIsReadFalse = unreadComments.filter((comment) => comment.isRead === false)
+
+          return { id: user.id, commentCount: filterIsReadFalse.length };
         })
       );
       setVisibleUserComments(commentCounts);

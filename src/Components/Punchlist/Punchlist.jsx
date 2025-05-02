@@ -95,7 +95,7 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
         try {
           const res = await axios.get(`${URL}/punchlist/${issue.id}/comments`);
           const unreadUserComments = res.data.filter(
-            (comment) => comment.isRead === false
+            (comment) => comment.isRead === false&&comment.createdByType=="user"
           );
           counts[issue.id] = unreadUserComments.length;
         } catch (err) {
