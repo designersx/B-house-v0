@@ -15,21 +15,21 @@ function ProjectDelivery({ selectedProject }) {
   const [itemsByManufacturerId, setItemsByManufacturerId] = useState({});
   const [commentCountsByManufacturerId, setCommentCountsByManufacturerId] = useState({});
   const navigate = useNavigate();
+  const projectId = localStorage.getItem("selectedProjectId");
+  const fetchLastNotificationTime = async () => {
+    if (!projectId) return;
+
+    try {
+      const res = await axios.get(`${URL}/projects/${projectId}`);
+      setLastNotificationTime(res.data?.lastNotificationSentAt || null);
+      console.log(res.data?.lastNotificationSentAt)
+    } catch (err) {
+      console.error("Failed to fetch project info:", err);
+    }
+  };
   useEffect(() => {
-    const fetchLastNotificationTime = async () => {
-      const projectId = localStorage.getItem("selectedProjectId");
-      if (!projectId) return;
-
-      try {
-        const res = await axios.get(`${URL}/projects/${projectId}`);
-        setLastNotificationTime(res.data?.lastNotificationSentAt || null);
-      } catch (err) {
-        console.error("Failed to fetch project info:", err);
-      }
-    };
-
     fetchLastNotificationTime();
-  }, []);
+  }, [projectId]);
   const handleViewAll = () => {
     navigate("/project-delivery-list", { state: { items: data } });
   };
@@ -150,15 +150,28 @@ function ProjectDelivery({ selectedProject }) {
     }
   }
   const formatDate = (date) => {
+    const d = new Date(date);
+  
     const options = {
-      weekday: 'long', // "Monday"
-      day: 'numeric',  // "25"
-      month: 'long',   // "April"
-      year: 'numeric', // "2025"
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
     };
-
-    return new Date(date).toLocaleDateString('en-GB', options);
+  
+    // Format with lowercase am/pm
+    let formatted = d.toLocaleString('en-GB', options);
+  
+    // Capitalize AM/PM
+    formatted = formatted.replace(/\b(am|pm)\b/, (match) => match.toUpperCase());
+  
+    return formatted;
   };
+  
+  
   //Commnet Count Functionlaity 
   const fetchCommentsByManufacturerId = async () => {
     const commentCounts = {};
@@ -178,10 +191,8 @@ function ProjectDelivery({ selectedProject }) {
     }
 
     setCommentCountsByManufacturerId(commentCounts);
-    console.log(" Comment counts per manufacturerId:", commentCounts);
   };
   const itemMarkItemCommentsAsRead = async (itemId) => {
-    console.log(itemId, "itemId")
     try {
       const response = await axios.put(`${URL}/projects/itemMarkItemCommentsAsRead/${itemId}`)
     } catch (error) {
@@ -199,19 +210,19 @@ function ProjectDelivery({ selectedProject }) {
   return (
     <div>
       <div className={styles.DeliveryUpdate}>
-      <h4 >
-        Lead Time Matrix
-      </h4>
+        <h4 >
+          Lead Time Matrix
+        </h4>
 
-    
+
         <button className={styles.button} onClick={handleViewAll}>
           View All
         </button>
       </div>
-      <div className={styles.dlDate}>
+      {data.length <= 0 ? null : <div className={styles.dlDate}>
         {lastNotificationTime && (
           <p className={styles.lastUpdatedTime}>
-            Last Updated:{" "}
+            <b>Last Updated:{" "}</b>
             {lastNotificationTime && !isNaN(new Date(lastNotificationTime))
               ? formatDate(lastNotificationTime)
               : "Not Updated"}
@@ -219,15 +230,134 @@ function ProjectDelivery({ selectedProject }) {
 
         )}
 
-      </div>
+      </div>}
 
-      <div className={styles.Container}>
+      {/* <div className={styles.Container}>
         {(showAll ? data : data.slice(0, 3))
           ?.filter((item) => item.itemName && item.itemName.trim() !== "")
           .map((item) => {
             const latestComment = latestCommentsByItem[item.id];
 
-            // ✅ Calculate progress at the top
+       
+            const progress = calculateDateProgress(
+              item.expectedDeliveryDate,
+              item.expectedArrivalDate,
+              item.status,
+              item.tbd
+            );
+
+            return (
+              <Link
+                to={`/orderInfo/${item?.id}`}
+                onClick={() => itemMarkItemCommentsAsRead(item?.id)}
+                key={item.id}
+                state={{ item }}
+                className={styles.linkStyle}
+              >
+                <div className={styles.orderCard}>
+             
+                  <div className={styles.orderHeader}>
+                    <h2 className={styles.orderTitle}>{item.itemName}</h2>
+                    <span
+                      className={styles.orderStatus}
+                      style={{
+                        color: progress?.color || "#6C35B1",
+                      }}
+                    >
+                      {item.status}
+                      <span
+                        className={styles.LineColor}
+                        style={{
+                          backgroundColor: progress?.color || "#6C35B1",
+                        }}
+                      ></span>
+                    </span>
+                  </div>
+
+               
+                  {item.expectedDeliveryDate ? (
+                    <p className={styles.orderDetails}>
+                      <strong>ETD :</strong>{" "}
+                      {item.expectedDeliveryDate?.slice(0, 10)} |{" "}
+                      <strong>ETA :</strong>{" "}
+                      {item.expectedArrivalDate?.slice(0, 10)}
+                    </p>
+                  ) : (
+                    "TBD"
+                  )}
+
+            
+                  {latestComment && (
+                    <div className={styles.commentBox}>
+                      <div className={styles.commentHeader}>
+                        <p className={styles.commentUser}>
+                          <img
+                            src={`${url2}/${latestComment.profilePhoto}`}
+                            alt="Profile"
+                            className={styles.PicImg}
+                          />
+                          {latestComment.createdByName}
+                        </p>
+                        <p className={styles.commentTime}>
+                          {formatTime(latestComment.createdAt)}
+                        </p>
+                      </div>
+                      <p className={styles.commentMessage}>
+                        {latestComment.comment}
+                      </p>
+                    </div>
+                  )}
+
+               
+                  <div className={styles.orderFooter}>
+                    <button className={styles.addComment}>
+                      <img src="/Svg/CommentIcon.svg" alt="Comment" />
+                      Add Comment
+                      {commentCountsByManufacturerId[item.id] > 0 && (
+                        <span className={styles.commentCount} style={{ color: 'red', fontWeight: 'bold' }}>
+                          ({commentCountsByManufacturerId[item.id]})
+                        </span>
+                      )}
+                    </button>
+
+                  </div>
+
+                 
+                  {item.tbd ? (
+                    <p className={styles.tbdText}>Delivery dates TBD</p>
+                  ) : (
+                    progress && (
+                      <div className={styles.progressBarContainer}>
+                        <div className={styles.progressBar}>
+                          <div
+                            className={styles.progress}
+                            style={{
+                              width: progress.width,
+                              backgroundColor: progress.color,
+                            }}
+                          ></div>
+                        </div>
+                       
+                      </div>
+                    )
+                  )}
+                </div>
+              </Link>
+            );
+          })}
+      </div> */}
+      <div className={styles.Container}>
+        {(() => {
+          const filteredData = (showAll ? data : data.slice(0, 3))?.filter(
+            (item) => item.itemName && item.itemName.trim() !== ""
+          );
+
+          if (!filteredData || filteredData.length === 0) {
+            return <p className={styles.noData}>No data</p>; // You can style `.noData` in CSS
+          }
+
+          return filteredData.map((item) => {
+            const latestComment = latestCommentsByItem[item.id];
             const progress = calculateDateProgress(
               item.expectedDeliveryDate,
               item.expectedArrivalDate,
@@ -308,7 +438,6 @@ function ProjectDelivery({ selectedProject }) {
                         </span>
                       )}
                     </button>
-
                   </div>
 
                   {/* Progress Bar */}
@@ -326,17 +455,16 @@ function ProjectDelivery({ selectedProject }) {
                             }}
                           ></div>
                         </div>
-                        {/* <span className={styles.progressLabel}>
-                  {parseFloat(progress.width).toFixed(0)}%
-                </span> */}
                       </div>
                     )
                   )}
                 </div>
               </Link>
             );
-          })}
+          });
+        })()}
       </div>
+
     </div>
   );
 }

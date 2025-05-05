@@ -553,7 +553,7 @@ const Onboarding = () => {
             )}
           </div>
 
-          <button
+          <div
             onClick={openModalIndex == 0 ? handleSubmit : handleUploadDoc}
             className={
               openModalIndex == 0 || (!docFile && openModalIndex == 1)
@@ -568,7 +568,7 @@ const Onboarding = () => {
                 "Update"
               )
             ) : null}
-          </button>
+          </div>
         </Modal>
       )}
     </div>

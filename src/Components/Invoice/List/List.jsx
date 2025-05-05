@@ -48,13 +48,13 @@ const List = ({ statusFilters, searchTerm = "" }) => {
   const filterInvoices = (invoicesList, option, statusFilters, searchTerm) => {
     const today = new Date();
     let filtered = [...invoicesList];
-  
+
     const getMonthsAgo = (n) => {
       const d = new Date();
       d.setMonth(today.getMonth() - n);
       return d;
     };
-  
+
     switch (option) {
       case "1 Month":
         filtered = filtered.filter((i) => new Date(i.createdAt) >= getMonthsAgo(1));
@@ -73,8 +73,8 @@ const List = ({ statusFilters, searchTerm = "" }) => {
 
 
     const activeStatuses = statusFilters
-    ? Object.keys(statusFilters).filter((status) => statusFilters[status])
-    : [];
+      ? Object.keys(statusFilters).filter((status) => statusFilters[status])
+      : [];
     if (activeStatuses.length > 0) {
       filtered = filtered.filter((invoice) => activeStatuses.includes(invoice.status));
     }
@@ -84,15 +84,15 @@ const List = ({ statusFilters, searchTerm = "" }) => {
       filtered = filtered.filter((invoice, index) => {
         const displayInvoiceNumber = invoice.invoiceNumber
           ? invoice.invoiceNumber.toLowerCase()
-          : `invoice ${index + 1}`.toLowerCase(); 
-  
+          : `invoice ${index + 1}`.toLowerCase();
+
         return displayInvoiceNumber.includes(searchTerm.toLowerCase());
       });
     }
-  
+
     setFilteredInvoices(filtered);
   };
-  
+
 
   const formatDate = (date) => {
     const today = new Date();
@@ -124,9 +124,9 @@ const List = ({ statusFilters, searchTerm = "" }) => {
 
       <div className={styles.Part1}>
         <div className={styles.title}>
-          <p>All Invoice List</p>
+          {filteredInvoices.length <= 0 ? null : <p>All Invoice List</p>}
         </div>
-        <div className={styles.dropdown}>
+        {filteredInvoices.length<= 0? null : <div className={styles.dropdown}>
           <button className={styles.dropdownBtn} onClick={toggleDropdown}>
             {selectedOption}
             <span className={`${styles.arrow} ${isOpen ? styles.rotate : ""}`}>
@@ -141,11 +141,11 @@ const List = ({ statusFilters, searchTerm = "" }) => {
               <li onClick={() => handleSelect("6 Months")}>Last 6 Months</li>
             </ul>
           )}
-        </div>
+        </div>}
       </div>
 
       <div className={styles.transactionList}>
-        {filteredInvoices.length === 0 ? (
+        {filteredInvoices.length <= 0 ? (
           <div className={styles.noData}>
             <div>
               <img src="Svg/notfound.svg" alt="" />
@@ -159,22 +159,22 @@ const List = ({ statusFilters, searchTerm = "" }) => {
           filteredInvoices.map((invoice, index) => (
             <div key={invoice.id} className={styles.transactionItem}>
               {invoice.invoiceFilePath ? (
-  <img
-    src="Svg/pdf-icon.svg"
-    alt="PDF Icon"
-    className={styles.image}
-    onClick={() => handleOpenFile(invoice.invoiceFilePath)}
-  />
-) : (
-  <div className={styles.noFileBox}>
-    <img
-      src="Svg/remove-file-svgrepo-com.svg"
-      alt="No File"
-      className={styles.noFileImage}
-    />
-    <p className={styles.noFileText}>No File</p>
-  </div>
-)}
+                <img
+                  src="Svg/pdf-icon.svg"
+                  alt="PDF Icon"
+                  className={styles.image}
+                  onClick={() => handleOpenFile(invoice.invoiceFilePath)}
+                />
+              ) : (
+                <div className={styles.noFileBox}>
+                  <img
+                    src="Svg/remove-file-svgrepo-com.svg"
+                    alt="No File"
+                    className={styles.noFileImage}
+                  />
+                  <p className={styles.noFileText}>No File</p>
+                </div>
+              )}
 
               <div className={styles.details}>
                 <p className={styles.title}>{`Invoice ${index + 1}`}</p>
@@ -183,6 +183,7 @@ const List = ({ statusFilters, searchTerm = "" }) => {
                     <img src="Svg/timer.svg" alt="" />
                     <p className={styles.date}>{formatDate(invoice.createdAt)}</p>
                   </div>
+
                   <p
   title={invoice.description}
   style={{ cursor: "pointer", color: "rgb(1, 69, 124)" }}
@@ -203,6 +204,7 @@ const List = ({ statusFilters, searchTerm = "" }) => {
 
 
 
+
                   <p className={styles.amount}>
                     {invoice.advancePaid
                       ? `${invoice.advancePaid.toLocaleString()} out of ${invoice.totalAmount.toLocaleString()}`
@@ -211,13 +213,12 @@ const List = ({ statusFilters, searchTerm = "" }) => {
                 </div>
               </div>
               <span
-                className={`${styles.status} ${
-                  invoice.status === "Partly Paid"
+                className={`${styles.status} ${invoice.status === "Partly Paid"
                     ? styles.PartlyPaid
                     : invoice.status === "Paid"
-                    ? styles.Paid
-                    : styles.Pending
-                }`}
+                      ? styles.Paid
+                      : styles.Pending
+                  }`}
               >
                 {invoice.status}
               </span>

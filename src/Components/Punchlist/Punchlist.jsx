@@ -17,7 +17,6 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
   const [loading, setLoading] = useState(false);
   const projectId = localStorage.getItem("selectedProjectId");
   const [commentCountsByIssueId, setCommentCountsByIssueId] = useState({});
-  console.log(commentCountsByIssueId)
   const handleCommentClick = async (issue) => {
     setActiveIssue(issue);
     setIsModalOpen(true);

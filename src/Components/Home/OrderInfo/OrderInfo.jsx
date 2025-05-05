@@ -168,7 +168,7 @@ function OrderInfo() {
           <div className={styles.orderInfo}>
             <div className={styles.orderDetails}>
               <div className={styles.orderD1}>
-                <img src='Svg/timer.svg' alt='' />
+                <img src='/Svg/timer.svg' alt='timer' />
                 <p className={styles.TimeHour}>
                   {formatTimeAgo(item?.createdAt)}
                 </p>
