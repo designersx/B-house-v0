@@ -13,7 +13,9 @@ const List = ({ statusFilters, searchTerm = "" }) => {
   const [selectedOption, setSelectedOption] = useState("Recent");
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
-
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+  const [fullDescription, setFullDescription] = useState("");
+  
   const projectId = localStorage.getItem("selectedProjectId");
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -181,7 +183,26 @@ const List = ({ statusFilters, searchTerm = "" }) => {
                     <img src="Svg/timer.svg" alt="" />
                     <p className={styles.date}>{formatDate(invoice.createdAt)}</p>
                   </div>
-                  <p>{invoice.description}</p> 
+                  <p
+  title={invoice.description}
+  style={{ cursor: "pointer", color: "rgb(1, 69, 124)" }}
+  onClick={() => {
+    setFullDescription(invoice.description);
+    setShowDescriptionModal(true);
+  }}
+>
+  {
+    invoice.description
+      .split(" ")
+      .slice(0, 3)
+      .join(" ") +
+    (invoice.description.split(" ").length > 3 ? "..." : "")
+  }
+</p>
+
+
+
+
                   <p className={styles.amount}>
                     {invoice.advancePaid
                       ? `${invoice.advancePaid.toLocaleString()} out of ${invoice.totalAmount.toLocaleString()}`
@@ -204,6 +225,31 @@ const List = ({ statusFilters, searchTerm = "" }) => {
           ))
         )}
       </div>
+      {showDescriptionModal && (
+  <div style={{
+    position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
+    backgroundColor: "rgba(0,0,0,0.5)", display: "flex",
+    alignItems: "center", justifyContent: "center", zIndex: 1000
+  }}>
+    <div style={{
+      background: "#fff", padding: "20px", borderRadius: "10px",
+      maxWidth: "500px", width: "90%", textAlign: "center", position: "relative"
+    }}>
+      <h3>Full Description</h3>
+      <p style={{ marginTop: "10px" }}>{fullDescription}</p>
+      <button
+        onClick={() => setShowDescriptionModal(false)}
+        style={{
+          marginTop: "20px", padding: "10px 20px", backgroundColor: "rgb(1, 69, 124)",
+          color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer"
+        }}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
