@@ -10,13 +10,15 @@ function ProjectOverView({ selectedProject }) {
   const [project, setProject] = useState(null);
   const [punchList, setPunchList] = useState([]);
   const [balanceDue, setBalanceDue] = useState(0);
+  const [balanceDueLoading,setBalanceDueLoading]=useState(false)
   const [docData, setDocsData] = useState();
   const [leadTimeValue, setLeadTimeValue] = useState(0);
   const [leadTimeUnit, setLeadTimeUnit] = useState("Days");
   const [isPunchListLoading, setIsPunchListLoading] = useState(true);
-
+  const projectId = localStorage.getItem("selectedProjectId");
+  const id = JSON.parse(localStorage.getItem("selectedProjectId"));
   const fetchDocs = async () => {
-    const id = JSON.parse(localStorage.getItem("selectedProjectId"));
+  
     try {
       const res = await axios.get(`${URL}/customerDoc/document/${id}`);
       setDocsData(res.data || []);
@@ -30,7 +32,7 @@ function ProjectOverView({ selectedProject }) {
   }, []);
   useEffect(() => {
     const fetchProject = async () => {
-      const projectId = localStorage.getItem("selectedProjectId");
+     
 
       if (!projectId) return;
 
@@ -71,10 +73,6 @@ function ProjectOverView({ selectedProject }) {
               estimated.setMonth(created.getMonth() + amount);
               break;
             default:
-              console.warn(
-                "Unknown estimatedCompletion format:",
-                project.estimatedCompletion
-              );
               estimated = new Date(created); // fallback
           }
 
@@ -147,6 +145,7 @@ function ProjectOverView({ selectedProject }) {
   };
   const calculateBalance = async (projectId) => {
     try {
+      setBalanceDueLoading(true)
       const projectRes = await axios.get(`${URL}/projects/${projectId}`);
       const project = projectRes.data;
 
@@ -184,15 +183,17 @@ function ProjectOverView({ selectedProject }) {
       const totalCost = Math.max(baseTotalAmount, invoiceTotal);
       const totalPaid = baseAdvance + paidFromInvoices;
       setBalanceDue(totalCost - totalPaid);
+      setBalanceDueLoading(false)
     } catch (err) {
       console.error("Error calculating balance due:", err);
+      setBalanceDueLoading(false)
     }
   };
 
   useEffect(() => {
     const projectId = localStorage.getItem("selectedProjectId");
     if (projectId) calculateBalance(projectId);
-  }, []);
+  }, [projectId]);
   useEffect(() => {
     getUserDetails();
   }, [project]);
@@ -216,7 +217,7 @@ function ProjectOverView({ selectedProject }) {
                     <span className={styles.subText}> {leadTimeUnit}</span>
                   </p>
                 ) : (
-                  <Loader />
+                  <Loader  size = "40"  />
                 )}
                 <p className={styles.label}>Lead Time</p>
               </div>
@@ -226,7 +227,7 @@ function ProjectOverView({ selectedProject }) {
                 className={styles.DATA}
               >
                 {isPunchListLoading ? (
-                  <Loader />
+                  <Loader  size = "40" />
                 ) : (
                   <p className={styles.bigText}>
                     {resolvedPunchItems}
@@ -262,7 +263,7 @@ function ProjectOverView({ selectedProject }) {
                       />
                     ))
                   ) : (
-                    <Loader />
+                    <Loader  size = "40" />
                   )}
                   {remaining > 0 && (
                     <span className={styles.plus}>+{remaining}</span>
@@ -282,7 +283,7 @@ function ProjectOverView({ selectedProject }) {
                     <span className={styles.subText}> $</span>
                   </p>
                 ) : (
-                  <Loader />
+                  <Loader   size = "40" />
                 )}
                 <p
                   onClick={() => navigate("/invoice")}
@@ -293,13 +294,14 @@ function ProjectOverView({ selectedProject }) {
               </div>
 
               <div className={styles.DATA}>
-                {balanceDue ? (
-                  <p className={styles.bigText}>
-                    {balanceDue.toLocaleString()}
-                    <span className={styles.subText}> $</span>
-                  </p>
+                {balanceDueLoading ? (
+                   <Loader size = "40"  />
                 ) : (
-                  <Loader />
+                
+                  <p className={styles.bigText}>
+                  {balanceDue.toLocaleString()}
+                  <span className={styles.subText}> $</span>
+                </p>
                 )}
                 <p
                   onClick={() => navigate("/invoice")}
