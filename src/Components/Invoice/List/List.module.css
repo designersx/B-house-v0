@@ -48,7 +48,7 @@
   list-style: none;
   padding: 5px 0;
   margin: 0;
-  width: 120px;
+  width: 130px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   outline: none;
 }
@@ -58,7 +58,7 @@
 }
 
 .dropdownMenu li {
-  padding: 8px 12px;
+  padding: 2px 8px;
   cursor: pointer;
   font-size: 14px;
   color: #26211F;
@@ -116,7 +116,7 @@
 .track {
   display: block;
   align-items: center;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 
 
 }

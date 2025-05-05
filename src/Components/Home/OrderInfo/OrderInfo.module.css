@@ -405,7 +405,7 @@
     color: #fff;
     padding: 10px 15px;
     border-radius: 12px;
-    max-width: 70%;
+    max-width: 90%;
     font-size: 14px;
     display: inline-block;
     text-align: left;
@@ -417,7 +417,7 @@
     margin: 0px;
     text-align: start;
     text-align: end;
-    max-width: 70%;
+    max-width: 90%;
     text-align: right;
     display: contents;
   }

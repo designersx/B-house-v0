@@ -307,6 +307,7 @@
     color: #000000;
     font-size: 16px;
     outline: none;
+    min-height: 50px;
 }
 
 .textarea {
@@ -330,6 +331,7 @@
     width: 100%;
     font-weight: 600;
     font-size: 18px;
+    text-align: center;
 }
 
 .submitButton :hover {
