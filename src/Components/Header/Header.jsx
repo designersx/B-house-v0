@@ -121,7 +121,18 @@ function Header({ showSearchIcon = true }) {
     navigate(`/${message.path}`, { state: { message } })
     handleNotificationClick(message.id)
     setMessage(message)
+    updateProjectChange(message.project_id)
 
+  }
+  const updateProjectChange = async (projectId) => {
+    try {
+      const res = await axios.get(`${URL}/projects/${projectId}`);
+      localStorage.setItem("selectedProjectId", projectId);
+      localStorage.setItem("selectedProject", JSON.stringify(res.data));
+    } catch (err) {
+      console.error("Failed to fetch invoices:", err);
+
+    }
   }
   const toggleMessage = (id) => {
     setExpandedMessages((prev) => ({
@@ -143,6 +154,12 @@ function Header({ showSearchIcon = true }) {
           // Update unread count
           const newUnreadCount = updated.filter((item) => !item.isRead).length;
           setUnreadNotification(newUnreadCount);
+
+
+
+
+
+
 
           return updated;
         });
@@ -194,9 +211,9 @@ function Header({ showSearchIcon = true }) {
           <img src="/Svg/Logo-Bhouse.svg" alt="logo" className={styles.logo} />
         </div>
         <div className={styles.headerSideIcon}>
-        {showSearchIcon && (
-          <img src='Svg/searchSvg.svg' alt='Search' className={styles.vector1} onClick={() => setShowModalSearch(true)} />
-        )}
+          {showSearchIcon && (
+            <img src='Svg/searchSvg.svg' alt='Search' className={styles.vector1} onClick={() => setShowModalSearch(true)} />
+          )}
           <div className={styles.vector2} onClick={handleOpenOffcanvas}>
             <img src="/Svg/BellIcon.svg" alt="BellIcon" />
             {unreadNotification > 0 && (

@@ -126,7 +126,6 @@ function Proposal({ onArchivedStatus, onAllArchived }) {
       setPrevProjectId(projectId);
       localStorage.setItem("selectedProjectId", projectId);
       localStorage.setItem("selectedProject", JSON.stringify(project));
-  
       fetchTeamUsers(project);
       fetchDocs(projectId);
       fetchInvoice(projectId);
