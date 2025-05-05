@@ -160,7 +160,7 @@
     border-radius: 12px;
     font-size: 14px;
     display: inline-block;
-    max-width: 70%;
+    max-width: 90%;
     word-break: break-all;
 }
 
@@ -171,7 +171,7 @@
     border-radius: 12px;
     font-size: 14px;
     display: inline-block;
-    max-width: 70%;
+    max-width: 90%;
     text-align: left;
     word-break: break-all;
 
@@ -302,4 +302,13 @@
     text-align: center;
     min-width: 80px;
     cursor: pointer;
+}
+@media screen and (min-device-width: 300px) and (max-device-width: 400px) {
+    .card{
+        display: block;
+    }
+    .commentLink{
+        justify-content: end;
+    }
+
 }
