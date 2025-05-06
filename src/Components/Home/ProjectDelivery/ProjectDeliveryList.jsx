@@ -44,11 +44,7 @@ function ProjectDeliveryList() {
     }
   };
 
-  useEffect(() => {
-    if (data.length > 0) {
-      fetchComments();
-    }
-  }, [data]);
+
 
   const calculateDateProgress = (etd, eta, status, tbd) => {
     if (status === "Installed") {
@@ -121,12 +117,6 @@ function ProjectDeliveryList() {
     .filter((item) =>
       item.itemName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-
-
-
-
-
   //Commnet Count Functionlaity 
   const fetchManufacturers = async () => {
     const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
@@ -172,7 +162,11 @@ function ProjectDeliveryList() {
       console.log(error)
     }
   }
-
+  useEffect(() => {
+    if (data.length > 0) {
+      fetchComments();
+    }
+  }, [data]);
 
   useEffect(() => {
     fetchManufacturers();
@@ -182,6 +176,28 @@ function ProjectDeliveryList() {
       fetchCommentsByManufacturerId();
     }
   }, [itemsByManufacturerId]);
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const hasReloaded = localStorage.getItem("hasReloaded");
+    if (params.get("fromEmail") === "true") {
+      const projectId = params.get("projectId");
+      axios.get(`${URL}/projects/${projectId}`).then((res) => {
+        const project = res.data
+
+        if (project) {
+          localStorage.setItem("selectedProjectId", projectId);
+          localStorage.setItem("selectedProject", JSON.stringify(project));
+          localStorage.setItem("hasReloaded", "true");
+          // Remove query params before reload to prevent loop
+          const cleanUrl = window.location.pathname;
+          window.history.replaceState({}, document.title, cleanUrl);
+          window.location.reload();
+
+        }
+      });
+
+    }
+  }, [location]);
   return (
 
     <>
@@ -192,7 +208,8 @@ function ProjectDeliveryList() {
         statusOptions={["Installed", "Delivered", "Pending", "In Transit", "Arrived"]}
       />
       <div className={styles.Container}>
-        {filteredData.length === 0 ? (
+
+        {filteredData.length <=  0 ? (
           <div className={styles.noData}>
           <div>
             <img src="Svg/notfound.svg" alt="" />
@@ -202,6 +219,7 @@ function ProjectDeliveryList() {
             </div>
           </div>
         </div>
+
         ) : (
           filteredData
             .filter((item) => item.itemName && item.itemName.trim() !== "")

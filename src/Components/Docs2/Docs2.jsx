@@ -145,11 +145,12 @@ const Docs2 = ({ onTotalDocsChange }) => {
                 if (filePath.startsWith("/")) {
                     filePath = filePath.substring(1);
                 }
-
+                        //  console.log({filePath})
                 try {
                     const res = await axios.get(`${URL}/projects/${projectId}/file-comments`, {
                         params: { filePath }
                     });
+                              
 
                     // Filter comments where isRead is false
                     const unreadComments = res.data.filter(comment => comment.isRead === false && comment.user
@@ -161,6 +162,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
                 }
             }
         }
+        console.log({newCommentCounts})
 
         setCommentCounts(newCommentCounts);
 
@@ -367,48 +369,77 @@ const Docs2 = ({ onTotalDocsChange }) => {
                     <h2 className={styles.modalTitle}>{selectedDoc?.title}</h2>
 
                     {selectedDoc?.fileUrl && (
-                        <div className={styles.previewBox}>
-                            {isFileLoading && (
-                                <div className={styles.loaderOverlay}>
-                                    <Loader size={30} />
-                                </div>
-                            )}
 
-                            {selectedDoc.fileUrl.endsWith('.pdf') ? (
-                                <>
-                                    {selectedDoc?.title === "CAD File" ? (
-                                        "No Preview"
-                                    ) : (
-                                        <iframe
-                                            height="400px"
-                                            width="100%"
-                                            src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`}
-                                            onLoad={() => setIsFileLoading(false)}
-                                        />
-                                    )}
-                                    {selectedDoc?.title === "CAD File" && (
-                                        <button onClick={handleDownload} className={styles.noPreviewDownloadButton}>
-                                            Download
-                                        </button>
-                                    )}
-                                </>
-                            ) : (
-                                <img
-                                    src={`${url2}${selectedDoc?.fileUrl}`}
-                                    alt={selectedDoc?.title}
-                                    onLoad={() => setIsFileLoading(false)}
-                                    style={{
-                                        maxWidth: '100%',
-                                        maxHeight: '400px',
-                                        objectFit: 'contain',
-                                        display: 'block',
-                                        margin: '0 auto',
-                                        borderRadius: '8px'
-                                    }}
-                                />
-                            )}
-                        </div>
-                    )}
+  <div className={styles.previewBox}>
+    {isFileLoading && (
+      <div className={styles.loaderOverlay}>
+        <Loader size={30} />
+      </div>
+    )}
+
+{(() => {
+  const fileUrl = selectedDoc?.fileUrl || '';
+  const fullUrl = `${url2}${fileUrl}`;
+
+  const isPdf = fileUrl.endsWith('.pdf');
+  const isCadFile =
+    fileUrl.endsWith('.dwg') ||
+    fileUrl.endsWith('.dxf') ||
+    fileUrl.endsWith('.cad');
+
+  if (isPdf) {
+    return (
+      <iframe
+        height="400px"
+        width="100%"
+        src={`https://docs.google.com/gview?url=${encodeURIComponent(fullUrl)}&embedded=true`}
+        onLoad={() => setIsFileLoading(false)}
+      />
+    );
+  } else if (isCadFile) {
+    if (isFileLoading) setIsFileLoading(false);
+    return (
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <p>No preview available for this file type.</p>
+        <a
+          href={fullUrl}
+          download
+          style={{
+            display: 'inline-block',
+            padding: '10px 20px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            borderRadius: '5px',
+            textDecoration: 'none',
+            marginTop: '10px'
+          }}
+        >
+          Download File
+        </a>
+      </div>
+    );
+  } else {
+    return (
+      <img
+        src={fullUrl}
+        alt={selectedDoc?.title}
+        onLoad={() => setIsFileLoading(false)}
+        style={{
+          maxWidth: '100%',
+          maxHeight: '400px',
+          objectFit: 'contain',
+          display: 'block',
+          margin: '0 auto',
+          borderRadius: '8px'
+        }}
+      />
+    );
+  }
+})()}
+
+  </div>
+)}
+
 
 
                     <div className={styles.chatWrapper}>
