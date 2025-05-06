@@ -1,262 +1,266 @@
-.DeliveryUpdate{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: space-between;
-    margin: 20px 0 0 0;
-    border-top: 2px solid;
-    border-image: linear-gradient(to right, #EAEAEA, #004680, #EAEAEA) 1;
-    padding: 20px 20px 10px 20px;
-   }
+.DeliveryUpdate {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  margin: 20px 0 0 0;
+  border-top: 2px solid;
+  border-image: linear-gradient(to right, #EAEAEA, #004680, #EAEAEA) 1;
+  padding: 20px 20px 10px 20px;
+}
 
-   .DeliveryUpdate h4{
-    font-size: 22px;
-    font-size: clamp(17px, 5vw, 22px);
-    color:#26211F;
-   }
-
-   
-   .DeliveryUpdate button{
-    font-size: 16px;
-    color:#004680;
-    border: none;background-color: transparent;
-   }
-   .dlDate{
-    padding-inline: 20px;
-    padding-bottom: 10px;
-    color: #26211F;
-    font-size: 16px;
-   }
-
- /* OrderCard.module.css */
-
- .Container{
-    padding: 20px 20px 20px 20px;
-    background-color: #F6F6F6;
-    border-radius: 16px;
- }
+.DeliveryUpdate h4 {
+  font-size: 22px;
+  font-size: clamp(17px, 5vw, 22px);
+  color: #26211F;
+}
 
 
- .linkStyle{
+.DeliveryUpdate button {
+  font-size: 16px;
+  color: #004680;
+  border: none;
+  background-color: transparent;
+}
+
+.dlDate {
+  padding-inline: 20px;
+  padding-bottom: 10px;
+  color: #26211F;
+  font-size: 16px;
+}
+
+/* OrderCard.module.css */
+
+.Container {
+  padding: 20px 20px 20px 20px;
+  background-color: #F6F6F6;
+  border-radius: 16px;
+}
+
+
+.linkStyle {
   background: #fff;
   border: 1px solid#ECECEC;
   border-radius: 10px;
 
- }
+}
 
 
 /* Card Container */
 .orderCard {
-    padding: 16px;
+  padding: 16px;
   background: #fff;
   border-radius: 10px;
 
-    margin-bottom: 16px;
-    word-break: break-all;
+  margin-bottom: 16px;
+  word-break: break-all;
 
-  }
-  
-  /* Title and Status */
-  .orderHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .orderTitle {
-    font-size: 18px;
-    font-weight: 600;
-    color: #26211F;
-    text-transform: capitalize;
-  }
-  
-  .orderStatus {
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
-  .green {
-    color: #28a745;
-  }
-  
-  .orange {
-    color: #ff9800;
-  }
-  
-  /* Order Details */
-  .orderDetails {
-    font-size: 16px;
-    color: #26211F;
-    margin: 8px 0;
-  }
-  
-  /* Comment Section */
-  .commentBox {
-    background: #f4f4f4;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 10px;
-  }
-  
-  .commentUser {
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
-  .commentTime {
-    font-size: 12px;
-    color: #777;
-  }
-  
-  .commentMessage {
-    font-size: 14px;
-    margin-top: 4px;
-    color: #26211F;
-  }
-  
-  /* Bottom Section */
-  .orderFooter {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    color: #777;
-    margin-top: 12px;
-  }
-  
-  .addComment {
-    display: flex;
-    align-items: center;
-    color: #007bff;
-    text-decoration: none;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    background: none;
-    padding: 0;
-  }
-  
-  .addComment img {
-    width: 16px;
-    height: 16px;
-    margin-right: 5px;
-  }
-  
-  /* Progress Bar */
-  .tbdText {
-    font-size: 12px;
-    color: #999;
-    margin-top: 8px;
-    font-style: italic;
-  }
-  
-  .progressBar {
-    width: 100%;
-    height: 6px;
-    background-color: #eee;
-    border-radius: 4px;
-    margin-top: 8px;
-    overflow: hidden;
-  }
-  
-  .progress {
-    height: 100%;
-    min-width: 4px;
-    transition: width 0.4s ease-in-out;
-    border-radius: 4px;
-  }
-  
-  
-  .progressGreen {
-    background: #28a745;
-  }
-  
-  .progressOrange {
-    background: #ff9800;
-  }
-
-
-  .green{
-    color: #28a745;
-    background-color: #28a745;
-  }
-
-  .PicImg{
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-
-  }
-  
-  .commentUser{
-    display: flex;
-    align-items: center;
-    gap:5px;
-    color: #26211F;
-    
-  }
-
-  .commentHeader{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: space-between;
-  }
-  .TimeFlex{
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    font-size: 14px;
-    color: #6B7280;
-  }
-
-  .LineColor{
-    display: inline-block;
-    width: 5px;
-    height: 20px;
-    border-radius: 10px;
-    background-color: #004680;
-  }
-
-  .orderStatus{
-    display: flex;
-    gap: 5px;
-    align-items: center;
-  }
-
-  .addComment{
-    color: #004680;
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 1px;
-  }
-  .linkStyle {
-    text-decoration: none;
-    color: inherit;
-  }
-
-
-  @media screen and (min-device-width: 1024px) and (max-device-width: 2500px) { 
-
-    .Container {
-        display: grid;
-        gap: 20px;
-        grid-template-columns: repeat(3, auto);
-        width: 100%;
-        height: 100%;
-    }
 }
 
-@media screen and (min-device-width: 767px) and (max-device-width: 1024px) { 
-    .Container {
-      gap: 20px;
-      height: 100%;
-        display: grid;
-        grid-template-columns: repeat(2, auto);
-     
-    }
+/* Title and Status */
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.orderTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #26211F;
+  text-transform: capitalize;
+}
+
+.orderStatus {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.green {
+  color: #28a745;
+}
+
+.orange {
+  color: #ff9800;
+}
+
+/* Order Details */
+.orderDetails {
+  font-size: 16px;
+  color: #26211F;
+  margin: 8px 0;
+}
+
+/* Comment Section */
+.commentBox {
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.commentUser {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.commentTime {
+  font-size: 12px;
+  color: #777;
+}
+
+.commentMessage {
+  font-size: 14px;
+  margin-top: 4px;
+  color: #26211F;
+}
+
+/* Bottom Section */
+.orderFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #777;
+  margin-top: 12px;
+}
+
+.addComment {
+  display: flex;
+  align-items: center;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.addComment img {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+/* Progress Bar */
+.tbdText {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background-color: #eee;
+  border-radius: 4px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  min-width: 4px;
+  transition: width 0.4s ease-in-out;
+  border-radius: 4px;
+}
+
+
+.progressGreen {
+  background: #28a745;
+}
+
+.progressOrange {
+  background: #ff9800;
+}
+
+
+.green {
+  color: #28a745;
+  background-color: #28a745;
+}
+
+.PicImg {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+
+}
+
+.commentUser {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #26211F;
+
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.TimeFlex {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 14px;
+  color: #6B7280;
+}
+
+.LineColor {
+  display: inline-block;
+  width: 5px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: #004680;
+}
+
+.orderStatus {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.addComment {
+  color: #004680;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.linkStyle {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+@media screen and (min-device-width: 1024px) and (max-device-width: 2500px) {
+
+  .Container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media screen and (min-device-width: 767px) and (max-device-width: 1024px) {
+  .Container {
+    gap: 20px;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  }
 }
 
 .dlDate {
@@ -276,5 +280,51 @@
   font-size: 15px;
   color: #333;
   font-weight: 500;
- 
+
+}
+
+.noData {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+  
+}
+
+.noData>div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.NoDataTittle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 20px;
+  color: #5A6479;
+}
+
+.noData img:first-child {
+  animation: floatUpDown 3s ease-in-out infinite;
+  width: 100px;
+}
+
+@keyframes floatUpDown {
+
+  0%,
+  100% {
+    transform: translateY(-20px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }

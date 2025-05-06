@@ -209,11 +209,17 @@ function ProjectDeliveryList() {
       />
       <div className={styles.Container}>
 
+        {filteredData.length <=  0 ? (
+          <div className={styles.noData}>
+          <div>
+            <img src="Svg/notfound.svg" alt="" />
+            <div className={styles.NoDataTittle}>
+              <p>No items found yet</p>
+              <img src="Svg/EYE1.svg" alt="" />
+            </div>
+          </div>
+        </div>
 
-
-
-        {filteredData.length <= 0 ? (
-          <p>No items found.</p>
         ) : (
           filteredData
             .filter((item) => item.itemName && item.itemName.trim() !== "")
