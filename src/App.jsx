@@ -30,6 +30,7 @@ import {
   onMessage,
   isSupported
 } from "firebase/messaging";
+import RouteWatcher from "./utils/RouteWatcher";
 // Initialize Firebase App
 const firebaseConfig = {
   apiKey: "AIzaSyDblY3fqpz8K5KXDA3HacPUzHxBnZHT1o0",
@@ -98,6 +99,8 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <RouteWatcher />
+
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Sign />}></Route>
