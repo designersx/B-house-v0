@@ -85,7 +85,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
         try {
             const res = await axios.get(`${URL}/projects/${projectId}`);
             const project = res.data;
-           
+
             setProjectData({
                 proposals: JSON.parse(project.proposals || '[]'),
                 floorPlans: JSON.parse(project.floorPlans || '[]'),
@@ -174,7 +174,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
     const handleCommentClick = (docTitle, fileUrl) => {
 
         const normalizedUrl = `/${fileUrl?.replace(/\\/g, '/')}`;
-        setIsFileLoading(true); 
+        setIsFileLoading(true);
 
         setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
         fetchComments(normalizedUrl);
@@ -322,7 +322,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
             const res = await axios.put(`${URL}/documentMarkCommentsAsRead`, {}, {
                 params: { filePath }
             });
-      
+
             fetchProject()
         } catch (error) {
             console.log("Error updating comments:", error);
@@ -369,6 +369,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
                     <h2 className={styles.modalTitle}>{selectedDoc?.title}</h2>
 
                     {selectedDoc?.fileUrl && (
+
   <div className={styles.previewBox}>
     {isFileLoading && (
       <div className={styles.loaderOverlay}>
@@ -438,6 +439,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
 
   </div>
 )}
+
 
 
                     <div className={styles.chatWrapper}>
