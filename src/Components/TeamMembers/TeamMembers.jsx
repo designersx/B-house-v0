@@ -133,6 +133,7 @@ const TeamMembers = () => {
           );
 
           const unreadComments = data.filter(comment => comment.createdByType == "user");
+          console.log({unreadComments})
           const filterIsReadFalse = unreadComments.filter((comment) => comment.isRead === false)
 
           return { id: user.id, commentCount: filterIsReadFalse.length };
