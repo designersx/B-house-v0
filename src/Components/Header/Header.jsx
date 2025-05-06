@@ -245,7 +245,7 @@ function Header({ showSearchIcon = true }) {
           <div className={styles.divider}></div>
         </div>
       </OffCanvas>
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='70vh'>
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='auto'>
         <div className={styles.formGroup}>
           <label>Delivery Address*</label>
           <input
