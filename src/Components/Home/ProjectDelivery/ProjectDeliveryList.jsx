@@ -192,12 +192,16 @@ function ProjectDeliveryList() {
         statusOptions={["Installed", "Delivered", "Pending", "In Transit", "Arrived"]}
       />
       <div className={styles.Container}>
-
-
-
-
         {filteredData.length === 0 ? (
-          <p>No items found.</p>
+          <div className={styles.noData}>
+          <div>
+            <img src="Svg/notfound.svg" alt="" />
+            <div className={styles.NoDataTittle}>
+              <p>No items found yet</p>
+              <img src="Svg/EYE1.svg" alt="" />
+            </div>
+          </div>
+        </div>
         ) : (
           filteredData
             .filter((item) => item.itemName && item.itemName.trim() !== "")
