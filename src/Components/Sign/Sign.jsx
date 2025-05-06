@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import styles from "../Sign/Sign.module.css";
 import axios from "axios";
 import URL from "../../config/api";
@@ -14,9 +14,8 @@ const Sign = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-
   const navigate = useNavigate();
-
+  const fromEmailPath = localStorage.getItem("fromEmailPath");
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
     const savedPassword = localStorage.getItem("savedPassword");
@@ -75,15 +74,20 @@ const Sign = () => {
 
       setLoading(false);
 
-      navigate(firstLogin ? "/reset" : "/home");
+    
+      if (fromEmailPath) {
+        localStorage.removeItem("fromEmailPath");
+        navigate(fromEmailPath);
+      } else {
+        navigate(firstLogin ? "/reset" : "/home");
+      }
     } catch (err) {
       setLoading(false);
       setFormErrors({
         general: err.response?.data?.message || "Login failed. Try again.",
       });
     }
-  };
-
+  };  
   return (
     <div className={styles.signMain}>
       <div className={`HeaderTop ${styles.topBar}`}>
