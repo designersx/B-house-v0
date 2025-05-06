@@ -15,7 +15,7 @@ const List = ({ statusFilters, searchTerm = "" }) => {
   const [popupMessage, setPopupMessage] = useState("");
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const [fullDescription, setFullDescription] = useState("");
-  
+
   const projectId = localStorage.getItem("selectedProjectId");
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -126,7 +126,7 @@ const List = ({ statusFilters, searchTerm = "" }) => {
         <div className={styles.title}>
           {filteredInvoices.length <= 0 ? null : <p>All Invoice List</p>}
         </div>
-        {filteredInvoices.length<= 0? null : <div className={styles.dropdown}>
+        {filteredInvoices.length <= 0 ? null : <div className={styles.dropdown}>
           <button className={styles.dropdownBtn} onClick={toggleDropdown}>
             {selectedOption}
             <span className={`${styles.arrow} ${isOpen ? styles.rotate : ""}`}>
@@ -185,21 +185,21 @@ const List = ({ statusFilters, searchTerm = "" }) => {
                   </div>
 
                   <p
-  title={invoice.description}
-  style={{ cursor: "pointer", color: "rgb(1, 69, 124)" }}
-  onClick={() => {
-    setFullDescription(invoice.description);
-    setShowDescriptionModal(true);
-  }}
->
-  {
-    invoice.description
-      .split(" ")
-      .slice(0, 3)
-      .join(" ") +
-    (invoice.description.split(" ").length > 3 ? "..." : "")
-  }
-</p>
+                    title={invoice.description}
+                    style={{ cursor: "pointer", color: "rgb(1, 69, 124)" }}
+                    onClick={() => {
+                      setFullDescription(invoice.description);
+                      setShowDescriptionModal(true);
+                    }}
+                  >
+                    {
+                      invoice.description
+                        .split(" ")
+                        .slice(0, 3)
+                        .join(" ") +
+                      (invoice.description.split(" ").length > 3 ? "..." : "")
+                    }
+                  </p>
 
 
 
@@ -214,10 +214,10 @@ const List = ({ statusFilters, searchTerm = "" }) => {
               </div>
               <span
                 className={`${styles.status} ${invoice.status === "Partly Paid"
-                    ? styles.PartlyPaid
-                    : invoice.status === "Paid"
-                      ? styles.Paid
-                      : styles.Pending
+                  ? styles.PartlyPaid
+                  : invoice.status === "Paid"
+                    ? styles.Paid
+                    : styles.Pending
                   }`}
               >
                 {invoice.status}
@@ -227,29 +227,29 @@ const List = ({ statusFilters, searchTerm = "" }) => {
         )}
       </div>
       {showDescriptionModal && (
-  <div style={{
-    position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
-    backgroundColor: "rgba(0,0,0,0.5)", display: "flex",
-    alignItems: "center", justifyContent: "center", zIndex: 1000
-  }}>
-    <div style={{
-      background: "#fff", padding: "20px", borderRadius: "10px",
-      maxWidth: "500px", width: "90%", textAlign: "center", position: "relative"
-    }}>
-      <h3>Full Description</h3>
-      <p style={{ marginTop: "10px" }}>{fullDescription}</p>
-      <button
-        onClick={() => setShowDescriptionModal(false)}
-        style={{
-          marginTop: "20px", padding: "10px 20px", backgroundColor: "rgb(1, 69, 124)",
-          color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer"
-        }}
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
+        <div style={{
+          position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
+          backgroundColor: "rgba(0,0,0,0.5)", display: "flex",
+          alignItems: "center", justifyContent: "center", zIndex: 1000
+        }}>
+          <div style={{
+            background: "#fff", padding: "20px", borderRadius: "10px",
+            maxWidth: "500px", width: "90%", textAlign: "center", position: "relative"
+          }}>
+            <h3>Full Description</h3>
+            <p style={{ marginTop: "10px" }}>{fullDescription}</p>
+            <button
+              onClick={() => setShowDescriptionModal(false)}
+              style={{
+                marginTop: "20px", padding: "10px 20px", backgroundColor: "rgb(1, 69, 124)",
+                color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer"
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );

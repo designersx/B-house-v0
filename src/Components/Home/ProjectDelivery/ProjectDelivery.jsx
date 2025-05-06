@@ -353,7 +353,15 @@ function ProjectDelivery({ selectedProject }) {
           );
 
           if (!filteredData || filteredData.length === 0) {
-            return <p className={styles.noData}>No data</p>; // You can style `.noData` in CSS
+            return  <div className={styles.noData}>
+                        <div>
+                          <img src="Svg/notfound.svg" alt="" />
+                          <div className={styles.NoDataTittle}>
+                            <p>No items found yet</p>
+                            <img src="Svg/EYE1.svg" alt="" />
+                          </div>
+                        </div>
+                      </div>; 
           }
 
           return filteredData.map((item) => {
