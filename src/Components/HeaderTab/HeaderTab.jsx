@@ -135,7 +135,7 @@ const HeaderTab = ({
         overlay={true}
       >
         <div className={styles.filterWrap}>
-          <h3 className={styles.heading}>Filter Data</h3>
+          <h3 className={styles.heading}>View By</h3>
 
           {statusOptions.map((status) => (
             <label key={status} className={styles.checkboxItem}>

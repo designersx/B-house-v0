@@ -48,35 +48,35 @@ function Proposal({ onArchivedStatus, onAllArchived }) {
   useEffect(() => {
     const customer = JSON.parse(localStorage.getItem("customerInfo"));
     const storedProjectId = localStorage.getItem("selectedProjectId");
-  
+
     if (!customer?.id) return;
-  
+
     const fetchProjects = async () => {
       try {
         const res = await axios.get(`${URL}/projects/client/${customer.id}`);
         const projectsData = res.data || [];
         setProjects(projectsData);
-  
+
         const allArchived = projectsData.length > 0 && projectsData.every((p) => p.status === "Archived");
         if (allArchived) {
           onAllArchived?.(); // Inform parent to lock the screen
           return;
         }
-  
+
         const validProject =
           projectsData.find((p) => p.id.toString() === storedProjectId && p.status !== "Archived") ||
           projectsData.find((p) => p.status !== "Archived");
-  
+
         if (validProject) {
           setSelectedProjectId(validProject.id);
           setPrevProjectId(validProject.id);
           setSelectedProject(validProject);
           localStorage.setItem("selectedProjectId", validProject.id);
           localStorage.setItem("selectedProject", JSON.stringify(validProject));
-  
+
           const allProjectIds = projectsData.map((p) => p.id);
           localStorage.setItem("allProjectIds", JSON.stringify(allProjectIds));
-  
+
           fetchTeamUsers(validProject);
           fetchDocs(validProject.id);
           fetchInvoice(validProject.id);
@@ -85,15 +85,16 @@ function Proposal({ onArchivedStatus, onAllArchived }) {
         console.error("Error fetching projects:", err);
       }
     };
-  
+
     fetchProjects();
   }, []);
-  
-  
+
+
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get("fromEmail") === "true") {
+      localStorage.setItem("fromEmail", `project-delivery-list/${projectId}`)
       const projectId = params.get("projectId");
       const project = projects.find((p) => p.id.toString() === projectId);
 
@@ -114,25 +115,24 @@ function Proposal({ onArchivedStatus, onAllArchived }) {
   const handleProjectChange = (e) => {
     const projectId = e.target.value;
     const project = projects.find((p) => p.id.toString() === projectId);
-  
+
     if (!project) return;
-  
+
     if (project.status === "Archived") {
-      onArchivedStatus?.(); 
-      setSelectedProjectId(prevProjectId); 
+      onArchivedStatus?.();
+      setSelectedProjectId(prevProjectId);
     } else {
       setSelectedProjectId(projectId);
       setSelectedProject(project);
       setPrevProjectId(projectId);
       localStorage.setItem("selectedProjectId", projectId);
       localStorage.setItem("selectedProject", JSON.stringify(project));
-  
       fetchTeamUsers(project);
       fetchDocs(projectId);
       fetchInvoice(projectId);
     }
   };
-  
+
 
   const steps = [
     {

@@ -76,7 +76,16 @@ const TeamMembers = () => {
   const markCommentsAsRead = async (toUserId) => {
     try {
       const response = await axios.put(`${URL}/projects/${selectedProject.id}/teamMarkCommentsAsRead/${toUserId}`);
-      fetchTeamMembers()
+      const { data } = await axios.get(`${URL}/auth/getAllUsers`);
+      if (data) {
+
+        const visibleUsers = data.filter(
+          (user) => visibleIds.includes(user.id) && user.id !== 1
+        );
+        fetchVisibleUserComments(visibleUsers)
+      }
+      setAllUsers(data);
+
     } catch (error) {
       console.log(error)
     }
@@ -133,6 +142,7 @@ const TeamMembers = () => {
           );
 
           const unreadComments = data.filter(comment => comment.createdByType == "user");
+          console.log({unreadComments})
           const filterIsReadFalse = unreadComments.filter((comment) => comment.isRead === false)
 
           return { id: user.id, commentCount: filterIsReadFalse.length };

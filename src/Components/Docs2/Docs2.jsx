@@ -85,7 +85,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
         try {
             const res = await axios.get(`${URL}/projects/${projectId}`);
             const project = res.data;
-           
+
             setProjectData({
                 proposals: JSON.parse(project.proposals || '[]'),
                 floorPlans: JSON.parse(project.floorPlans || '[]'),
@@ -145,11 +145,12 @@ const Docs2 = ({ onTotalDocsChange }) => {
                 if (filePath.startsWith("/")) {
                     filePath = filePath.substring(1);
                 }
-
+                        //  console.log({filePath})
                 try {
                     const res = await axios.get(`${URL}/projects/${projectId}/file-comments`, {
                         params: { filePath }
                     });
+                              
 
                     // Filter comments where isRead is false
                     const unreadComments = res.data.filter(comment => comment.isRead === false && comment.user
@@ -161,6 +162,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
                 }
             }
         }
+        console.log({newCommentCounts})
 
         setCommentCounts(newCommentCounts);
 
@@ -172,7 +174,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
     const handleCommentClick = (docTitle, fileUrl) => {
 
         const normalizedUrl = `/${fileUrl?.replace(/\\/g, '/')}`;
-        setIsFileLoading(true); 
+        setIsFileLoading(true);
 
         setSelectedDoc({ title: docTitle, fileUrl: normalizedUrl });
         fetchComments(normalizedUrl);
@@ -320,7 +322,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
             const res = await axios.put(`${URL}/documentMarkCommentsAsRead`, {}, {
                 params: { filePath }
             });
-      
+
             fetchProject()
         } catch (error) {
             console.log("Error updating comments:", error);
@@ -367,6 +369,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
                     <h2 className={styles.modalTitle}>{selectedDoc?.title}</h2>
 
                     {selectedDoc?.fileUrl && (
+
   <div className={styles.previewBox}>
     {isFileLoading && (
       <div className={styles.loaderOverlay}>
@@ -374,27 +377,51 @@ const Docs2 = ({ onTotalDocsChange }) => {
       </div>
     )}
 
-    {selectedDoc.fileUrl.endsWith('.pdf') ? (
-      <>
-        {selectedDoc?.title === "CAD File" ? (
-          "No Preview"
-        ) : (
-          <iframe
-            height="400px"
-            width="100%"
-            src={`https://docs.google.com/gview?url=${encodeURIComponent(`${url2}${selectedDoc?.fileUrl}`)}&embedded=true`}
-            onLoad={() => setIsFileLoading(false)}
-          />
-        )}
-        {selectedDoc?.title === "CAD File" && (
-          <button onClick={handleDownload} className={styles.noPreviewDownloadButton}>
-            Download
-          </button>
-        )}
-      </>
-    ) : (
+{(() => {
+  const fileUrl = selectedDoc?.fileUrl || '';
+  const fullUrl = `${url2}${fileUrl}`;
+
+  const isPdf = fileUrl.endsWith('.pdf');
+  const isCadFile =
+    fileUrl.endsWith('.dwg') ||
+    fileUrl.endsWith('.dxf') ||
+    fileUrl.endsWith('.cad');
+
+  if (isPdf) {
+    return (
+      <iframe
+        height="400px"
+        width="100%"
+        src={`https://docs.google.com/gview?url=${encodeURIComponent(fullUrl)}&embedded=true`}
+        onLoad={() => setIsFileLoading(false)}
+      />
+    );
+  } else if (isCadFile) {
+    if (isFileLoading) setIsFileLoading(false);
+    return (
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <p>No preview available for this file type.</p>
+        <a
+          href={fullUrl}
+          download
+          style={{
+            display: 'inline-block',
+            padding: '10px 20px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            borderRadius: '5px',
+            textDecoration: 'none',
+            marginTop: '10px'
+          }}
+        >
+          Download File
+        </a>
+      </div>
+    );
+  } else {
+    return (
       <img
-        src={`${url2}${selectedDoc?.fileUrl}`}
+        src={fullUrl}
         alt={selectedDoc?.title}
         onLoad={() => setIsFileLoading(false)}
         style={{
@@ -406,9 +433,13 @@ const Docs2 = ({ onTotalDocsChange }) => {
           borderRadius: '8px'
         }}
       />
-    )}
+    );
+  }
+})()}
+
   </div>
 )}
+
 
 
                     <div className={styles.chatWrapper}>
