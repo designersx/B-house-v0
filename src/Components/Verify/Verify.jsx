@@ -24,7 +24,12 @@ const Verify = () => {
       document.getElementById(`otp-${index + 1}`)?.focus();
     }
   };
-
+  const handleKeyDownOtp = (index, e) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      document.getElementById(`otp-${index - 1}`)?.focus();
+    }
+  };
+  
   const handleSubmit = async () => {
     try {
       const finalOtp = otp.join('');
@@ -96,15 +101,17 @@ const Verify = () => {
 
           <div className={styles.OtpContainer}>
             {otp.map((digit, index) => (
-              <input
-                key={index}
-                id={`otp-${index}`}
-                type='text'
-                maxLength='1'
-                value={digit}
-                className={`${styles.input} ${digit ? styles.filled : ''}`}
-                onChange={(e) => handleChangeOtp(index, e.target.value)}
-              />
+             <input
+             key={index}
+             id={`otp-${index}`}
+             type='text'
+             maxLength='1'
+             value={digit}
+             className={`${styles.input} ${digit ? styles.filled : ''}`}
+             onChange={(e) => handleChangeOtp(index, e.target.value)}
+             onKeyDown={(e) => handleKeyDownOtp(index, e)}
+           />
+           
             ))}
           </div>
 
