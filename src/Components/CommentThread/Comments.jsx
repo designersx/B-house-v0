@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from '../CommentThread/CommentThread.module.css';
 import axios from 'axios';
 import URL from '../../config/api';
+import { url2 } from '../../config/url';
 import Loader from '../Loader/Loader'
 const Comments = ({ documentId ,onView  }) => {
   const [comments, setComments] = useState([]);
@@ -96,7 +97,11 @@ const Comments = ({ documentId ,onView  }) => {
             <div key={index} className={styles.supportMessageRow}>
               <div className={styles.imageRow}>
                 <img
-                  src="Svg/admin.svg"
+                  src={
+                                      msg.User.profileImage
+                                        ? `${url2}/${msg.User.profileImage}`
+                                        : 'Svg/user-icon.svg'
+                                    }
                   alt="avatar"
                   className={styles.avatar}
                 />
@@ -104,7 +109,8 @@ const Comments = ({ documentId ,onView  }) => {
               <div>
                 <div className={styles.messageBubbleSupport}>{msg.message}</div>
                 <div className={styles.timestamp}>
-                  {new Date(msg.createdAt).toLocaleString()} – {msg.User.firstName}
+                  {msg.User.firstName}
+                  {msg.User.userRole ? ` (${msg.User.userRole})` : ''} • {new Date(msg.createdAt).toLocaleString()}
                 </div>
               </div>
             </div>
