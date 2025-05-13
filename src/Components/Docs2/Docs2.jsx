@@ -456,7 +456,11 @@ const Docs2 = ({ onTotalDocsChange }) => {
                                     {!isUser && (
                                         <div className={styles.adminBlock}>
                                             <img
-                                                src="Svg/admin.svg"
+                                                 src={
+                                                                                    item.user.profileImage
+                                                                                        ? `${url2}/${item.user.profileImage}`
+                                                                                        : 'Svg/user-icon.svg'
+                                                                                    }
                                                 alt="Admin DP"
                                                 className={styles.avatar}
                                             />
@@ -473,7 +477,8 @@ const Docs2 = ({ onTotalDocsChange }) => {
                                                             minute: "2-digit",
                                                             hour12: true,
                                                         })
-                                                        .replace(",", "")}
+                                                        .replace(",", "")} &nbsp;•&nbsp;
+                                                        {item?.user?.firstName} 
                                                     {item?.user?.userRole ? ` by ${item?.user?.userRole}` : ""}
                                                 </span>
                                             </div>
