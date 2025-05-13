@@ -284,7 +284,7 @@ function Punchlist({ statusFilters, searchTerm = "" }) {
     </Modal>
   </div>
 
-  {/* Yeh noData block ab container se bahar hai */}
+
   {!loading && filteredIssues?.length <= 0 && (
     <div className={styles.noData}>
       <div>
