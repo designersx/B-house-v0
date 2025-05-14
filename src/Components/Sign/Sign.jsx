@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "../Sign/Sign.module.css";
 import axios from "axios";
 import URL from "../../config/api";
@@ -74,7 +74,6 @@ const Sign = () => {
 
       setLoading(false);
 
-    
       if (fromEmailPath) {
         localStorage.removeItem("fromEmailPath");
         navigate(fromEmailPath);
@@ -87,7 +86,7 @@ const Sign = () => {
         general: err.response?.data?.message || "Login failed. Try again.",
       });
     }
-  };  
+  };
   return (
     <div className={styles.signMain}>
       <div className={`HeaderTop ${styles.topBar}`}>
@@ -109,29 +108,51 @@ const Sign = () => {
         </p>
 
         <form className={styles.form} onSubmit={handleSignIn}>
-          <label>Email<span className={styles.required}>*</span></label>
+          <label>
+            Email<span className={styles.required}>*</span>
+          </label>
           <input
             type="email"
             placeholder="Youremail@gmail.com"
             className={styles.input}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={validate}
+            onChange={(e) => {
+              const newEmail = e.target.value;
+              setEmail(newEmail);
+              if (formErrors.email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (newEmail.trim() && emailRegex.test(newEmail)) {
+                  setFormErrors((prev) => ({ ...prev, email: undefined }));
+                }
+              }
+            }}
           />
+
           {formErrors.email && (
             <p className={styles.errorMessage}>{formErrors.email}</p>
           )}
 
-          <label>Password<span className={styles.required}>*</span></label>
+          <label>
+            Password<span className={styles.required}>*</span>
+          </label>
           <div className={styles.passwordContainer}>
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Min. 6 characters"
               className={styles.inputPassword}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={validate}
+              onChange={(e) => {
+                const newPassword = e.target.value;
+                setPassword(newPassword);
+
+                if (formErrors.password) {
+                  if (newPassword.length >= 6) {
+                    setFormErrors((prev) => ({ ...prev, password: undefined }));
+                  }
+                }
+              }}
             />
+
             <p
               className={styles.eyeIcon}
               onClick={() => setShowPassword(!showPassword)}
