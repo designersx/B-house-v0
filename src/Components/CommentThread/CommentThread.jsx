@@ -71,7 +71,8 @@ const CommentThread = ({ issue }) => {
         <p><b>Comments History</b></p>
       </div>
       <div className={styles.messages}>
-      {comments.map((msg, index) => (
+      {[...comments].reverse().map((msg, index) => (
+
 
           msg.createdByType === 'user' ? (
             <div key={index} className={styles.supportMessageRow}>
@@ -82,7 +83,7 @@ const CommentThread = ({ issue }) => {
                   src={
                     msg.profileImage
                       ? `${url2}/${msg.profileImage}`
-                      : 'Svg/user-icon.svg'
+                      : "Svg/user-icon.svg"
                   }
                   alt="avatar"
                   className={styles.avatar}
