@@ -8,6 +8,13 @@ import URL from '../../../config/api';
 import { url2 } from '../../../config/url';
 import HeaderTab from '../../HeaderTab/HeaderTab';
 function OrderInfo() {
+   useEffect(() => {
+  if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+}, []);
+
   const location = useLocation();
   // const { item } = location.state || {};
   const [project, setProject] = useState(null);

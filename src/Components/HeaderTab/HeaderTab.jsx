@@ -30,11 +30,18 @@ const HeaderTab = ({
     }
   }, [statusOptions, statusFilters]);
 
-  const handleBackClick = () => {
+  // const handleBackClick = () => {
+  //   if (location.pathname.includes("punchlist-detail")) {
+  //     navigate("/home", { replace: true });
+  //   } else {
+  //     navigate("/home",)
+  //   }
+  // };
+   const handleBackClick = () => {
     if (location.pathname.includes("punchlist-detail")) {
-      navigate("/home", { replace: true });
+      navigate(-1, { replace: true });
     } else {
-      navigate("/home",)
+      navigate(-1);
     }
   };
 
