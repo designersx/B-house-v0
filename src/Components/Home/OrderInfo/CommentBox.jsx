@@ -19,14 +19,18 @@ function CommentBox({ saman }) {
   const customerId = customerInfo?.id;
   const projectId = JSON.parse(localStorage.getItem("selectedProjectId"));
   const messagesEndRef = useRef(null);
-
+// const isInitialLoad = useRef(true);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   
-  useEffect(() => {
-    scrollToBottom();
-  }, [comments]);
+//  useEffect(() => {
+//   if (isInitialLoad.current) {
+//     isInitialLoad.current = false;
+//     return; 
+//   }
+//   scrollToBottom();
+// }, [comments]);
   
   const fetchComments = async () => {
     try {

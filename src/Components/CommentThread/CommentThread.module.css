@@ -261,7 +261,7 @@ input::placeholder {
 
 @media screen and (min-device-width: 769px) and (max-device-width: 1400px) {
     .messages {
-        max-height: 525px;
+        max-height:370px;
     }
 
 }
