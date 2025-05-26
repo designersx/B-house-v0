@@ -153,7 +153,8 @@ const TeamMembers = () => {
       console.error("Error fetching visible user comment counts", err);
     }
   };
-
+  
+  console.log({visibleUsers})
 
   return (
     <div>
@@ -186,7 +187,16 @@ const TeamMembers = () => {
                       <div className={styles.phone}>{user.mobileNumber}</div>
                     </div>
                     <div className={styles.buttons}>
-                      <button className={styles.callBtn}>Book a Call</button>
+                    <button
+  onClick={() => {
+    if (user.mettingLink) {
+      window.open(user.mettingLink, '_blank'); // Opens in new tab
+    }
+  }}
+  className={styles.callBtn}
+>
+  Book a Call
+</button>
                       <button
                         className={styles.msgBtn}
                         onClick={() => handleSendMessage(user)}

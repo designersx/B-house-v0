@@ -28,6 +28,13 @@ function Header({ showSearchIcon = true }) {
   const [message, setMessage] = useState("")
   const handleCloseOffcanvas = () => { setOpenOffcanvas(false); }
   const [expandedMessages, setExpandedMessages] = useState({});
+const [deliveryDate , setDeliveryDate] = useState()
+const [pocName , setPocName] = useState()
+
+const [pocNumber , setPocNumber] = useState()
+
+
+const [pocEmail , setPocEmail] = useState()
 
   const handleLogout = async () => {
     localStorage.removeItem('customerToken');
@@ -50,7 +57,11 @@ function Header({ showSearchIcon = true }) {
     try {
       const data = {
         deliveryAddress,
-        deliveryHours: deliveryHours === "Other" ? customHours : deliveryHours
+        deliveryHours: deliveryHours === "Other" ? customHours : deliveryHours , 
+        deliveryDate  , 
+        pocEmail , 
+        pocName , 
+        pocNumber
       };
 
       const formData = new FormData();
@@ -192,6 +203,14 @@ function Header({ showSearchIcon = true }) {
         const project = res.data;
         setDeliveryAddress(project.deliveryAddress || '');
         setDeliveryHours(project.deliveryHours || '');
+
+        setDeliveryDate(project.deliveryDate || '')
+        setPocEmail(project.pocEmail || '')
+
+        setPocNumber(project.pocNumber || '')
+
+        setPocName(project.pocName || '')
+
         setCustomHours(['Regular Hours', 'Before 9 AM', 'After 6 PM'].includes(project.deliveryHours) ? '' : project.deliveryHours);
       } catch (err) {
         console.error("Error fetching project data:", err);
@@ -288,6 +307,46 @@ function Header({ showSearchIcon = true }) {
             <option>Other</option>
           </select>
         </div>
+           <div className={styles.formGroup}>
+          <label>Delivery Date*</label>
+         <input type="date"   onChange={(e)=>setDeliveryDate(e.target.value)} value = {deliveryDate} />
+        </div>
+
+         <div className={styles.formGroup}>
+  <label>Point of Contact</label>
+</div>
+
+<div className={styles.formGroup}>
+  <label>Name*</label>
+  <input
+    type="text"
+    value={pocName}
+    onChange={(e)=>setPocName(e.target.value)
+    }
+  />
+</div>
+
+<div className={styles.formGroup}>
+  <label>Phone Number*</label>
+  <input
+    type="text"
+    value={pocNumber}
+    onChange={(e) =>
+      setPocNumber(e.target.value)
+    }
+  />
+</div>
+
+<div className={styles.formGroup}>
+  <label>Email*</label>
+  <input
+    type="email"
+    value={pocEmail}
+    onChange={(e) =>
+     setPocEmail(e.target.value)
+    }
+  />
+</div>
 
         {deliveryHours === "Other" && (
           <div className={styles.formGroup}>
@@ -299,6 +358,7 @@ function Header({ showSearchIcon = true }) {
             />
           </div>
         )}
+
 
         <button className={styles.submitButton} onClick={handleUpdateDeliveryDetails}>Update</button>
       </Modal>
