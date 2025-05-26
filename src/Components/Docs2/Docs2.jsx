@@ -29,6 +29,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
         presentation: [],
         acknowledgements: [],
         receivingReports: [],
+        finalInvoice: []
     });
     const handleAddComment = async () => {
         setLoading(true);
@@ -46,10 +47,11 @@ const Docs2 = ({ onTotalDocsChange }) => {
         const titleToCategory = {
             'Detailed Proposal': 'proposals',
             'Options Presentation': 'presentation',
-            'Floor Plan': 'floorPlans',
+            'Pro Forma Invoice': 'floorPlans',
             'CAD File': 'cad',
             'Sales Agreement': 'salesAggrement',
             'Product Maintenance': "otherDocuments",
+            'Final Invoice' : "finalInvoice"
         };
 
         const category = titleToCategory[selectedDoc?.title] || 'otherDocuments';
@@ -95,6 +97,8 @@ const Docs2 = ({ onTotalDocsChange }) => {
                 otherDocuments: JSON.parse(project.otherDocuments || '[]'),
                 acknowledgements: JSON.parse(project.acknowledgements || '[]'),
                 receivingReports: JSON.parse(project.receivingReports || '[]'),
+                finalInvoice: JSON.parse(project.finalInvoice || '[]'),
+
 
             });
             fetchAllComments(project)
@@ -130,7 +134,8 @@ const Docs2 = ({ onTotalDocsChange }) => {
             'presentation',
             'otherDocuments',
             'acknowledgements',
-            'receivingReports'
+            'receivingReports' , 
+            'finalInvoice'
         ];
 
         const projectId = JSON.parse(localStorage.getItem('selectedProjectId'));
@@ -200,12 +205,12 @@ const Docs2 = ({ onTotalDocsChange }) => {
             fileUrl: projectData?.presentation[0] || null, // Placeholder
         },
         {
-            title: 'Floor Plan',
+            title: 'Pro Forma Invoice',
             icon: 'Svg/floor-plan.svg',
             fileUrl: projectData.floorPlans[0] || null,
         },
         {
-            title: 'CAD File',
+            title: 'COI(CERTIFICATE)',
             icon: 'Svg/cad-file.svg',
             fileUrl: projectData?.cad[0] || null // Placeholder
         },
@@ -228,7 +233,12 @@ const Docs2 = ({ onTotalDocsChange }) => {
             title: 'Receiving Reports',
             icon: 'Svg/final-invoice.svg',
             fileUrl: projectData?.receivingReports[0] || null, // Placeholder
-        }
+        } ,
+         {
+            title: 'Final Invoice',
+            icon: 'Svg/detailed-proposal.svg',
+            fileUrl: projectData.finalInvoice[0] || null,
+        },
 
     ];
     useEffect(() => {
@@ -251,7 +261,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
                 },
                 {
                     key: 'floorPlans',
-                    title: 'Floor Plan',
+                    title: 'Pro Forma Invoice',
                 },
                 {
                     key: 'cad',
@@ -268,6 +278,10 @@ const Docs2 = ({ onTotalDocsChange }) => {
                 {
                     key: 'acknowledgements',
                     title: 'Acknowledgements',
+                } ,
+                  {
+                    key: 'finalInvoice',
+                    title: 'Final Invoice',
                 }
             ];
 

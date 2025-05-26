@@ -6,23 +6,23 @@ import axios from 'axios';
 import PopUp from '../PopUp/PopUp';
 import Comments from '../CommentThread/Comments';
 import Modal from '../Modal/Modal';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from '../Loader/Loader';
-const docs = [
-  "Sample COI",
-  "COI (Certificate)",
-  "Sales Agreement",
-  "Pro Forma Invoice",
-  "Final Invoice",
-];
+
+const docs = ["Sample COI", "COI (Certificate)", "Pro Forma Invoice"];
+
+const displayLabels = {
+  "Sample COI": "Sample COI",
+  "COI (Certificate)": "Floor Plan",
+  "Pro Forma Invoice": "CAD File"
+};
+
 const iconMap = {
   "Sample COI": "Svg/Coi.svg",
   "COI (Certificate)": "Svg/certificate-coi-icon.svg",
-  "Sales Agreement": "Svg/sales-icon.svg",
-  "Pro Forma Invoice": "Svg/proforma-invoice.svg",
-  "Final Invoice": "Svg/final-invoice.svg",
+  "Pro Forma Invoice": "Svg/proforma-invoice.svg"
 };
+
 function Docs() {
   const customer = JSON.parse(localStorage.getItem('customerInfo'));
   const customerName = customer?.full_name || "My Docs";
@@ -39,7 +39,8 @@ function Docs() {
   const [totalDocs, setTotalDocs] = useState(0);
   const location = useLocation();
   const message = location.state?.message;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const fetchDocs = async () => {
     const id = JSON.parse(localStorage.getItem('selectedProjectId'));
     try {
@@ -49,6 +50,7 @@ function Docs() {
       console.error('Failed to fetch documents:', err);
     }
   };
+
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file || !currentDocType) return;
@@ -91,29 +93,27 @@ function Docs() {
       fileInputRef.current.click();
     }
   };
+
   const openCommentModal = async (docId, docTitle) => {
     try {
-      const documentId = docId
       setSelectedDocId(docId);
       setSelectedDocTitle(docTitle);
       setIsModalOpen(true);
-      await axios.put(`${URL}/customerDoc/updateCommentsIsReadByDocumentId/${documentId}`);
-      fetchUnreadCountsForAllDocs()
+      await axios.put(`${URL}/customerDoc/updateCommentsIsReadByDocumentId/${docId}`);
+      fetchUnreadCountsForAllDocs();
     } catch (err) {
       console.error('Failed to mark comments as read:', err);
     }
   };
+
   const closeCommentModal = () => {
     setSelectedDocId(null);
     setIsModalOpen(false);
   };
-  //function lock
+
   useEffect(() => {
     if (message) {
-
-      // Automatically switch to B-HOUSE DOCS if message.documentType is 'proposals' (case-insensitive match)
       if (message.filePath) {
-
         const documentKey = message.documentType.toLowerCase();
         const validDocKeys = [
           'proposals',
@@ -125,7 +125,6 @@ function Docs() {
           'receivingreports',
           'otherdocuments'
         ];
-
         if (validDocKeys.includes(documentKey)) {
           setActiveTab('B-HOUSE DOCS');
         }
@@ -135,10 +134,7 @@ function Docs() {
         setTimeout(() => {
           navigate(location.pathname, { replace: true });
         }, 1000);
-
       }
-
-
     }
   }, [message]);
 
@@ -148,39 +144,36 @@ function Docs() {
       return () => clearTimeout(timer);
     }
   }, [showPopup]);
+
   useEffect(() => {
     fetchDocs();
   }, []);
-  const tabRefs = useRef([]);
+
   const fetchUnreadCountsForAllDocs = async () => {
     const customer = JSON.parse(localStorage.getItem('customerInfo'));
     const customerId = customer?.id;
-
     if (!customerId || !docsData.length) return;
 
     const counts = {};
-
     await Promise.all(
       docsData.map(async (doc) => {
         try {
           const res = await axios.get(`${URL}/customerDoc/comments/${doc.id}?customerId=${customerId}`);
-          const unreadComments = res.data.filter(comment => comment.User
-            !== null);
-          const isReadFalse = unreadComments.filter(comment => comment.isRead === false)
+          const unreadComments = res.data.filter(comment => comment.User !== null);
+          const isReadFalse = unreadComments.filter(comment => comment.isRead === false);
           counts[doc.id] = isReadFalse.length || 0;
         } catch (err) {
           console.error(`Error fetching comments for doc ID ${doc.id}`, err);
         }
       })
     );
-
     setUnreadCounts(counts);
   };
+
   useEffect(() => {
     fetchUnreadCountsForAllDocs();
   }, [docsData]);
 
-  // Decrease count when a comment is viewed
   const handleCommentViewed = (docId) => {
     setUnreadCounts(prev => ({
       ...prev,
@@ -190,18 +183,19 @@ function Docs() {
 
   return (
     <div className={styles.container}>
-
       <input
         type="file"
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={handleFileChange}
       />
+
       {isLoading && (
         <div className={styles.loaderOverlay}>
           <Loader />
         </div>
       )}
+
       <h2 className={styles.heading}>List of Docs</h2>
 
       {showPopup && !isLoading && (
@@ -209,32 +203,17 @@ function Docs() {
       )}
 
       <div className={styles.tabs}>
-
-
-
-        {[customerName, 'B-HOUSE DOCS'].map((tab, index) => {
-          const isCustomerTab = tab === customerName
-          const unreadCount = Object.values(unreadCounts).reduce((acc, count) => acc + count, 0);
-          return (
-            <>  <button
-              key={tab}
-              ref={el => tabRefs.current[index] = el}
-              className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab}
-              {/* {isCustomerTab && unreadCount > 0 && (
-                <span style={{ marginLeft: '6px', color: 'red', fontWeight: 'bold' }}>
-                  ({unreadCount})
-                </span>
-              )} */}
-            </button>    </>
-          )
-
-        })}
+        {[customerName, 'B-HOUSE DOCS'].map((tab, index) => (
+          <button
+            key={tab}
+            className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
         <div className={styles.tabIndicator} style={{ left: activeTab === customerName ? '0%' : '50%' }} />
       </div>
-
 
       {activeTab === customerName ? (
         <div className={styles.docList}>
@@ -248,7 +227,7 @@ function Docs() {
                   <div className={styles.icon}>
                     <img src={iconSrc} alt="icon" />
                   </div>
-                  <span className={styles.docTitle}>{doc}</span>
+                  <span className={styles.docTitle}>{displayLabels[doc]}</span>
                 </div>
 
                 <div className={styles.rightSection}>
@@ -276,7 +255,6 @@ function Docs() {
                       )}
                     </div>
                   )}
-
                 </div>
               </div>
             );
@@ -285,24 +263,10 @@ function Docs() {
             If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
           </p>
         </div>
-
       ) : (
         <div className={styles.bHouseContent}>
           <Docs2 onTotalDocsChange={setTotalDocs} data={docsData} />
         </div>
-      )}
-
-      <input
-        type="file"
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        onChange={handleFileChange}
-      />
-
-      {activeTab === 'JENNY WILSON' && (
-        <p className={styles.note}>
-          If all documents are updated, ignore this; otherwise, <b>update</b> the <b>latest one</b>.
-        </p>
       )}
 
       {/* Comment Modal */}
@@ -314,7 +278,6 @@ function Docs() {
             customerId={JSON.parse(localStorage.getItem('customerId'))}
             onClose={closeCommentModal}
             onView={handleCommentViewed}
-
           />
         </Modal>
       )}
