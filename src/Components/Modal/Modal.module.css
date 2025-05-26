@@ -22,6 +22,7 @@
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
   position: relative;
   border-top: 5px solid #26211F;
+  overflow-x: auto;
 
 }
 
