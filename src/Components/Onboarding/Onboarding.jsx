@@ -87,10 +87,10 @@ const Onboarding = () => {
 
       // ✅ Convert weeks into a real date using createdAt
       const baseDate = data.createdAt ? new Date(data.createdAt) : new Date();
-      const weeks = parseInt(data.estimatedCompletion, 10);
-      if (!isNaN(weeks)) {
-        setEstimatedWeeks(weeks); // Store just the number
-      }
+      const weeks = data.estimatedCompletion
+     
+        setEstimatedWeeks(weeks); 
+     
 
 
 
@@ -361,7 +361,7 @@ const Onboarding = () => {
             </div>
             <div className={styles.Date}>
               <h2>Est. Occupancy date</h2>
-              <p>{estimatedWeeks} Week{Number(estimatedWeeks) > 1 ? "s" : ""}</p>
+              <p>{estimatedWeeks} </p>
 
 
 
