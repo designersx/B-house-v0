@@ -281,7 +281,7 @@ const [pocEmail , setPocEmail] = useState()
           <div className={styles.divider}></div>
         </div>
       </OffCanvas>
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='90vh'>
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)} height='100vh'>
         <div className={styles.formGroup}>
           <label>Delivery Address*</label>
           <input
