@@ -320,9 +320,9 @@ const [pocEmail , setPocEmail] = useState()
   <label>Name*</label>
   <input
     type="text"
-    value={pocName}
-    onChange={(e)=>setPocName(e.target.value)
-    }
+    value={pocName || ''}
+    onChange={(e) => setPocName(e.target.value)}
+    placeholder="Enter name"
   />
 </div>
 
@@ -330,10 +330,9 @@ const [pocEmail , setPocEmail] = useState()
   <label>Phone Number*</label>
   <input
     type="text"
-    value={pocNumber}
-    onChange={(e) =>
-      setPocNumber(e.target.value)
-    }
+    value={pocNumber || ''}
+    onChange={(e) => setPocNumber(e.target.value)}
+    placeholder="Enter phone number"
   />
 </div>
 
@@ -341,12 +340,12 @@ const [pocEmail , setPocEmail] = useState()
   <label>Email*</label>
   <input
     type="email"
-    value={pocEmail}
-    onChange={(e) =>
-     setPocEmail(e.target.value)
-    }
+    value={pocEmail || ''}
+    onChange={(e) => setPocEmail(e.target.value)}
+    placeholder="Enter email"
   />
 </div>
+
 
         {deliveryHours === "Other" && (
           <div className={styles.formGroup}>
