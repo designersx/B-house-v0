@@ -336,7 +336,7 @@ function ProjectOverView({ selectedProject }) {
               <div>
                 <p className={styles.docTitle}>
                   {" "}
-                  0{docData?.length}/05 Document Received
+                  0{docData?.length}/03 Document Received
                 </p>
                 <p className={styles.docSubtitle}>
                   Upload latest COI document ASAP!
