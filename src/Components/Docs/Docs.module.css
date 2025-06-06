@@ -237,3 +237,25 @@
   align-items: center;
   justify-content: center;
 }
+
+.downloadBtn{
+      text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #004680;
+}
+
+
+.commentsmix{
+    display: flex;
+   
+    gap: 4px;
+    
+}
+
+
+@media  (max-width: 440px) {
+  .editFlex{
+    display: grid;
+  }
+}

@@ -2,12 +2,14 @@ import React, { useEffect, useState, useRef } from 'react';
 import styles from '../Docs/Docs.module.css';
 import Docs2 from '../Docs2/Docs2';
 import URL from '../../config/api';
+import { url2 } from '../../config/url';
 import axios from 'axios';
 import PopUp from '../PopUp/PopUp';
 import Comments from '../CommentThread/Comments';
 import Modal from '../Modal/Modal';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from '../Loader/Loader';
+import { FaDownload } from 'react-icons/fa';
 
 const docs = ["Sample COI", "COI (Certificate)", "Pro Forma Invoice"];
 
@@ -50,6 +52,7 @@ function Docs() {
       console.error('Failed to fetch documents:', err);
     }
   };
+  
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -94,6 +97,7 @@ function Docs() {
     }
   };
 
+  
   const openCommentModal = async (docId, docTitle) => {
     try {
       setSelectedDocId(docId);
@@ -181,6 +185,31 @@ function Docs() {
     }));
   };
 
+   const handleDownload = async (doc) => {
+  if (!doc || !doc.fileUrl) {
+    console.error('No file URL available for download.');
+    return;
+  }
+
+  try {
+    const fileUrl = `${url2}${doc.fileUrl}`;
+    const response = await fetch(fileUrl);
+    if (!response.ok) throw new Error('Network error');
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${doc.documentType}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Failed to download PDF:', error);
+  }
+};
+
   return (
     <div className={styles.container}>
       <input
@@ -241,7 +270,7 @@ function Docs() {
 
                   {foundDoc && (
                     <div className={styles.editFlex}>
-                      <img src="Svg/edit-icon.svg" alt="edit-icon" />
+                   <div className={styles.commentsmix}>  <img src="Svg/edit-icon.svg" alt="edit-icon" />
                       <p
                         onClick={() => openCommentModal(foundDoc.id, doc)}
                         style={{ cursor: 'pointer' }}
@@ -252,8 +281,21 @@ function Docs() {
                         <span style={{ color: 'red', fontWeight: 'bold' }}>
                           ({unreadCounts[foundDoc.id]})
                         </span>
-                      )}
+                      )}</div> 
+                      {foundDoc && foundDoc.filePath && (
+<a
+  href={`${url2}/${foundDoc.filePath}`}
+  download={`${foundDoc.filePath}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className={styles.downloadBtn}
+>
+  <FaDownload/> Download
+</a>
+
+)}
                     </div>
+                    
                   )}
                 </div>
               </div>
