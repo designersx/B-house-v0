@@ -128,7 +128,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding-block: 1rem 2rem;
+    padding-block: 1rem 3rem;
     padding-right: 10px;
 }
 
@@ -311,4 +311,51 @@
         justify-content: end;
     }
 
+}
+.fileList{
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;    
+    gap: 20px;
+}
+
+/* In Docs2.module.css */
+
+.fileListItem {
+  display: flex; /* Aligns items horizontally */
+  align-items: center; /* Vertically centers items */
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  border: 1px dotted;
+  border-radius: 5px;
+  height: 100px;
+  width: 100px;
+}
+
+.fileListItem:hover {
+  background-color: #f0f0f0;
+}
+
+.fileIcon {
+  width: 55px; /* Adjust size as needed */
+  height: 70px; /* Adjust size as needed */
+  
+}
+
+/* Ensure text takes remaining space and comments are aligned */
+.fileListItem span:first-of-type { /* For the file name span */
+  flex-grow: 1; /* Allows the file name to take up available space */
+  white-space: nowrap; /* Prevents text from wrapping */
+  overflow: hidden; /* Hides overflowed text */
+  text-overflow: ellipsis; /* Adds ellipsis for overflowed text */
+}
+
+.commentCount {
+  margin-left: auto; /* Pushes the comment count to the right */
+  padding-left: 10px; /* Space before the comment count */
 }
