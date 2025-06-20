@@ -249,9 +249,9 @@ function ProjectDeliveryList() {
                   {item.expectedDeliveryDate ? (
                     <p className={styles.orderDetails}>
                       <strong>ETD:</strong>{" "}
-                      {item.expectedDeliveryDate.slice(0, 10)} |{" "}
+                      {item.expectedDeliveryDate ? item.expectedDeliveryDate.slice(0, 10): "NA"} |{" "}
                       <strong>ETA:</strong>{" "}
-                      {item.expectedArrivalDate?.slice(0, 10)}
+                      {item.expectedArrivalDate ? item.expectedArrivalDate?.slice(0, 10): 'NA'}
                     </p>
                   ) : (
                     "TBD"
