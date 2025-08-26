@@ -37,7 +37,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
     salesAggrement: [],
     otherDocuments: [],
     presentation: [],
-    acknowledgements: [],
+    // acknowledgements: [],
     receivingReports: [],
     finalInvoice: [],
   });
@@ -63,7 +63,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
       "Sales Agreement": "salesAggrement",
       "Product Maintenance": "otherDocuments",
       "Final Invoice": "finalInvoice",
-      "Acknowledgements": "acknowledgements",
+      // "Acknowledgements": "acknowledgements",
       "Receiving Reports": "receivingReports",
     };
     const category = titleToCategory[selectedDoc?.title] || "otherDocuments";
@@ -107,7 +107,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
         salesAggrement: JSON.parse(project.salesAggrement || "[]"),
         presentation: JSON.parse(project.presentation || "[]"),
         otherDocuments: JSON.parse(project.otherDocuments || "[]"),
-        acknowledgements: JSON.parse(project.acknowledgements || "[]"),
+        // acknowledgements: JSON.parse(project.acknowledgements || "[]"),
         receivingReports: JSON.parse(project.receivingReports || "[]"),
         finalInvoice: JSON.parse(project.finalInvoice || "[]"),
       });
@@ -142,7 +142,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
       "salesAggrement",
       "presentation",
       "otherDocuments",
-      "acknowledgements",
+      // "acknowledgements",
       "receivingReports",
       "finalInvoice",
     ];
@@ -276,11 +276,11 @@ const Docs2 = ({ onTotalDocsChange }) => {
       icon: "Svg/Coi.svg",
       files: projectData?.otherDocuments,
     },
-    {
-      title: "Acknowledgements",
-      icon: "Svg/sample-icon.svg",
-      files: projectData?.acknowledgements,
-    },
+    // {
+    //   title: "Acknowledgements",
+    //   icon: "Svg/sample-icon.svg",
+    //   files: projectData?.acknowledgements,
+    // },
     {
       title: "Receiving Reports",
       icon: "Svg/final-invoice.svg",
@@ -308,7 +308,7 @@ const Docs2 = ({ onTotalDocsChange }) => {
         { key: "cad", title: "COI(CERTIFICATE)" },
         { key: "salesAggrement", title: "Sales Agreement" },
         { key: "receivingReports", title: "Receiving Reports" },
-        { key: "acknowledgements", title: "Acknowledgements" },
+        // { key: "acknowledgements", title: "Acknowledgements" },
         { key: "finalInvoice", title: "Final Invoice" },
         { key: "otherDocuments", title: "Product Maintenance" },
       ];
