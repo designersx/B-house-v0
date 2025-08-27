@@ -7,11 +7,25 @@ import URL from "../../config/api";
 import { url2 } from "../../config/url";
 import Loader from "../Loader/Loader";
 const onboardingItems = [
-  // { img: 'Svg/project-address.svg', title: 'Project Address' },
   { img: "Svg/delivery-hour.svg", title: "Building Delivery Hours" },
   { img: "Svg/sample-icon.svg", title: "Building Sample (COI)" },
 ];
+const toArray = (v) => {
+  if (Array.isArray(v)) return v;
+  if (typeof v === "string") {
+    try {
+      const parsed = JSON.parse(v);
+      if (Array.isArray(parsed)) return parsed;
+    } catch { }
+    return v.split(",").map(s => s.trim()).filter(Boolean);
+  }
+  return v != null ? [v] : [];
+};
 
+const projectHasClient = (projectClientId, clientId) => {
+  const ids = toArray(projectClientId).map(Number);
+  return ids.includes(Number(clientId));
+};
 const Onboarding = () => {
   const navigate = useNavigate();
   const customerInfo = localStorage.getItem("customerInfo");
@@ -35,22 +49,20 @@ const Onboarding = () => {
     const fetchProject = async () => {
       try {
         const res = await axios.get(`${URL}/projects/client/${clientId}`);
-        const allProjects = res.data;
-
-        if (!allProjects.length) return;
-
-        setProjects(allProjects);
-        const firstProject = allProjects[0];
-
-        setProjectId(firstProject.id); // Default select first project
+        const allProjects = Array.isArray(res.data) ? res.data : [];
+        const myProjects = allProjects.filter(p => projectHasClient(p.clientId, clientId));
+        if (!myProjects.length) return;
+        setProjects(myProjects);
+        const firstProject = myProjects[0];
+        setProjectId(firstProject.id);
         fetchProjectDetails(firstProject.id);
       } catch (err) {
         console.error("Error fetching projects:", err);
       }
     };
-
     if (clientId) fetchProject();
   }, [clientId]);
+
   const [laoding, setLoading] = useState(false);
   const fetchDocs = async () => {
     setLoading(true);
@@ -70,8 +82,9 @@ const Onboarding = () => {
   };
 
   useEffect(() => {
-    fetchDocs();
-  }, [openModalIndex]);
+    if (openModalIndex !== null) fetchDocs();
+  }, [openModalIndex, projectId]);
+
   const fetchProjectDetails = async (id) => {
     try {
       const full = await axios.get(`${URL}/projects/${id}`);
@@ -82,18 +95,10 @@ const Onboarding = () => {
       setCustomHours(
         ["Regular Hours", "Before 9 AM", "After 6 PM"].includes(data.deliveryHours)
           ? ""
-          : data.deliveryHours
+          : (data.deliveryHours || "")
       );
-
-      // ✅ Convert weeks into a real date using createdAt
-      const baseDate = data.createdAt ? new Date(data.createdAt) : new Date();
-      const weeks = data.estimatedCompletion
-     
-        setEstimatedWeeks(weeks); 
-     
-
-
-
+      const occDate = data.estimatedCompletion ? formatDate(data.estimatedCompletion) : "—";
+      setEstimatedWeeks(occDate);
     } catch (err) {
       console.error("Error fetching project details:", err);
     }

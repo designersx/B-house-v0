@@ -166,7 +166,7 @@ function OrderInfo() {
                   <div className={styles.divider}></div>
                   <div className={styles.eta}>
                     <h5>ETA</h5>
-                    <p>{new Date(item?.expectedArrivalDate).toLocaleDateString()}</p>
+                    <p>{item?.expectedArrivalDate ? (item?.expectedArrivalDate).toLocaleDateString(): "NA"}</p>
                   </div>
                 </div></>
             ) : ("TBD")}
