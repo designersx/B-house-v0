@@ -4,7 +4,7 @@ import axios from 'axios';
 import URL from '../../config/api';
 import { url2 } from '../../config/url';
 import Loader from '../Loader/Loader'
-const Comments = ({ documentId ,onView  }) => {
+const Comments = ({ documentId, onView }) => {
   const [comments, setComments] = useState([]);
   const [viewed, setViewed] = useState(false);
   const [commentInput, setCommentInput] = useState('');
@@ -26,38 +26,38 @@ const Comments = ({ documentId ,onView  }) => {
 
   const postComment = async () => {
     if (!commentInput.trim()) return;
-  
+
     const message = commentInput.trim();
-  
+
     const payload = {
       documentId,
       message,
     };
-  
+
     const now = new Date().toISOString();
-  
+
     const tempComment = isCustomer
       ? {
-          message,
-          createdAt: now,
-          Customer: { name: customerInfo?.name || 'Customer' },
-        }
+        message,
+        createdAt: now,
+        Customer: { name: customerInfo?.name || 'Customer' },
+      }
       : {
-          message,
-          createdAt: now,
-          User: { firstName: userInfo?.firstName || 'Admin' },
-        };
-  
+        message,
+        createdAt: now,
+        User: { firstName: userInfo?.firstName || 'Admin' },
+      };
+
     setComments((prev) => [...prev, tempComment]);
     setCommentInput('');
     scrollToBottom();
-  
+
     if (isCustomer) {
       payload.customerId = customerInfo.id;
     } else {
       payload.userId = userInfo.id;
     }
-  
+
     try {
       await axios.post(`${URL}/customerDoc/comments/`, payload);
       fetchComments();
@@ -65,7 +65,7 @@ const Comments = ({ documentId ,onView  }) => {
       console.error('Error posting comment:', err);
     }
   };
-  
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -84,7 +84,7 @@ const Comments = ({ documentId ,onView  }) => {
       setViewed(true);
     }
   }, [comments, viewed, onView, documentId]);
-  
+
   return (
     <div className={styles.threadContainer}>
       <div className={styles.header}>
@@ -98,10 +98,10 @@ const Comments = ({ documentId ,onView  }) => {
               <div className={styles.imageRow}>
                 <img
                   src={
-                                      msg.User.profileImage
-                                        ? `${url2}/${msg.User.profileImage}`
-                                        : 'Svg/user-icon.svg'
-                                    }
+                    msg.User.profileImage
+                      ? `${url2}/${msg.User.profileImage}`
+                      : 'Svg/user-icon.svg'
+                  }
                   alt="avatar"
                   className={styles.avatar}
                 />
@@ -119,7 +119,8 @@ const Comments = ({ documentId ,onView  }) => {
               <div className={styles.right}>
                 <div className={styles.messageBubbleUser}>{msg.message}</div>
                 <div className={styles.timestamp2}>
-                  {new Date(msg.createdAt).toLocaleString()} – {msg.Customer?.name || 'Customer'}
+                  {new Date(msg.createdAt).toLocaleString()}
+                  {/* – {msg.Customer?.name || 'Customer'} */}
                 </div>
               </div>
               <div style={{ width: 40, marginLeft: 8 }}></div>
