@@ -146,6 +146,25 @@ function OrderInfo() {
   const itemFromLocation = location.state?.item;
   const item = itemFromLocation || itemsData
 
+  const toDate = (v) => {
+  if (!v) return null;
+  if (v instanceof Date) return v;
+  if (typeof v === "string" || typeof v === "number") {
+    const d = new Date(v);
+    return isNaN(d) ? null : d;
+  }
+  if (typeof v === "object") {
+    if (typeof v.toDate === "function") return v.toDate();        
+    if ("seconds" in v) return new Date(v.seconds * 1000);        
+  }
+  return null;
+};
+
+const formatDate = (v, fallback = "NA") => {
+  const d = toDate(v);
+  return d ? d.toLocaleDateString() : fallback;
+};
+
   return (
     <div>
       <div className='HeaderTop'>
@@ -160,13 +179,13 @@ function OrderInfo() {
                 <div className={styles.topFlex}>
                   <div className={styles.etd}>
                     <h5>ETD</h5>
-                    <p>{new Date(item?.expectedDeliveryDate).toLocaleDateString()}</p>
+                  <p>{formatDate(item?.expectedDeliveryDate)}</p>
                   </div>
 
                   <div className={styles.divider}></div>
                   <div className={styles.eta}>
                     <h5>ETA</h5>
-                    <p>{item?.expectedArrivalDate ? (item?.expectedArrivalDate).toLocaleDateString(): "NA"}</p>
+                   <p>{formatDate(item?.expectedArrivalDate)}</p>
                   </div>
                 </div></>
             ) : ("TBD")}
