@@ -4,6 +4,7 @@ import axios from 'axios';
 import URL from '../../config/api';
 import { url2 } from '../../config/url';
 import Loader from '../Loader/Loader'
+import { CgLayoutGrid } from 'react-icons/cg';
 const Comments = ({ documentId, onView }) => {
   const [comments, setComments] = useState([]);
   const [viewed, setViewed] = useState(false);
@@ -23,6 +24,10 @@ const Comments = ({ documentId, onView }) => {
       console.error('Error fetching comments:', err);
     }
   };
+  
+
+ 
+  
 
   const postComment = async () => {
     if (!commentInput.trim()) return;
@@ -85,6 +90,10 @@ const Comments = ({ documentId, onView }) => {
     }
   }, [comments, viewed, onView, documentId]);
 
+
+  
+  
+
   return (
     <div className={styles.threadContainer}>
       <div className={styles.header}>
@@ -117,9 +126,10 @@ const Comments = ({ documentId, onView }) => {
           ) : (
             <div key={index} className={styles.userMessageRow}>
               <div className={styles.right}>
-                <div className={styles.messageBubbleUser}>{msg.message}</div>
+                <div className={styles.messageBubbleUser}>{msg.message}   </div>
                 <div className={styles.timestamp2}>
-                  {new Date(msg.createdAt).toLocaleString()}
+                 {customerInfo?.id === msg.Customer.id  ? null :msg.Customer?.full_name
+ } {new Date(msg.createdAt).toLocaleString()}
                   {/* – {msg.Customer?.name || 'Customer'} */}
                 </div>
               </div>
