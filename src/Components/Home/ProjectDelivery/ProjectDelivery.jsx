@@ -52,37 +52,31 @@ function ProjectDelivery({ selectedProject }) {
     }
   };
 
-  const calculateDateProgress = (etd, eta, status, tbd) => {
-    if (status === "Installed") {
-      return { width: "100%", color: "green" };
-    }
+  const calculateDateProgress = (etd, eta, status, tbdETD, tbdETA) => {
+    if (status === "Installed") return { width: "100%", color: "green" };
 
-    if (tbd || !etd || !eta) return null;
+    if (tbdETD || tbdETA || !etd || !eta) return null;
 
-    const etdDate = new Date(etd);
-    const etaDate = new Date(eta);
+    const etdDate = toDate(etd);
+    const etaDate = toDate(eta);
+    if (!etdDate || !etaDate) return null;
+
     const today = new Date();
-
     const isSameDay = etdDate.toDateString() === etaDate.toDateString();
-    if (isSameDay) {
-      return { width: "100%", color: "green" };
-    }
+    if (isSameDay) return { width: "100%", color: "green" };
 
-    const totalDuration = etaDate - etdDate;
+    const total = etaDate - etdDate;
     const elapsed = today - etdDate;
 
-    if (totalDuration <= 0) return { width: "0%", color: "#4a90e2" };
+    if (total <= 0) return { width: "0%", color: "#4a90e2" };
 
-    let percent = (elapsed / totalDuration) * 100;
-    percent = Math.max(1, Math.min(100, percent));
+    let pct = (elapsed / total) * 100;
+    pct = Math.max(1, Math.min(100, pct));
+    const color = pct >= 100 ? "green" : "#4a90e2";
 
-    const color = percent >= 100 ? "green" : "#4a90e2";
-
-    return {
-      width: `${percent.toFixed(2)}%`,
-      color,
-    };
+    return { width: `${pct.toFixed(2)}%`, color };
   };
+
 
   const fetchComments = async () => {
     try {
@@ -151,7 +145,7 @@ function ProjectDelivery({ selectedProject }) {
   }
   const formatDate = (date) => {
     const d = new Date(date);
-  
+
     const options = {
       weekday: 'short',
       day: 'numeric',
@@ -161,17 +155,17 @@ function ProjectDelivery({ selectedProject }) {
       minute: '2-digit',
       hour12: true,
     };
-  
+
     // Format with lowercase am/pm
     let formatted = d.toLocaleString('en-GB', options);
-  
+
     // Capitalize AM/PM
     formatted = formatted.replace(/\b(am|pm)\b/, (match) => match.toUpperCase());
-  
+
     return formatted;
   };
-  
-  
+
+
   //Commnet Count Functionlaity 
   const fetchCommentsByManufacturerId = async () => {
     const commentCounts = {};
@@ -207,6 +201,33 @@ function ProjectDelivery({ selectedProject }) {
       fetchCommentsByManufacturerId();
     }
   }, [itemsByManufacturerId]);
+
+  const toDate = (v) => {
+    if (!v) return null;
+    if (v instanceof Date) return v;
+    if (typeof v === "string") {
+      // Handle plain YYYY-MM-DD safely (no UTC shift)
+      const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+      const d = new Date(v);
+      return isNaN(d) ? null : d;
+    }
+    if (typeof v === "number") {
+      const d = new Date(v);
+      return isNaN(d) ? null : d;
+    }
+    if (typeof v === "object") {
+      if (typeof v.toDate === "function") return v.toDate();
+      if ("seconds" in v) return new Date(v.seconds * 1000);
+    }
+    return null;
+  };
+
+  const formatDateOnly = (v, fallback = "TBD") => {
+    const d = toDate(v);
+    return d ? d.toLocaleDateString() : fallback;
+  };
+
   return (
     <div>
       <div className={styles.DeliveryUpdate}>
@@ -231,121 +252,6 @@ function ProjectDelivery({ selectedProject }) {
         )}
 
       </div>}
-
-      {/* <div className={styles.Container}>
-        {(showAll ? data : data.slice(0, 3))
-          ?.filter((item) => item.itemName && item.itemName.trim() !== "")
-          .map((item) => {
-            const latestComment = latestCommentsByItem[item.id];
-
-       
-            const progress = calculateDateProgress(
-              item.expectedDeliveryDate,
-              item.expectedArrivalDate,
-              item.status,
-              item.tbd
-            );
-
-            return (
-              <Link
-                to={`/orderInfo/${item?.id}`}
-                onClick={() => itemMarkItemCommentsAsRead(item?.id)}
-                key={item.id}
-                state={{ item }}
-                className={styles.linkStyle}
-              >
-                <div className={styles.orderCard}>
-             
-                  <div className={styles.orderHeader}>
-                    <h2 className={styles.orderTitle}>{item.itemName}</h2>
-                    <span
-                      className={styles.orderStatus}
-                      style={{
-                        color: progress?.color || "#6C35B1",
-                      }}
-                    >
-                      {item.status}
-                      <span
-                        className={styles.LineColor}
-                        style={{
-                          backgroundColor: progress?.color || "#6C35B1",
-                        }}
-                      ></span>
-                    </span>
-                  </div>
-
-               
-                  {item.expectedDeliveryDate ? (
-                    <p className={styles.orderDetails}>
-                      <strong>ETD :</strong>{" "}
-                      {item.expectedDeliveryDate?.slice(0, 10)} |{" "}
-                      <strong>ETA :</strong>{" "}
-                      {item.expectedArrivalDate?.slice(0, 10)}
-                    </p>
-                  ) : (
-                    "TBD"
-                  )}
-
-            
-                  {latestComment && (
-                    <div className={styles.commentBox}>
-                      <div className={styles.commentHeader}>
-                        <p className={styles.commentUser}>
-                          <img
-                            src={`${url2}/${latestComment.profilePhoto}`}
-                            alt="Profile"
-                            className={styles.PicImg}
-                          />
-                          {latestComment.createdByName}
-                        </p>
-                        <p className={styles.commentTime}>
-                          {formatTime(latestComment.createdAt)}
-                        </p>
-                      </div>
-                      <p className={styles.commentMessage}>
-                        {latestComment.comment}
-                      </p>
-                    </div>
-                  )}
-
-               
-                  <div className={styles.orderFooter}>
-                    <button className={styles.addComment}>
-                      <img src="/Svg/CommentIcon.svg" alt="Comment" />
-                      Add Comment
-                      {commentCountsByManufacturerId[item.id] > 0 && (
-                        <span className={styles.commentCount} style={{ color: 'red', fontWeight: 'bold' }}>
-                          ({commentCountsByManufacturerId[item.id]})
-                        </span>
-                      )}
-                    </button>
-
-                  </div>
-
-                 
-                  {item.tbd ? (
-                    <p className={styles.tbdText}>Delivery dates TBD</p>
-                  ) : (
-                    progress && (
-                      <div className={styles.progressBarContainer}>
-                        <div className={styles.progressBar}>
-                          <div
-                            className={styles.progress}
-                            style={{
-                              width: progress.width,
-                              backgroundColor: progress.color,
-                            }}
-                          ></div>
-                        </div>
-                       
-                      </div>
-                    )
-                  )}
-                </div>
-              </Link>
-            );
-          })}
-      </div> */}
       <div className={styles.Container}>
         {(() => {
           const filteredData = (showAll ? data : data.slice(0, 3))?.filter(
@@ -353,15 +259,15 @@ function ProjectDelivery({ selectedProject }) {
           );
 
           if (!filteredData || filteredData.length === 0) {
-            return  <div className={styles.noData}>
-                        <div>
-                          <img src="Svg/notfound.svg" alt="" />
-                          <div className={styles.NoDataTittle}>
-                            <p>No items found yet</p>
-                            <img src="Svg/EYE1.svg" alt="" />
-                          </div>
-                        </div>
-                      </div>; 
+            return <div className={styles.noData}>
+              <div>
+                <img src="Svg/notfound.svg" alt="" />
+                <div className={styles.NoDataTittle}>
+                  <p>No items found yet</p>
+                  <img src="Svg/EYE1.svg" alt="" />
+                </div>
+              </div>
+            </div>;
           }
 
           return filteredData.map((item) => {
@@ -402,16 +308,18 @@ function ProjectDelivery({ selectedProject }) {
                   </div>
 
                   {/* ETD & ETA */}
-                  {item.expectedDeliveryDate ? (
-                    <p className={styles.orderDetails}>
-                      <strong>ETD :</strong>{" "}
-                      {item.expectedDeliveryDate?.slice(0, 10)} |{" "}
-                      <strong>ETA :</strong>{" "}
-                      {item.expectedArrivalDate?.slice(0, 10)}
-                    </p>
-                  ) : (
-                    "TBD"
-                  )}
+                  <p className={styles.orderDetails}>
+                    <strong>ETD :</strong>{" "}
+                    {item.tbdETD || !item.expectedDeliveryDate
+                      ? "TBD"
+                      : formatDateOnly(item.expectedDeliveryDate)}
+                    {" | "}
+                    <strong>ETA :</strong>{" "}
+                    {item.tbdETA || !item.expectedArrivalDate
+                      ? "TBD"
+                      : formatDateOnly(item.expectedArrivalDate)}
+                  </p>
+
 
                   {/* Comment Box */}
                   {latestComment && (
