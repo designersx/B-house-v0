@@ -8,12 +8,12 @@ import URL from '../../../config/api';
 import { url2 } from '../../../config/url';
 import HeaderTab from '../../HeaderTab/HeaderTab';
 function OrderInfo() {
-   useEffect(() => {
-  if ('scrollRestoration' in window.history) {
-    window.history.scrollRestoration = 'manual';
-  }
-  window.scrollTo(0, 0);
-}, []);
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
 
   const location = useLocation();
   // const { item } = location.state || {};
@@ -146,141 +146,176 @@ function OrderInfo() {
   const itemFromLocation = location.state?.item;
   const item = itemFromLocation || itemsData
 
+  const toDate = (v) => {
+    if (!v) return null;
+    if (v instanceof Date) return v;
+    if (typeof v === "string") {
+      const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (m) {
+        const [_, y, mo, d] = m.map(Number);
+        return new Date(y, mo - 1, d); 
+      }
+      const d2 = new Date(v);
+      return isNaN(d2) ? null : d2;
+    }
+    if (typeof v === "number") {
+      const d = new Date(v);
+      return isNaN(d) ? null : d;
+    }
+    if (typeof v === "object") {
+      if (typeof v.toDate === "function") return v.toDate();
+      if ("seconds" in v) return new Date(v.seconds * 1000);
+    }
+    return null;
+  };
+
+  const formatDate = (v, fallback = "NA") => {
+    const d = toDate(v);
+    return d ? d.toLocaleDateString() : fallback;
+  };
+
   return (
     <div>
       <div className='HeaderTop'>
         <HeaderTab title={item?.itemName} />
       </div>
       <div className={styles.Forflex}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <div className={styles.etdEta}>
-            {item?.expectedDeliveryDate ? (
-              <>
-                <div className={styles.topFlex}>
-                  <div className={styles.etd}>
-                    <h5>ETD</h5>
-                    <p>{new Date(item?.expectedDeliveryDate).toLocaleDateString()}</p>
-                  </div>
-
-                  <div className={styles.divider}></div>
-                  <div className={styles.eta}>
-                    <h5>ETA</h5>
-                    <p>{item?.expectedArrivalDate ? (item?.expectedArrivalDate).toLocaleDateString(): "NA"}</p>
-                  </div>
-                </div></>
-            ) : ("TBD")}
-          </div>
-
-          <div className={styles.orderInfo}>
-            <div className={styles.orderDetails}>
-              <div className={styles.orderD1}>
-                <img src='/Svg/timer.svg' alt='timer' />
-                <p className={styles.TimeHour}>
-                  {formatTimeAgo(item?.createdAt)}
-                </p>
-
-              </div>
-
-              <div className={styles.orderD2}>
-                {/* <div className={styles.orderImage}>
-                  <img
-                    src="/Images/ChairImg.png"
-                    className={styles.productImage}
-                    alt="Order" />
-                </div> */}
-                <p className={styles.productName}>{item?.itemName || "Unnamed Item"}</p>
-
-              </div>
-
-              <div className={styles.orderD3}>
-                <p className={styles.productUpdate}>Project Delivery Update</p>
-                <button className={styles.bookCall}>Book a Call</button>
-              </div>
-            </div>
-            <div className={styles.CutPicDesign}>
-              <img src="/Svg/CutPicDesign.svg" alt="Status" />
-            </div>
-          </div>
-        </div>
-
-
-        <div className={styles.projectDetails}>
-          <h4>Project Details</h4>
-          <div className={styles.details}>
-            <div className={styles.contactInfo}>
-              <div className={styles.contactItem}>
-                <img src="/Svg/telecall.svg" alt="Contact" />
-                <div className={styles.contactText}>
-                  <p className={styles.contactTextpara}>
-                    {accountManager
-                      ? `${accountManager.firstName} ${accountManager.lastName}`
-                      : "No account manager assigned"}
-                    <span> (Account Manager)</span>
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <div className={styles.etdEta}>
+              <div className={styles.topFlex}>
+                <div className={styles.etd}>
+                  <h5>ETD</h5>
+                  <p>
+                    {item?.expectedDeliveryDate
+                      ? formatDate(item.expectedDeliveryDate)
+                      : "TBD"}
                   </p>
-                  <p className={styles.contactTextpara1}>
-                    {accountManager?.mobileNumber || "N/A"}
+                </div>
+
+                <div className={styles.divider}></div>
+
+                <div className={styles.eta}>
+                  <h5>ETA</h5>
+                  <p>
+                    {item?.expectedArrivalDate
+                      ? formatDate(item.expectedArrivalDate)
+                      : "TBD"}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className={styles.address}>
-              <img src="/Svg/Location-bhouse.svg" alt="Address" />
-              <p className={styles.contactTextpara1}>
-                {project?.deliveryAddress || 'No address provided'}
-              </p>
-            </div>
 
+            <div className={styles.orderInfo}>
+              <div className={styles.orderDetails}>
+                <div className={styles.orderD1}>
+                  <img src='/Svg/timer.svg' alt='timer' />
+                  <p className={styles.TimeHour}>
+                    {formatTimeAgo(item?.createdAt)}
+                  </p>
 
-            <div className={styles.DestinationAd}>
-              {latestUserComment?.comment ?
-                <img
-                  src={
-                    latestUserComment?.profilePhoto
-                      ? `${url2}/${latestUserComment.profilePhoto}`
-                      : `Images/profle.png`
-                  }
-                  alt="User Profile"
-                  className={styles.userProfileImage}
-                />
-                : null}
+                </div>
 
-              <div className={styles.status}>
-                <p className={styles.contactTextpara1}>
-                  {latestUserComment?.comment || "No updates yet from team."}
-                </p>
-                {latestUserComment && (
-                  <div className={styles.footer}>
-                    <p className={styles.footerp1}>
-                      {latestUserComment.createdByName}
-                      {latestUserComment.userRole && (
-                        <span className={styles.userRole}> ({latestUserComment.userRole})</span>
-                      )}
-                    </p>
-                    <p className={styles.footerp2}>
-                      {new Date(latestUserComment.createdAt).toLocaleString("en-US", {
-                        day: "numeric",
-                        month: "short",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })}
-                    </p>
-                  </div>
-                )}
+                <div className={styles.orderD2}>
+                  {/* <div className={styles.orderImage}>
+                  <img
+                    src="/Images/ChairImg.png"
+                    className={styles.productImage}
+                    alt="Order" />
+                </div> */}
+                  <p className={styles.productName}>{item?.itemName || "Unnamed Item"}</p>
+
+                </div>
+
+                <div className={styles.orderD3}>
+                  <p className={styles.productUpdate}>Project Delivery Update</p>
+                  <button className={styles.bookCall}>Book a Call</button>
+                </div>
+              </div>
+              <div className={styles.CutPicDesign}>
+                <img src="/Svg/CutPicDesign.svg" alt="Status" />
               </div>
             </div>
           </div>
+
+
+          <div className={styles.projectDetails}>
+            <h4>Project Details</h4>
+            <div className={styles.details}>
+              <div className={styles.contactInfo}>
+                <div className={styles.contactItem}>
+                  <img src="/Svg/telecall.svg" alt="Contact" />
+                  <div className={styles.contactText}>
+                    <p className={styles.contactTextpara}>
+                      {accountManager
+                        ? `${accountManager.firstName} ${accountManager.lastName}`
+                        : "No account manager assigned"}
+                      <span> (Account Manager)</span>
+                    </p>
+                    <p className={styles.contactTextpara1}>
+                      {accountManager?.mobileNumber || "N/A"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.address}>
+                <img src="/Svg/Location-bhouse.svg" alt="Address" />
+                <p className={styles.contactTextpara1}>
+                  {project?.deliveryAddress || 'No address provided'}
+                </p>
+              </div>
+
+
+              <div className={styles.DestinationAd}>
+                {latestUserComment?.comment ?
+                  <img
+                    src={
+                      latestUserComment?.profilePhoto
+                        ? `${url2}/${latestUserComment.profilePhoto}`
+                        : `Images/profle.png`
+                    }
+                    alt="User Profile"
+                    className={styles.userProfileImage}
+                  />
+                  : null}
+
+                <div className={styles.status}>
+                  <p className={styles.contactTextpara1}>
+                    {latestUserComment?.comment || "No updates yet from team."}
+                  </p>
+                  {latestUserComment && (
+                    <div className={styles.footer}>
+                      <p className={styles.footerp1}>
+                        {latestUserComment.createdByName}
+                        {latestUserComment.userRole && (
+                          <span className={styles.userRole}> ({latestUserComment.userRole})</span>
+                        )}
+                      </p>
+                      <p className={styles.footerp2}>
+                        {new Date(latestUserComment.createdAt).toLocaleString("en-US", {
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+          </div>
         </div>
-        <div>
+        <div className={styles.commentSection}>
+          <CommentBox saman={itemsData} />
         </div>
       </div>
-      <div className={styles.commentSection}>
-        <CommentBox saman={itemsData} />
-      </div>
-      </div>
-    
+
     </div>
   )
 }
